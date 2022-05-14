@@ -21,7 +21,7 @@ func main() {
 	opts := &plugin.ServeOpts{
 		Debug: debugMode,
 		ProviderAddr: "registry.terraform.io/terraform-provider-cloudtruth/cloudtruth",
-		ProviderFunc: cloudtruth.Provider(version),
+		ProviderFunc: cloudtruth.Provider,
 	}
 	plugin.Serve(opts)
 }
