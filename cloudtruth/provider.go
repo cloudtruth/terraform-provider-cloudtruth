@@ -27,7 +27,7 @@ func Provider() *schema.Provider {
 			"parameter_data_source": dataSourceParameter(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			      "project_resource": resourceProject(),
+			"project_resource": resourceProject(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
@@ -37,7 +37,7 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	return configureClient(
 		ctx,
 		authConfig{
-			APIKey:	 d.Get("api_key").(string),
+			APIKey:  d.Get("api_key").(string),
 			BaseURL: d.Get("base_url").(string),
 		},
 	)

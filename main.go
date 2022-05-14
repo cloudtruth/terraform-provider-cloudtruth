@@ -19,7 +19,7 @@ func main() {
 	flag.Parse()
 
 	opts := &plugin.ServeOpts{
-		Debug: debugMode,
+		Debug:        debugMode,
 		ProviderAddr: "registry.terraform.io/terraform-provider-cloudtruth/cloudtruth",
 		ProviderFunc: cloudtruth.Provider,
 	}

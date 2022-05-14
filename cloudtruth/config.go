@@ -17,14 +17,14 @@ const (
 	// profile = "CLOUDTRUTH_PROFILE" // todo: add profile support
 
 	// Not sure we want these overridden via env vars or specificied in HCL
-	project = "CLOUDTRUTH_PROJECT"
+	project     = "CLOUDTRUTH_PROJECT"
 	environment = "CLOUDTRUTH_ENVIRONMENT"
-
 )
 
 type authConfig struct {
-	APIKey  string
-	BaseURL string
+	APIKey     string
+	BaseURL    string
+	APIVersion string
 }
 
 /* We need 2 headers
@@ -32,6 +32,6 @@ type authConfig struct {
 -H 'Authorization: Api-Key REDACTED'
 */
 
-func configureClient(ctx context.Context, authConf authConfig) (*http.Client,  diag.Diagnostics) {
+func configureClient(ctx context.Context, authConf authConfig) (*http.Client, diag.Diagnostics) {
 	return nil, nil
 }
