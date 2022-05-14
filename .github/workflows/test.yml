@@ -101,4 +101,4 @@ jobs:
         # SOME_VAR: ${{ secrets.SOME_VAR }}
 
       run: |
-        go test -v -cover ./internal/provider/
+        go test -v -cover ./cloudtruth
