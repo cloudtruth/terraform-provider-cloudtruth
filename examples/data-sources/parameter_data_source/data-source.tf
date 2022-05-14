@@ -1,6 +1,7 @@
 # todo: get auth working: env, profile, inline in .tf?
-# specify 
+# specify env + projec
 
 data "parameter_data_source" "example" {
-  sample_attribute = "foo"
+  env = "production" # support id and name
+  project = "MyFirstProject" # support id and name
 }

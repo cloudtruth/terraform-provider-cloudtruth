@@ -1,4 +1,4 @@
-package provider
+package cloudtruth
 
 import (
 	"regexp"
@@ -7,26 +7,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccResourceProject(t *testing.T) {
-	t.Skip("resource not yet implemented, remove this once you add your own code")
+func TestAccDataSourceParameter(t *testing.T) {
+	t.Skip("data source not yet implemented, remove this once you add your own code")
 
 	resource.UnitTest(t, resource.TestCase{
 		PreCheck:          func() { testAccPreCheck(t) },
 		ProviderFactories: providerFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceProject,
+				Config: testAccDataSourceParameter,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestMatchResourceAttr(
-						"project_resource.foo", "sample_attribute", regexp.MustCompile("^ba")),
+						"data.parameter_data_source.foo", "sample_attribute", regexp.MustCompile("^ba")),
 				),
 			},
 		},
 	})
 }
 
-const testAccResourceProject = `
-resource "project_resource" "foo" {
+const testAccDataSourceParameter = `
+data "parameter_data_source" "foo" {
   sample_attribute = "bar"
 }
 `
