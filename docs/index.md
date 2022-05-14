@@ -3,7 +3,7 @@
 page_title: "cloudtruth Provider"
 subcategory: ""
 description: |-
-  
+
 ---
 
 # cloudtruth Provider
@@ -13,7 +13,7 @@ description: |-
 ## Example Usage
 
 ```terraform
-provider "scaffolding" {
+provider "cloudtruth" {
   # example configuration here
 }
 ```

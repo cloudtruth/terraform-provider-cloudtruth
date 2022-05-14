@@ -1,3 +1,3 @@
-provider "scaffolding" {
+provider "cloudtruth" {
   # example configuration here
 }
