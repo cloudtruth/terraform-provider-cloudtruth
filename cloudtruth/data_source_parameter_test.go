@@ -1,18 +1,15 @@
 package cloudtruth
 
 import (
-	"regexp"
-	"testing"
+//"regexp"
+//"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+//"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccDataSourceParameter(t *testing.T) {
-	t.Skip("data source not yet implemented, remove this once you add your own code")
-
+/*func TestDataSourceParameter(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		PreCheck:          func() { testAccPreCheck(t) },
-		ProviderFactories: providerFactories,
+		Providers: testProviders,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceParameter,
@@ -24,9 +21,11 @@ func TestAccDataSourceParameter(t *testing.T) {
 		},
 	})
 }
-
+*/
 const testAccDataSourceParameter = `
 data "parameter_data_source" "foo" {
-  sample_attribute = "bar"
+  env     = "production"
+  project = "MyFirstProject"
+  wrap    = true
 }
 `

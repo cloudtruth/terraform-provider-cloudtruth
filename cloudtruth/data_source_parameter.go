@@ -9,15 +9,11 @@ import (
 
 func dataSourceParameter() *schema.Resource {
 	return &schema.Resource{
-		// This description is used by the documentation generator and the language server.
-		Description: "Sample data source in the Terraform provider parameter.",
-
+		Description: "A CloudTruth parameter data source",
 		ReadContext: dataSourceParameterRead,
-
 		Schema: map[string]*schema.Schema{
-			"sample_attribute": {
-				// This description is used by the documentation generator and the language server.
-				Description: "Sample attribute.",
+			"env": {
+				Description: "The CloudTruth environment",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
@@ -28,9 +24,7 @@ func dataSourceParameter() *schema.Resource {
 func dataSourceParameterRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// use the meta value to retrieve your client from the provider configure method
 	// client := meta.(*apiClient)
-
 	idFromAPI := "my-id"
 	d.SetId(idFromAPI)
-
 	return diag.Errorf("not implemented")
 }

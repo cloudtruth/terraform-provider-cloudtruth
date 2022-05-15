@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	// used by goreleaser
-	version string = "dev"
-	// commit  string = ""
+// used by goreleaser
+// version string = "dev"
+// commit  string = ""
 )
 
 func main() {
