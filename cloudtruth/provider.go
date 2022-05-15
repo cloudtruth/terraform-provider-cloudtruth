@@ -2,14 +2,12 @@ package cloudtruth
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func Provider() *schema.Provider {
-	fmt.Print("help")
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"api_key": {

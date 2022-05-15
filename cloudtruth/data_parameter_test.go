@@ -1,7 +1,6 @@
 package cloudtruth
 
 import (
-	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -15,7 +14,8 @@ func TestDataSourceParameter(t *testing.T) {
 			{
 				Config: testAccDataSourceParameter,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestMatchResourceAttr("data.cloudtruth_parameter.foo", "env", regexp.MustCompile("^ba")),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.foo", "env", "production"),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.foo", "project", "MyFirstProject"),
 				),
 			},
 		},
@@ -26,6 +26,5 @@ const testAccDataSourceParameter = `
 data "cloudtruth_parameter" "foo" {
   env     = "production"
   project = "MyFirstProject"
-  wrap    = true
 }
 `

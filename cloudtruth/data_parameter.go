@@ -17,10 +17,16 @@ func dataCloudTruthParameter() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
+			"project": {
+				Description: "The CloudTruth project",
+				Type:        schema.TypeString,
+				Required:    true,
+			},
 		},
 	}
 }
 
 func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	d.SetId("temporary id")
 	return nil
 }
