@@ -94,7 +94,7 @@ jobs:
       timeout-minutes: 10
       env:
         TF_ACC: "1"
-	CLOUDTRUTH_API_KEY: "fakeapikey"
+        CLOUDTRUTH_API_KEY: "fakeapikey"
 
         # Set whatever additional acceptance test env vars here. You can
         # optionally use data from your repository secrets using the
