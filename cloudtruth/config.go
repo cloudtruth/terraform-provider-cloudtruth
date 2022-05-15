@@ -2,8 +2,8 @@ package cloudtruth
 
 import (
 	"context"
-	"net/http"
 
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 )
 
@@ -16,22 +16,20 @@ const (
 	// todo: possibly add profile support
 	// profile = "CLOUDTRUTH_PROFILE" // todo: add profile support
 
-	// Not sure we want these overridden via env vars or specificied in HCL
+	// todo:  do we want to be able to override via env vars
+	// or should we require explicit references in the HCL?
 	project     = "CLOUDTRUTH_PROJECT"
 	environment = "CLOUDTRUTH_ENVIRONMENT"
 )
 
-type authConfig struct {
+type clientConfig struct {
 	APIKey     string
 	BaseURL    string
 	APIVersion string
 }
 
-/* We need 2 headers
--H 'accept: application/json'
--H 'Authorization: Api-Key REDACTED'
-*/
+func configureClient(ctx context.Context, clientConf clientConfig) (*cloudTruthClient, diag.Diagnostics) {
+	tflog.Debug(ctx, "configureClient")
 
-func configureClient(ctx context.Context, authConf authConfig) (*http.Client, diag.Diagnostics) {
 	return nil, nil
 }

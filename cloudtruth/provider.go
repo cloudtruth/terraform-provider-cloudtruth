@@ -36,7 +36,7 @@ func Provider() *schema.Provider {
 func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	return configureClient(
 		ctx,
-		authConfig{
+		clientConfig{
 			APIKey:  d.Get("api_key").(string),
 			BaseURL: d.Get("base_url").(string),
 		},
