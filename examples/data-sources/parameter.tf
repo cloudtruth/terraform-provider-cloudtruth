@@ -10,12 +10,20 @@ terraform {
 }
 
 provider "cloudtruth" {
-  //api_version = "v1"
+  // todo: version support
+  // api_version = "v1"
   api_key = "should_use_CLOUDTRUTH_API_KEY_env_var_instead"
 }
 
 data "cloudtruth_parameter" "example" {
+  name = "first secret"
   env = "production"
-  project = "MyFirstProject"
-  #wrap = true
+
+  # todo: support project name in addition to id
+  # also add a project data source eventually
+  project = "c3e6f8e0-3323-44fd-8760-39998e5f2610"
+  # project = "MyFirstProject"
+
+  # todo: determine what other search/filter/evaluation/masking
+  # parameters to support
 }

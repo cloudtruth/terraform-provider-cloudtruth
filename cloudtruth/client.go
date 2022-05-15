@@ -1,6 +1,7 @@
 package cloudtruth
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	//"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -8,8 +9,8 @@ import (
 )
 
 type cloudTruthClient struct {
-	client       http.Client
-	clientConfig clientConfig
+	client http.Client
+	config clientConfig
 }
 
 func (c *cloudTruthClient) Get(url string) (resp *http.Response, err error) {
@@ -31,7 +32,7 @@ func (c *cloudTruthClient) Post(url, contentType string, body io.Reader) (resp *
 }
 
 func (c *cloudTruthClient) Do(req *http.Request) (*http.Response, error) {
-	req.Header.Add("Authorization: Api-Key", c.clientConfig.APIKey)
+	req.Header.Add("Authorization", fmt.Sprintf("Api-Key %s", c.config.APIKey))
 	req.Header.Add("Accept", "application/json")
 	return c.client.Do(req)
 }

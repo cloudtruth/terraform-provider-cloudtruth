@@ -32,7 +32,7 @@ type clientConfig struct {
 func configureClient(ctx context.Context, clientConf clientConfig) (*cloudTruthClient, diag.Diagnostics) {
 	tflog.Debug(ctx, "configureClient")
 	return &cloudTruthClient{
-		client:       http.Client{},
-		clientConfig: clientConf,
+		client: http.Client{},
+		config: clientConf,
 	}, nil
 }
