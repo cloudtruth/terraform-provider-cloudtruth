@@ -5,13 +5,25 @@ TEST?=./...
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 PKG_NAME=cloudtruth
 WEBSITE_REPO=github.com/hashicorp/terraform-website
-VERSION=$(shell [ ! -z `git tag -l --contains HEAD` ] && git tag -l --contains HEAD || git rev-parse --short HEAD)
+
+# todo: revert this
+# VERSION=$(shell [ ! -z `git tag -l --contains HEAD` ] && git tag -l --contains HEAD || git rev-parse --short HEAD)
+
+VERSION=0.0.1
 GOPATH=$(shell go env GOPATH)
 
 default: build
 
 build: fmtcheck
 	go install
+
+# Install for local testing on linux, todo: parameterize
+install: fmtcheck
+	mkdir -p ./dist; \
+	go build -o ./dist/terraform-provider-cloudtruth_$(VERSION); \
+	INSTALL_DIR="$(HOME)/.terraform.d/plugins/registry.terraform.io/cloudtruth/cloudtruth/$(VERSION)/linux_amd64"; \
+	mkdir -p $$INSTALL_DIR; \
+	cp ./dist/terraform-provider-cloudtruth_$(VERSION) $$INSTALL_DIR
 
 sweep:
 	@echo "WARNING: This will destroy infrastructure. Use only in development accounts."
@@ -60,7 +72,7 @@ release: fmtcheck
 		for dist in $$(go tool dist list | grep $$kernel); do  \
 			GOOS=$$kernel; \
 			GOARCH=$$(echo $$dist | cut -d/ -f2); \
-			GOOS=$$GOOS GOARCH=$$GOARCH go build -o terraform-provider-sysdig_$(VERSION); \
-			tar -czf terraform-provider-sysdig-$$GOOS-$$GOARCH.tar.gz terraform-provider-sysdig_$(VERSION) --remove-files; \
+			GOOS=$$GOOS GOARCH=$$GOARCH go build -o terraform-provider-cloudtruth_$(VERSION); \
+			tar -czf terraform-provider-cloudtruth-$$GOOS-$$GOARCH.tar.gz terraform-provider-cloudtruth_$(VERSION) --remove-files; \
 		done \
 	done

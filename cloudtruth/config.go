@@ -2,6 +2,7 @@ package cloudtruth
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -30,6 +31,8 @@ type clientConfig struct {
 
 func configureClient(ctx context.Context, clientConf clientConfig) (*cloudTruthClient, diag.Diagnostics) {
 	tflog.Debug(ctx, "configureClient")
-
-	return nil, nil
+	return &cloudTruthClient{
+		client:       http.Client{},
+		clientConfig: clientConf,
+	}, nil
 }
