@@ -3,7 +3,6 @@ package cloudtruth
 import (
 	"os"
 	"testing"
-	// todo: add tests. . .
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -17,6 +16,14 @@ func init() {
 		"cloudtruth": testAccProvider,
 	}
 }
+
+var (
+	testProviderFactories = map[string]func() (*schema.Provider, error){
+		"cloudtruth": func() (*schema.Provider, error) {
+			return Provider(), nil
+		},
+	}
+)
 
 func TestProvider(t *testing.T) {
 	if err := Provider().InternalValidate(); err != nil {

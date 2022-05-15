@@ -2,12 +2,14 @@ package cloudtruth
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func Provider() *schema.Provider {
+	fmt.Print("help")
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"api_key": {
@@ -24,10 +26,10 @@ func Provider() *schema.Provider {
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"parameter_data_source": dataSourceParameter(),
+			"cloudtruth_parameter": dataCloudTruthParameter(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"project_resource": resourceProject(),
+			"cloudtruth_project": resourceProject(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
