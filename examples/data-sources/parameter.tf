@@ -12,7 +12,7 @@ terraform {
 provider "cloudtruth" {
   // todo: version support
   // api_version = "v1"
-  api_key = "should_use_CLOUDTRUTH_API_KEY_env_var_instead"
+  // api_key = "should_use_CLOUDTRUTH_API_KEY_env_var_instead"
 }
 
 data "cloudtruth_parameter" "example" {
@@ -26,4 +26,12 @@ data "cloudtruth_parameter" "example" {
 
   # todo: determine what other search/filter/evaluation/masking
   # parameters to support
+}
+
+# Note: in practice you would not want to output such a value if
+# the parameter is sensitive (a secret), typically you'd be using
+# this data elsewhere e.g. in a resource definition
+# This is just an example
+output "parameter_output" {
+  value = data.cloudtruth_parameter.example
 }

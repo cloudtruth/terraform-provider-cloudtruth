@@ -25,6 +25,7 @@ func TestDataSourceParameter(t *testing.T) {
 const testAccDataSourceParameter = `
 data "cloudtruth_parameter" "foo" {
   env     = "production"
+  name    = "MyFirstParameter"
   project = "MyFirstProject"
 }
 `
