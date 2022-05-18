@@ -11,10 +11,8 @@ func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"api_key": {
-				Type:     schema.TypeString,
-				Optional: true,
-				// todo: remove this? no reasonable default value to use
-				DefaultFunc: schema.EnvDefaultFunc(apiKeyVarName, "UNSET"),
+				Type:        schema.TypeString,
+				Required:    true,
 				Description: "CloudTruth API Secret",
 			},
 			"base_url": {

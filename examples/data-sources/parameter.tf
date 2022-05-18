@@ -9,29 +9,22 @@ terraform {
   }
 }
 
+# Recommended - set this via
+# export TF_VAR_cloudtruth_api_key
+variable cloudtruth_api_key{}
+
 provider "cloudtruth" {
-  // todo: version support
-  // api_version = "v1"
-  // api_key = "should_use_CLOUDTRUTH_API_KEY_env_var_instead"
+  api_key = var.cloudtruth_api_key
 }
 
 data "cloudtruth_parameter" "example" {
   name = "first secret"
   env = "production"
-
-  # todo: support project name in addition to id
-  # also add a project data source eventually
   project = "c3e6f8e0-3323-44fd-8760-39998e5f2610"
-  # project = "MyFirstProject"
-
-  # todo: determine what other search/filter/evaluation/masking
-  # parameters to support
 }
 
-# Note: in practice you would not want to output such a value if
-# the parameter is sensitive (a secret), typically you'd be using
-# this data elsewhere e.g. in a resource definition
-# This is just an example
+# Note: this is just an example, you would not want to output
+# a CloudTruth parameter if it is used to store a secret
 output "parameter_output" {
   value = data.cloudtruth_parameter.example
 }

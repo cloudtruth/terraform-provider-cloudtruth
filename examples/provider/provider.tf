@@ -19,7 +19,10 @@ terraform {
   }
 }
 
+# Recommended - set this via
+# export TF_VAR_cloudtruth_api_key
+variable cloudtruth_api_key{}
+
 provider "cloudtruth" {
-  api_version = "v1"
-  api_key = "should_use_CLOUDTRUTH_API_KEY_env_var_instead"
+  api_key = var.cloudtruth_api_key
 }
