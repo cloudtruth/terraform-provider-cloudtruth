@@ -76,3 +76,32 @@ release: fmtcheck
 			tar -czf terraform-provider-cloudtruth-$$GOOS-$$GOARCH.tar.gz terraform-provider-cloudtruth_$(VERSION) --remove-files; \
 		done \
 	done
+
+client: pkg/cloudtruth/client.go
+
+# Generate Go bindings via Swagger
+# This code will likely move to a dedicated repo
+pkg/cloudtruth/client.go: pkg/openapi.yml
+	docker run --rm \
+		-v "$(shell pwd)/pkg:/pkg" \
+		--user "$(shell id -u):$(shell id -g)" \
+		openapitools/openapi-generator-cli generate \
+		-i /pkg/openapi.yml \
+		-g go \
+		-o /pkg/cloudtruthapi \
+		--additional-properties packageName=cloudtruthapi \
+		--additional-properties packageVersion=1.0.0 \
+		--additional-properties enumClassPrefix=true \
+		--type-mappings=object=interface{}
+	rm pkg/cloudtruthapi/go.mod pkg/cloudtruthapi/go.sum # These files break local imports
+
+pkg/openapi.yml: pkg
+	curl -s https://api.cloudtruth.io/api/schema/ > pkg/openapi.yml
+
+pkg:
+	mkdir -p pkg
+
+clean:
+	rm -rf dist
+
+
