@@ -29,7 +29,7 @@ func resourceProject() *schema.Resource {
 	}
 }
 
-func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	idFromAPI := "my-id"
 	d.SetId(idFromAPI)
 
@@ -40,14 +40,14 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta int
 	return diag.Errorf("not implemented")
 }
 
-func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Errorf("not implemented")
 }
 
-func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Errorf("not implemented")
 }
 
-func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return diag.Errorf("not implemented")
 }

@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 
+	"github.com/cloudtruth/terraform-provider-cloudtruth/cloudtruth"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-	"terraform-provider-cloudtruth/cloudtruth"
 )
 
 var (

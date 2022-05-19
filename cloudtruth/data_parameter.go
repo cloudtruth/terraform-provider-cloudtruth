@@ -42,7 +42,7 @@ func dataCloudTruthParameter() *schema.Resource {
 	}
 }
 
-func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParameterRead")
 
@@ -86,10 +86,10 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 
 // todo: clean up these structs, we don't need all of the fields
 type Parameters struct {
-	Count    int         `json:"count"`
-	Next     interface{} `json:"next"`
-	Previous interface{} `json:"previous"`
-	Results  []Results   `json:"results"`
+	Count    int       `json:"count"`
+	Next     any       `json:"next"`
+	Previous any       `json:"previous"`
+	Results  []Results `json:"results"`
 }
 
 type Results struct {
@@ -99,42 +99,42 @@ type Results struct {
 	Description          string           `json:"description"`
 	Secret               bool             `json:"secret"`
 	Type                 string           `json:"type"`
-	Rules                []interface{}    `json:"rules"`
+	Rules                []any            `json:"rules"`
 	Project              string           `json:"project"`
 	ProjectName          string           `json:"project_name"`
-	ReferencingTemplates []interface{}    `json:"referencing_templates"`
-	ReferencingValues    []interface{}    `json:"referencing_values"`
+	ReferencingTemplates []any            `json:"referencing_templates"`
+	ReferencingValues    []any            `json:"referencing_values"`
 	Values               map[string]Value `json:"values"`
-	Overrides            interface{}      `json:"overrides"`
+	Overrides            any              `json:"overrides"`
 	CreatedAt            time.Time        `json:"created_at"`
 	ModifiedAt           time.Time        `json:"modified_at"`
-	Templates            []interface{}    `json:"templates"`
+	Templates            []any            `json:"templates"`
 }
 
 type Value struct {
-	URL                  string        `json:"url"`
-	ID                   string        `json:"id"`
-	Environment          string        `json:"environment"`
-	EnvironmentName      string        `json:"environment_name"`
-	EarliestTag          interface{}   `json:"earliest_tag"`
-	Parameter            string        `json:"parameter"`
-	External             bool          `json:"external"`
-	ExternalFqn          string        `json:"external_fqn"`
-	ExternalFilter       string        `json:"external_filter"`
-	ExternalError        interface{}   `json:"external_error"`
-	ExternalStatus       interface{}   `json:"external_status"`
-	InternalValue        interface{}   `json:"internal_value"`
-	Interpolated         bool          `json:"interpolated"`
-	Value                string        `json:"value"`
-	Evaluated            bool          `json:"evaluated"`
-	Secret               bool          `json:"secret"`
-	ReferencedParameters []interface{} `json:"referenced_parameters"`
-	ReferencedTemplates  []interface{} `json:"referenced_templates"`
-	CreatedAt            time.Time     `json:"created_at"`
-	ModifiedAt           time.Time     `json:"modified_at"`
-	Dynamic              bool          `json:"dynamic"`
-	DynamicError         interface{}   `json:"dynamic_error"`
-	DynamicFilter        string        `json:"dynamic_filter"`
-	DynamicFqn           string        `json:"dynamic_fqn"`
-	StaticValue          interface{}   `json:"static_value"`
+	URL                  string    `json:"url"`
+	ID                   string    `json:"id"`
+	Environment          string    `json:"environment"`
+	EnvironmentName      string    `json:"environment_name"`
+	EarliestTag          any       `json:"earliest_tag"`
+	Parameter            string    `json:"parameter"`
+	External             bool      `json:"external"`
+	ExternalFqn          string    `json:"external_fqn"`
+	ExternalFilter       string    `json:"external_filter"`
+	ExternalError        any       `json:"external_error"`
+	ExternalStatus       any       `json:"external_status"`
+	InternalValue        any       `json:"internal_value"`
+	Interpolated         bool      `json:"interpolated"`
+	Value                string    `json:"value"`
+	Evaluated            bool      `json:"evaluated"`
+	Secret               bool      `json:"secret"`
+	ReferencedParameters []any     `json:"referenced_parameters"`
+	ReferencedTemplates  []any     `json:"referenced_templates"`
+	CreatedAt            time.Time `json:"created_at"`
+	ModifiedAt           time.Time `json:"modified_at"`
+	Dynamic              bool      `json:"dynamic"`
+	DynamicError         any       `json:"dynamic_error"`
+	DynamicFilter        string    `json:"dynamic_filter"`
+	DynamicFqn           string    `json:"dynamic_fqn"`
+	StaticValue          any       `json:"static_value"`
 }

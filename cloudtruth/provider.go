@@ -14,6 +14,7 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "CloudTruth API Secret",
+				Sensitive:   true,
 			},
 			"base_url": {
 				Type:        schema.TypeString,
@@ -32,7 +33,7 @@ func Provider() *schema.Provider {
 	}
 }
 
-func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+func providerConfigure(ctx context.Context, d *schema.ResourceData) (any, diag.Diagnostics) {
 	return configureClient(
 		ctx,
 		clientConfig{

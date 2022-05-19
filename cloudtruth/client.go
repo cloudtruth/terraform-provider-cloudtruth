@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/ctapi"
 )
 
 type cloudTruthClient struct {
@@ -13,6 +15,9 @@ type cloudTruthClient struct {
 }
 
 func (c *cloudTruthClient) Get(url string) (resp *http.Response, err error) {
+	cfg := ctapi.NewConfiguration()
+	fmt.Printf("%v+", cfg)
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
