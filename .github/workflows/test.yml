@@ -94,12 +94,6 @@ jobs:
       timeout-minutes: 10
       env:
         TF_ACC: "1"
-        CLOUDTRUTH_API_KEY: "fakeapikey"
-
-        # Set whatever additional acceptance test env vars here. You can
-        # optionally use data from your repository secrets using the
-        # following syntax:
-        # SOME_VAR: ${{ secrets.SOME_VAR }}
-
+        TF_VAR_cloudtruth_api_key: ${{ secrets.ACCEPTANCE_TEST_TOKEN }}
       run: |
         go test -v -cover ./cloudtruth
