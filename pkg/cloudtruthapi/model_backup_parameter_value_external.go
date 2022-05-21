@@ -17,7 +17,7 @@ import (
 
 // BackupParameterValueExternal struct for BackupParameterValueExternal
 type BackupParameterValueExternal struct {
-	Fqn string `json:"fqn"`
+	Fqn      string         `json:"fqn"`
 	JmesPath NullableString `json:"jmes_path,omitempty"`
 }
 
@@ -95,6 +95,7 @@ func (o *BackupParameterValueExternal) HasJmesPath() bool {
 func (o *BackupParameterValueExternal) SetJmesPath(v string) {
 	o.JmesPath.Set(&v)
 }
+
 // SetJmesPathNil sets the value for JmesPath to be an explicit nil
 func (o *BackupParameterValueExternal) SetJmesPathNil() {
 	o.JmesPath.Set(nil)
@@ -151,5 +152,3 @@ func (v *NullableBackupParameterValueExternal) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

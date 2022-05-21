@@ -26,9 +26,9 @@ type PatchedGrant struct {
 	// The URI of a scope for the grant; this must reference a project or environment.
 	Scope *string `json:"scope,omitempty"`
 	// The role that the principal has in the given scope.
-	Role NullableRoleEnum `json:"role,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	Role       NullableRoleEnum `json:"role,omitempty"`
+	CreatedAt  *time.Time       `json:"created_at,omitempty"`
+	ModifiedAt *time.Time       `json:"modified_at,omitempty"`
 }
 
 // NewPatchedGrant instantiates a new PatchedGrant object
@@ -208,6 +208,7 @@ func (o *PatchedGrant) HasRole() bool {
 func (o *PatchedGrant) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
+
 // SetRoleNil sets the value for Role to be an explicit nil
 func (o *PatchedGrant) SetRoleNil() {
 	o.Role.Set(nil)
@@ -343,5 +344,3 @@ func (v *NullablePatchedGrant) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

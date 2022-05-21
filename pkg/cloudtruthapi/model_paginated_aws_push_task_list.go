@@ -17,10 +17,10 @@ import (
 
 // PaginatedAwsPushTaskList struct for PaginatedAwsPushTaskList
 type PaginatedAwsPushTaskList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
+	Count    *int32         `json:"count,omitempty"`
+	Next     NullableString `json:"next,omitempty"`
 	Previous NullableString `json:"previous,omitempty"`
-	Results []AwsPushTask `json:"results,omitempty"`
+	Results  []AwsPushTask  `json:"results,omitempty"`
 }
 
 // NewPaginatedAwsPushTaskList instantiates a new PaginatedAwsPushTaskList object
@@ -104,6 +104,7 @@ func (o *PaginatedAwsPushTaskList) HasNext() bool {
 func (o *PaginatedAwsPushTaskList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedAwsPushTaskList) SetNextNil() {
 	o.Next.Set(nil)
@@ -146,6 +147,7 @@ func (o *PaginatedAwsPushTaskList) HasPrevious() bool {
 func (o *PaginatedAwsPushTaskList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedAwsPushTaskList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -240,5 +242,3 @@ func (v *NullablePaginatedAwsPushTaskList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

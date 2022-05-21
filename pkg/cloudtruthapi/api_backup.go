@@ -19,12 +19,11 @@ import (
 	"net/url"
 )
 
-
 // BackupApiService BackupApi service
 type BackupApiService service
 
 type ApiBackupSnapshotCreateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *BackupApiService
 }
 
@@ -41,7 +40,7 @@ BackupSnapshotCreate Get a snapshot of all Projects with parameters
 func (a *BackupApiService) BackupSnapshotCreate(ctx context.Context) ApiBackupSnapshotCreateRequest {
 	return ApiBackupSnapshotCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -49,10 +48,10 @@ func (a *BackupApiService) BackupSnapshotCreate(ctx context.Context) ApiBackupSn
 //  @return BackupDataSnapshot
 func (a *BackupApiService) BackupSnapshotCreateExecute(r ApiBackupSnapshotCreateRequest) (*BackupDataSnapshot, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *BackupDataSnapshot
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *BackupDataSnapshot
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BackupApiService.BackupSnapshotCreate")

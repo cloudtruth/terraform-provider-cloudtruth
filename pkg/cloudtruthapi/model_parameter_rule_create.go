@@ -17,8 +17,8 @@ import (
 
 // ParameterRuleCreate A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead of primary key relationships.  Specifically:  * A 'url' field is included instead of the 'id' field. * Relationships to other instances are hyperlinks, instead of primary keys.  NOTE: this only works with DRF 3.1.0 and above.
 type ParameterRuleCreate struct {
-	Type ParameterRuleTypeEnum `json:"type"`
-	Constraint string `json:"constraint"`
+	Type       ParameterRuleTypeEnum `json:"type"`
+	Constraint string                `json:"constraint"`
 }
 
 // NewParameterRuleCreate instantiates a new ParameterRuleCreate object
@@ -134,5 +134,3 @@ func (v *NullableParameterRuleCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

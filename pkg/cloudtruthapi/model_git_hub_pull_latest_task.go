@@ -31,8 +31,8 @@ type GitHubPullLatestTask struct {
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// If an error occurs early during processing, before attempting to process values, this detail may be helpful in determining the problem.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	ModifiedAt  time.Time      `json:"modified_at"`
 }
 
 // NewGitHubPullLatestTask instantiates a new GitHubPullLatestTask object
@@ -136,6 +136,7 @@ func (o *GitHubPullLatestTask) HasReason() bool {
 func (o *GitHubPullLatestTask) SetReason(v string) {
 	o.Reason.Set(&v)
 }
+
 // SetReasonNil sets the value for Reason to be an explicit nil
 func (o *GitHubPullLatestTask) SetReasonNil() {
 	o.Reason.Set(nil)
@@ -210,6 +211,7 @@ func (o *GitHubPullLatestTask) HasState() bool {
 func (o *GitHubPullLatestTask) SetState(v StateEnum) {
 	o.State.Set(&v)
 }
+
 // SetStateNil sets the value for State to be an explicit nil
 func (o *GitHubPullLatestTask) SetStateNil() {
 	o.State.Set(nil)
@@ -252,6 +254,7 @@ func (o *GitHubPullLatestTask) HasErrorCode() bool {
 func (o *GitHubPullLatestTask) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
+
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *GitHubPullLatestTask) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -294,6 +297,7 @@ func (o *GitHubPullLatestTask) HasErrorDetail() bool {
 func (o *GitHubPullLatestTask) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
+
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *GitHubPullLatestTask) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -419,5 +423,3 @@ func (v *NullableGitHubPullLatestTask) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

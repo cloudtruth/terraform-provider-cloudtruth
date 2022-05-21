@@ -18,10 +18,10 @@ import (
 
 // BackupDataSnapshot Environment, parameter-type, and project (including parameters and values) data at a point in time.
 type BackupDataSnapshot struct {
-	Environments map[string]BackupEnvironment `json:"environments"`
-	Types map[string]BackupParameterType `json:"types"`
-	Projects map[string]BackupProject `json:"projects"`
-	Timestamp time.Time `json:"timestamp"`
+	Environments map[string]BackupEnvironment   `json:"environments"`
+	Types        map[string]BackupParameterType `json:"types"`
+	Projects     map[string]BackupProject       `json:"projects"`
+	Timestamp    time.Time                      `json:"timestamp"`
 }
 
 // NewBackupDataSnapshot instantiates a new BackupDataSnapshot object
@@ -193,5 +193,3 @@ func (v *NullableBackupDataSnapshot) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

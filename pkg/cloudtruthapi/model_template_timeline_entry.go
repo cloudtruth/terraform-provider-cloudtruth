@@ -18,10 +18,10 @@ import (
 
 // TemplateTimelineEntry Details about a single change.
 type TemplateTimelineEntry struct {
-	HistoryDate time.Time `json:"history_date"`
+	HistoryDate time.Time               `json:"history_date"`
 	HistoryType NullableHistoryTypeEnum `json:"history_type"`
 	// The unique identifier of a user.
-	HistoryUser NullableString `json:"history_user,omitempty"`
+	HistoryUser     NullableString                       `json:"history_user,omitempty"`
 	HistoryTemplate TemplateTimelineEntryHistoryTemplate `json:"history_template"`
 }
 
@@ -127,6 +127,7 @@ func (o *TemplateTimelineEntry) HasHistoryUser() bool {
 func (o *TemplateTimelineEntry) SetHistoryUser(v string) {
 	o.HistoryUser.Set(&v)
 }
+
 // SetHistoryUserNil sets the value for HistoryUser to be an explicit nil
 func (o *TemplateTimelineEntry) SetHistoryUserNil() {
 	o.HistoryUser.Set(nil)
@@ -213,5 +214,3 @@ func (v *NullableTemplateTimelineEntry) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

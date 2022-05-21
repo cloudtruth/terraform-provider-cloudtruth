@@ -201,6 +201,7 @@ func (o *ValueCreate) HasInternalValue() bool {
 func (o *ValueCreate) SetInternalValue(v string) {
 	o.InternalValue.Set(&v)
 }
+
 // SetInternalValueNil sets the value for InternalValue to be an explicit nil
 func (o *ValueCreate) SetInternalValueNil() {
 	o.InternalValue.Set(nil)
@@ -301,5 +302,3 @@ func (v *NullableValueCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -128,6 +128,7 @@ func (o *ImportParameter) HasProjectId() bool {
 func (o *ImportParameter) SetProjectId(v string) {
 	o.ProjectId.Set(&v)
 }
+
 // SetProjectIdNil sets the value for ProjectId to be an explicit nil
 func (o *ImportParameter) SetProjectIdNil() {
 	o.ProjectId.Set(nil)
@@ -194,6 +195,7 @@ func (o *ImportParameter) HasEnvironmentId() bool {
 func (o *ImportParameter) SetEnvironmentId(v string) {
 	o.EnvironmentId.Set(&v)
 }
+
 // SetEnvironmentIdNil sets the value for EnvironmentId to be an explicit nil
 func (o *ImportParameter) SetEnvironmentIdNil() {
 	o.EnvironmentId.Set(nil)
@@ -260,6 +262,7 @@ func (o *ImportParameter) HasParameterId() bool {
 func (o *ImportParameter) SetParameterId(v string) {
 	o.ParameterId.Set(&v)
 }
+
 // SetParameterIdNil sets the value for ParameterId to be an explicit nil
 func (o *ImportParameter) SetParameterIdNil() {
 	o.ParameterId.Set(nil)
@@ -358,6 +361,7 @@ func (o *ImportParameter) HasValueId() bool {
 func (o *ImportParameter) SetValueId(v string) {
 	o.ValueId.Set(&v)
 }
+
 // SetValueIdNil sets the value for ValueId to be an explicit nil
 func (o *ImportParameter) SetValueIdNil() {
 	o.ValueId.Set(nil)
@@ -520,5 +524,3 @@ func (v *NullableImportParameter) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

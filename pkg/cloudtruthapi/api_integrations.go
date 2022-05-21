@@ -21,13 +21,12 @@ import (
 	"time"
 )
 
-
 // IntegrationsApiService IntegrationsApi service
 type IntegrationsApiService service
 
 type ApiIntegrationsAwsCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                  context.Context
+	ApiService           *IntegrationsApiService
 	awsIntegrationCreate *AwsIntegrationCreate
 }
 
@@ -60,7 +59,7 @@ Establishes an AWS Integration for your CloudTruth organization.
 func (a *IntegrationsApiService) IntegrationsAwsCreate(ctx context.Context) ApiIntegrationsAwsCreateRequest {
 	return ApiIntegrationsAwsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -68,10 +67,10 @@ func (a *IntegrationsApiService) IntegrationsAwsCreate(ctx context.Context) ApiI
 //  @return AwsIntegration
 func (a *IntegrationsApiService) IntegrationsAwsCreateExecute(r ApiIntegrationsAwsCreateRequest) (*AwsIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsIntegration
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsIntegration
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsCreate")
@@ -173,10 +172,10 @@ func (a *IntegrationsApiService) IntegrationsAwsCreateExecute(r ApiIntegrationsA
 }
 
 type ApiIntegrationsAwsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *IntegrationsApiService
-	id string
-	inUse *string
+	id         string
+	inUse      *string
 }
 
 // (Optional) Desired behavior if the integration has in-use values.  - &#x60;fail&#x60; will return HTTP error 409 if there are any values using the integration. - &#x60;leave&#x60; (default) will leave values in place and future queries may fail; you can control future value query behavior with the &#x60;lookup_error&#x60; query parameter on those requests. - &#x60;remove&#x60; will remove the all values using the integration when the integration is removed.
@@ -199,17 +198,17 @@ IntegrationsAwsDestroy Delete an AWS integration.
 func (a *IntegrationsApiService) IntegrationsAwsDestroy(ctx context.Context, id string) ApiIntegrationsAwsDestroyRequest {
 	return ApiIntegrationsAwsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsAwsDestroyExecute(r ApiIntegrationsAwsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsDestroy")
@@ -301,13 +300,13 @@ func (a *IntegrationsApiService) IntegrationsAwsDestroyExecute(r ApiIntegrations
 }
 
 type ApiIntegrationsAwsListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx          context.Context
+	ApiService   *IntegrationsApiService
 	awsAccountId *string
-	awsRoleName *string
-	ordering *string
-	page *int32
-	pageSize *int32
+	awsRoleName  *string
+	ordering     *string
+	page         *int32
+	pageSize     *int32
 }
 
 func (r ApiIntegrationsAwsListRequest) AwsAccountId(awsAccountId string) ApiIntegrationsAwsListRequest {
@@ -351,7 +350,7 @@ IntegrationsAwsList Method for IntegrationsAwsList
 func (a *IntegrationsApiService) IntegrationsAwsList(ctx context.Context) ApiIntegrationsAwsListRequest {
 	return ApiIntegrationsAwsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -359,10 +358,10 @@ func (a *IntegrationsApiService) IntegrationsAwsList(ctx context.Context) ApiInt
 //  @return PaginatedAwsIntegrationList
 func (a *IntegrationsApiService) IntegrationsAwsListExecute(r ApiIntegrationsAwsListRequest) (*PaginatedAwsIntegrationList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAwsIntegrationList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAwsIntegrationList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsList")
@@ -474,9 +473,9 @@ func (a *IntegrationsApiService) IntegrationsAwsListExecute(r ApiIntegrationsAws
 }
 
 type ApiIntegrationsAwsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	id string
+	ctx                   context.Context
+	ApiService            *IntegrationsApiService
+	id                    string
 	patchedAwsIntegration *PatchedAwsIntegration
 }
 
@@ -499,8 +498,8 @@ IntegrationsAwsPartialUpdate Method for IntegrationsAwsPartialUpdate
 func (a *IntegrationsApiService) IntegrationsAwsPartialUpdate(ctx context.Context, id string) ApiIntegrationsAwsPartialUpdateRequest {
 	return ApiIntegrationsAwsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -508,10 +507,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPartialUpdate(ctx context.Contex
 //  @return AwsIntegration
 func (a *IntegrationsApiService) IntegrationsAwsPartialUpdateExecute(r ApiIntegrationsAwsPartialUpdateRequest) (*AwsIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsIntegration
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsIntegration
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPartialUpdate")
@@ -611,10 +610,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPartialUpdateExecute(r ApiIntegr
 }
 
 type ApiIntegrationsAwsPullsCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	awsPull *AwsPull
+	awsPull          *AwsPull
 }
 
 func (r ApiIntegrationsAwsPullsCreateRequest) AwsPull(awsPull AwsPull) ApiIntegrationsAwsPullsCreateRequest {
@@ -635,8 +634,8 @@ IntegrationsAwsPullsCreate Method for IntegrationsAwsPullsCreate
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsCreate(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPullsCreateRequest {
 	return ApiIntegrationsAwsPullsCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
 	}
 }
@@ -645,10 +644,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsCreate(ctx context.Context,
 //  @return AwsPull
 func (a *IntegrationsApiService) IntegrationsAwsPullsCreateExecute(r ApiIntegrationsAwsPullsCreateRequest) (*AwsPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPull
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsCreate")
@@ -751,10 +750,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsCreateExecute(r ApiIntegrat
 }
 
 type ApiIntegrationsAwsPullsDestroyRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	id string
+	id               string
 }
 
 func (r ApiIntegrationsAwsPullsDestroyRequest) Execute() (*http.Response, error) {
@@ -771,19 +770,19 @@ IntegrationsAwsPullsDestroy Method for IntegrationsAwsPullsDestroy
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsDestroy(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsDestroyRequest {
 	return ApiIntegrationsAwsPullsDestroyRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsAwsPullsDestroyExecute(r ApiIntegrationsAwsPullsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsDestroy")
@@ -873,15 +872,15 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsDestroyExecute(r ApiIntegra
 }
 
 type ApiIntegrationsAwsPullsListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	awsintegrationPk string
+	ctx                  context.Context
+	ApiService           *IntegrationsApiService
+	awsintegrationPk     string
 	descriptionIcontains *string
-	name *string
-	nameIcontains *string
-	ordering *string
-	page *int32
-	pageSize *int32
+	name                 *string
+	nameIcontains        *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
 }
 
 func (r ApiIntegrationsAwsPullsListRequest) DescriptionIcontains(descriptionIcontains string) ApiIntegrationsAwsPullsListRequest {
@@ -930,8 +929,8 @@ IntegrationsAwsPullsList Method for IntegrationsAwsPullsList
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsList(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPullsListRequest {
 	return ApiIntegrationsAwsPullsListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
 	}
 }
@@ -940,10 +939,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsList(ctx context.Context, a
 //  @return PaginatedAwsPullList
 func (a *IntegrationsApiService) IntegrationsAwsPullsListExecute(r ApiIntegrationsAwsPullsListRequest) (*PaginatedAwsPullList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAwsPullList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAwsPullList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsList")
@@ -1059,11 +1058,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsListExecute(r ApiIntegratio
 }
 
 type ApiIntegrationsAwsPullsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	id string
-	patchedAwsPull *PatchedAwsPull
+	id               string
+	patchedAwsPull   *PatchedAwsPull
 }
 
 func (r ApiIntegrationsAwsPullsPartialUpdateRequest) PatchedAwsPull(patchedAwsPull PatchedAwsPull) ApiIntegrationsAwsPullsPartialUpdateRequest {
@@ -1085,10 +1084,10 @@ IntegrationsAwsPullsPartialUpdate Method for IntegrationsAwsPullsPartialUpdate
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsPartialUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsPartialUpdateRequest {
 	return ApiIntegrationsAwsPullsPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -1096,10 +1095,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsPartialUpdate(ctx context.C
 //  @return AwsPull
 func (a *IntegrationsApiService) IntegrationsAwsPullsPartialUpdateExecute(r ApiIntegrationsAwsPullsPartialUpdateRequest) (*AwsPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPull
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsPartialUpdate")
@@ -1200,10 +1199,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsPartialUpdateExecute(r ApiI
 }
 
 type ApiIntegrationsAwsPullsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	id string
+	id               string
 }
 
 func (r ApiIntegrationsAwsPullsRetrieveRequest) Execute() (*AwsPull, *http.Response, error) {
@@ -1220,10 +1219,10 @@ IntegrationsAwsPullsRetrieve Method for IntegrationsAwsPullsRetrieve
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsRetrieve(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsRetrieveRequest {
 	return ApiIntegrationsAwsPullsRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -1231,10 +1230,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsRetrieve(ctx context.Contex
 //  @return AwsPull
 func (a *IntegrationsApiService) IntegrationsAwsPullsRetrieveExecute(r ApiIntegrationsAwsPullsRetrieveRequest) (*AwsPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPull
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsRetrieve")
@@ -1333,10 +1332,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsRetrieveExecute(r ApiIntegr
 }
 
 type ApiIntegrationsAwsPullsSyncCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	awsintegrationPk string
-	id string
+	ctx                      context.Context
+	ApiService               *IntegrationsApiService
+	awsintegrationPk         string
+	id                       string
 	awsPullSyncActionRequest *AwsPullSyncActionRequest
 }
 
@@ -1361,19 +1360,19 @@ Enqueue a pull synchronization task for mapped external values accessible with t
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsSyncCreate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsSyncCreateRequest {
 	return ApiIntegrationsAwsPullsSyncCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsAwsPullsSyncCreateExecute(r ApiIntegrationsAwsPullsSyncCreateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsSyncCreate")
@@ -1465,17 +1464,17 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsSyncCreateExecute(r ApiInte
 }
 
 type ApiIntegrationsAwsPullsTasksListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	awspullPk string
-	modifiedAt *time.Time
-	modifiedAtGte *time.Time
-	modifiedAtLte *time.Time
-	ordering *string
-	page *int32
-	pageSize *int32
-	state *string
+	awspullPk        string
+	modifiedAt       *time.Time
+	modifiedAtGte    *time.Time
+	modifiedAtLte    *time.Time
+	ordering         *string
+	page             *int32
+	pageSize         *int32
+	state            *string
 }
 
 func (r ApiIntegrationsAwsPullsTasksListRequest) ModifiedAt(modifiedAt time.Time) ApiIntegrationsAwsPullsTasksListRequest {
@@ -1531,10 +1530,10 @@ IntegrationsAwsPullsTasksList Method for IntegrationsAwsPullsTasksList
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsTasksList(ctx context.Context, awsintegrationPk string, awspullPk string) ApiIntegrationsAwsPullsTasksListRequest {
 	return ApiIntegrationsAwsPullsTasksListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspullPk: awspullPk,
+		awspullPk:        awspullPk,
 	}
 }
 
@@ -1542,10 +1541,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksList(ctx context.Conte
 //  @return PaginatedAwsPullTaskList
 func (a *IntegrationsApiService) IntegrationsAwsPullsTasksListExecute(r ApiIntegrationsAwsPullsTasksListRequest) (*PaginatedAwsPullTaskList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAwsPullTaskList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAwsPullTaskList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsTasksList")
@@ -1665,11 +1664,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksListExecute(r ApiInteg
 }
 
 type ApiIntegrationsAwsPullsTasksRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	awspullPk string
-	id string
+	awspullPk        string
+	id               string
 }
 
 func (r ApiIntegrationsAwsPullsTasksRetrieveRequest) Execute() (*AwsPullTask, *http.Response, error) {
@@ -1687,11 +1686,11 @@ IntegrationsAwsPullsTasksRetrieve Method for IntegrationsAwsPullsTasksRetrieve
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsTasksRetrieve(ctx context.Context, awsintegrationPk string, awspullPk string, id string) ApiIntegrationsAwsPullsTasksRetrieveRequest {
 	return ApiIntegrationsAwsPullsTasksRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspullPk: awspullPk,
-		id: id,
+		awspullPk:        awspullPk,
+		id:               id,
 	}
 }
 
@@ -1699,10 +1698,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksRetrieve(ctx context.C
 //  @return AwsPullTask
 func (a *IntegrationsApiService) IntegrationsAwsPullsTasksRetrieveExecute(r ApiIntegrationsAwsPullsTasksRetrieveRequest) (*AwsPullTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPullTask
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPullTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsTasksRetrieve")
@@ -1802,23 +1801,23 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksRetrieveExecute(r ApiI
 }
 
 type ApiIntegrationsAwsPullsTasksStepsListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	awsintegrationPk string
-	awspullPk string
-	awspulltaskPk string
-	fqn *string
-	modifiedAt *time.Time
-	modifiedAtGte *time.Time
-	modifiedAtLte *time.Time
-	operation *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	success *bool
-	venueId *string
-	venueIdIcontains *string
-	venueName *string
+	ctx                context.Context
+	ApiService         *IntegrationsApiService
+	awsintegrationPk   string
+	awspullPk          string
+	awspulltaskPk      string
+	fqn                *string
+	modifiedAt         *time.Time
+	modifiedAtGte      *time.Time
+	modifiedAtLte      *time.Time
+	operation          *string
+	ordering           *string
+	page               *int32
+	pageSize           *int32
+	success            *bool
+	venueId            *string
+	venueIdIcontains   *string
+	venueName          *string
 	venueNameIcontains *string
 }
 
@@ -1906,11 +1905,11 @@ IntegrationsAwsPullsTasksStepsList Method for IntegrationsAwsPullsTasksStepsList
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsList(ctx context.Context, awsintegrationPk string, awspullPk string, awspulltaskPk string) ApiIntegrationsAwsPullsTasksStepsListRequest {
 	return ApiIntegrationsAwsPullsTasksStepsListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspullPk: awspullPk,
-		awspulltaskPk: awspulltaskPk,
+		awspullPk:        awspullPk,
+		awspulltaskPk:    awspulltaskPk,
 	}
 }
 
@@ -1918,10 +1917,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsList(ctx context.
 //  @return PaginatedAwsPullTaskStepList
 func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsListExecute(r ApiIntegrationsAwsPullsTasksStepsListRequest) (*PaginatedAwsPullTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAwsPullTaskStepList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAwsPullTaskStepList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsTasksStepsList")
@@ -2060,12 +2059,12 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsListExecute(r Api
 }
 
 type ApiIntegrationsAwsPullsTasksStepsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	awspullPk string
-	awspulltaskPk string
-	id string
+	awspullPk        string
+	awspulltaskPk    string
+	id               string
 }
 
 func (r ApiIntegrationsAwsPullsTasksStepsRetrieveRequest) Execute() (*AwsPullTaskStep, *http.Response, error) {
@@ -2084,12 +2083,12 @@ IntegrationsAwsPullsTasksStepsRetrieve Method for IntegrationsAwsPullsTasksSteps
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsRetrieve(ctx context.Context, awsintegrationPk string, awspullPk string, awspulltaskPk string, id string) ApiIntegrationsAwsPullsTasksStepsRetrieveRequest {
 	return ApiIntegrationsAwsPullsTasksStepsRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspullPk: awspullPk,
-		awspulltaskPk: awspulltaskPk,
-		id: id,
+		awspullPk:        awspullPk,
+		awspulltaskPk:    awspulltaskPk,
+		id:               id,
 	}
 }
 
@@ -2097,10 +2096,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsRetrieve(ctx cont
 //  @return AwsPullTaskStep
 func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsRetrieveExecute(r ApiIntegrationsAwsPullsTasksStepsRetrieveRequest) (*AwsPullTaskStep, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPullTaskStep
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPullTaskStep
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsTasksStepsRetrieve")
@@ -2201,11 +2200,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsRetrieveExecute(r
 }
 
 type ApiIntegrationsAwsPullsUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	id string
-	awsPull *AwsPull
+	id               string
+	awsPull          *AwsPull
 }
 
 func (r ApiIntegrationsAwsPullsUpdateRequest) AwsPull(awsPull AwsPull) ApiIntegrationsAwsPullsUpdateRequest {
@@ -2227,10 +2226,10 @@ IntegrationsAwsPullsUpdate Method for IntegrationsAwsPullsUpdate
 */
 func (a *IntegrationsApiService) IntegrationsAwsPullsUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsUpdateRequest {
 	return ApiIntegrationsAwsPullsUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -2238,10 +2237,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsUpdate(ctx context.Context,
 //  @return AwsPull
 func (a *IntegrationsApiService) IntegrationsAwsPullsUpdateExecute(r ApiIntegrationsAwsPullsUpdateRequest) (*AwsPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPull
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsUpdate")
@@ -2345,10 +2344,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsUpdateExecute(r ApiIntegrat
 }
 
 type ApiIntegrationsAwsPushesCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	awsPush *AwsPush
+	awsPush          *AwsPush
 }
 
 func (r ApiIntegrationsAwsPushesCreateRequest) AwsPush(awsPush AwsPush) ApiIntegrationsAwsPushesCreateRequest {
@@ -2369,8 +2368,8 @@ IntegrationsAwsPushesCreate Method for IntegrationsAwsPushesCreate
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesCreate(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPushesCreateRequest {
 	return ApiIntegrationsAwsPushesCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
 	}
 }
@@ -2379,10 +2378,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesCreate(ctx context.Context
 //  @return AwsPush
 func (a *IntegrationsApiService) IntegrationsAwsPushesCreateExecute(r ApiIntegrationsAwsPushesCreateRequest) (*AwsPush, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPush
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPush
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesCreate")
@@ -2485,10 +2484,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesCreateExecute(r ApiIntegra
 }
 
 type ApiIntegrationsAwsPushesDestroyRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	id string
+	id               string
 }
 
 func (r ApiIntegrationsAwsPushesDestroyRequest) Execute() (*http.Response, error) {
@@ -2505,19 +2504,19 @@ IntegrationsAwsPushesDestroy Method for IntegrationsAwsPushesDestroy
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesDestroy(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesDestroyRequest {
 	return ApiIntegrationsAwsPushesDestroyRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsAwsPushesDestroyExecute(r ApiIntegrationsAwsPushesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesDestroy")
@@ -2607,18 +2606,18 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesDestroyExecute(r ApiIntegr
 }
 
 type ApiIntegrationsAwsPushesListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	awsintegrationPk string
+	ctx                  context.Context
+	ApiService           *IntegrationsApiService
+	awsintegrationPk     string
 	descriptionIcontains *string
-	environment *string
-	name *string
-	nameIcontains *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	project *string
-	tag *string
+	environment          *string
+	name                 *string
+	nameIcontains        *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
+	project              *string
+	tag                  *string
 }
 
 func (r ApiIntegrationsAwsPushesListRequest) DescriptionIcontains(descriptionIcontains string) ApiIntegrationsAwsPushesListRequest {
@@ -2685,8 +2684,8 @@ IntegrationsAwsPushesList Method for IntegrationsAwsPushesList
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesList(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPushesListRequest {
 	return ApiIntegrationsAwsPushesListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
 	}
 }
@@ -2695,10 +2694,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesList(ctx context.Context, 
 //  @return PaginatedAwsPushList
 func (a *IntegrationsApiService) IntegrationsAwsPushesListExecute(r ApiIntegrationsAwsPushesListRequest) (*PaginatedAwsPushList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAwsPushList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAwsPushList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesList")
@@ -2823,10 +2822,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesListExecute(r ApiIntegrati
 }
 
 type ApiIntegrationsAwsPushesPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	awsintegrationPk string
-	id string
+	ctx                  context.Context
+	ApiService           *IntegrationsApiService
+	awsintegrationPk     string
+	id                   string
 	patchedAwsPushUpdate *PatchedAwsPushUpdate
 }
 
@@ -2849,10 +2848,10 @@ IntegrationsAwsPushesPartialUpdate Method for IntegrationsAwsPushesPartialUpdate
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesPartialUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesPartialUpdateRequest {
 	return ApiIntegrationsAwsPushesPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -2860,10 +2859,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesPartialUpdate(ctx context.
 //  @return AwsPushUpdate
 func (a *IntegrationsApiService) IntegrationsAwsPushesPartialUpdateExecute(r ApiIntegrationsAwsPushesPartialUpdateRequest) (*AwsPushUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPushUpdate
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPushUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesPartialUpdate")
@@ -2964,10 +2963,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesPartialUpdateExecute(r Api
 }
 
 type ApiIntegrationsAwsPushesRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	id string
+	id               string
 }
 
 func (r ApiIntegrationsAwsPushesRetrieveRequest) Execute() (*AwsPush, *http.Response, error) {
@@ -2984,10 +2983,10 @@ IntegrationsAwsPushesRetrieve Method for IntegrationsAwsPushesRetrieve
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesRetrieve(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesRetrieveRequest {
 	return ApiIntegrationsAwsPushesRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -2995,10 +2994,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesRetrieve(ctx context.Conte
 //  @return AwsPush
 func (a *IntegrationsApiService) IntegrationsAwsPushesRetrieveExecute(r ApiIntegrationsAwsPushesRetrieveRequest) (*AwsPush, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPush
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPush
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesRetrieve")
@@ -3097,11 +3096,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesRetrieveExecute(r ApiInteg
 }
 
 type ApiIntegrationsAwsPushesSyncCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	id string
-	awsPush *AwsPush
+	id               string
+	awsPush          *AwsPush
 }
 
 func (r ApiIntegrationsAwsPushesSyncCreateRequest) AwsPush(awsPush AwsPush) ApiIntegrationsAwsPushesSyncCreateRequest {
@@ -3125,19 +3124,19 @@ Enqueue a push synchronization task.
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesSyncCreate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesSyncCreateRequest {
 	return ApiIntegrationsAwsPushesSyncCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsAwsPushesSyncCreateExecute(r ApiIntegrationsAwsPushesSyncCreateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesSyncCreate")
@@ -3232,17 +3231,17 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesSyncCreateExecute(r ApiInt
 }
 
 type ApiIntegrationsAwsPushesTasksListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	awspushPk string
-	modifiedAt *time.Time
-	modifiedAtGte *time.Time
-	modifiedAtLte *time.Time
-	ordering *string
-	page *int32
-	pageSize *int32
-	state *string
+	awspushPk        string
+	modifiedAt       *time.Time
+	modifiedAtGte    *time.Time
+	modifiedAtLte    *time.Time
+	ordering         *string
+	page             *int32
+	pageSize         *int32
+	state            *string
 }
 
 func (r ApiIntegrationsAwsPushesTasksListRequest) ModifiedAt(modifiedAt time.Time) ApiIntegrationsAwsPushesTasksListRequest {
@@ -3298,10 +3297,10 @@ IntegrationsAwsPushesTasksList Method for IntegrationsAwsPushesTasksList
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesTasksList(ctx context.Context, awsintegrationPk string, awspushPk string) ApiIntegrationsAwsPushesTasksListRequest {
 	return ApiIntegrationsAwsPushesTasksListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspushPk: awspushPk,
+		awspushPk:        awspushPk,
 	}
 }
 
@@ -3309,10 +3308,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksList(ctx context.Cont
 //  @return PaginatedAwsPushTaskList
 func (a *IntegrationsApiService) IntegrationsAwsPushesTasksListExecute(r ApiIntegrationsAwsPushesTasksListRequest) (*PaginatedAwsPushTaskList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAwsPushTaskList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAwsPushTaskList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesTasksList")
@@ -3432,11 +3431,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksListExecute(r ApiInte
 }
 
 type ApiIntegrationsAwsPushesTasksRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	awspushPk string
-	id string
+	awspushPk        string
+	id               string
 }
 
 func (r ApiIntegrationsAwsPushesTasksRetrieveRequest) Execute() (*AwsPushTask, *http.Response, error) {
@@ -3454,11 +3453,11 @@ IntegrationsAwsPushesTasksRetrieve Method for IntegrationsAwsPushesTasksRetrieve
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesTasksRetrieve(ctx context.Context, awsintegrationPk string, awspushPk string, id string) ApiIntegrationsAwsPushesTasksRetrieveRequest {
 	return ApiIntegrationsAwsPushesTasksRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspushPk: awspushPk,
-		id: id,
+		awspushPk:        awspushPk,
+		id:               id,
 	}
 }
 
@@ -3466,10 +3465,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksRetrieve(ctx context.
 //  @return AwsPushTask
 func (a *IntegrationsApiService) IntegrationsAwsPushesTasksRetrieveExecute(r ApiIntegrationsAwsPushesTasksRetrieveRequest) (*AwsPushTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPushTask
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPushTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesTasksRetrieve")
@@ -3569,23 +3568,23 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksRetrieveExecute(r Api
 }
 
 type ApiIntegrationsAwsPushesTasksStepsListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	awsintegrationPk string
-	awspushPk string
-	awspushtaskPk string
-	fqn *string
-	modifiedAt *time.Time
-	modifiedAtGte *time.Time
-	modifiedAtLte *time.Time
-	operation *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	success *bool
-	venueId *string
-	venueIdIcontains *string
-	venueName *string
+	ctx                context.Context
+	ApiService         *IntegrationsApiService
+	awsintegrationPk   string
+	awspushPk          string
+	awspushtaskPk      string
+	fqn                *string
+	modifiedAt         *time.Time
+	modifiedAtGte      *time.Time
+	modifiedAtLte      *time.Time
+	operation          *string
+	ordering           *string
+	page               *int32
+	pageSize           *int32
+	success            *bool
+	venueId            *string
+	venueIdIcontains   *string
+	venueName          *string
 	venueNameIcontains *string
 }
 
@@ -3673,11 +3672,11 @@ IntegrationsAwsPushesTasksStepsList Method for IntegrationsAwsPushesTasksStepsLi
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsList(ctx context.Context, awsintegrationPk string, awspushPk string, awspushtaskPk string) ApiIntegrationsAwsPushesTasksStepsListRequest {
 	return ApiIntegrationsAwsPushesTasksStepsListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspushPk: awspushPk,
-		awspushtaskPk: awspushtaskPk,
+		awspushPk:        awspushPk,
+		awspushtaskPk:    awspushtaskPk,
 	}
 }
 
@@ -3685,10 +3684,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsList(ctx context
 //  @return PaginatedAwsPushTaskStepList
 func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsListExecute(r ApiIntegrationsAwsPushesTasksStepsListRequest) (*PaginatedAwsPushTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAwsPushTaskStepList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAwsPushTaskStepList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesTasksStepsList")
@@ -3827,12 +3826,12 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsListExecute(r Ap
 }
 
 type ApiIntegrationsAwsPushesTasksStepsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	awspushPk string
-	awspushtaskPk string
-	id string
+	awspushPk        string
+	awspushtaskPk    string
+	id               string
 }
 
 func (r ApiIntegrationsAwsPushesTasksStepsRetrieveRequest) Execute() (*AwsPushTaskStep, *http.Response, error) {
@@ -3851,12 +3850,12 @@ IntegrationsAwsPushesTasksStepsRetrieve Method for IntegrationsAwsPushesTasksSte
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsRetrieve(ctx context.Context, awsintegrationPk string, awspushPk string, awspushtaskPk string, id string) ApiIntegrationsAwsPushesTasksStepsRetrieveRequest {
 	return ApiIntegrationsAwsPushesTasksStepsRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspushPk: awspushPk,
-		awspushtaskPk: awspushtaskPk,
-		id: id,
+		awspushPk:        awspushPk,
+		awspushtaskPk:    awspushtaskPk,
+		id:               id,
 	}
 }
 
@@ -3864,10 +3863,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsRetrieve(ctx con
 //  @return AwsPushTaskStep
 func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsRetrieveExecute(r ApiIntegrationsAwsPushesTasksStepsRetrieveRequest) (*AwsPushTaskStep, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPushTaskStep
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPushTaskStep
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesTasksStepsRetrieve")
@@ -3968,11 +3967,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsRetrieveExecute(
 }
 
 type ApiIntegrationsAwsPushesUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	awsintegrationPk string
-	id string
-	awsPushUpdate *AwsPushUpdate
+	id               string
+	awsPushUpdate    *AwsPushUpdate
 }
 
 func (r ApiIntegrationsAwsPushesUpdateRequest) AwsPushUpdate(awsPushUpdate AwsPushUpdate) ApiIntegrationsAwsPushesUpdateRequest {
@@ -3994,10 +3993,10 @@ IntegrationsAwsPushesUpdate Method for IntegrationsAwsPushesUpdate
 */
 func (a *IntegrationsApiService) IntegrationsAwsPushesUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesUpdateRequest {
 	return ApiIntegrationsAwsPushesUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		awsintegrationPk: awsintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -4005,10 +4004,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesUpdate(ctx context.Context
 //  @return AwsPushUpdate
 func (a *IntegrationsApiService) IntegrationsAwsPushesUpdateExecute(r ApiIntegrationsAwsPushesUpdateRequest) (*AwsPushUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsPushUpdate
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsPushUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesUpdate")
@@ -4112,9 +4111,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesUpdateExecute(r ApiIntegra
 }
 
 type ApiIntegrationsAwsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	id string
+	ctx           context.Context
+	ApiService    *IntegrationsApiService
+	id            string
 	refreshStatus *bool
 }
 
@@ -4138,8 +4137,8 @@ IntegrationsAwsRetrieve Get details of an AWS Integration.
 func (a *IntegrationsApiService) IntegrationsAwsRetrieve(ctx context.Context, id string) ApiIntegrationsAwsRetrieveRequest {
 	return ApiIntegrationsAwsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -4147,10 +4146,10 @@ func (a *IntegrationsApiService) IntegrationsAwsRetrieve(ctx context.Context, id
 //  @return AwsIntegration
 func (a *IntegrationsApiService) IntegrationsAwsRetrieveExecute(r ApiIntegrationsAwsRetrieveRequest) (*AwsIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsIntegration
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsIntegration
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsRetrieve")
@@ -4251,9 +4250,9 @@ func (a *IntegrationsApiService) IntegrationsAwsRetrieveExecute(r ApiIntegration
 }
 
 type ApiIntegrationsAwsScanCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	id string
+	ctx                context.Context
+	ApiService         *IntegrationsApiService
+	id                 string
 	awsIntegrationScan *AwsIntegrationScan
 }
 
@@ -4278,8 +4277,8 @@ Probe a region and service using a pattern matching string that can be used in p
 func (a *IntegrationsApiService) IntegrationsAwsScanCreate(ctx context.Context, id string) ApiIntegrationsAwsScanCreateRequest {
 	return ApiIntegrationsAwsScanCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -4287,10 +4286,10 @@ func (a *IntegrationsApiService) IntegrationsAwsScanCreate(ctx context.Context, 
 //  @return DiscoveryResult
 func (a *IntegrationsApiService) IntegrationsAwsScanCreateExecute(r ApiIntegrationsAwsScanCreateRequest) (*DiscoveryResult, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *DiscoveryResult
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *DiscoveryResult
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsScanCreate")
@@ -4393,9 +4392,9 @@ func (a *IntegrationsApiService) IntegrationsAwsScanCreateExecute(r ApiIntegrati
 }
 
 type ApiIntegrationsAwsUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	id string
+	ctx            context.Context
+	ApiService     *IntegrationsApiService
+	id             string
 	awsIntegration *AwsIntegration
 }
 
@@ -4418,8 +4417,8 @@ IntegrationsAwsUpdate Method for IntegrationsAwsUpdate
 func (a *IntegrationsApiService) IntegrationsAwsUpdate(ctx context.Context, id string) ApiIntegrationsAwsUpdateRequest {
 	return ApiIntegrationsAwsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -4427,10 +4426,10 @@ func (a *IntegrationsApiService) IntegrationsAwsUpdate(ctx context.Context, id s
 //  @return AwsIntegration
 func (a *IntegrationsApiService) IntegrationsAwsUpdateExecute(r ApiIntegrationsAwsUpdateRequest) (*AwsIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AwsIntegration
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AwsIntegration
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsUpdate")
@@ -4533,8 +4532,8 @@ func (a *IntegrationsApiService) IntegrationsAwsUpdateExecute(r ApiIntegrationsA
 }
 
 type ApiIntegrationsAzureKeyVaultCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                            context.Context
+	ApiService                     *IntegrationsApiService
 	azureKeyVaultIntegrationCreate *AzureKeyVaultIntegrationCreate
 }
 
@@ -4568,7 +4567,7 @@ Establishes an Azure Key Vault Integration for your CloudTruth organization.
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultCreate(ctx context.Context) ApiIntegrationsAzureKeyVaultCreateRequest {
 	return ApiIntegrationsAzureKeyVaultCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -4576,10 +4575,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultCreate(ctx context.Con
 //  @return AzureKeyVaultIntegration
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultCreateExecute(r ApiIntegrationsAzureKeyVaultCreateRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultIntegration
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultIntegration
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultCreate")
@@ -4681,10 +4680,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultCreateExecute(r ApiInt
 }
 
 type ApiIntegrationsAzureKeyVaultDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *IntegrationsApiService
-	id string
-	inUse *string
+	id         string
+	inUse      *string
 }
 
 // (Optional) Desired behavior if the integration has in-use values.  - &#x60;fail&#x60; will return HTTP error 409 if there are any values using the integration. - &#x60;leave&#x60; (default) will leave values in place and future queries may fail; you can control future value query behavior with the &#x60;lookup_error&#x60; query parameter on those requests. - &#x60;remove&#x60; will remove the all values using the integration when the integration is removed.
@@ -4707,17 +4706,17 @@ IntegrationsAzureKeyVaultDestroy Delete an AWS integration.
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultDestroy(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultDestroyRequest {
 	return ApiIntegrationsAzureKeyVaultDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultDestroyExecute(r ApiIntegrationsAzureKeyVaultDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultDestroy")
@@ -4809,13 +4808,13 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultDestroyExecute(r ApiIn
 }
 
 type ApiIntegrationsAzureKeyVaultListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *IntegrationsApiService
-	ordering *string
-	page *int32
-	pageSize *int32
-	tenantId *string
-	vaultName *string
+	ordering   *string
+	page       *int32
+	pageSize   *int32
+	tenantId   *string
+	vaultName  *string
 }
 
 // Which field to use when ordering the results.
@@ -4859,7 +4858,7 @@ IntegrationsAzureKeyVaultList Method for IntegrationsAzureKeyVaultList
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultList(ctx context.Context) ApiIntegrationsAzureKeyVaultListRequest {
 	return ApiIntegrationsAzureKeyVaultListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -4867,10 +4866,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultList(ctx context.Conte
 //  @return PaginatedAzureKeyVaultIntegrationList
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultListExecute(r ApiIntegrationsAzureKeyVaultListRequest) (*PaginatedAzureKeyVaultIntegrationList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAzureKeyVaultIntegrationList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAzureKeyVaultIntegrationList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultList")
@@ -4982,9 +4981,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultListExecute(r ApiInteg
 }
 
 type ApiIntegrationsAzureKeyVaultPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	id string
+	ctx                             context.Context
+	ApiService                      *IntegrationsApiService
+	id                              string
 	patchedAzureKeyVaultIntegration *PatchedAzureKeyVaultIntegration
 }
 
@@ -5007,8 +5006,8 @@ IntegrationsAzureKeyVaultPartialUpdate Method for IntegrationsAzureKeyVaultParti
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPartialUpdate(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultPartialUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -5016,10 +5015,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPartialUpdate(ctx cont
 //  @return AzureKeyVaultIntegration
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPartialUpdateExecute(r ApiIntegrationsAzureKeyVaultPartialUpdateRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultIntegration
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultIntegration
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPartialUpdate")
@@ -5119,9 +5118,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPartialUpdateExecute(r
 }
 
 type ApiIntegrationsAzureKeyVaultPullsCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
+	ctx               context.Context
+	ApiService        *IntegrationsApiService
+	akvintegrationPk  string
 	azureKeyVaultPull *AzureKeyVaultPull
 }
 
@@ -5143,8 +5142,8 @@ IntegrationsAzureKeyVaultPullsCreate Method for IntegrationsAzureKeyVaultPullsCr
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsCreate(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPullsCreateRequest {
 	return ApiIntegrationsAzureKeyVaultPullsCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
 	}
 }
@@ -5153,10 +5152,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsCreate(ctx contex
 //  @return AzureKeyVaultPull
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsCreateExecute(r ApiIntegrationsAzureKeyVaultPullsCreateRequest) (*AzureKeyVaultPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPull
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsCreate")
@@ -5259,10 +5258,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsCreateExecute(r A
 }
 
 type ApiIntegrationsAzureKeyVaultPullsDestroyRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	akvintegrationPk string
-	id string
+	id               string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsDestroyRequest) Execute() (*http.Response, error) {
@@ -5279,19 +5278,19 @@ IntegrationsAzureKeyVaultPullsDestroy Method for IntegrationsAzureKeyVaultPullsD
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsDestroy(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsDestroyRequest {
 	return ApiIntegrationsAzureKeyVaultPullsDestroyRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsDestroyExecute(r ApiIntegrationsAzureKeyVaultPullsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsDestroy")
@@ -5381,15 +5380,15 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsDestroyExecute(r 
 }
 
 type ApiIntegrationsAzureKeyVaultPullsListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
+	ctx                  context.Context
+	ApiService           *IntegrationsApiService
+	akvintegrationPk     string
 	descriptionIcontains *string
-	name *string
-	nameIcontains *string
-	ordering *string
-	page *int32
-	pageSize *int32
+	name                 *string
+	nameIcontains        *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsListRequest) DescriptionIcontains(descriptionIcontains string) ApiIntegrationsAzureKeyVaultPullsListRequest {
@@ -5438,8 +5437,8 @@ IntegrationsAzureKeyVaultPullsList Method for IntegrationsAzureKeyVaultPullsList
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsList(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPullsListRequest {
 	return ApiIntegrationsAzureKeyVaultPullsListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
 	}
 }
@@ -5448,10 +5447,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsList(ctx context.
 //  @return PaginatedAzureKeyVaultPullList
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsListExecute(r ApiIntegrationsAzureKeyVaultPullsListRequest) (*PaginatedAzureKeyVaultPullList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAzureKeyVaultPullList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAzureKeyVaultPullList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsList")
@@ -5567,10 +5566,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsListExecute(r Api
 }
 
 type ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
-	id string
+	ctx                      context.Context
+	ApiService               *IntegrationsApiService
+	akvintegrationPk         string
+	id                       string
 	patchedAzureKeyVaultPull *PatchedAzureKeyVaultPull
 }
 
@@ -5593,10 +5592,10 @@ IntegrationsAzureKeyVaultPullsPartialUpdate Method for IntegrationsAzureKeyVault
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsPartialUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -5604,10 +5603,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsPartialUpdate(ctx
 //  @return AzureKeyVaultPull
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsPartialUpdateExecute(r ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest) (*AzureKeyVaultPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPull
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsPartialUpdate")
@@ -5708,10 +5707,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsPartialUpdateExec
 }
 
 type ApiIntegrationsAzureKeyVaultPullsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	akvintegrationPk string
-	id string
+	id               string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsRetrieveRequest) Execute() (*AzureKeyVaultPull, *http.Response, error) {
@@ -5728,10 +5727,10 @@ IntegrationsAzureKeyVaultPullsRetrieve Method for IntegrationsAzureKeyVaultPulls
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsRetrieve(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPullsRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -5739,10 +5738,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsRetrieve(ctx cont
 //  @return AzureKeyVaultPull
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsRetrieveExecute(r ApiIntegrationsAzureKeyVaultPullsRetrieveRequest) (*AzureKeyVaultPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPull
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsRetrieve")
@@ -5841,10 +5840,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsRetrieveExecute(r
 }
 
 type ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
-	id string
+	ctx                                context.Context
+	ApiService                         *IntegrationsApiService
+	akvintegrationPk                   string
+	id                                 string
 	azureKeyVaultPullSyncActionRequest *AzureKeyVaultPullSyncActionRequest
 }
 
@@ -5869,19 +5868,19 @@ Enqueue a pull synchronization task for mapped external values accessible with t
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsSyncCreate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest {
 	return ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsSyncCreateExecute(r ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsSyncCreate")
@@ -5973,17 +5972,17 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsSyncCreateExecute
 }
 
 type ApiIntegrationsAzureKeyVaultPullsTasksListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	akvintegrationPk string
-	akvpullPk string
-	modifiedAt *time.Time
-	modifiedAtGte *time.Time
-	modifiedAtLte *time.Time
-	ordering *string
-	page *int32
-	pageSize *int32
-	state *string
+	akvpullPk        string
+	modifiedAt       *time.Time
+	modifiedAtGte    *time.Time
+	modifiedAtLte    *time.Time
+	ordering         *string
+	page             *int32
+	pageSize         *int32
+	state            *string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsTasksListRequest) ModifiedAt(modifiedAt time.Time) ApiIntegrationsAzureKeyVaultPullsTasksListRequest {
@@ -6039,10 +6038,10 @@ IntegrationsAzureKeyVaultPullsTasksList Method for IntegrationsAzureKeyVaultPull
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksList(ctx context.Context, akvintegrationPk string, akvpullPk string) ApiIntegrationsAzureKeyVaultPullsTasksListRequest {
 	return ApiIntegrationsAzureKeyVaultPullsTasksListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpullPk: akvpullPk,
+		akvpullPk:        akvpullPk,
 	}
 }
 
@@ -6050,10 +6049,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksList(ctx con
 //  @return PaginatedAzureKeyVaultPullTaskList
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksListExecute(r ApiIntegrationsAzureKeyVaultPullsTasksListRequest) (*PaginatedAzureKeyVaultPullTaskList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAzureKeyVaultPullTaskList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAzureKeyVaultPullTaskList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsTasksList")
@@ -6173,11 +6172,11 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksListExecute(
 }
 
 type ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	akvintegrationPk string
-	akvpullPk string
-	id string
+	akvpullPk        string
+	id               string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest) Execute() (*AzureKeyVaultPullTask, *http.Response, error) {
@@ -6195,11 +6194,11 @@ IntegrationsAzureKeyVaultPullsTasksRetrieve Method for IntegrationsAzureKeyVault
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksRetrieve(ctx context.Context, akvintegrationPk string, akvpullPk string, id string) ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpullPk: akvpullPk,
-		id: id,
+		akvpullPk:        akvpullPk,
+		id:               id,
 	}
 }
 
@@ -6207,10 +6206,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksRetrieve(ctx
 //  @return AzureKeyVaultPullTask
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksRetrieveExecute(r ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest) (*AzureKeyVaultPullTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPullTask
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPullTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsTasksRetrieve")
@@ -6310,23 +6309,23 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksRetrieveExec
 }
 
 type ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
-	akvpullPk string
-	akvpulltaskPk string
-	fqn *string
-	modifiedAt *time.Time
-	modifiedAtGte *time.Time
-	modifiedAtLte *time.Time
-	operation *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	success *bool
-	venueId *string
-	venueIdIcontains *string
-	venueName *string
+	ctx                context.Context
+	ApiService         *IntegrationsApiService
+	akvintegrationPk   string
+	akvpullPk          string
+	akvpulltaskPk      string
+	fqn                *string
+	modifiedAt         *time.Time
+	modifiedAtGte      *time.Time
+	modifiedAtLte      *time.Time
+	operation          *string
+	ordering           *string
+	page               *int32
+	pageSize           *int32
+	success            *bool
+	venueId            *string
+	venueIdIcontains   *string
+	venueName          *string
 	venueNameIcontains *string
 }
 
@@ -6414,11 +6413,11 @@ IntegrationsAzureKeyVaultPullsTasksStepsList Method for IntegrationsAzureKeyVaul
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsList(ctx context.Context, akvintegrationPk string, akvpullPk string, akvpulltaskPk string) ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest {
 	return ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpullPk: akvpullPk,
-		akvpulltaskPk: akvpulltaskPk,
+		akvpullPk:        akvpullPk,
+		akvpulltaskPk:    akvpulltaskPk,
 	}
 }
 
@@ -6426,10 +6425,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsList(ct
 //  @return PaginatedAzureKeyVaultPullTaskStepList
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsListExecute(r ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest) (*PaginatedAzureKeyVaultPullTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAzureKeyVaultPullTaskStepList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAzureKeyVaultPullTaskStepList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsTasksStepsList")
@@ -6568,12 +6567,12 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsListExe
 }
 
 type ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	akvintegrationPk string
-	akvpullPk string
-	akvpulltaskPk string
-	id string
+	akvpullPk        string
+	akvpulltaskPk    string
+	id               string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest) Execute() (*AzureKeyVaultPullTaskStep, *http.Response, error) {
@@ -6592,12 +6591,12 @@ IntegrationsAzureKeyVaultPullsTasksStepsRetrieve Method for IntegrationsAzureKey
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsRetrieve(ctx context.Context, akvintegrationPk string, akvpullPk string, akvpulltaskPk string, id string) ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpullPk: akvpullPk,
-		akvpulltaskPk: akvpulltaskPk,
-		id: id,
+		akvpullPk:        akvpullPk,
+		akvpulltaskPk:    akvpulltaskPk,
+		id:               id,
 	}
 }
 
@@ -6605,10 +6604,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsRetriev
 //  @return AzureKeyVaultPullTaskStep
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsRetrieveExecute(r ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest) (*AzureKeyVaultPullTaskStep, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPullTaskStep
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPullTaskStep
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsTasksStepsRetrieve")
@@ -6709,10 +6708,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsRetriev
 }
 
 type ApiIntegrationsAzureKeyVaultPullsUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
-	id string
+	ctx               context.Context
+	ApiService        *IntegrationsApiService
+	akvintegrationPk  string
+	id                string
 	azureKeyVaultPull *AzureKeyVaultPull
 }
 
@@ -6735,10 +6734,10 @@ IntegrationsAzureKeyVaultPullsUpdate Method for IntegrationsAzureKeyVaultPullsUp
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultPullsUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -6746,10 +6745,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsUpdate(ctx contex
 //  @return AzureKeyVaultPull
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsUpdateExecute(r ApiIntegrationsAzureKeyVaultPullsUpdateRequest) (*AzureKeyVaultPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPull
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsUpdate")
@@ -6853,9 +6852,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsUpdateExecute(r A
 }
 
 type ApiIntegrationsAzureKeyVaultPushesCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
+	ctx               context.Context
+	ApiService        *IntegrationsApiService
+	akvintegrationPk  string
 	azureKeyVaultPush *AzureKeyVaultPush
 }
 
@@ -6877,8 +6876,8 @@ IntegrationsAzureKeyVaultPushesCreate Method for IntegrationsAzureKeyVaultPushes
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesCreate(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPushesCreateRequest {
 	return ApiIntegrationsAzureKeyVaultPushesCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
 	}
 }
@@ -6887,10 +6886,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesCreate(ctx conte
 //  @return AzureKeyVaultPush
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesCreateExecute(r ApiIntegrationsAzureKeyVaultPushesCreateRequest) (*AzureKeyVaultPush, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPush
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPush
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesCreate")
@@ -6993,10 +6992,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesCreateExecute(r 
 }
 
 type ApiIntegrationsAzureKeyVaultPushesDestroyRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	akvintegrationPk string
-	id string
+	id               string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesDestroyRequest) Execute() (*http.Response, error) {
@@ -7013,19 +7012,19 @@ IntegrationsAzureKeyVaultPushesDestroy Method for IntegrationsAzureKeyVaultPushe
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesDestroy(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesDestroyRequest {
 	return ApiIntegrationsAzureKeyVaultPushesDestroyRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesDestroyExecute(r ApiIntegrationsAzureKeyVaultPushesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesDestroy")
@@ -7115,18 +7114,18 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesDestroyExecute(r
 }
 
 type ApiIntegrationsAzureKeyVaultPushesListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
+	ctx                  context.Context
+	ApiService           *IntegrationsApiService
+	akvintegrationPk     string
 	descriptionIcontains *string
-	environment *string
-	name *string
-	nameIcontains *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	project *string
-	tag *string
+	environment          *string
+	name                 *string
+	nameIcontains        *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
+	project              *string
+	tag                  *string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesListRequest) DescriptionIcontains(descriptionIcontains string) ApiIntegrationsAzureKeyVaultPushesListRequest {
@@ -7193,8 +7192,8 @@ IntegrationsAzureKeyVaultPushesList Method for IntegrationsAzureKeyVaultPushesLi
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesList(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPushesListRequest {
 	return ApiIntegrationsAzureKeyVaultPushesListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
 	}
 }
@@ -7203,10 +7202,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesList(ctx context
 //  @return PaginatedAzureKeyVaultPushList
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesListExecute(r ApiIntegrationsAzureKeyVaultPushesListRequest) (*PaginatedAzureKeyVaultPushList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAzureKeyVaultPushList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAzureKeyVaultPushList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesList")
@@ -7331,10 +7330,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesListExecute(r Ap
 }
 
 type ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
-	id string
+	ctx                            context.Context
+	ApiService                     *IntegrationsApiService
+	akvintegrationPk               string
+	id                             string
 	patchedAzureKeyVaultPushUpdate *PatchedAzureKeyVaultPushUpdate
 }
 
@@ -7357,10 +7356,10 @@ IntegrationsAzureKeyVaultPushesPartialUpdate Method for IntegrationsAzureKeyVaul
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesPartialUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -7368,10 +7367,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesPartialUpdate(ct
 //  @return AzureKeyVaultPushUpdate
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesPartialUpdateExecute(r ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest) (*AzureKeyVaultPushUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPushUpdate
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPushUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesPartialUpdate")
@@ -7472,10 +7471,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesPartialUpdateExe
 }
 
 type ApiIntegrationsAzureKeyVaultPushesRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	akvintegrationPk string
-	id string
+	id               string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesRetrieveRequest) Execute() (*AzureKeyVaultPush, *http.Response, error) {
@@ -7492,10 +7491,10 @@ IntegrationsAzureKeyVaultPushesRetrieve Method for IntegrationsAzureKeyVaultPush
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesRetrieve(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPushesRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -7503,10 +7502,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesRetrieve(ctx con
 //  @return AzureKeyVaultPush
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesRetrieveExecute(r ApiIntegrationsAzureKeyVaultPushesRetrieveRequest) (*AzureKeyVaultPush, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPush
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPush
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesRetrieve")
@@ -7605,10 +7604,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesRetrieveExecute(
 }
 
 type ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
-	id string
+	ctx               context.Context
+	ApiService        *IntegrationsApiService
+	akvintegrationPk  string
+	id                string
 	azureKeyVaultPush *AzureKeyVaultPush
 }
 
@@ -7633,19 +7632,19 @@ Enqueue a push synchronization task.
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesSyncCreate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest {
 	return ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesSyncCreateExecute(r ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesSyncCreate")
@@ -7740,17 +7739,17 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesSyncCreateExecut
 }
 
 type ApiIntegrationsAzureKeyVaultPushesTasksListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	akvintegrationPk string
-	akvpushPk string
-	modifiedAt *time.Time
-	modifiedAtGte *time.Time
-	modifiedAtLte *time.Time
-	ordering *string
-	page *int32
-	pageSize *int32
-	state *string
+	akvpushPk        string
+	modifiedAt       *time.Time
+	modifiedAtGte    *time.Time
+	modifiedAtLte    *time.Time
+	ordering         *string
+	page             *int32
+	pageSize         *int32
+	state            *string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesTasksListRequest) ModifiedAt(modifiedAt time.Time) ApiIntegrationsAzureKeyVaultPushesTasksListRequest {
@@ -7806,10 +7805,10 @@ IntegrationsAzureKeyVaultPushesTasksList Method for IntegrationsAzureKeyVaultPus
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksList(ctx context.Context, akvintegrationPk string, akvpushPk string) ApiIntegrationsAzureKeyVaultPushesTasksListRequest {
 	return ApiIntegrationsAzureKeyVaultPushesTasksListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpushPk: akvpushPk,
+		akvpushPk:        akvpushPk,
 	}
 }
 
@@ -7817,10 +7816,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksList(ctx co
 //  @return PaginatedAzureKeyVaultPushTaskList
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksListExecute(r ApiIntegrationsAzureKeyVaultPushesTasksListRequest) (*PaginatedAzureKeyVaultPushTaskList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAzureKeyVaultPushTaskList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAzureKeyVaultPushTaskList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesTasksList")
@@ -7940,11 +7939,11 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksListExecute
 }
 
 type ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	akvintegrationPk string
-	akvpushPk string
-	id string
+	akvpushPk        string
+	id               string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest) Execute() (*AzureKeyVaultPushTask, *http.Response, error) {
@@ -7962,11 +7961,11 @@ IntegrationsAzureKeyVaultPushesTasksRetrieve Method for IntegrationsAzureKeyVaul
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksRetrieve(ctx context.Context, akvintegrationPk string, akvpushPk string, id string) ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpushPk: akvpushPk,
-		id: id,
+		akvpushPk:        akvpushPk,
+		id:               id,
 	}
 }
 
@@ -7974,10 +7973,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksRetrieve(ct
 //  @return AzureKeyVaultPushTask
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksRetrieveExecute(r ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest) (*AzureKeyVaultPushTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPushTask
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPushTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesTasksRetrieve")
@@ -8077,23 +8076,23 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksRetrieveExe
 }
 
 type ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
-	akvpushPk string
-	akvpushtaskPk string
-	fqn *string
-	modifiedAt *time.Time
-	modifiedAtGte *time.Time
-	modifiedAtLte *time.Time
-	operation *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	success *bool
-	venueId *string
-	venueIdIcontains *string
-	venueName *string
+	ctx                context.Context
+	ApiService         *IntegrationsApiService
+	akvintegrationPk   string
+	akvpushPk          string
+	akvpushtaskPk      string
+	fqn                *string
+	modifiedAt         *time.Time
+	modifiedAtGte      *time.Time
+	modifiedAtLte      *time.Time
+	operation          *string
+	ordering           *string
+	page               *int32
+	pageSize           *int32
+	success            *bool
+	venueId            *string
+	venueIdIcontains   *string
+	venueName          *string
 	venueNameIcontains *string
 }
 
@@ -8181,11 +8180,11 @@ IntegrationsAzureKeyVaultPushesTasksStepsList Method for IntegrationsAzureKeyVau
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsList(ctx context.Context, akvintegrationPk string, akvpushPk string, akvpushtaskPk string) ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest {
 	return ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpushPk: akvpushPk,
-		akvpushtaskPk: akvpushtaskPk,
+		akvpushPk:        akvpushPk,
+		akvpushtaskPk:    akvpushtaskPk,
 	}
 }
 
@@ -8193,10 +8192,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsList(c
 //  @return PaginatedAzureKeyVaultPushTaskStepList
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsListExecute(r ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest) (*PaginatedAzureKeyVaultPushTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAzureKeyVaultPushTaskStepList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAzureKeyVaultPushTaskStepList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesTasksStepsList")
@@ -8335,12 +8334,12 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsListEx
 }
 
 type ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx              context.Context
+	ApiService       *IntegrationsApiService
 	akvintegrationPk string
-	akvpushPk string
-	akvpushtaskPk string
-	id string
+	akvpushPk        string
+	akvpushtaskPk    string
+	id               string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest) Execute() (*AzureKeyVaultPushTaskStep, *http.Response, error) {
@@ -8359,12 +8358,12 @@ IntegrationsAzureKeyVaultPushesTasksStepsRetrieve Method for IntegrationsAzureKe
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsRetrieve(ctx context.Context, akvintegrationPk string, akvpushPk string, akvpushtaskPk string, id string) ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpushPk: akvpushPk,
-		akvpushtaskPk: akvpushtaskPk,
-		id: id,
+		akvpushPk:        akvpushPk,
+		akvpushtaskPk:    akvpushtaskPk,
+		id:               id,
 	}
 }
 
@@ -8372,10 +8371,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsRetrie
 //  @return AzureKeyVaultPushTaskStep
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsRetrieveExecute(r ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest) (*AzureKeyVaultPushTaskStep, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPushTaskStep
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPushTaskStep
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesTasksStepsRetrieve")
@@ -8476,10 +8475,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsRetrie
 }
 
 type ApiIntegrationsAzureKeyVaultPushesUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	akvintegrationPk string
-	id string
+	ctx                     context.Context
+	ApiService              *IntegrationsApiService
+	akvintegrationPk        string
+	id                      string
 	azureKeyVaultPushUpdate *AzureKeyVaultPushUpdate
 }
 
@@ -8502,10 +8501,10 @@ IntegrationsAzureKeyVaultPushesUpdate Method for IntegrationsAzureKeyVaultPushes
 */
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultPushesUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:       a,
+		ctx:              ctx,
 		akvintegrationPk: akvintegrationPk,
-		id: id,
+		id:               id,
 	}
 }
 
@@ -8513,10 +8512,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesUpdate(ctx conte
 //  @return AzureKeyVaultPushUpdate
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesUpdateExecute(r ApiIntegrationsAzureKeyVaultPushesUpdateRequest) (*AzureKeyVaultPushUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultPushUpdate
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultPushUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesUpdate")
@@ -8620,9 +8619,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesUpdateExecute(r 
 }
 
 type ApiIntegrationsAzureKeyVaultRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	id string
+	ctx           context.Context
+	ApiService    *IntegrationsApiService
+	id            string
 	refreshStatus *bool
 }
 
@@ -8646,8 +8645,8 @@ IntegrationsAzureKeyVaultRetrieve Get details of an Azure Key Vault Integration.
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultRetrieve(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -8655,10 +8654,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultRetrieve(ctx context.C
 //  @return AzureKeyVaultIntegration
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultRetrieveExecute(r ApiIntegrationsAzureKeyVaultRetrieveRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultIntegration
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultIntegration
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultRetrieve")
@@ -8759,9 +8758,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultRetrieveExecute(r ApiI
 }
 
 type ApiIntegrationsAzureKeyVaultScanCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	id string
+	ctx                          context.Context
+	ApiService                   *IntegrationsApiService
+	id                           string
 	azureKeyVaultIntegrationScan *AzureKeyVaultIntegrationScan
 }
 
@@ -8786,8 +8785,8 @@ Probe a region and service using a pattern matching string that can be used in p
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultScanCreate(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultScanCreateRequest {
 	return ApiIntegrationsAzureKeyVaultScanCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -8795,10 +8794,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultScanCreate(ctx context
 //  @return DiscoveryResult
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultScanCreateExecute(r ApiIntegrationsAzureKeyVaultScanCreateRequest) (*DiscoveryResult, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *DiscoveryResult
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *DiscoveryResult
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultScanCreate")
@@ -8901,9 +8900,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultScanCreateExecute(r Ap
 }
 
 type ApiIntegrationsAzureKeyVaultUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	id string
+	ctx                      context.Context
+	ApiService               *IntegrationsApiService
+	id                       string
 	azureKeyVaultIntegration *AzureKeyVaultIntegration
 }
 
@@ -8926,8 +8925,8 @@ IntegrationsAzureKeyVaultUpdate Method for IntegrationsAzureKeyVaultUpdate
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultUpdate(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -8935,10 +8934,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultUpdate(ctx context.Con
 //  @return AzureKeyVaultIntegration
 func (a *IntegrationsApiService) IntegrationsAzureKeyVaultUpdateExecute(r ApiIntegrationsAzureKeyVaultUpdateRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AzureKeyVaultIntegration
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AzureKeyVaultIntegration
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultUpdate")
@@ -9038,13 +9037,13 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultUpdateExecute(r ApiInt
 }
 
 type ApiIntegrationsExploreListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *IntegrationsApiService
-	fqn *string
-	jmes *string
-	ordering *string
-	page *int32
-	pageSize *int32
+	fqn        *string
+	jmes       *string
+	ordering   *string
+	page       *int32
+	pageSize   *int32
 }
 
 // FQN (URL-like) for third-party integration.
@@ -9097,7 +9096,7 @@ You can start exploring by not specifying an 'fqn', which will return a list of 
 func (a *IntegrationsApiService) IntegrationsExploreList(ctx context.Context) ApiIntegrationsExploreListRequest {
 	return ApiIntegrationsExploreListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -9105,10 +9104,10 @@ func (a *IntegrationsApiService) IntegrationsExploreList(ctx context.Context) Ap
 //  @return PaginatedIntegrationNodeList
 func (a *IntegrationsApiService) IntegrationsExploreListExecute(r ApiIntegrationsExploreListRequest) (*PaginatedIntegrationNodeList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedIntegrationNodeList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedIntegrationNodeList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsExploreList")
@@ -9220,8 +9219,8 @@ func (a *IntegrationsApiService) IntegrationsExploreListExecute(r ApiIntegration
 }
 
 type ApiIntegrationsGithubCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                     context.Context
+	ApiService              *IntegrationsApiService
 	gitHubIntegrationCreate *GitHubIntegrationCreate
 }
 
@@ -9244,17 +9243,17 @@ Establishes a GitHub Integration in your CloudTruth organization.
 ### Pre-Conditions ###
 
 - The user must be an Administrator or Owner of your organization.
-- A GitHub Integration with the `installation_id` cannot 
+- A GitHub Integration with the `installation_id` cannot
 already exist in this organization.
-- The user must first install the CloudTruth GitHub Application in 
-their GitHub organization and obtain the `installation_id` of the 
+- The user must first install the CloudTruth GitHub Application in
+their GitHub organization and obtain the `installation_id` of the
 application in order to create the integration.
 
 ### Initiating the GitHub Application Installation ###
 
 - Go to `https://github.com/apps/GITHUB_APP_NAME/installations/new?state=<bearer_token>`
-- On successful installation the browser will return to 
-`https://APP_URL/app_setup/github` (configured in ctops/bin/github*) 
+- On successful installation the browser will return to
+`https://APP_URL/app_setup/github` (configured in ctops/bin/github*)
 and provide the `installation_id` in the URI.
 - POST to this api to verify and establish the integration.
 
@@ -9264,7 +9263,7 @@ and provide the `installation_id` in the URI.
 func (a *IntegrationsApiService) IntegrationsGithubCreate(ctx context.Context) ApiIntegrationsGithubCreateRequest {
 	return ApiIntegrationsGithubCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -9272,10 +9271,10 @@ func (a *IntegrationsApiService) IntegrationsGithubCreate(ctx context.Context) A
 //  @return GitHubIntegration
 func (a *IntegrationsApiService) IntegrationsGithubCreateExecute(r ApiIntegrationsGithubCreateRequest) (*GitHubIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GitHubIntegration
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GitHubIntegration
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubCreate")
@@ -9377,10 +9376,10 @@ func (a *IntegrationsApiService) IntegrationsGithubCreateExecute(r ApiIntegratio
 }
 
 type ApiIntegrationsGithubDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *IntegrationsApiService
-	id string
-	inUse *string
+	id         string
+	inUse      *string
 }
 
 // (Optional) Desired behavior if the integration has in-use values.  - &#x60;fail&#x60; will return HTTP error 409 if there are any values using the integration. - &#x60;leave&#x60; (default) will leave values in place and future queries may fail; you can control future value query behavior with the &#x60;lookup_error&#x60; query parameter on those requests. - &#x60;remove&#x60; will remove the all values using the integration when the integration is removed.
@@ -9403,17 +9402,17 @@ IntegrationsGithubDestroy Delete a GitHub integration.
 func (a *IntegrationsApiService) IntegrationsGithubDestroy(ctx context.Context, id string) ApiIntegrationsGithubDestroyRequest {
 	return ApiIntegrationsGithubDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsGithubDestroyExecute(r ApiIntegrationsGithubDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubDestroy")
@@ -9505,12 +9504,12 @@ func (a *IntegrationsApiService) IntegrationsGithubDestroyExecute(r ApiIntegrati
 }
 
 type ApiIntegrationsGithubListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                context.Context
+	ApiService         *IntegrationsApiService
 	ghOrganizationSlug *string
-	ordering *string
-	page *int32
-	pageSize *int32
+	ordering           *string
+	page               *int32
+	pageSize           *int32
 }
 
 func (r ApiIntegrationsGithubListRequest) GhOrganizationSlug(ghOrganizationSlug string) ApiIntegrationsGithubListRequest {
@@ -9549,7 +9548,7 @@ IntegrationsGithubList Method for IntegrationsGithubList
 func (a *IntegrationsApiService) IntegrationsGithubList(ctx context.Context) ApiIntegrationsGithubListRequest {
 	return ApiIntegrationsGithubListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -9557,10 +9556,10 @@ func (a *IntegrationsApiService) IntegrationsGithubList(ctx context.Context) Api
 //  @return PaginatedGitHubIntegrationList
 func (a *IntegrationsApiService) IntegrationsGithubListExecute(r ApiIntegrationsGithubListRequest) (*PaginatedGitHubIntegrationList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedGitHubIntegrationList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedGitHubIntegrationList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubList")
@@ -9669,15 +9668,15 @@ func (a *IntegrationsApiService) IntegrationsGithubListExecute(r ApiIntegrations
 }
 
 type ApiIntegrationsGithubPullsListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	githubintegrationPk string
+	ctx                  context.Context
+	ApiService           *IntegrationsApiService
+	githubintegrationPk  string
 	descriptionIcontains *string
-	name *string
-	nameIcontains *string
-	ordering *string
-	page *int32
-	pageSize *int32
+	name                 *string
+	nameIcontains        *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
 }
 
 func (r ApiIntegrationsGithubPullsListRequest) DescriptionIcontains(descriptionIcontains string) ApiIntegrationsGithubPullsListRequest {
@@ -9726,8 +9725,8 @@ IntegrationsGithubPullsList Method for IntegrationsGithubPullsList
 */
 func (a *IntegrationsApiService) IntegrationsGithubPullsList(ctx context.Context, githubintegrationPk string) ApiIntegrationsGithubPullsListRequest {
 	return ApiIntegrationsGithubPullsListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:          a,
+		ctx:                 ctx,
 		githubintegrationPk: githubintegrationPk,
 	}
 }
@@ -9736,10 +9735,10 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsList(ctx context.Context
 //  @return PaginatedGitHubPullList
 func (a *IntegrationsApiService) IntegrationsGithubPullsListExecute(r ApiIntegrationsGithubPullsListRequest) (*PaginatedGitHubPullList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedGitHubPullList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedGitHubPullList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsList")
@@ -9855,11 +9854,11 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsListExecute(r ApiIntegra
 }
 
 type ApiIntegrationsGithubPullsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                 context.Context
+	ApiService          *IntegrationsApiService
 	githubintegrationPk string
-	id string
-	patchedGitHubPull *PatchedGitHubPull
+	id                  string
+	patchedGitHubPull   *PatchedGitHubPull
 }
 
 func (r ApiIntegrationsGithubPullsPartialUpdateRequest) PatchedGitHubPull(patchedGitHubPull PatchedGitHubPull) ApiIntegrationsGithubPullsPartialUpdateRequest {
@@ -9881,10 +9880,10 @@ IntegrationsGithubPullsPartialUpdate Method for IntegrationsGithubPullsPartialUp
 */
 func (a *IntegrationsApiService) IntegrationsGithubPullsPartialUpdate(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsPartialUpdateRequest {
 	return ApiIntegrationsGithubPullsPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:          a,
+		ctx:                 ctx,
 		githubintegrationPk: githubintegrationPk,
-		id: id,
+		id:                  id,
 	}
 }
 
@@ -9892,10 +9891,10 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsPartialUpdate(ctx contex
 //  @return GitHubPull
 func (a *IntegrationsApiService) IntegrationsGithubPullsPartialUpdateExecute(r ApiIntegrationsGithubPullsPartialUpdateRequest) (*GitHubPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GitHubPull
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GitHubPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsPartialUpdate")
@@ -9996,10 +9995,10 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsPartialUpdateExecute(r A
 }
 
 type ApiIntegrationsGithubPullsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                 context.Context
+	ApiService          *IntegrationsApiService
 	githubintegrationPk string
-	id string
+	id                  string
 }
 
 func (r ApiIntegrationsGithubPullsRetrieveRequest) Execute() (*GitHubPull, *http.Response, error) {
@@ -10016,10 +10015,10 @@ IntegrationsGithubPullsRetrieve Method for IntegrationsGithubPullsRetrieve
 */
 func (a *IntegrationsApiService) IntegrationsGithubPullsRetrieve(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsRetrieveRequest {
 	return ApiIntegrationsGithubPullsRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:          a,
+		ctx:                 ctx,
 		githubintegrationPk: githubintegrationPk,
-		id: id,
+		id:                  id,
 	}
 }
 
@@ -10027,10 +10026,10 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsRetrieve(ctx context.Con
 //  @return GitHubPull
 func (a *IntegrationsApiService) IntegrationsGithubPullsRetrieveExecute(r ApiIntegrationsGithubPullsRetrieveRequest) (*GitHubPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GitHubPull
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GitHubPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsRetrieve")
@@ -10129,11 +10128,11 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsRetrieveExecute(r ApiInt
 }
 
 type ApiIntegrationsGithubPullsSyncCreateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                 context.Context
+	ApiService          *IntegrationsApiService
 	githubintegrationPk string
-	id string
-	gitHubPull *GitHubPull
+	id                  string
+	gitHubPull          *GitHubPull
 }
 
 func (r ApiIntegrationsGithubPullsSyncCreateRequest) GitHubPull(gitHubPull GitHubPull) ApiIntegrationsGithubPullsSyncCreateRequest {
@@ -10157,19 +10156,19 @@ Enqueue a pull synchronization task for mapped external values accessible with t
 */
 func (a *IntegrationsApiService) IntegrationsGithubPullsSyncCreate(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsSyncCreateRequest {
 	return ApiIntegrationsGithubPullsSyncCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:          a,
+		ctx:                 ctx,
 		githubintegrationPk: githubintegrationPk,
-		id: id,
+		id:                  id,
 	}
 }
 
 // Execute executes the request
 func (a *IntegrationsApiService) IntegrationsGithubPullsSyncCreateExecute(r ApiIntegrationsGithubPullsSyncCreateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPost
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsSyncCreate")
@@ -10264,17 +10263,17 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsSyncCreateExecute(r ApiI
 }
 
 type ApiIntegrationsGithubPullsTasksListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                 context.Context
+	ApiService          *IntegrationsApiService
 	githubintegrationPk string
-	githubpullPk string
-	modifiedAt *time.Time
-	modifiedAtGte *time.Time
-	modifiedAtLte *time.Time
-	ordering *string
-	page *int32
-	pageSize *int32
-	state *string
+	githubpullPk        string
+	modifiedAt          *time.Time
+	modifiedAtGte       *time.Time
+	modifiedAtLte       *time.Time
+	ordering            *string
+	page                *int32
+	pageSize            *int32
+	state               *string
 }
 
 func (r ApiIntegrationsGithubPullsTasksListRequest) ModifiedAt(modifiedAt time.Time) ApiIntegrationsGithubPullsTasksListRequest {
@@ -10330,10 +10329,10 @@ IntegrationsGithubPullsTasksList Method for IntegrationsGithubPullsTasksList
 */
 func (a *IntegrationsApiService) IntegrationsGithubPullsTasksList(ctx context.Context, githubintegrationPk string, githubpullPk string) ApiIntegrationsGithubPullsTasksListRequest {
 	return ApiIntegrationsGithubPullsTasksListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:          a,
+		ctx:                 ctx,
 		githubintegrationPk: githubintegrationPk,
-		githubpullPk: githubpullPk,
+		githubpullPk:        githubpullPk,
 	}
 }
 
@@ -10341,10 +10340,10 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksList(ctx context.Co
 //  @return PaginatedGitHubPullTaskList
 func (a *IntegrationsApiService) IntegrationsGithubPullsTasksListExecute(r ApiIntegrationsGithubPullsTasksListRequest) (*PaginatedGitHubPullTaskList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedGitHubPullTaskList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedGitHubPullTaskList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsTasksList")
@@ -10464,11 +10463,11 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksListExecute(r ApiIn
 }
 
 type ApiIntegrationsGithubPullsTasksRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                 context.Context
+	ApiService          *IntegrationsApiService
 	githubintegrationPk string
-	githubpullPk string
-	id string
+	githubpullPk        string
+	id                  string
 }
 
 func (r ApiIntegrationsGithubPullsTasksRetrieveRequest) Execute() (*GitHubPullTask, *http.Response, error) {
@@ -10486,11 +10485,11 @@ IntegrationsGithubPullsTasksRetrieve Method for IntegrationsGithubPullsTasksRetr
 */
 func (a *IntegrationsApiService) IntegrationsGithubPullsTasksRetrieve(ctx context.Context, githubintegrationPk string, githubpullPk string, id string) ApiIntegrationsGithubPullsTasksRetrieveRequest {
 	return ApiIntegrationsGithubPullsTasksRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:          a,
+		ctx:                 ctx,
 		githubintegrationPk: githubintegrationPk,
-		githubpullPk: githubpullPk,
-		id: id,
+		githubpullPk:        githubpullPk,
+		id:                  id,
 	}
 }
 
@@ -10498,10 +10497,10 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksRetrieve(ctx contex
 //  @return GitHubPullTask
 func (a *IntegrationsApiService) IntegrationsGithubPullsTasksRetrieveExecute(r ApiIntegrationsGithubPullsTasksRetrieveRequest) (*GitHubPullTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GitHubPullTask
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GitHubPullTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsTasksRetrieve")
@@ -10601,24 +10600,24 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksRetrieveExecute(r A
 }
 
 type ApiIntegrationsGithubPullsTasksStepsListRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                 context.Context
+	ApiService          *IntegrationsApiService
 	githubintegrationPk string
-	githubpullPk string
-	githubpulltaskPk string
-	fqn *string
-	modifiedAt *time.Time
-	modifiedAtGte *time.Time
-	modifiedAtLte *time.Time
-	operation *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	success *bool
-	venueId *string
-	venueIdIcontains *string
-	venueName *string
-	venueNameIcontains *string
+	githubpullPk        string
+	githubpulltaskPk    string
+	fqn                 *string
+	modifiedAt          *time.Time
+	modifiedAtGte       *time.Time
+	modifiedAtLte       *time.Time
+	operation           *string
+	ordering            *string
+	page                *int32
+	pageSize            *int32
+	success             *bool
+	venueId             *string
+	venueIdIcontains    *string
+	venueName           *string
+	venueNameIcontains  *string
 }
 
 func (r ApiIntegrationsGithubPullsTasksStepsListRequest) Fqn(fqn string) ApiIntegrationsGithubPullsTasksStepsListRequest {
@@ -10705,11 +10704,11 @@ IntegrationsGithubPullsTasksStepsList Method for IntegrationsGithubPullsTasksSte
 */
 func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsList(ctx context.Context, githubintegrationPk string, githubpullPk string, githubpulltaskPk string) ApiIntegrationsGithubPullsTasksStepsListRequest {
 	return ApiIntegrationsGithubPullsTasksStepsListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:          a,
+		ctx:                 ctx,
 		githubintegrationPk: githubintegrationPk,
-		githubpullPk: githubpullPk,
-		githubpulltaskPk: githubpulltaskPk,
+		githubpullPk:        githubpullPk,
+		githubpulltaskPk:    githubpulltaskPk,
 	}
 }
 
@@ -10717,10 +10716,10 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsList(ctx conte
 //  @return PaginatedGitHubPullTaskStepList
 func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsListExecute(r ApiIntegrationsGithubPullsTasksStepsListRequest) (*PaginatedGitHubPullTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedGitHubPullTaskStepList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedGitHubPullTaskStepList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsTasksStepsList")
@@ -10859,12 +10858,12 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsListExecute(r 
 }
 
 type ApiIntegrationsGithubPullsTasksStepsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                 context.Context
+	ApiService          *IntegrationsApiService
 	githubintegrationPk string
-	githubpullPk string
-	githubpulltaskPk string
-	id string
+	githubpullPk        string
+	githubpulltaskPk    string
+	id                  string
 }
 
 func (r ApiIntegrationsGithubPullsTasksStepsRetrieveRequest) Execute() (*GitHubPullTaskStep, *http.Response, error) {
@@ -10883,12 +10882,12 @@ IntegrationsGithubPullsTasksStepsRetrieve Method for IntegrationsGithubPullsTask
 */
 func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsRetrieve(ctx context.Context, githubintegrationPk string, githubpullPk string, githubpulltaskPk string, id string) ApiIntegrationsGithubPullsTasksStepsRetrieveRequest {
 	return ApiIntegrationsGithubPullsTasksStepsRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:          a,
+		ctx:                 ctx,
 		githubintegrationPk: githubintegrationPk,
-		githubpullPk: githubpullPk,
-		githubpulltaskPk: githubpulltaskPk,
-		id: id,
+		githubpullPk:        githubpullPk,
+		githubpulltaskPk:    githubpulltaskPk,
+		id:                  id,
 	}
 }
 
@@ -10896,10 +10895,10 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsRetrieve(ctx c
 //  @return GitHubPullTaskStep
 func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsRetrieveExecute(r ApiIntegrationsGithubPullsTasksStepsRetrieveRequest) (*GitHubPullTaskStep, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GitHubPullTaskStep
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GitHubPullTaskStep
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsTasksStepsRetrieve")
@@ -11000,11 +10999,11 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsRetrieveExecut
 }
 
 type ApiIntegrationsGithubPullsUpdateRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
+	ctx                 context.Context
+	ApiService          *IntegrationsApiService
 	githubintegrationPk string
-	id string
-	gitHubPull *GitHubPull
+	id                  string
+	gitHubPull          *GitHubPull
 }
 
 func (r ApiIntegrationsGithubPullsUpdateRequest) GitHubPull(gitHubPull GitHubPull) ApiIntegrationsGithubPullsUpdateRequest {
@@ -11026,10 +11025,10 @@ IntegrationsGithubPullsUpdate Method for IntegrationsGithubPullsUpdate
 */
 func (a *IntegrationsApiService) IntegrationsGithubPullsUpdate(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsUpdateRequest {
 	return ApiIntegrationsGithubPullsUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:          a,
+		ctx:                 ctx,
 		githubintegrationPk: githubintegrationPk,
-		id: id,
+		id:                  id,
 	}
 }
 
@@ -11037,10 +11036,10 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsUpdate(ctx context.Conte
 //  @return GitHubPull
 func (a *IntegrationsApiService) IntegrationsGithubPullsUpdateExecute(r ApiIntegrationsGithubPullsUpdateRequest) (*GitHubPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GitHubPull
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GitHubPull
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsUpdate")
@@ -11144,9 +11143,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsUpdateExecute(r ApiInteg
 }
 
 type ApiIntegrationsGithubRetrieveRequest struct {
-	ctx context.Context
-	ApiService *IntegrationsApiService
-	id string
+	ctx           context.Context
+	ApiService    *IntegrationsApiService
+	id            string
 	refreshStatus *bool
 }
 
@@ -11170,8 +11169,8 @@ IntegrationsGithubRetrieve Get details of a GitHub Integration.
 func (a *IntegrationsApiService) IntegrationsGithubRetrieve(ctx context.Context, id string) ApiIntegrationsGithubRetrieveRequest {
 	return ApiIntegrationsGithubRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -11179,10 +11178,10 @@ func (a *IntegrationsApiService) IntegrationsGithubRetrieve(ctx context.Context,
 //  @return GitHubIntegration
 func (a *IntegrationsApiService) IntegrationsGithubRetrieveExecute(r ApiIntegrationsGithubRetrieveRequest) (*GitHubIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GitHubIntegration
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GitHubIntegration
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubRetrieve")

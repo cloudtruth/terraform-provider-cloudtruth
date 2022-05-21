@@ -57,8 +57,8 @@ type TaskStep struct {
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// Details on the error that occurred during processing.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	ModifiedAt  time.Time      `json:"modified_at"`
 }
 
 // NewTaskStep instantiates a new TaskStep object
@@ -166,6 +166,7 @@ func (o *TaskStep) HasOperation() bool {
 func (o *TaskStep) SetOperation(v OperationEnum) {
 	o.Operation.Set(&v)
 }
+
 // SetOperationNil sets the value for Operation to be an explicit nil
 func (o *TaskStep) SetOperationNil() {
 	o.Operation.Set(nil)
@@ -232,6 +233,7 @@ func (o *TaskStep) HasSuccessDetail() bool {
 func (o *TaskStep) SetSuccessDetail(v string) {
 	o.SuccessDetail.Set(&v)
 }
+
 // SetSuccessDetailNil sets the value for SuccessDetail to be an explicit nil
 func (o *TaskStep) SetSuccessDetailNil() {
 	o.SuccessDetail.Set(nil)
@@ -274,6 +276,7 @@ func (o *TaskStep) HasFqn() bool {
 func (o *TaskStep) SetFqn(v string) {
 	o.Fqn.Set(&v)
 }
+
 // SetFqnNil sets the value for Fqn to be an explicit nil
 func (o *TaskStep) SetFqnNil() {
 	o.Fqn.Set(nil)
@@ -342,6 +345,7 @@ func (o *TaskStep) HasEnvironmentId() bool {
 func (o *TaskStep) SetEnvironmentId(v string) {
 	o.EnvironmentId.Set(&v)
 }
+
 // SetEnvironmentIdNil sets the value for EnvironmentId to be an explicit nil
 func (o *TaskStep) SetEnvironmentIdNil() {
 	o.EnvironmentId.Set(nil)
@@ -384,6 +388,7 @@ func (o *TaskStep) HasEnvironmentName() bool {
 func (o *TaskStep) SetEnvironmentName(v string) {
 	o.EnvironmentName.Set(&v)
 }
+
 // SetEnvironmentNameNil sets the value for EnvironmentName to be an explicit nil
 func (o *TaskStep) SetEnvironmentNameNil() {
 	o.EnvironmentName.Set(nil)
@@ -452,6 +457,7 @@ func (o *TaskStep) HasProjectId() bool {
 func (o *TaskStep) SetProjectId(v string) {
 	o.ProjectId.Set(&v)
 }
+
 // SetProjectIdNil sets the value for ProjectId to be an explicit nil
 func (o *TaskStep) SetProjectIdNil() {
 	o.ProjectId.Set(nil)
@@ -494,6 +500,7 @@ func (o *TaskStep) HasProjectName() bool {
 func (o *TaskStep) SetProjectName(v string) {
 	o.ProjectName.Set(&v)
 }
+
 // SetProjectNameNil sets the value for ProjectName to be an explicit nil
 func (o *TaskStep) SetProjectNameNil() {
 	o.ProjectName.Set(nil)
@@ -562,6 +569,7 @@ func (o *TaskStep) HasParameterId() bool {
 func (o *TaskStep) SetParameterId(v string) {
 	o.ParameterId.Set(&v)
 }
+
 // SetParameterIdNil sets the value for ParameterId to be an explicit nil
 func (o *TaskStep) SetParameterIdNil() {
 	o.ParameterId.Set(nil)
@@ -604,6 +612,7 @@ func (o *TaskStep) HasParameterName() bool {
 func (o *TaskStep) SetParameterName(v string) {
 	o.ParameterName.Set(&v)
 }
+
 // SetParameterNameNil sets the value for ParameterName to be an explicit nil
 func (o *TaskStep) SetParameterNameNil() {
 	o.ParameterName.Set(nil)
@@ -646,6 +655,7 @@ func (o *TaskStep) HasVenueId() bool {
 func (o *TaskStep) SetVenueId(v string) {
 	o.VenueId.Set(&v)
 }
+
 // SetVenueIdNil sets the value for VenueId to be an explicit nil
 func (o *TaskStep) SetVenueIdNil() {
 	o.VenueId.Set(nil)
@@ -688,6 +698,7 @@ func (o *TaskStep) HasVenueName() bool {
 func (o *TaskStep) SetVenueName(v string) {
 	o.VenueName.Set(&v)
 }
+
 // SetVenueNameNil sets the value for VenueName to be an explicit nil
 func (o *TaskStep) SetVenueNameNil() {
 	o.VenueName.Set(nil)
@@ -730,6 +741,7 @@ func (o *TaskStep) HasSummary() bool {
 func (o *TaskStep) SetSummary(v string) {
 	o.Summary.Set(&v)
 }
+
 // SetSummaryNil sets the value for Summary to be an explicit nil
 func (o *TaskStep) SetSummaryNil() {
 	o.Summary.Set(nil)
@@ -772,6 +784,7 @@ func (o *TaskStep) HasErrorCode() bool {
 func (o *TaskStep) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
+
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *TaskStep) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -814,6 +827,7 @@ func (o *TaskStep) HasErrorDetail() bool {
 func (o *TaskStep) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
+
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *TaskStep) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -978,5 +992,3 @@ func (v *NullableTaskStep) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

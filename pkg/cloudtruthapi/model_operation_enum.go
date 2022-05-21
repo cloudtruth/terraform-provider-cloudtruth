@@ -22,7 +22,7 @@ type OperationEnum string
 // List of OperationEnum
 const (
 	OPERATIONENUM_CREATE OperationEnum = "create"
-	OPERATIONENUM_READ OperationEnum = "read"
+	OPERATIONENUM_READ   OperationEnum = "read"
 	OPERATIONENUM_UPDATE OperationEnum = "update"
 	OPERATIONENUM_DELETE OperationEnum = "delete"
 )
@@ -113,4 +113,3 @@ func (v *NullableOperationEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

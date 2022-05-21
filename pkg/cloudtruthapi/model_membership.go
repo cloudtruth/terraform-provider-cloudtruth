@@ -26,9 +26,9 @@ type Membership struct {
 	// The organization that the user is a member of.
 	Organization string `json:"organization"`
 	// The role that the user has in the organization.
-	Role NullableRoleEnum `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	Role       NullableRoleEnum `json:"role"`
+	CreatedAt  time.Time        `json:"created_at"`
+	ModifiedAt time.Time        `json:"modified_at"`
 }
 
 // NewMembership instantiates a new Membership object
@@ -286,5 +286,3 @@ func (v *NullableMembership) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

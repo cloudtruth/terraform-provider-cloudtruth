@@ -57,8 +57,8 @@ type AzureKeyVaultPushTaskStep struct {
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// Details on the error that occurred during processing.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	ModifiedAt  time.Time      `json:"modified_at"`
 }
 
 // NewAzureKeyVaultPushTaskStep instantiates a new AzureKeyVaultPushTaskStep object
@@ -166,6 +166,7 @@ func (o *AzureKeyVaultPushTaskStep) HasOperation() bool {
 func (o *AzureKeyVaultPushTaskStep) SetOperation(v OperationEnum) {
 	o.Operation.Set(&v)
 }
+
 // SetOperationNil sets the value for Operation to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetOperationNil() {
 	o.Operation.Set(nil)
@@ -232,6 +233,7 @@ func (o *AzureKeyVaultPushTaskStep) HasSuccessDetail() bool {
 func (o *AzureKeyVaultPushTaskStep) SetSuccessDetail(v string) {
 	o.SuccessDetail.Set(&v)
 }
+
 // SetSuccessDetailNil sets the value for SuccessDetail to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetSuccessDetailNil() {
 	o.SuccessDetail.Set(nil)
@@ -274,6 +276,7 @@ func (o *AzureKeyVaultPushTaskStep) HasFqn() bool {
 func (o *AzureKeyVaultPushTaskStep) SetFqn(v string) {
 	o.Fqn.Set(&v)
 }
+
 // SetFqnNil sets the value for Fqn to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetFqnNil() {
 	o.Fqn.Set(nil)
@@ -342,6 +345,7 @@ func (o *AzureKeyVaultPushTaskStep) HasEnvironmentId() bool {
 func (o *AzureKeyVaultPushTaskStep) SetEnvironmentId(v string) {
 	o.EnvironmentId.Set(&v)
 }
+
 // SetEnvironmentIdNil sets the value for EnvironmentId to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetEnvironmentIdNil() {
 	o.EnvironmentId.Set(nil)
@@ -384,6 +388,7 @@ func (o *AzureKeyVaultPushTaskStep) HasEnvironmentName() bool {
 func (o *AzureKeyVaultPushTaskStep) SetEnvironmentName(v string) {
 	o.EnvironmentName.Set(&v)
 }
+
 // SetEnvironmentNameNil sets the value for EnvironmentName to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetEnvironmentNameNil() {
 	o.EnvironmentName.Set(nil)
@@ -452,6 +457,7 @@ func (o *AzureKeyVaultPushTaskStep) HasProjectId() bool {
 func (o *AzureKeyVaultPushTaskStep) SetProjectId(v string) {
 	o.ProjectId.Set(&v)
 }
+
 // SetProjectIdNil sets the value for ProjectId to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetProjectIdNil() {
 	o.ProjectId.Set(nil)
@@ -494,6 +500,7 @@ func (o *AzureKeyVaultPushTaskStep) HasProjectName() bool {
 func (o *AzureKeyVaultPushTaskStep) SetProjectName(v string) {
 	o.ProjectName.Set(&v)
 }
+
 // SetProjectNameNil sets the value for ProjectName to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetProjectNameNil() {
 	o.ProjectName.Set(nil)
@@ -562,6 +569,7 @@ func (o *AzureKeyVaultPushTaskStep) HasParameterId() bool {
 func (o *AzureKeyVaultPushTaskStep) SetParameterId(v string) {
 	o.ParameterId.Set(&v)
 }
+
 // SetParameterIdNil sets the value for ParameterId to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetParameterIdNil() {
 	o.ParameterId.Set(nil)
@@ -604,6 +612,7 @@ func (o *AzureKeyVaultPushTaskStep) HasParameterName() bool {
 func (o *AzureKeyVaultPushTaskStep) SetParameterName(v string) {
 	o.ParameterName.Set(&v)
 }
+
 // SetParameterNameNil sets the value for ParameterName to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetParameterNameNil() {
 	o.ParameterName.Set(nil)
@@ -646,6 +655,7 @@ func (o *AzureKeyVaultPushTaskStep) HasVenueId() bool {
 func (o *AzureKeyVaultPushTaskStep) SetVenueId(v string) {
 	o.VenueId.Set(&v)
 }
+
 // SetVenueIdNil sets the value for VenueId to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetVenueIdNil() {
 	o.VenueId.Set(nil)
@@ -688,6 +698,7 @@ func (o *AzureKeyVaultPushTaskStep) HasVenueName() bool {
 func (o *AzureKeyVaultPushTaskStep) SetVenueName(v string) {
 	o.VenueName.Set(&v)
 }
+
 // SetVenueNameNil sets the value for VenueName to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetVenueNameNil() {
 	o.VenueName.Set(nil)
@@ -730,6 +741,7 @@ func (o *AzureKeyVaultPushTaskStep) HasSummary() bool {
 func (o *AzureKeyVaultPushTaskStep) SetSummary(v string) {
 	o.Summary.Set(&v)
 }
+
 // SetSummaryNil sets the value for Summary to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetSummaryNil() {
 	o.Summary.Set(nil)
@@ -772,6 +784,7 @@ func (o *AzureKeyVaultPushTaskStep) HasErrorCode() bool {
 func (o *AzureKeyVaultPushTaskStep) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
+
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -814,6 +827,7 @@ func (o *AzureKeyVaultPushTaskStep) HasErrorDetail() bool {
 func (o *AzureKeyVaultPushTaskStep) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
+
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *AzureKeyVaultPushTaskStep) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -978,5 +992,3 @@ func (v *NullableAzureKeyVaultPushTaskStep) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

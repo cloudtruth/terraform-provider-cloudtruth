@@ -26,9 +26,9 @@ type PatchedMembership struct {
 	// The organization that the user is a member of.
 	Organization *string `json:"organization,omitempty"`
 	// The role that the user has in the organization.
-	Role NullableRoleEnum `json:"role,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	Role       NullableRoleEnum `json:"role,omitempty"`
+	CreatedAt  *time.Time       `json:"created_at,omitempty"`
+	ModifiedAt *time.Time       `json:"modified_at,omitempty"`
 }
 
 // NewPatchedMembership instantiates a new PatchedMembership object
@@ -208,6 +208,7 @@ func (o *PatchedMembership) HasRole() bool {
 func (o *PatchedMembership) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
+
 // SetRoleNil sets the value for Role to be an explicit nil
 func (o *PatchedMembership) SetRoleNil() {
 	o.Role.Set(nil)
@@ -343,5 +344,3 @@ func (v *NullablePatchedMembership) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

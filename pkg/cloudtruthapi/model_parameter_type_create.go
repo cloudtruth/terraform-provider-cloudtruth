@@ -131,6 +131,7 @@ func (o *ParameterTypeCreate) HasParent() bool {
 func (o *ParameterTypeCreate) SetParent(v string) {
 	o.Parent.Set(&v)
 }
+
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *ParameterTypeCreate) SetParentNil() {
 	o.Parent.Set(nil)
@@ -190,5 +191,3 @@ func (v *NullableParameterTypeCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

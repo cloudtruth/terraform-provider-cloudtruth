@@ -17,10 +17,10 @@ import (
 
 // PaginatedAwsPullList struct for PaginatedAwsPullList
 type PaginatedAwsPullList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
+	Count    *int32         `json:"count,omitempty"`
+	Next     NullableString `json:"next,omitempty"`
 	Previous NullableString `json:"previous,omitempty"`
-	Results []AwsPull `json:"results,omitempty"`
+	Results  []AwsPull      `json:"results,omitempty"`
 }
 
 // NewPaginatedAwsPullList instantiates a new PaginatedAwsPullList object
@@ -104,6 +104,7 @@ func (o *PaginatedAwsPullList) HasNext() bool {
 func (o *PaginatedAwsPullList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedAwsPullList) SetNextNil() {
 	o.Next.Set(nil)
@@ -146,6 +147,7 @@ func (o *PaginatedAwsPullList) HasPrevious() bool {
 func (o *PaginatedAwsPullList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedAwsPullList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -240,5 +242,3 @@ func (v *NullablePaginatedAwsPullList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

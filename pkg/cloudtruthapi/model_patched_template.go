@@ -39,8 +39,8 @@ type PatchedTemplate struct {
 	// The dynamic values that reference this template.
 	ReferencingValues []string `json:"referencing_values,omitempty"`
 	// If True, this template contains secrets.
-	HasSecret *bool `json:"has_secret,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	HasSecret  *bool      `json:"has_secret,omitempty"`
+	CreatedAt  *time.Time `json:"created_at,omitempty"`
 	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 }
 
@@ -556,5 +556,3 @@ func (v *NullablePatchedTemplate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

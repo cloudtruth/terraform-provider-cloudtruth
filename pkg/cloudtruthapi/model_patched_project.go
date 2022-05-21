@@ -36,8 +36,8 @@ type PatchedProject struct {
 	// Deprecated. Only shows pushes for aws integrations in /api/v1/.
 	Pushes []AwsPush `json:"pushes,omitempty"`
 	// Push actions associated with the project.
-	PushUrls []string `json:"push_urls,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	PushUrls   []string   `json:"push_urls,omitempty"`
+	CreatedAt  *time.Time `json:"created_at,omitempty"`
 	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 }
 
@@ -250,6 +250,7 @@ func (o *PatchedProject) HasDependsOn() bool {
 func (o *PatchedProject) SetDependsOn(v string) {
 	o.DependsOn.Set(&v)
 }
+
 // SetDependsOnNil sets the value for DependsOn to be an explicit nil
 func (o *PatchedProject) SetDependsOnNil() {
 	o.DependsOn.Set(nil)
@@ -324,6 +325,7 @@ func (o *PatchedProject) HasRole() bool {
 func (o *PatchedProject) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
+
 // SetRoleNil sets the value for Role to be an explicit nil
 func (o *PatchedProject) SetRoleNil() {
 	o.Role.Set(nil)
@@ -538,5 +540,3 @@ func (v *NullablePatchedProject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

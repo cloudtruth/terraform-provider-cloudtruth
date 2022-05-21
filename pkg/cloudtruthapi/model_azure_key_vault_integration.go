@@ -20,7 +20,7 @@ import (
 type AzureKeyVaultIntegration struct {
 	Url string `json:"url"`
 	// The unique identifier for the integration.
-	Id string `json:"id"`
+	Id   string `json:"id"`
 	Name string `json:"name"`
 	// An optional description for the integration.
 	Description *string `json:"description,omitempty"`
@@ -30,9 +30,9 @@ type AzureKeyVaultIntegration struct {
 	StatusDetail string `json:"status_detail"`
 	// The last time the status was evaluated.
 	StatusLastCheckedAt time.Time `json:"status_last_checked_at"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
-	Fqn string `json:"fqn"`
+	CreatedAt           time.Time `json:"created_at"`
+	ModifiedAt          time.Time `json:"modified_at"`
+	Fqn                 string    `json:"fqn"`
 	// The type of integration.
 	Type string `json:"type"`
 	// Allow actions to write to the integration.
@@ -508,5 +508,3 @@ func (v *NullableAzureKeyVaultIntegration) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

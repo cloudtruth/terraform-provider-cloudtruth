@@ -17,13 +17,13 @@ import (
 
 // BackupParameterValuesValue struct for BackupParameterValuesValue
 type BackupParameterValuesValue struct {
-	External NullableBackupParameterValueExternal `json:"external"`
-	Environment string `json:"environment"`
-	Evaluated bool `json:"evaluated"`
-	Source NullableString `json:"source,omitempty"`
-	Project NullableString `json:"project,omitempty"`
-	Value NullableString `json:"value,omitempty"`
-	Raw NullableString `json:"raw,omitempty"`
+	External    NullableBackupParameterValueExternal `json:"external"`
+	Environment string                               `json:"environment"`
+	Evaluated   bool                                 `json:"evaluated"`
+	Source      NullableString                       `json:"source,omitempty"`
+	Project     NullableString                       `json:"project,omitempty"`
+	Value       NullableString                       `json:"value,omitempty"`
+	Raw         NullableString                       `json:"raw,omitempty"`
 }
 
 // NewBackupParameterValuesValue instantiates a new BackupParameterValuesValue object
@@ -152,6 +152,7 @@ func (o *BackupParameterValuesValue) HasSource() bool {
 func (o *BackupParameterValuesValue) SetSource(v string) {
 	o.Source.Set(&v)
 }
+
 // SetSourceNil sets the value for Source to be an explicit nil
 func (o *BackupParameterValuesValue) SetSourceNil() {
 	o.Source.Set(nil)
@@ -194,6 +195,7 @@ func (o *BackupParameterValuesValue) HasProject() bool {
 func (o *BackupParameterValuesValue) SetProject(v string) {
 	o.Project.Set(&v)
 }
+
 // SetProjectNil sets the value for Project to be an explicit nil
 func (o *BackupParameterValuesValue) SetProjectNil() {
 	o.Project.Set(nil)
@@ -236,6 +238,7 @@ func (o *BackupParameterValuesValue) HasValue() bool {
 func (o *BackupParameterValuesValue) SetValue(v string) {
 	o.Value.Set(&v)
 }
+
 // SetValueNil sets the value for Value to be an explicit nil
 func (o *BackupParameterValuesValue) SetValueNil() {
 	o.Value.Set(nil)
@@ -278,6 +281,7 @@ func (o *BackupParameterValuesValue) HasRaw() bool {
 func (o *BackupParameterValuesValue) SetRaw(v string) {
 	o.Raw.Set(&v)
 }
+
 // SetRawNil sets the value for Raw to be an explicit nil
 func (o *BackupParameterValuesValue) SetRawNil() {
 	o.Raw.Set(nil)
@@ -349,5 +353,3 @@ func (v *NullableBackupParameterValuesValue) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

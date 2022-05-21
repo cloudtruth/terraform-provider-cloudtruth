@@ -18,13 +18,13 @@ import (
 
 // PatchedServiceAccount struct for PatchedServiceAccount
 type PatchedServiceAccount struct {
-	Url *string `json:"url,omitempty"`
-	Id *string `json:"id,omitempty"`
+	Url  *string                    `json:"url,omitempty"`
+	Id   *string                    `json:"id,omitempty"`
 	User *PatchedServiceAccountUser `json:"user,omitempty"`
 	// An optional description of the process or system using the service account.
-	Description *string `json:"description,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	Description *string    `json:"description,omitempty"`
+	CreatedAt   *time.Time `json:"created_at,omitempty"`
+	ModifiedAt  *time.Time `json:"modified_at,omitempty"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
 	LastUsedAt NullableTime `json:"last_used_at,omitempty"`
 }
@@ -270,6 +270,7 @@ func (o *PatchedServiceAccount) HasLastUsedAt() bool {
 func (o *PatchedServiceAccount) SetLastUsedAt(v time.Time) {
 	o.LastUsedAt.Set(&v)
 }
+
 // SetLastUsedAtNil sets the value for LastUsedAt to be an explicit nil
 func (o *PatchedServiceAccount) SetLastUsedAtNil() {
 	o.LastUsedAt.Set(nil)
@@ -341,5 +342,3 @@ func (v *NullablePatchedServiceAccount) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

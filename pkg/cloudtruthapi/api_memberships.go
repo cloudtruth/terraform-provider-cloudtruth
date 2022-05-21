@@ -20,13 +20,12 @@ import (
 	"strings"
 )
 
-
 // MembershipsApiService MembershipsApi service
 type MembershipsApiService service
 
 type ApiMembershipsCreateRequest struct {
-	ctx context.Context
-	ApiService *MembershipsApiService
+	ctx              context.Context
+	ApiService       *MembershipsApiService
 	membershipCreate *MembershipCreate
 }
 
@@ -48,7 +47,7 @@ MembershipsCreate Method for MembershipsCreate
 func (a *MembershipsApiService) MembershipsCreate(ctx context.Context) ApiMembershipsCreateRequest {
 	return ApiMembershipsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -56,10 +55,10 @@ func (a *MembershipsApiService) MembershipsCreate(ctx context.Context) ApiMember
 //  @return Membership
 func (a *MembershipsApiService) MembershipsCreateExecute(r ApiMembershipsCreateRequest) (*Membership, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Membership
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Membership
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsCreate")
@@ -161,9 +160,9 @@ func (a *MembershipsApiService) MembershipsCreateExecute(r ApiMembershipsCreateR
 }
 
 type ApiMembershipsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MembershipsApiService
-	id string
+	id         string
 }
 
 func (r ApiMembershipsDestroyRequest) Execute() (*http.Response, error) {
@@ -180,17 +179,17 @@ MembershipsDestroy Method for MembershipsDestroy
 func (a *MembershipsApiService) MembershipsDestroy(ctx context.Context, id string) ApiMembershipsDestroyRequest {
 	return ApiMembershipsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *MembershipsApiService) MembershipsDestroyExecute(r ApiMembershipsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsDestroy")
@@ -279,13 +278,13 @@ func (a *MembershipsApiService) MembershipsDestroyExecute(r ApiMembershipsDestro
 }
 
 type ApiMembershipsListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MembershipsApiService
-	ordering *string
-	page *int32
-	pageSize *int32
-	role *string
-	user *string
+	ordering   *string
+	page       *int32
+	pageSize   *int32
+	role       *string
+	user       *string
 }
 
 // Which field to use when ordering the results.
@@ -331,7 +330,7 @@ MembershipsList Method for MembershipsList
 func (a *MembershipsApiService) MembershipsList(ctx context.Context) ApiMembershipsListRequest {
 	return ApiMembershipsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -339,10 +338,10 @@ func (a *MembershipsApiService) MembershipsList(ctx context.Context) ApiMembersh
 //  @return PaginatedMembershipList
 func (a *MembershipsApiService) MembershipsListExecute(r ApiMembershipsListRequest) (*PaginatedMembershipList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedMembershipList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedMembershipList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsList")
@@ -454,9 +453,9 @@ func (a *MembershipsApiService) MembershipsListExecute(r ApiMembershipsListReque
 }
 
 type ApiMembershipsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *MembershipsApiService
-	id string
+	ctx               context.Context
+	ApiService        *MembershipsApiService
+	id                string
 	patchedMembership *PatchedMembership
 }
 
@@ -479,8 +478,8 @@ MembershipsPartialUpdate Method for MembershipsPartialUpdate
 func (a *MembershipsApiService) MembershipsPartialUpdate(ctx context.Context, id string) ApiMembershipsPartialUpdateRequest {
 	return ApiMembershipsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -488,10 +487,10 @@ func (a *MembershipsApiService) MembershipsPartialUpdate(ctx context.Context, id
 //  @return Membership
 func (a *MembershipsApiService) MembershipsPartialUpdateExecute(r ApiMembershipsPartialUpdateRequest) (*Membership, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Membership
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Membership
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsPartialUpdate")
@@ -591,9 +590,9 @@ func (a *MembershipsApiService) MembershipsPartialUpdateExecute(r ApiMemberships
 }
 
 type ApiMembershipsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MembershipsApiService
-	id string
+	id         string
 }
 
 func (r ApiMembershipsRetrieveRequest) Execute() (*Membership, *http.Response, error) {
@@ -610,8 +609,8 @@ MembershipsRetrieve Method for MembershipsRetrieve
 func (a *MembershipsApiService) MembershipsRetrieve(ctx context.Context, id string) ApiMembershipsRetrieveRequest {
 	return ApiMembershipsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -619,10 +618,10 @@ func (a *MembershipsApiService) MembershipsRetrieve(ctx context.Context, id stri
 //  @return Membership
 func (a *MembershipsApiService) MembershipsRetrieveExecute(r ApiMembershipsRetrieveRequest) (*Membership, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Membership
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Membership
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsRetrieve")
@@ -720,9 +719,9 @@ func (a *MembershipsApiService) MembershipsRetrieveExecute(r ApiMembershipsRetri
 }
 
 type ApiMembershipsUpdateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MembershipsApiService
-	id string
+	id         string
 	membership *Membership
 }
 
@@ -745,8 +744,8 @@ MembershipsUpdate Method for MembershipsUpdate
 func (a *MembershipsApiService) MembershipsUpdate(ctx context.Context, id string) ApiMembershipsUpdateRequest {
 	return ApiMembershipsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -754,10 +753,10 @@ func (a *MembershipsApiService) MembershipsUpdate(ctx context.Context, id string
 //  @return Membership
 func (a *MembershipsApiService) MembershipsUpdateExecute(r ApiMembershipsUpdateRequest) (*Membership, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Membership
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Membership
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsUpdate")

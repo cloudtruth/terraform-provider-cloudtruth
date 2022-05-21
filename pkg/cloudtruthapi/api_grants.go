@@ -20,14 +20,13 @@ import (
 	"strings"
 )
 
-
 // GrantsApiService GrantsApi service
 type GrantsApiService service
 
 type ApiGrantsCreateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsApiService
-	grant *Grant
+	grant      *Grant
 }
 
 func (r ApiGrantsCreateRequest) Grant(grant Grant) ApiGrantsCreateRequest {
@@ -54,7 +53,7 @@ will return a 403 Forbidden error.
 func (a *GrantsApiService) GrantsCreate(ctx context.Context) ApiGrantsCreateRequest {
 	return ApiGrantsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -62,10 +61,10 @@ func (a *GrantsApiService) GrantsCreate(ctx context.Context) ApiGrantsCreateRequ
 //  @return Grant
 func (a *GrantsApiService) GrantsCreateExecute(r ApiGrantsCreateRequest) (*Grant, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Grant
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Grant
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsApiService.GrantsCreate")
@@ -167,9 +166,9 @@ func (a *GrantsApiService) GrantsCreateExecute(r ApiGrantsCreateRequest) (*Grant
 }
 
 type ApiGrantsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsApiService
-	id string
+	id         string
 }
 
 func (r ApiGrantsDestroyRequest) Execute() (*http.Response, error) {
@@ -192,17 +191,17 @@ will return a 403 Forbidden error.
 func (a *GrantsApiService) GrantsDestroy(ctx context.Context, id string) ApiGrantsDestroyRequest {
 	return ApiGrantsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *GrantsApiService) GrantsDestroyExecute(r ApiGrantsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsApiService.GrantsDestroy")
@@ -291,14 +290,14 @@ func (a *GrantsApiService) GrantsDestroyExecute(r ApiGrantsDestroyRequest) (*htt
 }
 
 type ApiGrantsListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsApiService
-	ordering *string
-	page *int32
-	pageSize *int32
-	principal *string
-	role *string
-	scope *string
+	ordering   *string
+	page       *int32
+	pageSize   *int32
+	principal  *string
+	role       *string
+	scope      *string
 }
 
 // Which field to use when ordering the results.
@@ -356,7 +355,7 @@ will return a 403 Forbidden error.
 func (a *GrantsApiService) GrantsList(ctx context.Context) ApiGrantsListRequest {
 	return ApiGrantsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -364,10 +363,10 @@ func (a *GrantsApiService) GrantsList(ctx context.Context) ApiGrantsListRequest 
 //  @return PaginatedGrantList
 func (a *GrantsApiService) GrantsListExecute(r ApiGrantsListRequest) (*PaginatedGrantList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedGrantList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedGrantList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsApiService.GrantsList")
@@ -482,7 +481,7 @@ func (a *GrantsApiService) GrantsListExecute(r ApiGrantsListRequest) (*Paginated
 }
 
 type ApiGrantsMultiDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsApiService
 }
 
@@ -504,7 +503,7 @@ or remove all grants for a user.
 func (a *GrantsApiService) GrantsMultiDestroy(ctx context.Context) ApiGrantsMultiDestroyRequest {
 	return ApiGrantsMultiDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -512,10 +511,10 @@ func (a *GrantsApiService) GrantsMultiDestroy(ctx context.Context) ApiGrantsMult
 //  @return Grant
 func (a *GrantsApiService) GrantsMultiDestroyExecute(r ApiGrantsMultiDestroyRequest) (*Grant, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Grant
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Grant
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsApiService.GrantsMultiDestroy")
@@ -612,9 +611,9 @@ func (a *GrantsApiService) GrantsMultiDestroyExecute(r ApiGrantsMultiDestroyRequ
 }
 
 type ApiGrantsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *GrantsApiService
-	id string
+	ctx          context.Context
+	ApiService   *GrantsApiService
+	id           string
 	patchedGrant *PatchedGrant
 }
 
@@ -643,8 +642,8 @@ will return a 403 Forbidden error.
 func (a *GrantsApiService) GrantsPartialUpdate(ctx context.Context, id string) ApiGrantsPartialUpdateRequest {
 	return ApiGrantsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -652,10 +651,10 @@ func (a *GrantsApiService) GrantsPartialUpdate(ctx context.Context, id string) A
 //  @return Grant
 func (a *GrantsApiService) GrantsPartialUpdateExecute(r ApiGrantsPartialUpdateRequest) (*Grant, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Grant
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Grant
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsApiService.GrantsPartialUpdate")
@@ -755,9 +754,9 @@ func (a *GrantsApiService) GrantsPartialUpdateExecute(r ApiGrantsPartialUpdateRe
 }
 
 type ApiGrantsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsApiService
-	id string
+	id         string
 }
 
 func (r ApiGrantsRetrieveRequest) Execute() (*Grant, *http.Response, error) {
@@ -780,8 +779,8 @@ will return a 403 Forbidden error.
 func (a *GrantsApiService) GrantsRetrieve(ctx context.Context, id string) ApiGrantsRetrieveRequest {
 	return ApiGrantsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -789,10 +788,10 @@ func (a *GrantsApiService) GrantsRetrieve(ctx context.Context, id string) ApiGra
 //  @return Grant
 func (a *GrantsApiService) GrantsRetrieveExecute(r ApiGrantsRetrieveRequest) (*Grant, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Grant
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Grant
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsApiService.GrantsRetrieve")
@@ -890,10 +889,10 @@ func (a *GrantsApiService) GrantsRetrieveExecute(r ApiGrantsRetrieveRequest) (*G
 }
 
 type ApiGrantsUpdateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsApiService
-	id string
-	grant *Grant
+	id         string
+	grant      *Grant
 }
 
 func (r ApiGrantsUpdateRequest) Grant(grant Grant) ApiGrantsUpdateRequest {
@@ -921,8 +920,8 @@ will return a 403 Forbidden error.
 func (a *GrantsApiService) GrantsUpdate(ctx context.Context, id string) ApiGrantsUpdateRequest {
 	return ApiGrantsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -930,10 +929,10 @@ func (a *GrantsApiService) GrantsUpdate(ctx context.Context, id string) ApiGrant
 //  @return Grant
 func (a *GrantsApiService) GrantsUpdateExecute(r ApiGrantsUpdateRequest) (*Grant, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Grant
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Grant
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsApiService.GrantsUpdate")

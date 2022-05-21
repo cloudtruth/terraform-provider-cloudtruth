@@ -18,14 +18,14 @@ import (
 
 // ParameterTimelineEntry Details about a single change.
 type ParameterTimelineEntry struct {
-	HistoryDate time.Time `json:"history_date"`
+	HistoryDate time.Time               `json:"history_date"`
 	HistoryType NullableHistoryTypeEnum `json:"history_type"`
 	// The unique identifier of a user.
 	HistoryUser NullableString `json:"history_user,omitempty"`
 	// The affected environment(s).
 	HistoryEnvironments []ParameterTimelineEntryEnvironment `json:"history_environments"`
 	// The component of the parameter that changed.
-	HistoryModel NullableHistoryModelEnum `json:"history_model"`
+	HistoryModel     NullableHistoryModelEnum               `json:"history_model"`
 	HistoryParameter ParameterTimelineEntryHistoryParameter `json:"history_parameter"`
 }
 
@@ -133,6 +133,7 @@ func (o *ParameterTimelineEntry) HasHistoryUser() bool {
 func (o *ParameterTimelineEntry) SetHistoryUser(v string) {
 	o.HistoryUser.Set(&v)
 }
+
 // SetHistoryUserNil sets the value for HistoryUser to be an explicit nil
 func (o *ParameterTimelineEntry) SetHistoryUserNil() {
 	o.HistoryUser.Set(nil)
@@ -275,5 +276,3 @@ func (v *NullableParameterTimelineEntry) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

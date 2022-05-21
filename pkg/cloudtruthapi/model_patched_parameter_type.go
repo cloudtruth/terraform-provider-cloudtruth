@@ -31,8 +31,8 @@ type PatchedParameterType struct {
 	Parent NullableString `json:"parent,omitempty"`
 	// Name of the parent ParameterType (if any).
 	ParentName NullableString `json:"parent_name,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	CreatedAt  *time.Time     `json:"created_at,omitempty"`
+	ModifiedAt *time.Time     `json:"modified_at,omitempty"`
 }
 
 // NewPatchedParameterType instantiates a new PatchedParameterType object
@@ -244,6 +244,7 @@ func (o *PatchedParameterType) HasParent() bool {
 func (o *PatchedParameterType) SetParent(v string) {
 	o.Parent.Set(&v)
 }
+
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *PatchedParameterType) SetParentNil() {
 	o.Parent.Set(nil)
@@ -286,6 +287,7 @@ func (o *PatchedParameterType) HasParentName() bool {
 func (o *PatchedParameterType) SetParentName(v string) {
 	o.ParentName.Set(&v)
 }
+
 // SetParentNameNil sets the value for ParentName to be an explicit nil
 func (o *PatchedParameterType) SetParentNameNil() {
 	o.ParentName.Set(nil)
@@ -427,5 +429,3 @@ func (v *NullablePatchedParameterType) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

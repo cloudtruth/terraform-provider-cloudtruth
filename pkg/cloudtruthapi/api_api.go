@@ -19,15 +19,14 @@ import (
 	"net/url"
 )
 
-
 // ApiApiService ApiApi service
 type ApiApiService service
 
 type ApiApiSchemaRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ApiApiService
-	format *string
-	lang *string
+	format     *string
+	lang       *string
 }
 
 func (r ApiApiSchemaRetrieveRequest) Format(format string) ApiApiSchemaRetrieveRequest {
@@ -58,7 +57,7 @@ OpenApi3 schema for this API. Format can be selected via content negotiation.
 func (a *ApiApiService) ApiSchemaRetrieve(ctx context.Context) ApiApiSchemaRetrieveRequest {
 	return ApiApiSchemaRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -66,10 +65,10 @@ func (a *ApiApiService) ApiSchemaRetrieve(ctx context.Context) ApiApiSchemaRetri
 //  @return map[string]interface{}
 func (a *ApiApiService) ApiSchemaRetrieveExecute(r ApiApiSchemaRetrieveRequest) (map[string]interface{}, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue map[string]interface{}
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ApiApiService.ApiSchemaRetrieve")

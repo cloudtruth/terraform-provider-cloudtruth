@@ -17,10 +17,10 @@ import (
 
 // PaginatedParameterTypeRuleList struct for PaginatedParameterTypeRuleList
 type PaginatedParameterTypeRuleList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
-	Previous NullableString `json:"previous,omitempty"`
-	Results []ParameterTypeRule `json:"results,omitempty"`
+	Count    *int32              `json:"count,omitempty"`
+	Next     NullableString      `json:"next,omitempty"`
+	Previous NullableString      `json:"previous,omitempty"`
+	Results  []ParameterTypeRule `json:"results,omitempty"`
 }
 
 // NewPaginatedParameterTypeRuleList instantiates a new PaginatedParameterTypeRuleList object
@@ -104,6 +104,7 @@ func (o *PaginatedParameterTypeRuleList) HasNext() bool {
 func (o *PaginatedParameterTypeRuleList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedParameterTypeRuleList) SetNextNil() {
 	o.Next.Set(nil)
@@ -146,6 +147,7 @@ func (o *PaginatedParameterTypeRuleList) HasPrevious() bool {
 func (o *PaginatedParameterTypeRuleList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedParameterTypeRuleList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -240,5 +242,3 @@ func (v *NullablePaginatedParameterTypeRuleList) UnmarshalJSON(src []byte) error
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

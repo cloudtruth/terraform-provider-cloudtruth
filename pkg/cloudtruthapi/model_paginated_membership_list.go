@@ -17,10 +17,10 @@ import (
 
 // PaginatedMembershipList struct for PaginatedMembershipList
 type PaginatedMembershipList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
+	Count    *int32         `json:"count,omitempty"`
+	Next     NullableString `json:"next,omitempty"`
 	Previous NullableString `json:"previous,omitempty"`
-	Results []Membership `json:"results,omitempty"`
+	Results  []Membership   `json:"results,omitempty"`
 }
 
 // NewPaginatedMembershipList instantiates a new PaginatedMembershipList object
@@ -104,6 +104,7 @@ func (o *PaginatedMembershipList) HasNext() bool {
 func (o *PaginatedMembershipList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedMembershipList) SetNextNil() {
 	o.Next.Set(nil)
@@ -146,6 +147,7 @@ func (o *PaginatedMembershipList) HasPrevious() bool {
 func (o *PaginatedMembershipList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedMembershipList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -240,5 +242,3 @@ func (v *NullablePaginatedMembershipList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

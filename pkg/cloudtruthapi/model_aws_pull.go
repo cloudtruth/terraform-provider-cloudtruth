@@ -24,10 +24,10 @@ type AwsPull struct {
 	// The action name.
 	Name string `json:"name"`
 	// The optional description for the action.
-	Description *string `json:"description,omitempty"`
-	LatestTask NullableAwsPullLatestTask `json:"latest_task"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	Description *string                   `json:"description,omitempty"`
+	LatestTask  NullableAwsPullLatestTask `json:"latest_task"`
+	CreatedAt   time.Time                 `json:"created_at"`
+	ModifiedAt  time.Time                 `json:"modified_at"`
 	// Allow the pull to create environments.  Any automatically created environments will be children of the `default` environment.  If an environment needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
 	CreateEnvironments *bool `json:"create_environments,omitempty"`
 	// Allow the pull to create projects.  If a project needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
@@ -561,5 +561,3 @@ func (v *NullableAwsPull) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -218,6 +218,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) HasResource() bool {
 func (o *PatchedAzureKeyVaultPushUpdate) SetResource(v string) {
 	o.Resource.Set(&v)
 }
+
 // SetResourceNil sets the value for Resource to be an explicit nil
 func (o *PatchedAzureKeyVaultPushUpdate) SetResourceNil() {
 	o.Resource.Set(nil)
@@ -493,5 +494,3 @@ func (v *NullablePatchedAzureKeyVaultPushUpdate) UnmarshalJSON(src []byte) error
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

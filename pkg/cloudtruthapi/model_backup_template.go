@@ -17,8 +17,8 @@ import (
 
 // BackupTemplate Template data at a given point in time.
 type BackupTemplate struct {
-	Name string `json:"name"`
-	Text string `json:"text"`
+	Name        string         `json:"name"`
+	Text        string         `json:"text"`
 	Description NullableString `json:"description"`
 }
 
@@ -165,5 +165,3 @@ func (v *NullableBackupTemplate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

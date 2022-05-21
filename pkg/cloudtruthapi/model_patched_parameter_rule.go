@@ -19,13 +19,13 @@ import (
 // PatchedParameterRule A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead of primary key relationships.  Specifically:  * A 'url' field is included instead of the 'id' field. * Relationships to other instances are hyperlinks, instead of primary keys.  NOTE: this only works with DRF 3.1.0 and above.
 type PatchedParameterRule struct {
 	Url *string `json:"url,omitempty"`
-	Id *string `json:"id,omitempty"`
+	Id  *string `json:"id,omitempty"`
 	// The parameter this rule is for.
-	Parameter *string `json:"parameter,omitempty"`
-	Type *ParameterRuleTypeEnum `json:"type,omitempty"`
-	Constraint *string `json:"constraint,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	Parameter  *string                `json:"parameter,omitempty"`
+	Type       *ParameterRuleTypeEnum `json:"type,omitempty"`
+	Constraint *string                `json:"constraint,omitempty"`
+	CreatedAt  *time.Time             `json:"created_at,omitempty"`
+	ModifiedAt *time.Time             `json:"modified_at,omitempty"`
 }
 
 // NewPatchedParameterRule instantiates a new PatchedParameterRule object
@@ -330,5 +330,3 @@ func (v *NullablePatchedParameterRule) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

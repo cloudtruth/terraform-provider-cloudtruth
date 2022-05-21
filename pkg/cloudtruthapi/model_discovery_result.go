@@ -18,7 +18,7 @@ import (
 // DiscoveryResult struct for DiscoveryResult
 type DiscoveryResult struct {
 	Matched map[string]DiscoveredContent `json:"matched"`
-	Skipped map[string]string `json:"skipped"`
+	Skipped map[string]string            `json:"skipped"`
 }
 
 // NewDiscoveryResult instantiates a new DiscoveryResult object
@@ -134,5 +134,3 @@ func (v *NullableDiscoveryResult) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

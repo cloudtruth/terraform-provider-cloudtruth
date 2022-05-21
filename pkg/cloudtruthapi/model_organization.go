@@ -26,14 +26,14 @@ type Organization struct {
 	// Indicates if this Organization is the one currently targeted by the Bearer token used by the client to authorize.
 	Current bool `json:"current"`
 	// Your role in the organization.
-	Role NullableRoleEnum `json:"role"`
-	SubscriptionExpiresAt NullableTime `json:"subscription_expires_at"`
-	SubscriptionFeatures []string `json:"subscription_features"`
-	SubscriptionId NullableString `json:"subscription_id"`
-	SubscriptionPlanId NullableString `json:"subscription_plan_id"`
-	SubscriptionPlanName NullableString `json:"subscription_plan_name"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	Role                  NullableRoleEnum `json:"role"`
+	SubscriptionExpiresAt NullableTime     `json:"subscription_expires_at"`
+	SubscriptionFeatures  []string         `json:"subscription_features"`
+	SubscriptionId        NullableString   `json:"subscription_id"`
+	SubscriptionPlanId    NullableString   `json:"subscription_plan_id"`
+	SubscriptionPlanName  NullableString   `json:"subscription_plan_name"`
+	CreatedAt             time.Time        `json:"created_at"`
+	ModifiedAt            time.Time        `json:"modified_at"`
 }
 
 // NewOrganization instantiates a new Organization object
@@ -439,5 +439,3 @@ func (v *NullableOrganization) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

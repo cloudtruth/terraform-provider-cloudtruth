@@ -21,13 +21,12 @@ import (
 	"time"
 )
 
-
 // EnvironmentsApiService EnvironmentsApi service
 type EnvironmentsApiService service
 
 type ApiEnvironmentsCreateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
+	ctx               context.Context
+	ApiService        *EnvironmentsApiService
 	environmentCreate *EnvironmentCreate
 }
 
@@ -49,7 +48,7 @@ EnvironmentsCreate Method for EnvironmentsCreate
 func (a *EnvironmentsApiService) EnvironmentsCreate(ctx context.Context) ApiEnvironmentsCreateRequest {
 	return ApiEnvironmentsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -57,10 +56,10 @@ func (a *EnvironmentsApiService) EnvironmentsCreate(ctx context.Context) ApiEnvi
 //  @return Environment
 func (a *EnvironmentsApiService) EnvironmentsCreateExecute(r ApiEnvironmentsCreateRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Environment
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Environment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsCreate")
@@ -162,9 +161,9 @@ func (a *EnvironmentsApiService) EnvironmentsCreateExecute(r ApiEnvironmentsCrea
 }
 
 type ApiEnvironmentsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *EnvironmentsApiService
-	id string
+	id         string
 }
 
 func (r ApiEnvironmentsDestroyRequest) Execute() (*http.Response, error) {
@@ -181,17 +180,17 @@ EnvironmentsDestroy Method for EnvironmentsDestroy
 func (a *EnvironmentsApiService) EnvironmentsDestroy(ctx context.Context, id string) ApiEnvironmentsDestroyRequest {
 	return ApiEnvironmentsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *EnvironmentsApiService) EnvironmentsDestroyExecute(r ApiEnvironmentsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsDestroy")
@@ -280,16 +279,16 @@ func (a *EnvironmentsApiService) EnvironmentsDestroyExecute(r ApiEnvironmentsDes
 }
 
 type ApiEnvironmentsListRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
+	ctx                  context.Context
+	ApiService           *EnvironmentsApiService
 	descriptionIcontains *string
-	name *string
-	nameIcontains *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	parentName *string
-	parentNameIcontains *string
+	name                 *string
+	nameIcontains        *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
+	parentName           *string
+	parentNameIcontains  *string
 }
 
 func (r ApiEnvironmentsListRequest) DescriptionIcontains(descriptionIcontains string) ApiEnvironmentsListRequest {
@@ -348,7 +347,7 @@ EnvironmentsList Method for EnvironmentsList
 func (a *EnvironmentsApiService) EnvironmentsList(ctx context.Context) ApiEnvironmentsListRequest {
 	return ApiEnvironmentsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -356,10 +355,10 @@ func (a *EnvironmentsApiService) EnvironmentsList(ctx context.Context) ApiEnviro
 //  @return PaginatedEnvironmentList
 func (a *EnvironmentsApiService) EnvironmentsListExecute(r ApiEnvironmentsListRequest) (*PaginatedEnvironmentList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedEnvironmentList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedEnvironmentList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsList")
@@ -480,9 +479,9 @@ func (a *EnvironmentsApiService) EnvironmentsListExecute(r ApiEnvironmentsListRe
 }
 
 type ApiEnvironmentsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
-	id string
+	ctx                context.Context
+	ApiService         *EnvironmentsApiService
+	id                 string
 	patchedEnvironment *PatchedEnvironment
 }
 
@@ -505,8 +504,8 @@ EnvironmentsPartialUpdate Method for EnvironmentsPartialUpdate
 func (a *EnvironmentsApiService) EnvironmentsPartialUpdate(ctx context.Context, id string) ApiEnvironmentsPartialUpdateRequest {
 	return ApiEnvironmentsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -514,10 +513,10 @@ func (a *EnvironmentsApiService) EnvironmentsPartialUpdate(ctx context.Context, 
 //  @return Environment
 func (a *EnvironmentsApiService) EnvironmentsPartialUpdateExecute(r ApiEnvironmentsPartialUpdateRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Environment
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Environment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsPartialUpdate")
@@ -617,12 +616,12 @@ func (a *EnvironmentsApiService) EnvironmentsPartialUpdateExecute(r ApiEnvironme
 }
 
 type ApiEnvironmentsPushesListRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
+	ctx           context.Context
+	ApiService    *EnvironmentsApiService
 	environmentPk string
-	ordering *string
-	page *int32
-	pageSize *int32
+	ordering      *string
+	page          *int32
+	pageSize      *int32
 }
 
 // Which field to use when ordering the results.
@@ -658,8 +657,8 @@ The push operations that this environment was involved in.
 */
 func (a *EnvironmentsApiService) EnvironmentsPushesList(ctx context.Context, environmentPk string) ApiEnvironmentsPushesListRequest {
 	return ApiEnvironmentsPushesListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
 	}
 }
@@ -668,10 +667,10 @@ func (a *EnvironmentsApiService) EnvironmentsPushesList(ctx context.Context, env
 //  @return PaginatedTaskStepList
 func (a *EnvironmentsApiService) EnvironmentsPushesListExecute(r ApiEnvironmentsPushesListRequest) (*PaginatedTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedTaskStepList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedTaskStepList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsPushesList")
@@ -778,9 +777,9 @@ func (a *EnvironmentsApiService) EnvironmentsPushesListExecute(r ApiEnvironments
 }
 
 type ApiEnvironmentsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *EnvironmentsApiService
-	id string
+	id         string
 }
 
 func (r ApiEnvironmentsRetrieveRequest) Execute() (*Environment, *http.Response, error) {
@@ -797,8 +796,8 @@ EnvironmentsRetrieve Method for EnvironmentsRetrieve
 func (a *EnvironmentsApiService) EnvironmentsRetrieve(ctx context.Context, id string) ApiEnvironmentsRetrieveRequest {
 	return ApiEnvironmentsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -806,10 +805,10 @@ func (a *EnvironmentsApiService) EnvironmentsRetrieve(ctx context.Context, id st
 //  @return Environment
 func (a *EnvironmentsApiService) EnvironmentsRetrieveExecute(r ApiEnvironmentsRetrieveRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Environment
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Environment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsRetrieve")
@@ -907,10 +906,10 @@ func (a *EnvironmentsApiService) EnvironmentsRetrieveExecute(r ApiEnvironmentsRe
 }
 
 type ApiEnvironmentsTagsCreateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
+	ctx           context.Context
+	ApiService    *EnvironmentsApiService
 	environmentPk string
-	tagCreate *TagCreate
+	tagCreate     *TagCreate
 }
 
 func (r ApiEnvironmentsTagsCreateRequest) TagCreate(tagCreate TagCreate) ApiEnvironmentsTagsCreateRequest {
@@ -936,8 +935,8 @@ option however they are mutually exclusive.
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsCreate(ctx context.Context, environmentPk string) ApiEnvironmentsTagsCreateRequest {
 	return ApiEnvironmentsTagsCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
 	}
 }
@@ -946,10 +945,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsCreate(ctx context.Context, env
 //  @return Tag
 func (a *EnvironmentsApiService) EnvironmentsTagsCreateExecute(r ApiEnvironmentsTagsCreateRequest) (*Tag, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Tag
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Tag
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsCreate")
@@ -1052,10 +1051,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsCreateExecute(r ApiEnvironments
 }
 
 type ApiEnvironmentsTagsDestroyRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
+	ctx           context.Context
+	ApiService    *EnvironmentsApiService
 	environmentPk string
-	id string
+	id            string
 }
 
 func (r ApiEnvironmentsTagsDestroyRequest) Execute() (*http.Response, error) {
@@ -1077,19 +1076,19 @@ option however they are mutually exclusive.
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsDestroy(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsDestroyRequest {
 	return ApiEnvironmentsTagsDestroyRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
-		id: id,
+		id:            id,
 	}
 }
 
 // Execute executes the request
 func (a *EnvironmentsApiService) EnvironmentsTagsDestroyExecute(r ApiEnvironmentsTagsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsDestroy")
@@ -1179,18 +1178,18 @@ func (a *EnvironmentsApiService) EnvironmentsTagsDestroyExecute(r ApiEnvironment
 }
 
 type ApiEnvironmentsTagsListRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
-	environmentPk string
+	ctx                  context.Context
+	ApiService           *EnvironmentsApiService
+	environmentPk        string
 	descriptionIcontains *string
-	name *string
-	nameIcontains *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	timestamp *time.Time
-	timestampGte *time.Time
-	timestampLte *time.Time
+	name                 *string
+	nameIcontains        *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
+	timestamp            *time.Time
+	timestampGte         *time.Time
+	timestampLte         *time.Time
 }
 
 func (r ApiEnvironmentsTagsListRequest) DescriptionIcontains(descriptionIcontains string) ApiEnvironmentsTagsListRequest {
@@ -1259,8 +1258,8 @@ option however they are mutually exclusive.
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsList(ctx context.Context, environmentPk string) ApiEnvironmentsTagsListRequest {
 	return ApiEnvironmentsTagsListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
 	}
 }
@@ -1269,10 +1268,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsList(ctx context.Context, envir
 //  @return PaginatedTagList
 func (a *EnvironmentsApiService) EnvironmentsTagsListExecute(r ApiEnvironmentsTagsListRequest) (*PaginatedTagList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedTagList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedTagList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsList")
@@ -1397,10 +1396,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsListExecute(r ApiEnvironmentsTa
 }
 
 type ApiEnvironmentsTagsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
-	environmentPk string
-	id string
+	ctx              context.Context
+	ApiService       *EnvironmentsApiService
+	environmentPk    string
+	id               string
 	patchedTagUpdate *PatchedTagUpdate
 }
 
@@ -1428,10 +1427,10 @@ option however they are mutually exclusive.
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdate(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsPartialUpdateRequest {
 	return ApiEnvironmentsTagsPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
-		id: id,
+		id:            id,
 	}
 }
 
@@ -1439,10 +1438,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdate(ctx context.Conte
 //  @return TagUpdate
 func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdateExecute(r ApiEnvironmentsTagsPartialUpdateRequest) (*TagUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *TagUpdate
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TagUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsPartialUpdate")
@@ -1543,10 +1542,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdateExecute(r ApiEnvir
 }
 
 type ApiEnvironmentsTagsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
+	ctx           context.Context
+	ApiService    *EnvironmentsApiService
 	environmentPk string
-	id string
+	id            string
 }
 
 func (r ApiEnvironmentsTagsRetrieveRequest) Execute() (*Tag, *http.Response, error) {
@@ -1568,10 +1567,10 @@ option however they are mutually exclusive.
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsRetrieve(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsRetrieveRequest {
 	return ApiEnvironmentsTagsRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
-		id: id,
+		id:            id,
 	}
 }
 
@@ -1579,10 +1578,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsRetrieve(ctx context.Context, e
 //  @return Tag
 func (a *EnvironmentsApiService) EnvironmentsTagsRetrieveExecute(r ApiEnvironmentsTagsRetrieveRequest) (*Tag, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Tag
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Tag
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsRetrieve")
@@ -1681,11 +1680,11 @@ func (a *EnvironmentsApiService) EnvironmentsTagsRetrieveExecute(r ApiEnvironmen
 }
 
 type ApiEnvironmentsTagsUpdateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
+	ctx           context.Context
+	ApiService    *EnvironmentsApiService
 	environmentPk string
-	id string
-	tagUpdate *TagUpdate
+	id            string
+	tagUpdate     *TagUpdate
 }
 
 func (r ApiEnvironmentsTagsUpdateRequest) TagUpdate(tagUpdate TagUpdate) ApiEnvironmentsTagsUpdateRequest {
@@ -1712,10 +1711,10 @@ option however they are mutually exclusive.
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsUpdate(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsUpdateRequest {
 	return ApiEnvironmentsTagsUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
-		id: id,
+		id:            id,
 	}
 }
 
@@ -1723,10 +1722,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsUpdate(ctx context.Context, env
 //  @return TagUpdate
 func (a *EnvironmentsApiService) EnvironmentsTagsUpdateExecute(r ApiEnvironmentsTagsUpdateRequest) (*TagUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *TagUpdate
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TagUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsUpdate")
@@ -1830,9 +1829,9 @@ func (a *EnvironmentsApiService) EnvironmentsTagsUpdateExecute(r ApiEnvironments
 }
 
 type ApiEnvironmentsUpdateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsApiService
-	id string
+	ctx         context.Context
+	ApiService  *EnvironmentsApiService
+	id          string
 	environment *Environment
 }
 
@@ -1855,8 +1854,8 @@ EnvironmentsUpdate Method for EnvironmentsUpdate
 func (a *EnvironmentsApiService) EnvironmentsUpdate(ctx context.Context, id string) ApiEnvironmentsUpdateRequest {
 	return ApiEnvironmentsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -1864,10 +1863,10 @@ func (a *EnvironmentsApiService) EnvironmentsUpdate(ctx context.Context, id stri
 //  @return Environment
 func (a *EnvironmentsApiService) EnvironmentsUpdateExecute(r ApiEnvironmentsUpdateRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Environment
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Environment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsUpdate")

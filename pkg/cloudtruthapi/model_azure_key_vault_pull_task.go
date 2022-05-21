@@ -31,8 +31,8 @@ type AzureKeyVaultPullTask struct {
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// If an error occurs early during processing, before attempting to process values, this detail may be helpful in determining the problem.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	ModifiedAt  time.Time      `json:"modified_at"`
 }
 
 // NewAzureKeyVaultPullTask instantiates a new AzureKeyVaultPullTask object
@@ -136,6 +136,7 @@ func (o *AzureKeyVaultPullTask) HasReason() bool {
 func (o *AzureKeyVaultPullTask) SetReason(v string) {
 	o.Reason.Set(&v)
 }
+
 // SetReasonNil sets the value for Reason to be an explicit nil
 func (o *AzureKeyVaultPullTask) SetReasonNil() {
 	o.Reason.Set(nil)
@@ -210,6 +211,7 @@ func (o *AzureKeyVaultPullTask) HasState() bool {
 func (o *AzureKeyVaultPullTask) SetState(v StateEnum) {
 	o.State.Set(&v)
 }
+
 // SetStateNil sets the value for State to be an explicit nil
 func (o *AzureKeyVaultPullTask) SetStateNil() {
 	o.State.Set(nil)
@@ -252,6 +254,7 @@ func (o *AzureKeyVaultPullTask) HasErrorCode() bool {
 func (o *AzureKeyVaultPullTask) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
+
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *AzureKeyVaultPullTask) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -294,6 +297,7 @@ func (o *AzureKeyVaultPullTask) HasErrorDetail() bool {
 func (o *AzureKeyVaultPullTask) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
+
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *AzureKeyVaultPullTask) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -419,5 +423,3 @@ func (v *NullableAzureKeyVaultPullTask) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -26,9 +26,9 @@ type Grant struct {
 	// The URI of a scope for the grant; this must reference a project or environment.
 	Scope string `json:"scope"`
 	// The role that the principal has in the given scope.
-	Role NullableRoleEnum `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	Role       NullableRoleEnum `json:"role"`
+	CreatedAt  time.Time        `json:"created_at"`
+	ModifiedAt time.Time        `json:"modified_at"`
 }
 
 // NewGrant instantiates a new Grant object
@@ -286,5 +286,3 @@ func (v *NullableGrant) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

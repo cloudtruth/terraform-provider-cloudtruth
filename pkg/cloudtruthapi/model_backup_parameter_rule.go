@@ -17,7 +17,7 @@ import (
 
 // BackupParameterRule Rule that is applied to a parameter or parameter-type at a point in time.
 type BackupParameterRule struct {
-	RuleType string `json:"rule_type"`
+	RuleType   string `json:"rule_type"`
 	Constraint string `json:"constraint"`
 }
 
@@ -134,5 +134,3 @@ func (v *NullableBackupParameterRule) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

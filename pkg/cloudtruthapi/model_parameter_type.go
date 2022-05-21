@@ -31,8 +31,8 @@ type ParameterType struct {
 	Parent NullableString `json:"parent,omitempty"`
 	// Name of the parent ParameterType (if any).
 	ParentName NullableString `json:"parent_name"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt  time.Time      `json:"created_at"`
+	ModifiedAt time.Time      `json:"modified_at"`
 }
 
 // NewParameterType instantiates a new ParameterType object
@@ -219,6 +219,7 @@ func (o *ParameterType) HasParent() bool {
 func (o *ParameterType) SetParent(v string) {
 	o.Parent.Set(&v)
 }
+
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *ParameterType) SetParentNil() {
 	o.Parent.Set(nil)
@@ -370,5 +371,3 @@ func (v *NullableParameterType) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

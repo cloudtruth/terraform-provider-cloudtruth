@@ -17,10 +17,10 @@ import (
 
 // PaginatedGitHubPullTaskStepList struct for PaginatedGitHubPullTaskStepList
 type PaginatedGitHubPullTaskStepList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
-	Previous NullableString `json:"previous,omitempty"`
-	Results []GitHubPullTaskStep `json:"results,omitempty"`
+	Count    *int32               `json:"count,omitempty"`
+	Next     NullableString       `json:"next,omitempty"`
+	Previous NullableString       `json:"previous,omitempty"`
+	Results  []GitHubPullTaskStep `json:"results,omitempty"`
 }
 
 // NewPaginatedGitHubPullTaskStepList instantiates a new PaginatedGitHubPullTaskStepList object
@@ -104,6 +104,7 @@ func (o *PaginatedGitHubPullTaskStepList) HasNext() bool {
 func (o *PaginatedGitHubPullTaskStepList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedGitHubPullTaskStepList) SetNextNil() {
 	o.Next.Set(nil)
@@ -146,6 +147,7 @@ func (o *PaginatedGitHubPullTaskStepList) HasPrevious() bool {
 func (o *PaginatedGitHubPullTaskStepList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedGitHubPullTaskStepList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -240,5 +242,3 @@ func (v *NullablePaginatedGitHubPullTaskStepList) UnmarshalJSON(src []byte) erro
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

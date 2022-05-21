@@ -31,8 +31,8 @@ type AwsPushLatestTask struct {
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// If an error occurs early during processing, before attempting to process values, this detail may be helpful in determining the problem.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	ModifiedAt  time.Time      `json:"modified_at"`
 }
 
 // NewAwsPushLatestTask instantiates a new AwsPushLatestTask object
@@ -136,6 +136,7 @@ func (o *AwsPushLatestTask) HasReason() bool {
 func (o *AwsPushLatestTask) SetReason(v string) {
 	o.Reason.Set(&v)
 }
+
 // SetReasonNil sets the value for Reason to be an explicit nil
 func (o *AwsPushLatestTask) SetReasonNil() {
 	o.Reason.Set(nil)
@@ -210,6 +211,7 @@ func (o *AwsPushLatestTask) HasState() bool {
 func (o *AwsPushLatestTask) SetState(v StateEnum) {
 	o.State.Set(&v)
 }
+
 // SetStateNil sets the value for State to be an explicit nil
 func (o *AwsPushLatestTask) SetStateNil() {
 	o.State.Set(nil)
@@ -252,6 +254,7 @@ func (o *AwsPushLatestTask) HasErrorCode() bool {
 func (o *AwsPushLatestTask) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
+
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *AwsPushLatestTask) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -294,6 +297,7 @@ func (o *AwsPushLatestTask) HasErrorDetail() bool {
 func (o *AwsPushLatestTask) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
+
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *AwsPushLatestTask) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -419,5 +423,3 @@ func (v *NullableAwsPushLatestTask) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

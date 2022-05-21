@@ -19,16 +19,15 @@ import (
 	"net/url"
 )
 
-
 // ImportApiService ImportApi service
 type ImportApiService service
 
 type ApiImportCreateRequest struct {
-	ctx context.Context
-	ApiService *ImportApiService
+	ctx                 context.Context
+	ApiService          *ImportApiService
 	importCreateRequest *ImportCreateRequest
-	maskSecrets *bool
-	preview *bool
+	maskSecrets         *bool
+	preview             *bool
 }
 
 func (r ApiImportCreateRequest) ImportCreateRequest(importCreateRequest ImportCreateRequest) ApiImportCreateRequest {
@@ -63,7 +62,7 @@ Import parameters from the provided data.
 func (a *ImportApiService) ImportCreate(ctx context.Context) ApiImportCreateRequest {
 	return ApiImportCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -71,10 +70,10 @@ func (a *ImportApiService) ImportCreate(ctx context.Context) ApiImportCreateRequ
 //  @return ImportCreateResponse
 func (a *ImportApiService) ImportCreateExecute(r ApiImportCreateRequest) (*ImportCreateResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ImportCreateResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ImportCreateResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ImportApiService.ImportCreate")

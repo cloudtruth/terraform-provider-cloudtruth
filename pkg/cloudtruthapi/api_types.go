@@ -20,13 +20,12 @@ import (
 	"strings"
 )
 
-
 // TypesApiService TypesApi service
 type TypesApiService service
 
 type ApiTypesCreateRequest struct {
-	ctx context.Context
-	ApiService *TypesApiService
+	ctx                 context.Context
+	ApiService          *TypesApiService
 	parameterTypeCreate *ParameterTypeCreate
 }
 
@@ -48,7 +47,7 @@ TypesCreate Method for TypesCreate
 func (a *TypesApiService) TypesCreate(ctx context.Context) ApiTypesCreateRequest {
 	return ApiTypesCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -56,10 +55,10 @@ func (a *TypesApiService) TypesCreate(ctx context.Context) ApiTypesCreateRequest
 //  @return ParameterType
 func (a *TypesApiService) TypesCreateExecute(r ApiTypesCreateRequest) (*ParameterType, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterType
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterType
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesCreate")
@@ -161,9 +160,9 @@ func (a *TypesApiService) TypesCreateExecute(r ApiTypesCreateRequest) (*Paramete
 }
 
 type ApiTypesDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TypesApiService
-	id string
+	id         string
 }
 
 func (r ApiTypesDestroyRequest) Execute() (*http.Response, error) {
@@ -180,17 +179,17 @@ TypesDestroy Method for TypesDestroy
 func (a *TypesApiService) TypesDestroy(ctx context.Context, id string) ApiTypesDestroyRequest {
 	return ApiTypesDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *TypesApiService) TypesDestroyExecute(r ApiTypesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesDestroy")
@@ -279,16 +278,16 @@ func (a *TypesApiService) TypesDestroyExecute(r ApiTypesDestroyRequest) (*http.R
 }
 
 type ApiTypesListRequest struct {
-	ctx context.Context
-	ApiService *TypesApiService
+	ctx                  context.Context
+	ApiService           *TypesApiService
 	descriptionIcontains *string
-	nameIcontains *string
-	nameIexact *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	parentNameIcontains *string
-	parentNameIexact *string
+	nameIcontains        *string
+	nameIexact           *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
+	parentNameIcontains  *string
+	parentNameIexact     *string
 }
 
 func (r ApiTypesListRequest) DescriptionIcontains(descriptionIcontains string) ApiTypesListRequest {
@@ -347,7 +346,7 @@ TypesList Method for TypesList
 func (a *TypesApiService) TypesList(ctx context.Context) ApiTypesListRequest {
 	return ApiTypesListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -355,10 +354,10 @@ func (a *TypesApiService) TypesList(ctx context.Context) ApiTypesListRequest {
 //  @return PaginatedParameterTypeList
 func (a *TypesApiService) TypesListExecute(r ApiTypesListRequest) (*PaginatedParameterTypeList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedParameterTypeList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedParameterTypeList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesList")
@@ -479,9 +478,9 @@ func (a *TypesApiService) TypesListExecute(r ApiTypesListRequest) (*PaginatedPar
 }
 
 type ApiTypesPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *TypesApiService
-	id string
+	ctx                  context.Context
+	ApiService           *TypesApiService
+	id                   string
 	patchedParameterType *PatchedParameterType
 }
 
@@ -504,8 +503,8 @@ TypesPartialUpdate Method for TypesPartialUpdate
 func (a *TypesApiService) TypesPartialUpdate(ctx context.Context, id string) ApiTypesPartialUpdateRequest {
 	return ApiTypesPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -513,10 +512,10 @@ func (a *TypesApiService) TypesPartialUpdate(ctx context.Context, id string) Api
 //  @return ParameterType
 func (a *TypesApiService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateRequest) (*ParameterType, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterType
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterType
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesPartialUpdate")
@@ -616,9 +615,9 @@ func (a *TypesApiService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateReque
 }
 
 type ApiTypesRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TypesApiService
-	id string
+	id         string
 }
 
 func (r ApiTypesRetrieveRequest) Execute() (*ParameterType, *http.Response, error) {
@@ -635,8 +634,8 @@ TypesRetrieve Method for TypesRetrieve
 func (a *TypesApiService) TypesRetrieve(ctx context.Context, id string) ApiTypesRetrieveRequest {
 	return ApiTypesRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -644,10 +643,10 @@ func (a *TypesApiService) TypesRetrieve(ctx context.Context, id string) ApiTypes
 //  @return ParameterType
 func (a *TypesApiService) TypesRetrieveExecute(r ApiTypesRetrieveRequest) (*ParameterType, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterType
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterType
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRetrieve")
@@ -745,9 +744,9 @@ func (a *TypesApiService) TypesRetrieveExecute(r ApiTypesRetrieveRequest) (*Para
 }
 
 type ApiTypesRulesCreateRequest struct {
-	ctx context.Context
-	ApiService *TypesApiService
-	parametertypePk string
+	ctx                     context.Context
+	ApiService              *TypesApiService
+	parametertypePk         string
 	parameterTypeRuleCreate *ParameterTypeRuleCreate
 }
 
@@ -769,8 +768,8 @@ TypesRulesCreate Method for TypesRulesCreate
 */
 func (a *TypesApiService) TypesRulesCreate(ctx context.Context, parametertypePk string) ApiTypesRulesCreateRequest {
 	return ApiTypesRulesCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:      a,
+		ctx:             ctx,
 		parametertypePk: parametertypePk,
 	}
 }
@@ -779,10 +778,10 @@ func (a *TypesApiService) TypesRulesCreate(ctx context.Context, parametertypePk 
 //  @return ParameterTypeRule
 func (a *TypesApiService) TypesRulesCreateExecute(r ApiTypesRulesCreateRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeRule
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTypeRule
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesCreate")
@@ -885,9 +884,9 @@ func (a *TypesApiService) TypesRulesCreateExecute(r ApiTypesRulesCreateRequest) 
 }
 
 type ApiTypesRulesDestroyRequest struct {
-	ctx context.Context
-	ApiService *TypesApiService
-	id string
+	ctx             context.Context
+	ApiService      *TypesApiService
+	id              string
 	parametertypePk string
 }
 
@@ -905,9 +904,9 @@ TypesRulesDestroy Method for TypesRulesDestroy
 */
 func (a *TypesApiService) TypesRulesDestroy(ctx context.Context, id string, parametertypePk string) ApiTypesRulesDestroyRequest {
 	return ApiTypesRulesDestroyRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:      a,
+		ctx:             ctx,
+		id:              id,
 		parametertypePk: parametertypePk,
 	}
 }
@@ -915,9 +914,9 @@ func (a *TypesApiService) TypesRulesDestroy(ctx context.Context, id string, para
 // Execute executes the request
 func (a *TypesApiService) TypesRulesDestroyExecute(r ApiTypesRulesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesDestroy")
@@ -1007,13 +1006,13 @@ func (a *TypesApiService) TypesRulesDestroyExecute(r ApiTypesRulesDestroyRequest
 }
 
 type ApiTypesRulesListRequest struct {
-	ctx context.Context
-	ApiService *TypesApiService
+	ctx             context.Context
+	ApiService      *TypesApiService
 	parametertypePk string
-	ordering *string
-	page *int32
-	pageSize *int32
-	type_ *string
+	ordering        *string
+	page            *int32
+	pageSize        *int32
+	type_           *string
 }
 
 // Which field to use when ordering the results.
@@ -1052,8 +1051,8 @@ TypesRulesList Method for TypesRulesList
 */
 func (a *TypesApiService) TypesRulesList(ctx context.Context, parametertypePk string) ApiTypesRulesListRequest {
 	return ApiTypesRulesListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:      a,
+		ctx:             ctx,
 		parametertypePk: parametertypePk,
 	}
 }
@@ -1062,10 +1061,10 @@ func (a *TypesApiService) TypesRulesList(ctx context.Context, parametertypePk st
 //  @return PaginatedParameterTypeRuleList
 func (a *TypesApiService) TypesRulesListExecute(r ApiTypesRulesListRequest) (*PaginatedParameterTypeRuleList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedParameterTypeRuleList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedParameterTypeRuleList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesList")
@@ -1175,10 +1174,10 @@ func (a *TypesApiService) TypesRulesListExecute(r ApiTypesRulesListRequest) (*Pa
 }
 
 type ApiTypesRulesPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *TypesApiService
-	id string
-	parametertypePk string
+	ctx                      context.Context
+	ApiService               *TypesApiService
+	id                       string
+	parametertypePk          string
 	patchedParameterTypeRule *PatchedParameterTypeRule
 }
 
@@ -1201,9 +1200,9 @@ TypesRulesPartialUpdate Method for TypesRulesPartialUpdate
 */
 func (a *TypesApiService) TypesRulesPartialUpdate(ctx context.Context, id string, parametertypePk string) ApiTypesRulesPartialUpdateRequest {
 	return ApiTypesRulesPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:      a,
+		ctx:             ctx,
+		id:              id,
 		parametertypePk: parametertypePk,
 	}
 }
@@ -1212,10 +1211,10 @@ func (a *TypesApiService) TypesRulesPartialUpdate(ctx context.Context, id string
 //  @return ParameterTypeRule
 func (a *TypesApiService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialUpdateRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeRule
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTypeRule
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesPartialUpdate")
@@ -1316,9 +1315,9 @@ func (a *TypesApiService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialU
 }
 
 type ApiTypesRulesRetrieveRequest struct {
-	ctx context.Context
-	ApiService *TypesApiService
-	id string
+	ctx             context.Context
+	ApiService      *TypesApiService
+	id              string
 	parametertypePk string
 }
 
@@ -1336,9 +1335,9 @@ TypesRulesRetrieve Method for TypesRulesRetrieve
 */
 func (a *TypesApiService) TypesRulesRetrieve(ctx context.Context, id string, parametertypePk string) ApiTypesRulesRetrieveRequest {
 	return ApiTypesRulesRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:      a,
+		ctx:             ctx,
+		id:              id,
 		parametertypePk: parametertypePk,
 	}
 }
@@ -1347,10 +1346,10 @@ func (a *TypesApiService) TypesRulesRetrieve(ctx context.Context, id string, par
 //  @return ParameterTypeRule
 func (a *TypesApiService) TypesRulesRetrieveExecute(r ApiTypesRulesRetrieveRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeRule
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTypeRule
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesRetrieve")
@@ -1449,10 +1448,10 @@ func (a *TypesApiService) TypesRulesRetrieveExecute(r ApiTypesRulesRetrieveReque
 }
 
 type ApiTypesRulesUpdateRequest struct {
-	ctx context.Context
-	ApiService *TypesApiService
-	id string
-	parametertypePk string
+	ctx               context.Context
+	ApiService        *TypesApiService
+	id                string
+	parametertypePk   string
 	parameterTypeRule *ParameterTypeRule
 }
 
@@ -1475,9 +1474,9 @@ TypesRulesUpdate Method for TypesRulesUpdate
 */
 func (a *TypesApiService) TypesRulesUpdate(ctx context.Context, id string, parametertypePk string) ApiTypesRulesUpdateRequest {
 	return ApiTypesRulesUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:      a,
+		ctx:             ctx,
+		id:              id,
 		parametertypePk: parametertypePk,
 	}
 }
@@ -1486,10 +1485,10 @@ func (a *TypesApiService) TypesRulesUpdate(ctx context.Context, id string, param
 //  @return ParameterTypeRule
 func (a *TypesApiService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeRule
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTypeRule
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesUpdate")
@@ -1593,9 +1592,9 @@ func (a *TypesApiService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) 
 }
 
 type ApiTypesUpdateRequest struct {
-	ctx context.Context
-	ApiService *TypesApiService
-	id string
+	ctx           context.Context
+	ApiService    *TypesApiService
+	id            string
 	parameterType *ParameterType
 }
 
@@ -1618,8 +1617,8 @@ TypesUpdate Method for TypesUpdate
 func (a *TypesApiService) TypesUpdate(ctx context.Context, id string) ApiTypesUpdateRequest {
 	return ApiTypesUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -1627,10 +1626,10 @@ func (a *TypesApiService) TypesUpdate(ctx context.Context, id string) ApiTypesUp
 //  @return ParameterType
 func (a *TypesApiService) TypesUpdateExecute(r ApiTypesUpdateRequest) (*ParameterType, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterType
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterType
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesUpdate")

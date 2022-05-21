@@ -19,20 +19,19 @@ import (
 	"net/url"
 )
 
-
 // UtilsApiService UtilsApi service
 type UtilsApiService service
 
 type ApiUtilsGeneratePasswordCreateRequest struct {
-	ctx context.Context
-	ApiService *UtilsApiService
-	length *int32
+	ctx                       context.Context
+	ApiService                *UtilsApiService
+	length                    *int32
 	requireHardwareGeneration *bool
-	requireLowercase *bool
-	requireNumbers *bool
-	requireSpaces *bool
-	requireSymbols *bool
-	requireUppercase *bool
+	requireLowercase          *bool
+	requireNumbers            *bool
+	requireSpaces             *bool
+	requireSymbols            *bool
+	requireUppercase          *bool
 }
 
 // The length of the password to generate.  Minimum of 8, maximum of 4095.
@@ -92,7 +91,7 @@ Endpoint for accessing utility functions
 func (a *UtilsApiService) UtilsGeneratePasswordCreate(ctx context.Context) ApiUtilsGeneratePasswordCreateRequest {
 	return ApiUtilsGeneratePasswordCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -100,10 +99,10 @@ func (a *UtilsApiService) UtilsGeneratePasswordCreate(ctx context.Context) ApiUt
 //  @return GeneratedPasswordResponse
 func (a *UtilsApiService) UtilsGeneratePasswordCreateExecute(r ApiUtilsGeneratePasswordCreateRequest) (*GeneratedPasswordResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GeneratedPasswordResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GeneratedPasswordResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UtilsApiService.UtilsGeneratePasswordCreate")

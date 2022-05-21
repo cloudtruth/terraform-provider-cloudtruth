@@ -20,7 +20,7 @@ type GitHubIntegrationCreate struct {
 	// An optional description for the integration.
 	Description *string `json:"description,omitempty"`
 	// Allow actions to write to the integration.
-	Writable *bool `json:"writable,omitempty"`
+	Writable         *bool `json:"writable,omitempty"`
 	GhInstallationId int32 `json:"gh_installation_id"`
 }
 
@@ -179,5 +179,3 @@ func (v *NullableGitHubIntegrationCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

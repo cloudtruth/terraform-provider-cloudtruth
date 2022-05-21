@@ -22,8 +22,8 @@ type NodeTypeEnum string
 // List of NodeTypeEnum
 const (
 	NODETYPEENUM_DIRECTORY NodeTypeEnum = "directory"
-	NODETYPEENUM_FILE NodeTypeEnum = "file"
-	NODETYPEENUM_VALUE NodeTypeEnum = "value"
+	NODETYPEENUM_FILE      NodeTypeEnum = "file"
+	NODETYPEENUM_VALUE     NodeTypeEnum = "value"
 )
 
 // All allowed values of NodeTypeEnum enum
@@ -111,4 +111,3 @@ func (v *NullableNodeTypeEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

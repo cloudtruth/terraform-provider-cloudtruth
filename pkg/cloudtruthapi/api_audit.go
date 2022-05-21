@@ -21,25 +21,24 @@ import (
 	"time"
 )
 
-
 // AuditApiService AuditApi service
 type AuditApiService service
 
 type ApiAuditListRequest struct {
-	ctx context.Context
-	ApiService *AuditApiService
-	action *string
-	earliest *time.Time
+	ctx           context.Context
+	ApiService    *AuditApiService
+	action        *string
+	earliest      *time.Time
 	environmentId *string
-	latest *time.Time
-	objectId *string
-	objectType *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	parameterId *string
-	projectId *string
-	userId *string
+	latest        *time.Time
+	objectId      *string
+	objectType    *string
+	ordering      *string
+	page          *int32
+	pageSize      *int32
+	parameterId   *string
+	projectId     *string
+	userId        *string
 }
 
 // The action that was taken.
@@ -124,7 +123,7 @@ A searchable log of all the actions taken by users and service accounts within t
 func (a *AuditApiService) AuditList(ctx context.Context) ApiAuditListRequest {
 	return ApiAuditListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -132,10 +131,10 @@ func (a *AuditApiService) AuditList(ctx context.Context) ApiAuditListRequest {
 //  @return PaginatedAuditTrailList
 func (a *AuditApiService) AuditListExecute(r ApiAuditListRequest) (*PaginatedAuditTrailList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAuditTrailList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAuditTrailList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuditApiService.AuditList")
@@ -268,9 +267,9 @@ func (a *AuditApiService) AuditListExecute(r ApiAuditListRequest) (*PaginatedAud
 }
 
 type ApiAuditRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *AuditApiService
-	id string
+	id         string
 }
 
 func (r ApiAuditRetrieveRequest) Execute() (*AuditTrail, *http.Response, error) {
@@ -289,8 +288,8 @@ Retrieve one record from the audit log.
 func (a *AuditApiService) AuditRetrieve(ctx context.Context, id string) ApiAuditRetrieveRequest {
 	return ApiAuditRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -298,10 +297,10 @@ func (a *AuditApiService) AuditRetrieve(ctx context.Context, id string) ApiAudit
 //  @return AuditTrail
 func (a *AuditApiService) AuditRetrieveExecute(r ApiAuditRetrieveRequest) (*AuditTrail, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AuditTrail
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AuditTrail
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuditApiService.AuditRetrieve")
@@ -399,7 +398,7 @@ func (a *AuditApiService) AuditRetrieveExecute(r ApiAuditRetrieveRequest) (*Audi
 }
 
 type ApiAuditSummaryRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *AuditApiService
 }
 
@@ -418,7 +417,7 @@ Summary information about the organization's audit trail.
 func (a *AuditApiService) AuditSummaryRetrieve(ctx context.Context) ApiAuditSummaryRetrieveRequest {
 	return ApiAuditSummaryRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -426,10 +425,10 @@ func (a *AuditApiService) AuditSummaryRetrieve(ctx context.Context) ApiAuditSumm
 //  @return AuditTrailSummary
 func (a *AuditApiService) AuditSummaryRetrieveExecute(r ApiAuditSummaryRetrieveRequest) (*AuditTrailSummary, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AuditTrailSummary
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AuditTrailSummary
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuditApiService.AuditSummaryRetrieve")

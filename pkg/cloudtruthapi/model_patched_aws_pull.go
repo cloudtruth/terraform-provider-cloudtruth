@@ -24,10 +24,10 @@ type PatchedAwsPull struct {
 	// The action name.
 	Name *string `json:"name,omitempty"`
 	// The optional description for the action.
-	Description *string `json:"description,omitempty"`
-	LatestTask NullableAwsPullLatestTask `json:"latest_task,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	Description *string                   `json:"description,omitempty"`
+	LatestTask  NullableAwsPullLatestTask `json:"latest_task,omitempty"`
+	CreatedAt   *time.Time                `json:"created_at,omitempty"`
+	ModifiedAt  *time.Time                `json:"modified_at,omitempty"`
 	// Allow the pull to create environments.  Any automatically created environments will be children of the `default` environment.  If an environment needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
 	CreateEnvironments *bool `json:"create_environments,omitempty"`
 	// Allow the pull to create projects.  If a project needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
@@ -223,6 +223,7 @@ func (o *PatchedAwsPull) HasLatestTask() bool {
 func (o *PatchedAwsPull) SetLatestTask(v AwsPullLatestTask) {
 	o.LatestTask.Set(&v)
 }
+
 // SetLatestTaskNil sets the value for LatestTask to be an explicit nil
 func (o *PatchedAwsPull) SetLatestTaskNil() {
 	o.LatestTask.Set(nil)
@@ -457,6 +458,7 @@ func (o *PatchedAwsPull) HasMode() bool {
 func (o *PatchedAwsPull) SetMode(v ModeEnum) {
 	o.Mode.Set(&v)
 }
+
 // SetModeNil sets the value for Mode to be an explicit nil
 func (o *PatchedAwsPull) SetModeNil() {
 	o.Mode.Set(nil)
@@ -499,6 +501,7 @@ func (o *PatchedAwsPull) HasRegion() bool {
 func (o *PatchedAwsPull) SetRegion(v AwsRegionEnum) {
 	o.Region.Set(&v)
 }
+
 // SetRegionNil sets the value for Region to be an explicit nil
 func (o *PatchedAwsPull) SetRegionNil() {
 	o.Region.Set(nil)
@@ -541,6 +544,7 @@ func (o *PatchedAwsPull) HasService() bool {
 func (o *PatchedAwsPull) SetService(v AwsServiceEnum) {
 	o.Service.Set(&v)
 }
+
 // SetServiceNil sets the value for Service to be an explicit nil
 func (o *PatchedAwsPull) SetServiceNil() {
 	o.Service.Set(nil)
@@ -583,6 +587,7 @@ func (o *PatchedAwsPull) HasResource() bool {
 func (o *PatchedAwsPull) SetResource(v string) {
 	o.Resource.Set(&v)
 }
+
 // SetResourceNil sets the value for Resource to be an explicit nil
 func (o *PatchedAwsPull) SetResourceNil() {
 	o.Resource.Set(nil)
@@ -678,5 +683,3 @@ func (v *NullablePatchedAwsPull) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

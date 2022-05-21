@@ -17,11 +17,11 @@ import (
 
 // DiscoveredContent struct for DiscoveredContent
 type DiscoveredContent struct {
-	VenueId string `json:"venue_id"`
-	VenueName string `json:"venue_name"`
+	VenueId         string `json:"venue_id"`
+	VenueName       string `json:"venue_name"`
 	EnvironmentName string `json:"environment_name"`
-	ProjectName string `json:"project_name"`
-	ParameterName string `json:"parameter_name"`
+	ProjectName     string `json:"project_name"`
+	ParameterName   string `json:"parameter_name"`
 }
 
 // NewDiscoveredContent instantiates a new DiscoveredContent object
@@ -221,5 +221,3 @@ func (v *NullableDiscoveredContent) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

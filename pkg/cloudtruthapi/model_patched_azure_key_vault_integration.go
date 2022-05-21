@@ -20,7 +20,7 @@ import (
 type PatchedAzureKeyVaultIntegration struct {
 	Url *string `json:"url,omitempty"`
 	// The unique identifier for the integration.
-	Id *string `json:"id,omitempty"`
+	Id   *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	// An optional description for the integration.
 	Description *string `json:"description,omitempty"`
@@ -30,9 +30,9 @@ type PatchedAzureKeyVaultIntegration struct {
 	StatusDetail *string `json:"status_detail,omitempty"`
 	// The last time the status was evaluated.
 	StatusLastCheckedAt *time.Time `json:"status_last_checked_at,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
-	Fqn *string `json:"fqn,omitempty"`
+	CreatedAt           *time.Time `json:"created_at,omitempty"`
+	ModifiedAt          *time.Time `json:"modified_at,omitempty"`
+	Fqn                 *string    `json:"fqn,omitempty"`
 	// The type of integration.
 	Type *string `json:"type,omitempty"`
 	// Allow actions to write to the integration.
@@ -220,6 +220,7 @@ func (o *PatchedAzureKeyVaultIntegration) HasStatus() bool {
 func (o *PatchedAzureKeyVaultIntegration) SetStatus(v StatusEnum) {
 	o.Status.Set(&v)
 }
+
 // SetStatusNil sets the value for Status to be an explicit nil
 func (o *PatchedAzureKeyVaultIntegration) SetStatusNil() {
 	o.Status.Set(nil)
@@ -600,5 +601,3 @@ func (v *NullablePatchedAzureKeyVaultIntegration) UnmarshalJSON(src []byte) erro
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

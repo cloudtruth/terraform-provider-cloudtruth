@@ -21,29 +21,29 @@ type AwsRegionEnum string
 
 // List of AwsRegionEnum
 const (
-	AWSREGIONENUM_AF_SOUTH_1 AwsRegionEnum = "af-south-1"
-	AWSREGIONENUM_AP_EAST_1 AwsRegionEnum = "ap-east-1"
+	AWSREGIONENUM_AF_SOUTH_1     AwsRegionEnum = "af-south-1"
+	AWSREGIONENUM_AP_EAST_1      AwsRegionEnum = "ap-east-1"
 	AWSREGIONENUM_AP_NORTHEAST_1 AwsRegionEnum = "ap-northeast-1"
 	AWSREGIONENUM_AP_NORTHEAST_2 AwsRegionEnum = "ap-northeast-2"
 	AWSREGIONENUM_AP_NORTHEAST_3 AwsRegionEnum = "ap-northeast-3"
-	AWSREGIONENUM_AP_SOUTH_1 AwsRegionEnum = "ap-south-1"
+	AWSREGIONENUM_AP_SOUTH_1     AwsRegionEnum = "ap-south-1"
 	AWSREGIONENUM_AP_SOUTHEAST_1 AwsRegionEnum = "ap-southeast-1"
 	AWSREGIONENUM_AP_SOUTHEAST_2 AwsRegionEnum = "ap-southeast-2"
-	AWSREGIONENUM_CA_CENTRAL_1 AwsRegionEnum = "ca-central-1"
-	AWSREGIONENUM_CN_NORTH_1 AwsRegionEnum = "cn-north-1"
+	AWSREGIONENUM_CA_CENTRAL_1   AwsRegionEnum = "ca-central-1"
+	AWSREGIONENUM_CN_NORTH_1     AwsRegionEnum = "cn-north-1"
 	AWSREGIONENUM_CN_NORTHWEST_1 AwsRegionEnum = "cn-northwest-1"
-	AWSREGIONENUM_EU_CENTRAL_1 AwsRegionEnum = "eu-central-1"
-	AWSREGIONENUM_EU_NORTH_1 AwsRegionEnum = "eu-north-1"
-	AWSREGIONENUM_EU_SOUTH_1 AwsRegionEnum = "eu-south-1"
-	AWSREGIONENUM_EU_WEST_1 AwsRegionEnum = "eu-west-1"
-	AWSREGIONENUM_EU_WEST_2 AwsRegionEnum = "eu-west-2"
-	AWSREGIONENUM_EU_WEST_3 AwsRegionEnum = "eu-west-3"
-	AWSREGIONENUM_ME_SOUTH_1 AwsRegionEnum = "me-south-1"
-	AWSREGIONENUM_SA_EAST_1 AwsRegionEnum = "sa-east-1"
-	AWSREGIONENUM_US_EAST_1 AwsRegionEnum = "us-east-1"
-	AWSREGIONENUM_US_EAST_2 AwsRegionEnum = "us-east-2"
-	AWSREGIONENUM_US_WEST_1 AwsRegionEnum = "us-west-1"
-	AWSREGIONENUM_US_WEST_2 AwsRegionEnum = "us-west-2"
+	AWSREGIONENUM_EU_CENTRAL_1   AwsRegionEnum = "eu-central-1"
+	AWSREGIONENUM_EU_NORTH_1     AwsRegionEnum = "eu-north-1"
+	AWSREGIONENUM_EU_SOUTH_1     AwsRegionEnum = "eu-south-1"
+	AWSREGIONENUM_EU_WEST_1      AwsRegionEnum = "eu-west-1"
+	AWSREGIONENUM_EU_WEST_2      AwsRegionEnum = "eu-west-2"
+	AWSREGIONENUM_EU_WEST_3      AwsRegionEnum = "eu-west-3"
+	AWSREGIONENUM_ME_SOUTH_1     AwsRegionEnum = "me-south-1"
+	AWSREGIONENUM_SA_EAST_1      AwsRegionEnum = "sa-east-1"
+	AWSREGIONENUM_US_EAST_1      AwsRegionEnum = "us-east-1"
+	AWSREGIONENUM_US_EAST_2      AwsRegionEnum = "us-east-2"
+	AWSREGIONENUM_US_WEST_1      AwsRegionEnum = "us-west-1"
+	AWSREGIONENUM_US_WEST_2      AwsRegionEnum = "us-west-2"
 )
 
 // All allowed values of AwsRegionEnum enum
@@ -151,4 +151,3 @@ func (v *NullableAwsRegionEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

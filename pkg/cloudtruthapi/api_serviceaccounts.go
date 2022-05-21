@@ -20,13 +20,12 @@ import (
 	"strings"
 )
 
-
 // ServiceaccountsApiService ServiceaccountsApi service
 type ServiceaccountsApiService service
 
 type ApiServiceaccountsCreateRequest struct {
-	ctx context.Context
-	ApiService *ServiceaccountsApiService
+	ctx                         context.Context
+	ApiService                  *ServiceaccountsApiService
 	serviceAccountCreateRequest *ServiceAccountCreateRequest
 }
 
@@ -51,7 +50,7 @@ ServiceaccountsCreate Create a ServiceAccount user.
             is not stored on any CloudTruth system, and should be treated as a secret.  Should
             the key be lost, you will need to delete and recreate the ServiceAccount in order
             to generate a new API key.
-            
+
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiServiceaccountsCreateRequest
@@ -59,7 +58,7 @@ ServiceaccountsCreate Create a ServiceAccount user.
 func (a *ServiceaccountsApiService) ServiceaccountsCreate(ctx context.Context) ApiServiceaccountsCreateRequest {
 	return ApiServiceaccountsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -67,10 +66,10 @@ func (a *ServiceaccountsApiService) ServiceaccountsCreate(ctx context.Context) A
 //  @return ServiceAccountCreateResponse
 func (a *ServiceaccountsApiService) ServiceaccountsCreateExecute(r ApiServiceaccountsCreateRequest) (*ServiceAccountCreateResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ServiceAccountCreateResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ServiceAccountCreateResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsCreate")
@@ -172,9 +171,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsCreateExecute(r ApiServiceacc
 }
 
 type ApiServiceaccountsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ServiceaccountsApiService
-	id string
+	id         string
 }
 
 func (r ApiServiceaccountsDestroyRequest) Execute() (*http.Response, error) {
@@ -191,17 +190,17 @@ ServiceaccountsDestroy Method for ServiceaccountsDestroy
 func (a *ServiceaccountsApiService) ServiceaccountsDestroy(ctx context.Context, id string) ApiServiceaccountsDestroyRequest {
 	return ApiServiceaccountsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *ServiceaccountsApiService) ServiceaccountsDestroyExecute(r ApiServiceaccountsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsDestroy")
@@ -290,11 +289,11 @@ func (a *ServiceaccountsApiService) ServiceaccountsDestroyExecute(r ApiServiceac
 }
 
 type ApiServiceaccountsListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ServiceaccountsApiService
-	ordering *string
-	page *int32
-	pageSize *int32
+	ordering   *string
+	page       *int32
+	pageSize   *int32
 }
 
 // Which field to use when ordering the results.
@@ -328,7 +327,7 @@ ServiceaccountsList Method for ServiceaccountsList
 func (a *ServiceaccountsApiService) ServiceaccountsList(ctx context.Context) ApiServiceaccountsListRequest {
 	return ApiServiceaccountsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -336,10 +335,10 @@ func (a *ServiceaccountsApiService) ServiceaccountsList(ctx context.Context) Api
 //  @return PaginatedServiceAccountList
 func (a *ServiceaccountsApiService) ServiceaccountsListExecute(r ApiServiceaccountsListRequest) (*PaginatedServiceAccountList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedServiceAccountList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedServiceAccountList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsList")
@@ -445,9 +444,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsListExecute(r ApiServiceaccou
 }
 
 type ApiServiceaccountsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *ServiceaccountsApiService
-	id string
+	ctx                   context.Context
+	ApiService            *ServiceaccountsApiService
+	id                    string
 	patchedServiceAccount *PatchedServiceAccount
 }
 
@@ -470,8 +469,8 @@ ServiceaccountsPartialUpdate Method for ServiceaccountsPartialUpdate
 func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdate(ctx context.Context, id string) ApiServiceaccountsPartialUpdateRequest {
 	return ApiServiceaccountsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -479,10 +478,10 @@ func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdate(ctx context.Con
 //  @return ServiceAccount
 func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdateExecute(r ApiServiceaccountsPartialUpdateRequest) (*ServiceAccount, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ServiceAccount
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ServiceAccount
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsPartialUpdate")
@@ -582,9 +581,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdateExecute(r ApiSer
 }
 
 type ApiServiceaccountsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ServiceaccountsApiService
-	id string
+	id         string
 }
 
 func (r ApiServiceaccountsRetrieveRequest) Execute() (*ServiceAccount, *http.Response, error) {
@@ -601,8 +600,8 @@ ServiceaccountsRetrieve Method for ServiceaccountsRetrieve
 func (a *ServiceaccountsApiService) ServiceaccountsRetrieve(ctx context.Context, id string) ApiServiceaccountsRetrieveRequest {
 	return ApiServiceaccountsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -610,10 +609,10 @@ func (a *ServiceaccountsApiService) ServiceaccountsRetrieve(ctx context.Context,
 //  @return ServiceAccount
 func (a *ServiceaccountsApiService) ServiceaccountsRetrieveExecute(r ApiServiceaccountsRetrieveRequest) (*ServiceAccount, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ServiceAccount
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ServiceAccount
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsRetrieve")
@@ -711,9 +710,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsRetrieveExecute(r ApiServicea
 }
 
 type ApiServiceaccountsUpdateRequest struct {
-	ctx context.Context
-	ApiService *ServiceaccountsApiService
-	id string
+	ctx            context.Context
+	ApiService     *ServiceaccountsApiService
+	id             string
 	serviceAccount *ServiceAccount
 }
 
@@ -736,8 +735,8 @@ ServiceaccountsUpdate Method for ServiceaccountsUpdate
 func (a *ServiceaccountsApiService) ServiceaccountsUpdate(ctx context.Context, id string) ApiServiceaccountsUpdateRequest {
 	return ApiServiceaccountsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -745,10 +744,10 @@ func (a *ServiceaccountsApiService) ServiceaccountsUpdate(ctx context.Context, i
 //  @return ServiceAccount
 func (a *ServiceaccountsApiService) ServiceaccountsUpdateExecute(r ApiServiceaccountsUpdateRequest) (*ServiceAccount, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ServiceAccount
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ServiceAccount
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsUpdate")

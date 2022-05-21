@@ -24,10 +24,10 @@ type PatchedGroup struct {
 	// The group name.
 	Name *string `json:"name,omitempty"`
 	// A description of the group.  You may find it helpful to document how this group is used to assist others when they need to maintain this organization.
-	Description *string `json:"description,omitempty"`
-	Users []string `json:"users,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	Description *string    `json:"description,omitempty"`
+	Users       []string   `json:"users,omitempty"`
+	CreatedAt   *time.Time `json:"created_at,omitempty"`
+	ModifiedAt  *time.Time `json:"modified_at,omitempty"`
 }
 
 // NewPatchedGroup instantiates a new PatchedGroup object
@@ -332,5 +332,3 @@ func (v *NullablePatchedGroup) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

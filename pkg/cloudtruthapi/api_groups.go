@@ -20,16 +20,15 @@ import (
 	"strings"
 )
 
-
 // GroupsApiService GroupsApi service
 type GroupsApiService service
 
 type ApiGroupsAddCreateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GroupsApiService
-	id string
-	user *string
-	group *Group
+	id         string
+	user       *string
+	group      *Group
 }
 
 func (r ApiGroupsAddCreateRequest) User(user string) ApiGroupsAddCreateRequest {
@@ -58,8 +57,8 @@ Add a user to the group.
 func (a *GroupsApiService) GroupsAddCreate(ctx context.Context, id string) ApiGroupsAddCreateRequest {
 	return ApiGroupsAddCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -67,10 +66,10 @@ func (a *GroupsApiService) GroupsAddCreate(ctx context.Context, id string) ApiGr
 //  @return Group
 func (a *GroupsApiService) GroupsAddCreateExecute(r ApiGroupsAddCreateRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Group
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Group
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsAddCreate")
@@ -180,9 +179,9 @@ func (a *GroupsApiService) GroupsAddCreateExecute(r ApiGroupsAddCreateRequest) (
 }
 
 type ApiGroupsCreateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GroupsApiService
-	group *Group
+	group      *Group
 }
 
 func (r ApiGroupsCreateRequest) Group(group Group) ApiGroupsCreateRequest {
@@ -206,7 +205,7 @@ grants more easily.
 func (a *GroupsApiService) GroupsCreate(ctx context.Context) ApiGroupsCreateRequest {
 	return ApiGroupsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -214,10 +213,10 @@ func (a *GroupsApiService) GroupsCreate(ctx context.Context) ApiGroupsCreateRequ
 //  @return Group
 func (a *GroupsApiService) GroupsCreateExecute(r ApiGroupsCreateRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Group
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Group
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsCreate")
@@ -319,9 +318,9 @@ func (a *GroupsApiService) GroupsCreateExecute(r ApiGroupsCreateRequest) (*Group
 }
 
 type ApiGroupsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GroupsApiService
-	id string
+	id         string
 }
 
 func (r ApiGroupsDestroyRequest) Execute() (*http.Response, error) {
@@ -341,17 +340,17 @@ grants more easily.
 func (a *GroupsApiService) GroupsDestroy(ctx context.Context, id string) ApiGroupsDestroyRequest {
 	return ApiGroupsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *GroupsApiService) GroupsDestroyExecute(r ApiGroupsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsDestroy")
@@ -440,13 +439,13 @@ func (a *GroupsApiService) GroupsDestroyExecute(r ApiGroupsDestroyRequest) (*htt
 }
 
 type ApiGroupsListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GroupsApiService
-	name *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	user *string
+	name       *string
+	ordering   *string
+	page       *int32
+	pageSize   *int32
+	user       *string
 }
 
 func (r ApiGroupsListRequest) Name(name string) ApiGroupsListRequest {
@@ -494,7 +493,7 @@ grants more easily.
 func (a *GroupsApiService) GroupsList(ctx context.Context) ApiGroupsListRequest {
 	return ApiGroupsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -502,10 +501,10 @@ func (a *GroupsApiService) GroupsList(ctx context.Context) ApiGroupsListRequest 
 //  @return PaginatedGroupList
 func (a *GroupsApiService) GroupsListExecute(r ApiGroupsListRequest) (*PaginatedGroupList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedGroupList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedGroupList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsList")
@@ -617,9 +616,9 @@ func (a *GroupsApiService) GroupsListExecute(r ApiGroupsListRequest) (*Paginated
 }
 
 type ApiGroupsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *GroupsApiService
-	id string
+	ctx          context.Context
+	ApiService   *GroupsApiService
+	id           string
 	patchedGroup *PatchedGroup
 }
 
@@ -645,8 +644,8 @@ grants more easily.
 func (a *GroupsApiService) GroupsPartialUpdate(ctx context.Context, id string) ApiGroupsPartialUpdateRequest {
 	return ApiGroupsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -654,10 +653,10 @@ func (a *GroupsApiService) GroupsPartialUpdate(ctx context.Context, id string) A
 //  @return Group
 func (a *GroupsApiService) GroupsPartialUpdateExecute(r ApiGroupsPartialUpdateRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Group
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Group
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsPartialUpdate")
@@ -757,11 +756,11 @@ func (a *GroupsApiService) GroupsPartialUpdateExecute(r ApiGroupsPartialUpdateRe
 }
 
 type ApiGroupsRemoveCreateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GroupsApiService
-	id string
-	user *string
-	group *Group
+	id         string
+	user       *string
+	group      *Group
 }
 
 func (r ApiGroupsRemoveCreateRequest) User(user string) ApiGroupsRemoveCreateRequest {
@@ -790,8 +789,8 @@ Remove a user from the group.
 func (a *GroupsApiService) GroupsRemoveCreate(ctx context.Context, id string) ApiGroupsRemoveCreateRequest {
 	return ApiGroupsRemoveCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -799,10 +798,10 @@ func (a *GroupsApiService) GroupsRemoveCreate(ctx context.Context, id string) Ap
 //  @return Group
 func (a *GroupsApiService) GroupsRemoveCreateExecute(r ApiGroupsRemoveCreateRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Group
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Group
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsRemoveCreate")
@@ -912,9 +911,9 @@ func (a *GroupsApiService) GroupsRemoveCreateExecute(r ApiGroupsRemoveCreateRequ
 }
 
 type ApiGroupsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GroupsApiService
-	id string
+	id         string
 }
 
 func (r ApiGroupsRetrieveRequest) Execute() (*Group, *http.Response, error) {
@@ -934,8 +933,8 @@ grants more easily.
 func (a *GroupsApiService) GroupsRetrieve(ctx context.Context, id string) ApiGroupsRetrieveRequest {
 	return ApiGroupsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -943,10 +942,10 @@ func (a *GroupsApiService) GroupsRetrieve(ctx context.Context, id string) ApiGro
 //  @return Group
 func (a *GroupsApiService) GroupsRetrieveExecute(r ApiGroupsRetrieveRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Group
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Group
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsRetrieve")
@@ -1044,10 +1043,10 @@ func (a *GroupsApiService) GroupsRetrieveExecute(r ApiGroupsRetrieveRequest) (*G
 }
 
 type ApiGroupsUpdateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GroupsApiService
-	id string
-	group *Group
+	id         string
+	group      *Group
 }
 
 func (r ApiGroupsUpdateRequest) Group(group Group) ApiGroupsUpdateRequest {
@@ -1072,8 +1071,8 @@ grants more easily.
 func (a *GroupsApiService) GroupsUpdate(ctx context.Context, id string) ApiGroupsUpdateRequest {
 	return ApiGroupsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -1081,10 +1080,10 @@ func (a *GroupsApiService) GroupsUpdate(ctx context.Context, id string) ApiGroup
 //  @return Group
 func (a *GroupsApiService) GroupsUpdateExecute(r ApiGroupsUpdateRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Group
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Group
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsUpdate")

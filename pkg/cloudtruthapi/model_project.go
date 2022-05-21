@@ -36,8 +36,8 @@ type Project struct {
 	// Deprecated. Only shows pushes for aws integrations in /api/v1/.
 	Pushes []AwsPush `json:"pushes"`
 	// Push actions associated with the project.
-	PushUrls []string `json:"push_urls"`
-	CreatedAt time.Time `json:"created_at"`
+	PushUrls   []string  `json:"push_urls"`
+	CreatedAt  time.Time `json:"created_at"`
 	ModifiedAt time.Time `json:"modified_at"`
 }
 
@@ -227,6 +227,7 @@ func (o *Project) HasDependsOn() bool {
 func (o *Project) SetDependsOn(v string) {
 	o.DependsOn.Set(&v)
 }
+
 // SetDependsOnNil sets the value for DependsOn to be an explicit nil
 func (o *Project) SetDependsOnNil() {
 	o.DependsOn.Set(nil)
@@ -467,5 +468,3 @@ func (v *NullableProject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

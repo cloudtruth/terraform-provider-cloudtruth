@@ -36,7 +36,7 @@ type ParameterValuesValue struct {
 	// If the value is `external`, the content returned by the integration can be reduced by applying a JMESpath expression.  This is valid as long as the content is structured and of a supported format.  JMESpath expressions are supported on `json`, `yaml`, and `dotenv` content.
 	ExternalFilter *string `json:"external_filter,omitempty"`
 	// This field is deprecated and unused.
-	ExternalError NullableString `json:"external_error"`
+	ExternalError  NullableString                     `json:"external_error"`
 	ExternalStatus NullablePatchedValueExternalStatus `json:"external_status"`
 	// This is the content to use when resolving the Value for an internal non-secret, or when storing a secret.  When storing a secret, this content is stored in your organization's dedicated vault and this field is cleared.  This field is required if the value is being created or updated and is `internal`.  This field cannot be specified when creating or updating an `external` value.
 	InternalValue NullableString `json:"internal_value,omitempty"`
@@ -51,9 +51,9 @@ type ParameterValuesValue struct {
 	// The parameters this value references, if interpolated.
 	ReferencedParameters []string `json:"referenced_parameters"`
 	// The templates this value references, if interpolated.
-	ReferencedTemplates []string `json:"referenced_templates"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ReferencedTemplates []string  `json:"referenced_templates"`
+	CreatedAt           time.Time `json:"created_at"`
+	ModifiedAt          time.Time `json:"modified_at"`
 }
 
 // NewParameterValuesValue instantiates a new ParameterValuesValue object
@@ -414,6 +414,7 @@ func (o *ParameterValuesValue) HasInternalValue() bool {
 func (o *ParameterValuesValue) SetInternalValue(v string) {
 	o.InternalValue.Set(&v)
 }
+
 // SetInternalValueNil sets the value for InternalValue to be an explicit nil
 func (o *ParameterValuesValue) SetInternalValueNil() {
 	o.InternalValue.Set(nil)
@@ -728,5 +729,3 @@ func (v *NullableParameterValuesValue) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

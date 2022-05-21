@@ -17,10 +17,10 @@ import (
 
 // PaginatedAzureKeyVaultPullList struct for PaginatedAzureKeyVaultPullList
 type PaginatedAzureKeyVaultPullList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
-	Previous NullableString `json:"previous,omitempty"`
-	Results []AzureKeyVaultPull `json:"results,omitempty"`
+	Count    *int32              `json:"count,omitempty"`
+	Next     NullableString      `json:"next,omitempty"`
+	Previous NullableString      `json:"previous,omitempty"`
+	Results  []AzureKeyVaultPull `json:"results,omitempty"`
 }
 
 // NewPaginatedAzureKeyVaultPullList instantiates a new PaginatedAzureKeyVaultPullList object
@@ -104,6 +104,7 @@ func (o *PaginatedAzureKeyVaultPullList) HasNext() bool {
 func (o *PaginatedAzureKeyVaultPullList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedAzureKeyVaultPullList) SetNextNil() {
 	o.Next.Set(nil)
@@ -146,6 +147,7 @@ func (o *PaginatedAzureKeyVaultPullList) HasPrevious() bool {
 func (o *PaginatedAzureKeyVaultPullList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedAzureKeyVaultPullList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -240,5 +242,3 @@ func (v *NullablePaginatedAzureKeyVaultPullList) UnmarshalJSON(src []byte) error
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

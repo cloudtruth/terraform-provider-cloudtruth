@@ -17,10 +17,10 @@ import (
 
 // PaginatedAuditTrailList struct for PaginatedAuditTrailList
 type PaginatedAuditTrailList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
+	Count    *int32         `json:"count,omitempty"`
+	Next     NullableString `json:"next,omitempty"`
 	Previous NullableString `json:"previous,omitempty"`
-	Results []AuditTrail `json:"results,omitempty"`
+	Results  []AuditTrail   `json:"results,omitempty"`
 }
 
 // NewPaginatedAuditTrailList instantiates a new PaginatedAuditTrailList object
@@ -104,6 +104,7 @@ func (o *PaginatedAuditTrailList) HasNext() bool {
 func (o *PaginatedAuditTrailList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedAuditTrailList) SetNextNil() {
 	o.Next.Set(nil)
@@ -146,6 +147,7 @@ func (o *PaginatedAuditTrailList) HasPrevious() bool {
 func (o *PaginatedAuditTrailList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedAuditTrailList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -240,5 +242,3 @@ func (v *NullablePaginatedAuditTrailList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

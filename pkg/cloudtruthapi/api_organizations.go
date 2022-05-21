@@ -20,13 +20,12 @@ import (
 	"strings"
 )
 
-
 // OrganizationsApiService OrganizationsApi service
 type OrganizationsApiService service
 
 type ApiOrganizationsCreateRequest struct {
-	ctx context.Context
-	ApiService *OrganizationsApiService
+	ctx                context.Context
+	ApiService         *OrganizationsApiService
 	organizationCreate *OrganizationCreate
 }
 
@@ -48,7 +47,7 @@ OrganizationsCreate Method for OrganizationsCreate
 func (a *OrganizationsApiService) OrganizationsCreate(ctx context.Context) ApiOrganizationsCreateRequest {
 	return ApiOrganizationsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -56,10 +55,10 @@ func (a *OrganizationsApiService) OrganizationsCreate(ctx context.Context) ApiOr
 //  @return Organization
 func (a *OrganizationsApiService) OrganizationsCreateExecute(r ApiOrganizationsCreateRequest) (*Organization, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Organization
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Organization
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OrganizationsApiService.OrganizationsCreate")
@@ -161,9 +160,9 @@ func (a *OrganizationsApiService) OrganizationsCreateExecute(r ApiOrganizationsC
 }
 
 type ApiOrganizationsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *OrganizationsApiService
-	id string
+	id         string
 }
 
 func (r ApiOrganizationsDestroyRequest) Execute() (*http.Response, error) {
@@ -180,17 +179,17 @@ OrganizationsDestroy Method for OrganizationsDestroy
 func (a *OrganizationsApiService) OrganizationsDestroy(ctx context.Context, id string) ApiOrganizationsDestroyRequest {
 	return ApiOrganizationsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *OrganizationsApiService) OrganizationsDestroyExecute(r ApiOrganizationsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OrganizationsApiService.OrganizationsDestroy")
@@ -279,12 +278,12 @@ func (a *OrganizationsApiService) OrganizationsDestroyExecute(r ApiOrganizations
 }
 
 type ApiOrganizationsListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *OrganizationsApiService
-	name *string
-	ordering *string
-	page *int32
-	pageSize *int32
+	name       *string
+	ordering   *string
+	page       *int32
+	pageSize   *int32
 }
 
 func (r ApiOrganizationsListRequest) Name(name string) ApiOrganizationsListRequest {
@@ -323,7 +322,7 @@ OrganizationsList Method for OrganizationsList
 func (a *OrganizationsApiService) OrganizationsList(ctx context.Context) ApiOrganizationsListRequest {
 	return ApiOrganizationsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
@@ -331,10 +330,10 @@ func (a *OrganizationsApiService) OrganizationsList(ctx context.Context) ApiOrga
 //  @return PaginatedOrganizationList
 func (a *OrganizationsApiService) OrganizationsListExecute(r ApiOrganizationsListRequest) (*PaginatedOrganizationList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedOrganizationList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedOrganizationList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OrganizationsApiService.OrganizationsList")
@@ -443,9 +442,9 @@ func (a *OrganizationsApiService) OrganizationsListExecute(r ApiOrganizationsLis
 }
 
 type ApiOrganizationsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *OrganizationsApiService
-	id string
+	ctx                 context.Context
+	ApiService          *OrganizationsApiService
+	id                  string
 	patchedOrganization *PatchedOrganization
 }
 
@@ -468,8 +467,8 @@ OrganizationsPartialUpdate Method for OrganizationsPartialUpdate
 func (a *OrganizationsApiService) OrganizationsPartialUpdate(ctx context.Context, id string) ApiOrganizationsPartialUpdateRequest {
 	return ApiOrganizationsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -477,10 +476,10 @@ func (a *OrganizationsApiService) OrganizationsPartialUpdate(ctx context.Context
 //  @return Organization
 func (a *OrganizationsApiService) OrganizationsPartialUpdateExecute(r ApiOrganizationsPartialUpdateRequest) (*Organization, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Organization
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Organization
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OrganizationsApiService.OrganizationsPartialUpdate")
@@ -580,9 +579,9 @@ func (a *OrganizationsApiService) OrganizationsPartialUpdateExecute(r ApiOrganiz
 }
 
 type ApiOrganizationsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *OrganizationsApiService
-	id string
+	id         string
 }
 
 func (r ApiOrganizationsRetrieveRequest) Execute() (*Organization, *http.Response, error) {
@@ -599,8 +598,8 @@ OrganizationsRetrieve Method for OrganizationsRetrieve
 func (a *OrganizationsApiService) OrganizationsRetrieve(ctx context.Context, id string) ApiOrganizationsRetrieveRequest {
 	return ApiOrganizationsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -608,10 +607,10 @@ func (a *OrganizationsApiService) OrganizationsRetrieve(ctx context.Context, id 
 //  @return Organization
 func (a *OrganizationsApiService) OrganizationsRetrieveExecute(r ApiOrganizationsRetrieveRequest) (*Organization, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Organization
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Organization
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OrganizationsApiService.OrganizationsRetrieve")
@@ -709,9 +708,9 @@ func (a *OrganizationsApiService) OrganizationsRetrieveExecute(r ApiOrganization
 }
 
 type ApiOrganizationsUpdateRequest struct {
-	ctx context.Context
-	ApiService *OrganizationsApiService
-	id string
+	ctx          context.Context
+	ApiService   *OrganizationsApiService
+	id           string
 	organization *Organization
 }
 
@@ -734,8 +733,8 @@ OrganizationsUpdate Method for OrganizationsUpdate
 func (a *OrganizationsApiService) OrganizationsUpdate(ctx context.Context, id string) ApiOrganizationsUpdateRequest {
 	return ApiOrganizationsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
@@ -743,10 +742,10 @@ func (a *OrganizationsApiService) OrganizationsUpdate(ctx context.Context, id st
 //  @return Organization
 func (a *OrganizationsApiService) OrganizationsUpdateExecute(r ApiOrganizationsUpdateRequest) (*Organization, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Organization
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Organization
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "OrganizationsApiService.OrganizationsUpdate")

@@ -26,14 +26,14 @@ type PatchedOrganization struct {
 	// Indicates if this Organization is the one currently targeted by the Bearer token used by the client to authorize.
 	Current *bool `json:"current,omitempty"`
 	// Your role in the organization.
-	Role NullableRoleEnum `json:"role,omitempty"`
-	SubscriptionExpiresAt NullableTime `json:"subscription_expires_at,omitempty"`
-	SubscriptionFeatures []string `json:"subscription_features,omitempty"`
-	SubscriptionId NullableString `json:"subscription_id,omitempty"`
-	SubscriptionPlanId NullableString `json:"subscription_plan_id,omitempty"`
-	SubscriptionPlanName NullableString `json:"subscription_plan_name,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	Role                  NullableRoleEnum `json:"role,omitempty"`
+	SubscriptionExpiresAt NullableTime     `json:"subscription_expires_at,omitempty"`
+	SubscriptionFeatures  []string         `json:"subscription_features,omitempty"`
+	SubscriptionId        NullableString   `json:"subscription_id,omitempty"`
+	SubscriptionPlanId    NullableString   `json:"subscription_plan_id,omitempty"`
+	SubscriptionPlanName  NullableString   `json:"subscription_plan_name,omitempty"`
+	CreatedAt             *time.Time       `json:"created_at,omitempty"`
+	ModifiedAt            *time.Time       `json:"modified_at,omitempty"`
 }
 
 // NewPatchedOrganization instantiates a new PatchedOrganization object
@@ -213,6 +213,7 @@ func (o *PatchedOrganization) HasRole() bool {
 func (o *PatchedOrganization) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
+
 // SetRoleNil sets the value for Role to be an explicit nil
 func (o *PatchedOrganization) SetRoleNil() {
 	o.Role.Set(nil)
@@ -255,6 +256,7 @@ func (o *PatchedOrganization) HasSubscriptionExpiresAt() bool {
 func (o *PatchedOrganization) SetSubscriptionExpiresAt(v time.Time) {
 	o.SubscriptionExpiresAt.Set(&v)
 }
+
 // SetSubscriptionExpiresAtNil sets the value for SubscriptionExpiresAt to be an explicit nil
 func (o *PatchedOrganization) SetSubscriptionExpiresAtNil() {
 	o.SubscriptionExpiresAt.Set(nil)
@@ -329,6 +331,7 @@ func (o *PatchedOrganization) HasSubscriptionId() bool {
 func (o *PatchedOrganization) SetSubscriptionId(v string) {
 	o.SubscriptionId.Set(&v)
 }
+
 // SetSubscriptionIdNil sets the value for SubscriptionId to be an explicit nil
 func (o *PatchedOrganization) SetSubscriptionIdNil() {
 	o.SubscriptionId.Set(nil)
@@ -371,6 +374,7 @@ func (o *PatchedOrganization) HasSubscriptionPlanId() bool {
 func (o *PatchedOrganization) SetSubscriptionPlanId(v string) {
 	o.SubscriptionPlanId.Set(&v)
 }
+
 // SetSubscriptionPlanIdNil sets the value for SubscriptionPlanId to be an explicit nil
 func (o *PatchedOrganization) SetSubscriptionPlanIdNil() {
 	o.SubscriptionPlanId.Set(nil)
@@ -413,6 +417,7 @@ func (o *PatchedOrganization) HasSubscriptionPlanName() bool {
 func (o *PatchedOrganization) SetSubscriptionPlanName(v string) {
 	o.SubscriptionPlanName.Set(&v)
 }
+
 // SetSubscriptionPlanNameNil sets the value for SubscriptionPlanName to be an explicit nil
 func (o *PatchedOrganization) SetSubscriptionPlanNameNil() {
 	o.SubscriptionPlanName.Set(nil)
@@ -563,5 +568,3 @@ func (v *NullablePatchedOrganization) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -20,7 +20,7 @@ import (
 type AwsIntegration struct {
 	Url string `json:"url"`
 	// The unique identifier for the integration.
-	Id string `json:"id"`
+	Id   string `json:"id"`
 	Name string `json:"name"`
 	// An optional description for the integration.
 	Description *string `json:"description,omitempty"`
@@ -30,9 +30,9 @@ type AwsIntegration struct {
 	StatusDetail string `json:"status_detail"`
 	// The last time the status was evaluated.
 	StatusLastCheckedAt time.Time `json:"status_last_checked_at"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
-	Fqn string `json:"fqn"`
+	CreatedAt           time.Time `json:"created_at"`
+	ModifiedAt          time.Time `json:"modified_at"`
+	Fqn                 string    `json:"fqn"`
 	// The type of integration.
 	Type string `json:"type"`
 	// Allow actions to write to the integration.
@@ -45,7 +45,7 @@ type AwsIntegration struct {
 	AwsEnabledServices []AwsServiceEnum `json:"aws_enabled_services"`
 	// This is a shared secret between the AWS Administrator who set up your IAM trust relationship and your CloudTruth AWS Integration.  CloudTruth will generate a random value for you to give to your AWS Administrator in order to create the necessary IAM role for proper access.
 	AwsExternalId string `json:"aws_external_id"`
-	// If present, this is the KMS Key Id that is used to push values.  This key must be accessible in the AWS account (it cannot be an ARN to a key in another AWS account). 
+	// If present, this is the KMS Key Id that is used to push values.  This key must be accessible in the AWS account (it cannot be an ARN to a key in another AWS account).
 	AwsKmsKeyId NullableString `json:"aws_kms_key_id,omitempty"`
 	// The role that CloudTruth will assume when interacting with your AWS Account through this integration.  The role is configured by your AWS Account Administrator.  If your AWS Administrator provided you with a value use it, otherwise make your own role name and give it to your AWS Administrator.
 	AwsRoleName string `json:"aws_role_name"`
@@ -517,6 +517,7 @@ func (o *AwsIntegration) HasAwsKmsKeyId() bool {
 func (o *AwsIntegration) SetAwsKmsKeyId(v string) {
 	o.AwsKmsKeyId.Set(&v)
 }
+
 // SetAwsKmsKeyIdNil sets the value for AwsKmsKeyId to be an explicit nil
 func (o *AwsIntegration) SetAwsKmsKeyIdNil() {
 	o.AwsKmsKeyId.Set(nil)
@@ -645,5 +646,3 @@ func (v *NullableAwsIntegration) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

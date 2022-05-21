@@ -32,9 +32,9 @@ type PatchedEnvironment struct {
 	// Indicates if access control is being enforced through grants.
 	AccessControlled *bool `json:"access_controlled,omitempty"`
 	// Your role in the environment, if the environment is access-controlled.
-	Role NullableRoleEnum `json:"role,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	Role       NullableRoleEnum `json:"role,omitempty"`
+	CreatedAt  *time.Time       `json:"created_at,omitempty"`
+	ModifiedAt *time.Time       `json:"modified_at,omitempty"`
 }
 
 // NewPatchedEnvironment instantiates a new PatchedEnvironment object
@@ -214,6 +214,7 @@ func (o *PatchedEnvironment) HasParent() bool {
 func (o *PatchedEnvironment) SetParent(v string) {
 	o.Parent.Set(&v)
 }
+
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *PatchedEnvironment) SetParentNil() {
 	o.Parent.Set(nil)
@@ -320,6 +321,7 @@ func (o *PatchedEnvironment) HasRole() bool {
 func (o *PatchedEnvironment) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
+
 // SetRoleNil sets the value for Role to be an explicit nil
 func (o *PatchedEnvironment) SetRoleNil() {
 	o.Role.Set(nil)
@@ -464,5 +466,3 @@ func (v *NullablePatchedEnvironment) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

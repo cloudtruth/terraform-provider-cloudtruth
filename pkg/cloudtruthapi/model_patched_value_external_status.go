@@ -57,8 +57,8 @@ type PatchedValueExternalStatus struct {
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// Details on the error that occurred during processing.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	ModifiedAt  time.Time      `json:"modified_at"`
 }
 
 // NewPatchedValueExternalStatus instantiates a new PatchedValueExternalStatus object
@@ -166,6 +166,7 @@ func (o *PatchedValueExternalStatus) HasOperation() bool {
 func (o *PatchedValueExternalStatus) SetOperation(v OperationEnum) {
 	o.Operation.Set(&v)
 }
+
 // SetOperationNil sets the value for Operation to be an explicit nil
 func (o *PatchedValueExternalStatus) SetOperationNil() {
 	o.Operation.Set(nil)
@@ -232,6 +233,7 @@ func (o *PatchedValueExternalStatus) HasSuccessDetail() bool {
 func (o *PatchedValueExternalStatus) SetSuccessDetail(v string) {
 	o.SuccessDetail.Set(&v)
 }
+
 // SetSuccessDetailNil sets the value for SuccessDetail to be an explicit nil
 func (o *PatchedValueExternalStatus) SetSuccessDetailNil() {
 	o.SuccessDetail.Set(nil)
@@ -274,6 +276,7 @@ func (o *PatchedValueExternalStatus) HasFqn() bool {
 func (o *PatchedValueExternalStatus) SetFqn(v string) {
 	o.Fqn.Set(&v)
 }
+
 // SetFqnNil sets the value for Fqn to be an explicit nil
 func (o *PatchedValueExternalStatus) SetFqnNil() {
 	o.Fqn.Set(nil)
@@ -342,6 +345,7 @@ func (o *PatchedValueExternalStatus) HasEnvironmentId() bool {
 func (o *PatchedValueExternalStatus) SetEnvironmentId(v string) {
 	o.EnvironmentId.Set(&v)
 }
+
 // SetEnvironmentIdNil sets the value for EnvironmentId to be an explicit nil
 func (o *PatchedValueExternalStatus) SetEnvironmentIdNil() {
 	o.EnvironmentId.Set(nil)
@@ -384,6 +388,7 @@ func (o *PatchedValueExternalStatus) HasEnvironmentName() bool {
 func (o *PatchedValueExternalStatus) SetEnvironmentName(v string) {
 	o.EnvironmentName.Set(&v)
 }
+
 // SetEnvironmentNameNil sets the value for EnvironmentName to be an explicit nil
 func (o *PatchedValueExternalStatus) SetEnvironmentNameNil() {
 	o.EnvironmentName.Set(nil)
@@ -452,6 +457,7 @@ func (o *PatchedValueExternalStatus) HasProjectId() bool {
 func (o *PatchedValueExternalStatus) SetProjectId(v string) {
 	o.ProjectId.Set(&v)
 }
+
 // SetProjectIdNil sets the value for ProjectId to be an explicit nil
 func (o *PatchedValueExternalStatus) SetProjectIdNil() {
 	o.ProjectId.Set(nil)
@@ -494,6 +500,7 @@ func (o *PatchedValueExternalStatus) HasProjectName() bool {
 func (o *PatchedValueExternalStatus) SetProjectName(v string) {
 	o.ProjectName.Set(&v)
 }
+
 // SetProjectNameNil sets the value for ProjectName to be an explicit nil
 func (o *PatchedValueExternalStatus) SetProjectNameNil() {
 	o.ProjectName.Set(nil)
@@ -562,6 +569,7 @@ func (o *PatchedValueExternalStatus) HasParameterId() bool {
 func (o *PatchedValueExternalStatus) SetParameterId(v string) {
 	o.ParameterId.Set(&v)
 }
+
 // SetParameterIdNil sets the value for ParameterId to be an explicit nil
 func (o *PatchedValueExternalStatus) SetParameterIdNil() {
 	o.ParameterId.Set(nil)
@@ -604,6 +612,7 @@ func (o *PatchedValueExternalStatus) HasParameterName() bool {
 func (o *PatchedValueExternalStatus) SetParameterName(v string) {
 	o.ParameterName.Set(&v)
 }
+
 // SetParameterNameNil sets the value for ParameterName to be an explicit nil
 func (o *PatchedValueExternalStatus) SetParameterNameNil() {
 	o.ParameterName.Set(nil)
@@ -646,6 +655,7 @@ func (o *PatchedValueExternalStatus) HasVenueId() bool {
 func (o *PatchedValueExternalStatus) SetVenueId(v string) {
 	o.VenueId.Set(&v)
 }
+
 // SetVenueIdNil sets the value for VenueId to be an explicit nil
 func (o *PatchedValueExternalStatus) SetVenueIdNil() {
 	o.VenueId.Set(nil)
@@ -688,6 +698,7 @@ func (o *PatchedValueExternalStatus) HasVenueName() bool {
 func (o *PatchedValueExternalStatus) SetVenueName(v string) {
 	o.VenueName.Set(&v)
 }
+
 // SetVenueNameNil sets the value for VenueName to be an explicit nil
 func (o *PatchedValueExternalStatus) SetVenueNameNil() {
 	o.VenueName.Set(nil)
@@ -730,6 +741,7 @@ func (o *PatchedValueExternalStatus) HasSummary() bool {
 func (o *PatchedValueExternalStatus) SetSummary(v string) {
 	o.Summary.Set(&v)
 }
+
 // SetSummaryNil sets the value for Summary to be an explicit nil
 func (o *PatchedValueExternalStatus) SetSummaryNil() {
 	o.Summary.Set(nil)
@@ -772,6 +784,7 @@ func (o *PatchedValueExternalStatus) HasErrorCode() bool {
 func (o *PatchedValueExternalStatus) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
+
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *PatchedValueExternalStatus) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -814,6 +827,7 @@ func (o *PatchedValueExternalStatus) HasErrorDetail() bool {
 func (o *PatchedValueExternalStatus) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
+
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *PatchedValueExternalStatus) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -978,5 +992,3 @@ func (v *NullablePatchedValueExternalStatus) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

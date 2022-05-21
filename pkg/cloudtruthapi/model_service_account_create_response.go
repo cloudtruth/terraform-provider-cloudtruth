@@ -18,13 +18,13 @@ import (
 
 // ServiceAccountCreateResponse struct for ServiceAccountCreateResponse
 type ServiceAccountCreateResponse struct {
-	Url string `json:"url"`
-	Id string `json:"id"`
+	Url  string                    `json:"url"`
+	Id   string                    `json:"id"`
 	User PatchedServiceAccountUser `json:"user"`
 	// An optional description of the process or system using the service account.
-	Description *string `json:"description,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	Description *string   `json:"description,omitempty"`
+	CreatedAt   time.Time `json:"created_at"`
+	ModifiedAt  time.Time `json:"modified_at"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
 	LastUsedAt NullableTime `json:"last_used_at"`
 	// The API Key to use as a Bearer token for the service account.
@@ -321,5 +321,3 @@ func (v *NullableServiceAccountCreateResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

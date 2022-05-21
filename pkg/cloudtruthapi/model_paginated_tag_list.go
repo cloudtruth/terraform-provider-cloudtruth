@@ -17,10 +17,10 @@ import (
 
 // PaginatedTagList struct for PaginatedTagList
 type PaginatedTagList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
+	Count    *int32         `json:"count,omitempty"`
+	Next     NullableString `json:"next,omitempty"`
 	Previous NullableString `json:"previous,omitempty"`
-	Results []Tag `json:"results,omitempty"`
+	Results  []Tag          `json:"results,omitempty"`
 }
 
 // NewPaginatedTagList instantiates a new PaginatedTagList object
@@ -104,6 +104,7 @@ func (o *PaginatedTagList) HasNext() bool {
 func (o *PaginatedTagList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedTagList) SetNextNil() {
 	o.Next.Set(nil)
@@ -146,6 +147,7 @@ func (o *PaginatedTagList) HasPrevious() bool {
 func (o *PaginatedTagList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedTagList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -240,5 +242,3 @@ func (v *NullablePaginatedTagList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

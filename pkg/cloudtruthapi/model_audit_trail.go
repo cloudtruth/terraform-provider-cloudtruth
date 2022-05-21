@@ -30,8 +30,8 @@ type AuditTrail struct {
 	// The type of object associated with the action.
 	ObjectType NullableObjectTypeEnum `json:"object_type"`
 	// The timestamp of the activity that was audited.
-	Timestamp time.Time `json:"timestamp"`
-	User AuditTrailUser `json:"user"`
+	Timestamp time.Time      `json:"timestamp"`
+	User      AuditTrailUser `json:"user"`
 }
 
 // NewAuditTrail instantiates a new AuditTrail object
@@ -317,5 +317,3 @@ func (v *NullableAuditTrail) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

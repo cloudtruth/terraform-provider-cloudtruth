@@ -21,8 +21,8 @@ type ParameterTimeline struct {
 	// The number of records in this response.
 	Count int32 `json:"count"`
 	// If present, additional history can be retrieved using this timestamp in the next call for the as_of query parameter value.
-	NextAsOf *time.Time `json:"next_as_of,omitempty"`
-	Results []ParameterTimelineEntry `json:"results"`
+	NextAsOf *time.Time               `json:"next_as_of,omitempty"`
+	Results  []ParameterTimelineEntry `json:"results"`
 }
 
 // NewParameterTimeline instantiates a new ParameterTimeline object
@@ -173,5 +173,3 @@ func (v *NullableParameterTimeline) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

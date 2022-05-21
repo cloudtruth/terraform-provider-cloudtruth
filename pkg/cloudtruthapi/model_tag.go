@@ -31,7 +31,7 @@ type Tag struct {
 	Pushes []AwsPush `json:"pushes"`
 	// Push actions associated with the tag.
 	PushUrls []string `json:"push_urls"`
-	Usage TagUsage `json:"usage"`
+	Usage    TagUsage `json:"usage"`
 }
 
 // NewTag instantiates a new Tag object
@@ -322,5 +322,3 @@ func (v *NullableTag) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -17,13 +17,13 @@ import (
 
 // BackupParameter Parameter, rule, and value data at a point in time.
 type BackupParameter struct {
-	Rules map[string]BackupParameterRule `json:"rules"`
-	Values map[string]BackupParameterValuesValue `json:"values"`
-	Name string `json:"name"`
-	ParamType string `json:"param_type"`
-	Project string `json:"project"`
-	Secret bool `json:"secret"`
-	Description NullableString `json:"description,omitempty"`
+	Rules       map[string]BackupParameterRule        `json:"rules"`
+	Values      map[string]BackupParameterValuesValue `json:"values"`
+	Name        string                                `json:"name"`
+	ParamType   string                                `json:"param_type"`
+	Project     string                                `json:"project"`
+	Secret      bool                                  `json:"secret"`
+	Description NullableString                        `json:"description,omitempty"`
 }
 
 // NewBackupParameter instantiates a new BackupParameter object
@@ -225,6 +225,7 @@ func (o *BackupParameter) HasDescription() bool {
 func (o *BackupParameter) SetDescription(v string) {
 	o.Description.Set(&v)
 }
+
 // SetDescriptionNil sets the value for Description to be an explicit nil
 func (o *BackupParameter) SetDescriptionNil() {
 	o.Description.Set(nil)
@@ -296,5 +297,3 @@ func (v *NullableBackupParameter) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

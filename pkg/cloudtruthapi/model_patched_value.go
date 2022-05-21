@@ -36,7 +36,7 @@ type PatchedValue struct {
 	// If the value is `external`, the content returned by the integration can be reduced by applying a JMESpath expression.  This is valid as long as the content is structured and of a supported format.  JMESpath expressions are supported on `json`, `yaml`, and `dotenv` content.
 	ExternalFilter *string `json:"external_filter,omitempty"`
 	// This field is deprecated and unused.
-	ExternalError NullableString `json:"external_error,omitempty"`
+	ExternalError  NullableString                     `json:"external_error,omitempty"`
 	ExternalStatus NullablePatchedValueExternalStatus `json:"external_status,omitempty"`
 	// This is the content to use when resolving the Value for an internal non-secret, or when storing a secret.  When storing a secret, this content is stored in your organization's dedicated vault and this field is cleared.  This field is required if the value is being created or updated and is `internal`.  This field cannot be specified when creating or updating an `external` value.
 	InternalValue NullableString `json:"internal_value,omitempty"`
@@ -51,9 +51,9 @@ type PatchedValue struct {
 	// The parameters this value references, if interpolated.
 	ReferencedParameters []string `json:"referenced_parameters,omitempty"`
 	// The templates this value references, if interpolated.
-	ReferencedTemplates []string `json:"referenced_templates,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	ReferencedTemplates []string   `json:"referenced_templates,omitempty"`
+	CreatedAt           *time.Time `json:"created_at,omitempty"`
+	ModifiedAt          *time.Time `json:"modified_at,omitempty"`
 }
 
 // NewPatchedValue instantiates a new PatchedValue object
@@ -233,6 +233,7 @@ func (o *PatchedValue) HasEarliestTag() bool {
 func (o *PatchedValue) SetEarliestTag(v string) {
 	o.EarliestTag.Set(&v)
 }
+
 // SetEarliestTagNil sets the value for EarliestTag to be an explicit nil
 func (o *PatchedValue) SetEarliestTagNil() {
 	o.EarliestTag.Set(nil)
@@ -403,6 +404,7 @@ func (o *PatchedValue) HasExternalError() bool {
 func (o *PatchedValue) SetExternalError(v string) {
 	o.ExternalError.Set(&v)
 }
+
 // SetExternalErrorNil sets the value for ExternalError to be an explicit nil
 func (o *PatchedValue) SetExternalErrorNil() {
 	o.ExternalError.Set(nil)
@@ -445,6 +447,7 @@ func (o *PatchedValue) HasExternalStatus() bool {
 func (o *PatchedValue) SetExternalStatus(v PatchedValueExternalStatus) {
 	o.ExternalStatus.Set(&v)
 }
+
 // SetExternalStatusNil sets the value for ExternalStatus to be an explicit nil
 func (o *PatchedValue) SetExternalStatusNil() {
 	o.ExternalStatus.Set(nil)
@@ -487,6 +490,7 @@ func (o *PatchedValue) HasInternalValue() bool {
 func (o *PatchedValue) SetInternalValue(v string) {
 	o.InternalValue.Set(&v)
 }
+
 // SetInternalValueNil sets the value for InternalValue to be an explicit nil
 func (o *PatchedValue) SetInternalValueNil() {
 	o.InternalValue.Set(nil)
@@ -561,6 +565,7 @@ func (o *PatchedValue) HasValue() bool {
 func (o *PatchedValue) SetValue(v string) {
 	o.Value.Set(&v)
 }
+
 // SetValueNil sets the value for Value to be an explicit nil
 func (o *PatchedValue) SetValueNil() {
 	o.Value.Set(nil)
@@ -635,6 +640,7 @@ func (o *PatchedValue) HasSecret() bool {
 func (o *PatchedValue) SetSecret(v bool) {
 	o.Secret.Set(&v)
 }
+
 // SetSecretNil sets the value for Secret to be an explicit nil
 func (o *PatchedValue) SetSecretNil() {
 	o.Secret.Set(nil)
@@ -873,5 +879,3 @@ func (v *NullablePatchedValue) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

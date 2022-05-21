@@ -173,6 +173,7 @@ func (o *PatchedTagUpdate) HasTimestamp() bool {
 func (o *PatchedTagUpdate) SetTimestamp(v time.Time) {
 	o.Timestamp.Set(&v)
 }
+
 // SetTimestampNil sets the value for Timestamp to be an explicit nil
 func (o *PatchedTagUpdate) SetTimestampNil() {
 	o.Timestamp.Set(nil)
@@ -235,5 +236,3 @@ func (v *NullablePatchedTagUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

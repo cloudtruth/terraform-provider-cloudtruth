@@ -57,8 +57,8 @@ type GitHubPullTaskStep struct {
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// Details on the error that occurred during processing.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	ModifiedAt  time.Time      `json:"modified_at"`
 }
 
 // NewGitHubPullTaskStep instantiates a new GitHubPullTaskStep object
@@ -166,6 +166,7 @@ func (o *GitHubPullTaskStep) HasOperation() bool {
 func (o *GitHubPullTaskStep) SetOperation(v OperationEnum) {
 	o.Operation.Set(&v)
 }
+
 // SetOperationNil sets the value for Operation to be an explicit nil
 func (o *GitHubPullTaskStep) SetOperationNil() {
 	o.Operation.Set(nil)
@@ -232,6 +233,7 @@ func (o *GitHubPullTaskStep) HasSuccessDetail() bool {
 func (o *GitHubPullTaskStep) SetSuccessDetail(v string) {
 	o.SuccessDetail.Set(&v)
 }
+
 // SetSuccessDetailNil sets the value for SuccessDetail to be an explicit nil
 func (o *GitHubPullTaskStep) SetSuccessDetailNil() {
 	o.SuccessDetail.Set(nil)
@@ -274,6 +276,7 @@ func (o *GitHubPullTaskStep) HasFqn() bool {
 func (o *GitHubPullTaskStep) SetFqn(v string) {
 	o.Fqn.Set(&v)
 }
+
 // SetFqnNil sets the value for Fqn to be an explicit nil
 func (o *GitHubPullTaskStep) SetFqnNil() {
 	o.Fqn.Set(nil)
@@ -342,6 +345,7 @@ func (o *GitHubPullTaskStep) HasEnvironmentId() bool {
 func (o *GitHubPullTaskStep) SetEnvironmentId(v string) {
 	o.EnvironmentId.Set(&v)
 }
+
 // SetEnvironmentIdNil sets the value for EnvironmentId to be an explicit nil
 func (o *GitHubPullTaskStep) SetEnvironmentIdNil() {
 	o.EnvironmentId.Set(nil)
@@ -384,6 +388,7 @@ func (o *GitHubPullTaskStep) HasEnvironmentName() bool {
 func (o *GitHubPullTaskStep) SetEnvironmentName(v string) {
 	o.EnvironmentName.Set(&v)
 }
+
 // SetEnvironmentNameNil sets the value for EnvironmentName to be an explicit nil
 func (o *GitHubPullTaskStep) SetEnvironmentNameNil() {
 	o.EnvironmentName.Set(nil)
@@ -452,6 +457,7 @@ func (o *GitHubPullTaskStep) HasProjectId() bool {
 func (o *GitHubPullTaskStep) SetProjectId(v string) {
 	o.ProjectId.Set(&v)
 }
+
 // SetProjectIdNil sets the value for ProjectId to be an explicit nil
 func (o *GitHubPullTaskStep) SetProjectIdNil() {
 	o.ProjectId.Set(nil)
@@ -494,6 +500,7 @@ func (o *GitHubPullTaskStep) HasProjectName() bool {
 func (o *GitHubPullTaskStep) SetProjectName(v string) {
 	o.ProjectName.Set(&v)
 }
+
 // SetProjectNameNil sets the value for ProjectName to be an explicit nil
 func (o *GitHubPullTaskStep) SetProjectNameNil() {
 	o.ProjectName.Set(nil)
@@ -562,6 +569,7 @@ func (o *GitHubPullTaskStep) HasParameterId() bool {
 func (o *GitHubPullTaskStep) SetParameterId(v string) {
 	o.ParameterId.Set(&v)
 }
+
 // SetParameterIdNil sets the value for ParameterId to be an explicit nil
 func (o *GitHubPullTaskStep) SetParameterIdNil() {
 	o.ParameterId.Set(nil)
@@ -604,6 +612,7 @@ func (o *GitHubPullTaskStep) HasParameterName() bool {
 func (o *GitHubPullTaskStep) SetParameterName(v string) {
 	o.ParameterName.Set(&v)
 }
+
 // SetParameterNameNil sets the value for ParameterName to be an explicit nil
 func (o *GitHubPullTaskStep) SetParameterNameNil() {
 	o.ParameterName.Set(nil)
@@ -646,6 +655,7 @@ func (o *GitHubPullTaskStep) HasVenueId() bool {
 func (o *GitHubPullTaskStep) SetVenueId(v string) {
 	o.VenueId.Set(&v)
 }
+
 // SetVenueIdNil sets the value for VenueId to be an explicit nil
 func (o *GitHubPullTaskStep) SetVenueIdNil() {
 	o.VenueId.Set(nil)
@@ -688,6 +698,7 @@ func (o *GitHubPullTaskStep) HasVenueName() bool {
 func (o *GitHubPullTaskStep) SetVenueName(v string) {
 	o.VenueName.Set(&v)
 }
+
 // SetVenueNameNil sets the value for VenueName to be an explicit nil
 func (o *GitHubPullTaskStep) SetVenueNameNil() {
 	o.VenueName.Set(nil)
@@ -730,6 +741,7 @@ func (o *GitHubPullTaskStep) HasSummary() bool {
 func (o *GitHubPullTaskStep) SetSummary(v string) {
 	o.Summary.Set(&v)
 }
+
 // SetSummaryNil sets the value for Summary to be an explicit nil
 func (o *GitHubPullTaskStep) SetSummaryNil() {
 	o.Summary.Set(nil)
@@ -772,6 +784,7 @@ func (o *GitHubPullTaskStep) HasErrorCode() bool {
 func (o *GitHubPullTaskStep) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
+
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *GitHubPullTaskStep) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -814,6 +827,7 @@ func (o *GitHubPullTaskStep) HasErrorDetail() bool {
 func (o *GitHubPullTaskStep) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
+
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *GitHubPullTaskStep) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -978,5 +992,3 @@ func (v *NullableGitHubPullTaskStep) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

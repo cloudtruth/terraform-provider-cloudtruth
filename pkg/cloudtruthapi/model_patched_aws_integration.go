@@ -20,7 +20,7 @@ import (
 type PatchedAwsIntegration struct {
 	Url *string `json:"url,omitempty"`
 	// The unique identifier for the integration.
-	Id *string `json:"id,omitempty"`
+	Id   *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	// An optional description for the integration.
 	Description *string `json:"description,omitempty"`
@@ -30,9 +30,9 @@ type PatchedAwsIntegration struct {
 	StatusDetail *string `json:"status_detail,omitempty"`
 	// The last time the status was evaluated.
 	StatusLastCheckedAt *time.Time `json:"status_last_checked_at,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
-	Fqn *string `json:"fqn,omitempty"`
+	CreatedAt           *time.Time `json:"created_at,omitempty"`
+	ModifiedAt          *time.Time `json:"modified_at,omitempty"`
+	Fqn                 *string    `json:"fqn,omitempty"`
 	// The type of integration.
 	Type *string `json:"type,omitempty"`
 	// Allow actions to write to the integration.
@@ -45,7 +45,7 @@ type PatchedAwsIntegration struct {
 	AwsEnabledServices []AwsServiceEnum `json:"aws_enabled_services,omitempty"`
 	// This is a shared secret between the AWS Administrator who set up your IAM trust relationship and your CloudTruth AWS Integration.  CloudTruth will generate a random value for you to give to your AWS Administrator in order to create the necessary IAM role for proper access.
 	AwsExternalId *string `json:"aws_external_id,omitempty"`
-	// If present, this is the KMS Key Id that is used to push values.  This key must be accessible in the AWS account (it cannot be an ARN to a key in another AWS account). 
+	// If present, this is the KMS Key Id that is used to push values.  This key must be accessible in the AWS account (it cannot be an ARN to a key in another AWS account).
 	AwsKmsKeyId NullableString `json:"aws_kms_key_id,omitempty"`
 	// The role that CloudTruth will assume when interacting with your AWS Account through this integration.  The role is configured by your AWS Account Administrator.  If your AWS Administrator provided you with a value use it, otherwise make your own role name and give it to your AWS Administrator.
 	AwsRoleName *string `json:"aws_role_name,omitempty"`
@@ -228,6 +228,7 @@ func (o *PatchedAwsIntegration) HasStatus() bool {
 func (o *PatchedAwsIntegration) SetStatus(v StatusEnum) {
 	o.Status.Set(&v)
 }
+
 // SetStatusNil sets the value for Status to be an explicit nil
 func (o *PatchedAwsIntegration) SetStatusNil() {
 	o.Status.Set(nil)
@@ -622,6 +623,7 @@ func (o *PatchedAwsIntegration) HasAwsKmsKeyId() bool {
 func (o *PatchedAwsIntegration) SetAwsKmsKeyId(v string) {
 	o.AwsKmsKeyId.Set(&v)
 }
+
 // SetAwsKmsKeyIdNil sets the value for AwsKmsKeyId to be an explicit nil
 func (o *PatchedAwsIntegration) SetAwsKmsKeyIdNil() {
 	o.AwsKmsKeyId.Set(nil)
@@ -758,5 +760,3 @@ func (v *NullablePatchedAwsIntegration) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

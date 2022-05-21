@@ -24,10 +24,10 @@ type AzureKeyVaultPush struct {
 	// The action name.
 	Name string `json:"name"`
 	// The optional description for the action.
-	Description *string `json:"description,omitempty"`
-	LatestTask NullableAzureKeyVaultPushLatestTask `json:"latest_task"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	Description *string                             `json:"description,omitempty"`
+	LatestTask  NullableAzureKeyVaultPushLatestTask `json:"latest_task"`
+	CreatedAt   time.Time                           `json:"created_at"`
+	ModifiedAt  time.Time                           `json:"modified_at"`
 	// This setting allows parameters (non-secrets) to be pushed to a destination that only supports storing secrets.  This may increase your overall cost from the cloud provider as some cloud providers charge a premium for secrets-only storage.
 	CoerceParameters *bool `json:"coerce_parameters,omitempty"`
 	// Include parameters (non-secrets) in the values being pushed.  This setting requires the destination to support parameters or for the `coerce_parameters` flag to be enabled, otherwise the push will fail.
@@ -643,5 +643,3 @@ func (v *NullableAzureKeyVaultPush) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

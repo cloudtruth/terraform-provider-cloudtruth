@@ -39,8 +39,8 @@ type Template struct {
 	// The dynamic values that reference this template.
 	ReferencingValues []string `json:"referencing_values"`
 	// If True, this template contains secrets.
-	HasSecret bool `json:"has_secret"`
-	CreatedAt time.Time `json:"created_at"`
+	HasSecret  bool      `json:"has_secret"`
+	CreatedAt  time.Time `json:"created_at"`
 	ModifiedAt time.Time `json:"modified_at"`
 }
 
@@ -479,5 +479,3 @@ func (v *NullableTemplate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

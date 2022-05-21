@@ -32,9 +32,9 @@ type Environment struct {
 	// Indicates if access control is being enforced through grants.
 	AccessControlled *bool `json:"access_controlled,omitempty"`
 	// Your role in the environment, if the environment is access-controlled.
-	Role NullableRoleEnum `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	Role       NullableRoleEnum `json:"role"`
+	CreatedAt  time.Time        `json:"created_at"`
+	ModifiedAt time.Time        `json:"modified_at"`
 }
 
 // NewEnvironment instantiates a new Environment object
@@ -197,6 +197,7 @@ func (o *Environment) HasParent() bool {
 func (o *Environment) SetParent(v string) {
 	o.Parent.Set(&v)
 }
+
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *Environment) SetParentNil() {
 	o.Parent.Set(nil)
@@ -407,5 +408,3 @@ func (v *NullableEnvironment) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

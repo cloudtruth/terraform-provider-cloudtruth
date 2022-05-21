@@ -183,6 +183,7 @@ func (o *PatchedInvitation) HasRole() bool {
 func (o *PatchedInvitation) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
+
 // SetRoleNil sets the value for Role to be an explicit nil
 func (o *PatchedInvitation) SetRoleNil() {
 	o.Role.Set(nil)
@@ -353,6 +354,7 @@ func (o *PatchedInvitation) HasMembership() bool {
 func (o *PatchedInvitation) SetMembership(v string) {
 	o.Membership.Set(&v)
 }
+
 // SetMembershipNil sets the value for Membership to be an explicit nil
 func (o *PatchedInvitation) SetMembershipNil() {
 	o.Membership.Set(nil)
@@ -465,5 +467,3 @@ func (v *NullablePatchedInvitation) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

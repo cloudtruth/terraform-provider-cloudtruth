@@ -21,8 +21,8 @@ type TemplateTimeline struct {
 	// The number of records in this response.
 	Count int32 `json:"count"`
 	// If present, additional history can be retrieved using this timestamp in the next call for the as_of query parameter value.
-	NextAsOf *time.Time `json:"next_as_of,omitempty"`
-	Results []TemplateTimelineEntry `json:"results"`
+	NextAsOf *time.Time              `json:"next_as_of,omitempty"`
+	Results  []TemplateTimelineEntry `json:"results"`
 }
 
 // NewTemplateTimeline instantiates a new TemplateTimeline object
@@ -173,5 +173,3 @@ func (v *NullableTemplateTimeline) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
