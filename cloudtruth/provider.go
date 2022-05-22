@@ -12,15 +12,27 @@ func Provider() *schema.Provider {
 		Schema: map[string]*schema.Schema{
 			"api_key": {
 				Type:        schema.TypeString,
-				Required:    true,
-				Description: "CloudTruth API Secret",
+				Optional:    true,
 				Sensitive:   true,
+				DefaultFunc: schema.EnvDefaultFunc("TF_VAR_cloudtruth_api_key", nil),
 			},
-			"base_url": {
+			"base_url": { // todo: change to host and scheme if going with Swagger
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc(baseURLVarName, defaultBaseURL),
 				Description: "The base URL for the CloudTruth API",
+			},
+			"project": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc(projectVarName, nil),
+				Description: "Provider level project declaration (overridable)",
+			},
+			"environment": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc(environmentVarName, nil),
+				Description: "Provider level enivironment declaration (overridable)",
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
@@ -34,11 +46,15 @@ func Provider() *schema.Provider {
 }
 
 func providerConfigure(ctx context.Context, d *schema.ResourceData) (any, diag.Diagnostics) {
+	// todo: swap out with Swagger generated client
 	return configureClient(
 		ctx,
 		clientConfig{
 			APIKey:  d.Get("api_key").(string),
 			BaseURL: d.Get("base_url").(string),
+			// todo: update, hardcoded for now
+			Host:   "api.cloudtruth.io",
+			Scheme: "https",
 		},
 	)
 }

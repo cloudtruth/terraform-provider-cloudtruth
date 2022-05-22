@@ -56,6 +56,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	tflog.Debug(ctx, paramURL)
 
 	resp, err := c.Get(paramURL)
+	fmt.Println(err.Error())
 	if err != nil {
 		return diag.FromErr(err)
 	}

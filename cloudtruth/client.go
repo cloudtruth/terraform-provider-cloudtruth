@@ -1,32 +1,45 @@
 package cloudtruth
 
 import (
+	"context"
 	"fmt"
+	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"io"
 	"net/http"
 	"strings"
-
-	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 )
 
+// todo:
+// once the Swagger API is a go
+// add env and project caching
 type cloudTruthClient struct {
-	client http.Client
-	config clientConfig
+	client        http.Client
+	config        clientConfig
+	swaggerClient *cloudtruthapi.APIClient
 }
 
+// todo:
+// add an env and project cache a la the argocd-cloudtruth-plugin repo
 func (c *cloudTruthClient) Get(url string) (resp *http.Response, err error) {
-	cfg := cloudtruthapi.NewConfiguration()
-	fmt.Printf("%v+", cfg)
-
+	sResp, _, sErr := c.swaggerClient.EnvironmentsApi.EnvironmentsList(context.Background()).Execute()
+	if sErr != nil {
+		fmt.Print("todo")
+	}
+	for _, p := range sResp.Results {
+		fmt.Println(p.Name)
+	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 
 	}
+	// The API returns a 400 when the project isn't known
+	// fmt.Println(formatRequest(req))
 	resp, respErr := c.Do(req)
 	if err != nil {
 		return nil, respErr
 	}
+
 	respErr = checkStatusCodeForError(resp.StatusCode)
 	return resp, respErr
 }
