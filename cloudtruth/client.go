@@ -4,24 +4,85 @@ import (
 	"context"
 	"fmt"
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
-	"io"
-	"net/http"
-	"strings"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-// todo:
-// once the Swagger API is a go
-// add env and project caching
 type cloudTruthClient struct {
-	client        http.Client
 	config        clientConfig
-	swaggerClient *cloudtruthapi.APIClient
+	openAPIClient *cloudtruthapi.APIClient
+	envNames      map[string]string
+	envIDs        map[string]string
+	projectNames  map[string]string
+	projectIDs    map[string]string
 }
 
 // todo:
-// add an env and project cache a la the argocd-cloudtruth-plugin repo
+// set the default env and project
+// read Parameter -> data source, determine what properties to expose in HCL
+// read Parameters based on search/filter, but scoped to one env and project
+// project CRUD
+// env CRUD
+// param CRUD
+// template CRUD
+// import support for all resources
+
+// Map of CloudTruth project names -> project IDs
+func (c *cloudTruthClient) projectNameCache() map[string]string {
+	if c.projectIDCache == nil {
+		tflog.Debug(ctx, "Fetching project names")
+		resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(context.Background()).Execute()
+		if err != nil {
+			// todo: diag logging
+			fmt.Printf("%+v", r)
+		}
+		c.projectIDCache = make(map[string]string)
+		for _, p := range *resp.Results {
+			c.projectNameCache[p.Name] = p.Id
+		}
+	} else {
+		tflog.Debug(ctx, "Returning cached project names")
+	}
+	return c.projectNameCache
+}
+
+// Map of CloudTruth project IDs -> project names
+func (c *cloudTruthClient) projectIDCache() map[string]string {
+	if c.projectIDCache == nil {
+		tflog.Debug(ctx, "Fetching project IDs")
+		c.projectIDCache = convertMap(c.projectNameCache())
+	} else {
+		tflog.Debug(ctx, "Returning cached project IDs")
+	}
+	return c.projectIDCache
+}
+
+func convertMap(m map[int]string) map[string]string {
+	inv := make(map[string]string)
+	for k, v := range m {
+		inv[v] = k
+	}
+	return inv
+}
+
+// Map of CloudTruth environment names -> environment IDs
+func (c *cloudTruthClient) envNameCache() map[string]string {
+	if c.envIDCache == nil {
+		tflog.Debug(ctx, "Fetching projects")
+		resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(context.Background()).Execute()
+		if err != nil {
+			// todo: diag logging
+			fmt.Printf("%+v", r)
+		}
+		c.envIDCache = make(map[string]string)
+		for _, p := range *resp.Results {
+			c.envIDCache[p.Name] = p.Id
+		}
+	}
+	return c.envIDCache
+}
+
 func (c *cloudTruthClient) Get(url string) (resp *http.Response, err error) {
-	sResp, _, sErr := c.swaggerClient.EnvironmentsApi.EnvironmentsList(context.Background()).Execute()
+	sResp, _, sErr := c.openAPIClient.EnvironmentsApi.EnvironmentsList(context.Background()).Execute()
 	if sErr != nil {
 		fmt.Print("todo")
 	}
@@ -40,121 +101,5 @@ func (c *cloudTruthClient) Get(url string) (resp *http.Response, err error) {
 		return nil, respErr
 	}
 
-	respErr = checkStatusCodeForError(resp.StatusCode)
 	return resp, respErr
-}
-
-func (c *cloudTruthClient) Post(url, contentType string, body io.Reader) (resp *http.Response, err error) {
-	req, err := http.NewRequest("POST", url, body)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Content-Type", contentType)
-	return c.Do(req)
-}
-
-func (c *cloudTruthClient) Do(req *http.Request) (*http.Response, error) {
-	req.Header.Add("Authorization", fmt.Sprintf("Api-Key %s", c.config.APIKey))
-	req.Header.Add("Accept", "application/json")
-	return c.client.Do(req)
-}
-
-func (e Error) Error() string {
-	return fmt.Sprintf("%s: %s [HTTP code %d]", e.Type, e.Message, e.StatusCode)
-}
-
-// Error represents an error returned by the CloudTruth API.
-type Error struct {
-	Type       string `json:"type"`
-	Message    string `json:"message"`
-	StatusCode int
-}
-
-// Useful HTTP errors
-func checkStatusCodeForError(statusCode int) error {
-	if statusCode == 200 {
-		return nil
-	}
-	switch statusCode {
-	case 400:
-		return Error{
-			Type:       "BAD_REQUEST",
-			Message:    "The HTTP request is invalid",
-			StatusCode: statusCode,
-		}
-	case 401:
-		return Error{
-			Type:       "AUTHENTICATION_REQUIRED",
-			Message:    "You must provide a valid api key to perform this operation",
-			StatusCode: statusCode,
-		}
-	case 403:
-		return Error{
-			Type:       "NOT_AUTHORIZED",
-			Message:    "You are not authorized to perform this operation",
-			StatusCode: statusCode,
-		}
-	case 404:
-		return Error{
-			Type:       "NOT_FOUND",
-			Message:    "Could not find what you are looking for",
-			StatusCode: statusCode,
-		}
-	case 413:
-		return Error{
-			Type:       "REQUEST_TOO_LARGE",
-			Message:    "The request body is too large",
-			StatusCode: statusCode,
-		}
-	case 422:
-		return Error{
-			Type:       "UNPROCESSABLE_ENTITY",
-			Message:    "CloudTruth was unable to process this request",
-			StatusCode: statusCode,
-		}
-	case 429:
-		return Error{
-			Type:       "TOO_MANY_REQUESTS",
-			Message:    "CloudTruth rate limiting error",
-			StatusCode: statusCode,
-		}
-	case 500:
-		return Error{
-			Type:       "SERVER_ERROR",
-			Message:    "Try again. If the problem persists, contact CloudTruth support.",
-			StatusCode: statusCode,
-		}
-	case 503:
-		return Error{
-			Type:       "SERVICE_UNAVAILABLE",
-			Message:    "CloudTruth is temporarily unavailable. Please retry shortly.",
-			StatusCode: statusCode,
-		}
-	default:
-		return Error{
-			Type:       "UNKNOWN_HTTP_ERROR",
-			Message:    "CloudTruth returned an unknown HTTP response.",
-			StatusCode: statusCode,
-		}
-	}
-}
-
-// For debugging purposes, this function generates ascii representation of a request
-func formatRequest(r *http.Request) string {
-	var request []string
-	url := fmt.Sprintf("%v %v %v", r.Method, r.URL, r.Proto)
-	request = append(request, url)
-	request = append(request, fmt.Sprintf("Host: %v", r.Host))
-	for name, headers := range r.Header {
-		name = strings.ToLower(name)
-		for _, h := range headers {
-			request = append(request, fmt.Sprintf("%v: %v", name, h))
-		}
-	}
-	if r.Method == "POST" {
-		r.ParseForm()
-		request = append(request, "\n")
-		request = append(request, r.Form.Encode())
-	}
-	return strings.Join(request, "\n")
 }

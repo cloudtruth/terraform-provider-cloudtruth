@@ -8,7 +8,7 @@ import (
 )
 
 func Provider() *schema.Provider {
-	return &schema.Provider{
+	p := schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"api_key": {
 				Type:        schema.TypeString,
@@ -16,11 +16,11 @@ func Provider() *schema.Provider {
 				Sensitive:   true,
 				DefaultFunc: schema.EnvDefaultFunc("TF_VAR_cloudtruth_api_key", nil),
 			},
-			"base_url": { // todo: change to host and scheme if going with Swagger
+			"domain": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc(baseURLVarName, defaultBaseURL),
-				Description: "The base URL for the CloudTruth API",
+				DefaultFunc: schema.EnvDefaultFunc(domainVarName, defaultDomain),
+				Description: "The CloudTruth API domain name",
 			},
 			"project": {
 				Type:        schema.TypeString,
@@ -41,20 +41,29 @@ func Provider() *schema.Provider {
 		ResourcesMap: map[string]*schema.Resource{
 			"cloudtruth_project": resourceProject(),
 		},
+		/*ResourcesMap: map[string]*schema.Resource{
+			"cloudtruth_parameters": todo()
+		},
+		ResourcesMap: map[string]*schema.Resource{
+			"cloudtruth_environment": todo()
+		},
+		ResourcesMap: map[string]*schema.Resource{
+			"cloudtruth_template": todo()
+		},*/
 		ConfigureContextFunc: providerConfigure,
 	}
+	return &p
 }
 
 func providerConfigure(ctx context.Context, d *schema.ResourceData) (any, diag.Diagnostics) {
-	// todo: swap out with Swagger generated client
 	return configureClient(
 		ctx,
 		clientConfig{
-			APIKey:  d.Get("api_key").(string),
-			BaseURL: d.Get("base_url").(string),
-			// todo: update, hardcoded for now
-			Host:   "api.cloudtruth.io",
-			Scheme: "https",
+			APIKey:      d.Get("api_key").(string),
+			Project:     d.Get("project").(string),
+			Environment: d.Get("environment").(string),
+			Domain:      d.Get("domain").(string),
+			Scheme:      d.Get("scheme").(string),
 		},
 	)
 }
