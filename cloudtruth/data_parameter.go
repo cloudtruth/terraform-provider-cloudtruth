@@ -2,6 +2,7 @@ package cloudtruth
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -37,27 +38,26 @@ func dataCloudTruthParameter() *schema.Resource {
 	}
 }
 
+// todo: add support for provider level env/project lookup
 func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParameterRead")
-	// todo: add support for provider level env/project lookup
 	env := d.Get("environment").(string)
 	project := d.Get("project").(string)
 	name := d.Get("name").(string)
 
 	projectID := c.lookupProject(ctx, project)
 	if projectID == nil {
-		// todo: handle this
+		return diag.FromErr(errors.New(fmt.Sprintf("CloudTruth project %s not found", project)))
 	}
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(), *projectID).Environment(env).Name(name).Execute()
 	if err != nil {
-		// todo: handle this
-		tflog.Debug(ctx, fmt.Sprintf("+%v", r))
+		return diag.FromErr(errors.New(fmt.Sprintf("Error looking up parameter %s: %+v", name, r)))
 	}
-	tflog.Debug(ctx, fmt.Sprintf("+%v", r))
 	if resp.GetCount() > 1 {
-		// todo: handle this
+		return diag.FromErr(errors.New(fmt.Sprintf("Unexpectedly found %d results for parameter %s", resp.GetCount(), name)))
 	}
+
 	// We know there is only one parameter at this point
 	// The value is indexed by the environment name but we could have an
 	// alias for the specified environment if this value is inherited from a parent env

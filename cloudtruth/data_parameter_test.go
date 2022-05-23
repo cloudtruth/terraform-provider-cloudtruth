@@ -1,6 +1,7 @@
 package cloudtruth
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -45,15 +46,15 @@ func TestDataSourceParameter(t *testing.T) {
 
 const testAccDataSourceParameter = `
 data "cloudtruth_parameter" "regular_param" {
-  project = "%s"
-  env     = "%s"
-  name    = "%s"
+  project     = "%s"
+  environment = "%s"
+  name        = "%s"
 }
 
 data "cloudtruth_parameter" "secret_param" {
-  project = "%s"
-  env     = "%s"
-  name    = "%s"
+  project     = "%s"
+  environment = "%s"
+  name        = "%s"
 }
 
 `
