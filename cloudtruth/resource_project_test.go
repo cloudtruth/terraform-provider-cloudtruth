@@ -1,5 +1,6 @@
 package cloudtruth
 
+/*
 import (
 	"testing"
 	//"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -14,3 +15,4 @@ resource "project_resource" "foo" {
   sample_attribute = "bar"
 }
 `
+*/

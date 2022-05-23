@@ -36,7 +36,7 @@ func TestProvider_impl(t *testing.T) {
 }
 
 func testAccPreCheck(t *testing.T) {
-	if v := os.Getenv("TF_VAR_cloudtruth_api_key"); v == "" {
-		t.Fatal("TF_VAR_cloudtruth_api_key must be set for acceptance tests")
+	if v := os.Getenv("CLOUDTRUTH_API_KEY"); v == "" {
+		t.Fatal("CLOUDTRUTH_API_KEY must be set for acceptance tests")
 	}
 }

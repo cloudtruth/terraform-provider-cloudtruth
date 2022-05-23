@@ -17,12 +17,12 @@ func dataCloudTruthParameter() *schema.Resource {
 			"environment": {
 				Description: "The CloudTruth environment",
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 			},
 			"project": {
 				Description: "The CloudTruth project",
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 			},
 			"name": {
 				Description: "The name of the parameter",
@@ -43,12 +43,27 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParameterRead")
 	env := d.Get("environment").(string)
-	project := d.Get("project").(string)
-	name := d.Get("name").(string)
 
-	projectID := c.lookupProject(ctx, project)
-	if projectID == nil {
-		return diag.FromErr(errors.New(fmt.Sprintf("CloudTruth project %s not found", project)))
+	if env == "" {
+		if c.config.Environment != "" {
+			env = c.config.Environment
+		} else {
+			return diag.FromErr(errors.New("The CloudTruth environmentt must be specified at the provider or resource level"))
+		}
+	}
+	project := d.Get("project").(string)
+	if project == "" {
+		if c.config.Project != "" {
+			project = c.config.Project
+		} else {
+			return diag.FromErr(errors.New("The CloudTruth project must be specified at the provider or resource level"))
+		}
+	}
+
+	name := d.Get("name").(string)
+	projectID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(err)
 	}
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(), *projectID).Environment(env).Name(name).Execute()
 	if err != nil {

@@ -35,13 +35,34 @@ type clientConfig struct {
 
 func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient, diag.Diagnostics) {
 	tflog.Debug(ctx, "configureClient")
+	tflog.Debug(ctx, fmt.Sprintf("%+v", conf))
 	apiConfig := cloudtruthapi.NewConfiguration()
 	apiConfig.Host = conf.Domain
 	apiConfig.Scheme = conf.Protocol
 	apiConfig.AddDefaultHeader("Authorization", fmt.Sprintf("Api-Key %s", conf.APIKey))
 	apiConfig.AddDefaultHeader("UserAgent", conf.UserAgent)
-	return &cloudTruthClient{
+	client := cloudTruthClient{
 		config:        conf,
 		openAPIClient: cloudtruthapi.NewAPIClient(apiConfig),
-	}, nil
+	}
+
+	// load caches
+	err := client.loadProjectNameCache(ctx)
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+	err = client.loadProjectIDCache(ctx)
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+	err = client.loadEnvNameCache(ctx)
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+	err = client.loadEnvIDCache(ctx)
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
+	return &client, nil
 }
