@@ -7,8 +7,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+// providerVersion represents the current version of the provider.
+// todo: It should be overwritten during the release process.
+var providerVersion = "dev"
+
 func Provider() *schema.Provider {
-	p := schema.Provider{
+	provider := &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"api_key": {
 				Type:        schema.TypeString,
@@ -32,38 +36,45 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc(environmentVarName, nil),
-				Description: "Provider level enivironment declaration (overridable)",
+				Description: "Provider level environment declaration (overridable)",
+			},
+			"protocol": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc(protocolVarName, defaultProtocol),
+				Description: "The network protocol, default https",
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"cloudtruth_parameter": dataCloudTruthParameter(),
+			//"cloudtruth_parameters": todo()
+			//"cloudtruth_project": todo()
+			//"cloudtruth_environment": todo()
+			//"cloudtruth_template": todo()
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"cloudtruth_project": resourceProject(),
 		},
-		/*ResourcesMap: map[string]*schema.Resource{
-			"cloudtruth_parameters": todo()
-		},
-		ResourcesMap: map[string]*schema.Resource{
-			"cloudtruth_environment": todo()
-		},
-		ResourcesMap: map[string]*schema.Resource{
-			"cloudtruth_template": todo()
-		},*/
-		ConfigureContextFunc: providerConfigure,
+		/*
+			ResourcesMap: map[string]*schema.Resource{
+				"cloudtruth_environment": todo()
+			},
+			ResourcesMap: map[string]*schema.Resource{
+				"cloudtruth_template": todo()
+			},*/
 	}
-	return &p
-}
 
-func providerConfigure(ctx context.Context, d *schema.ResourceData) (any, diag.Diagnostics) {
-	return configureClient(
-		ctx,
-		clientConfig{
-			APIKey:      d.Get("api_key").(string),
-			Project:     d.Get("project").(string),
-			Environment: d.Get("environment").(string),
-			Domain:      d.Get("domain").(string),
-			Scheme:      d.Get("scheme").(string),
-		},
-	)
+	provider.ConfigureContextFunc = func(ctx context.Context, d *schema.ResourceData) (any, diag.Diagnostics) {
+		return configureClient(
+			ctx,
+			clientConfig{
+				APIKey:      d.Get("api_key").(string),
+				Project:     d.Get("project").(string),
+				Environment: d.Get("environment").(string),
+				Domain:      d.Get("domain").(string),
+				Protocol:    d.Get("protocol").(string),
+				UserAgent:   provider.UserAgent("terraform-provider-cloudtruth", providerVersion),
+			})
+	}
+	return provider
 }

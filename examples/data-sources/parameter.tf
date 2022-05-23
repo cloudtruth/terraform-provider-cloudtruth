@@ -18,9 +18,9 @@ provider "cloudtruth" {
 }
 
 data "cloudtruth_parameter" "example" {
-  name = "first secret"
-  env = "production"
-  project = "c3e6f8e0-3323-44fd-8760-39998e5f2610"
+  project     = "AcceptanceTest"
+  environment = "default"
+  name        = "DefaultRegularParam"
 }
 
 # Note: this is just an example, you would not want to output

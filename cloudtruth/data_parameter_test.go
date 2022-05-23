@@ -6,17 +6,37 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-// todo: fix this with dedicated integration resources in the backend
+/* For now, these tests will rely on the following pre-canned resources:
+   project - AcceptanceTest
+   environments - default/development/staging/production
+   parameters - DefaultRegularParam, DefaultSecretParam
+   Eventually, when resources are in place, it may make more sense to
+   set up full circuit tests. . .
+*/
+
+const (
+	defaultEnv      = "default"
+	project         = "AcceptanceTest"
+	regularParam    = "DefaultRegularParam"
+	regularParamVal = "notreallyasecret"
+	secretParam     = "DefaultSecretParam"
+	secretParamVal  = "ultratopsecret"
+)
+
+// todo: add the secret param test validation
 func TestDataSourceParameter(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceParameter,
+				Config: fmt.Sprintf(testAccDataSourceParameter, project, defaultEnv,
+					regularParam, project, defaultEnv, secretParam),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.cloudtruth_parameter.foo", "env", "production"),
-					resource.TestCheckResourceAttr("data.cloudtruth_parameter.foo", "project", "MyFirstProject"),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.regular_param", "environment", defaultEnv),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.regular_param", "project", project),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.regular_param", "name", regularParam),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.regular_param", "value", regularParamVal),
 				),
 			},
 		},
@@ -24,9 +44,16 @@ func TestDataSourceParameter(t *testing.T) {
 }
 
 const testAccDataSourceParameter = `
-data "cloudtruth_parameter" "foo" {
-  env     = "production"
-  name    = "MyFirstParameter"
-  project = "MyFirstProject"
+data "cloudtruth_parameter" "regular_param" {
+  project = "%s"
+  env     = "%s"
+  name    = "%s"
 }
+
+data "cloudtruth_parameter" "secret_param" {
+  project = "%s"
+  env     = "%s"
+  name    = "%s"
+}
+
 `
