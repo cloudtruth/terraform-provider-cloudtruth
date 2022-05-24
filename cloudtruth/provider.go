@@ -18,7 +18,7 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
-				DefaultFunc: schema.EnvDefaultFunc("TF_VAR_cloudtruth_api_key", nil),
+				DefaultFunc: schema.EnvDefaultFunc(apiKeyVarName, nil),
 			},
 			"domain": {
 				Type:        schema.TypeString,
@@ -46,8 +46,8 @@ func Provider() *schema.Provider {
 			},
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"cloudtruth_parameter": dataCloudTruthParameter(),
-			//"cloudtruth_parameters": todo()
+			"cloudtruth_parameter":  dataCloudTruthParameter(),
+			"cloudtruth_parameters": dataCloudTruthParameters(),
 			//"cloudtruth_project": todo()
 			//"cloudtruth_environment": todo()
 			//"cloudtruth_template": todo()

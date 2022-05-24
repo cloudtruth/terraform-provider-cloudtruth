@@ -6,10 +6,7 @@ import (
 	"testing"
 )
 
-/* For now, these tests will rely on the following pre-canned resources:
-   project - AcceptanceTest
-   environments - default/development/staging/production
-   parameters - DefaultRegularParam, DefaultSecretParam
+/* For now, these tests will rely on the following pre-canned resources
    Eventually, when resources are in place, it may make more sense to
    set up full circuit tests. . .
 */
@@ -22,7 +19,32 @@ const (
 	secretParamVal  = "ultratopsecret"
 )
 
-// todo: add the secret param test validation
+const testAccParameter = `
+data "cloudtruth_parameter" "nonsecret" {
+  project     = "%s"
+  environment = "%s"
+  name        = "%s"
+}
+data "cloudtruth_parameter" "secret" {
+  project     = "%s"
+  environment = "%s"
+  name        = "%s"
+}
+`
+
+// project and environment must be specified via
+// the CLOUDTRUTH_PROJECT and CLOUDTRUTH_ENVIRONMENT environment variables
+// which will set them at the provider level
+const testAccParameterProvEnvProj = `
+data "cloudtruth_parameter" "nonsecret_prov_env_proj" {
+  name        = "%s"
+}
+
+data "cloudtruth_parameter" "secret_prov_env_proj" {
+  name        = "%s"
+}
+`
+
 func TestDataSourceParameter(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
@@ -58,28 +80,3 @@ func TestDataSourceParameter(t *testing.T) {
 		},
 	})
 }
-
-const testAccParameter = `
-data "cloudtruth_parameter" "nonsecret" {
-  project     = "%s"
-  environment = "%s"
-  name        = "%s"
-}
-data "cloudtruth_parameter" "secret" {
-  project     = "%s"
-  environment = "%s"
-  name        = "%s"
-}
-`
-
-// project and environment must be specified via
-// the CLOUDTRUTH_PROJECT and CLOUDTRUTH_ENVIRONMENT environment variables
-const testAccParameterProvEnvProj = `
-data "cloudtruth_parameter" "nonsecret_prov_env_proj" {
-  name        = "%s"
-}
-
-data "cloudtruth_parameter" "secret_prov_env_proj" {
-  name        = "%s"
-}
-`

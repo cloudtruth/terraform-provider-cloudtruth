@@ -4,8 +4,8 @@ This is the official Terraform provider for [CloudTruth](https://cloudtruth.com/
 
 ## Requirements
 
--	[Terraform](https://www.terraform.io/downloads.html) >= 0.13.x
--	[Go](https://golang.org/doc/install) >= 1.17
+-	[Terraform](https://www.terraform.io/downloads.html) >= 0.15.x
+-	[Go](https://golang.org/doc/install) >= 1.18
 
 ## Building The Provider
 
