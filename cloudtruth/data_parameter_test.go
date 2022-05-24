@@ -74,6 +74,7 @@ data "cloudtruth_parameter" "secret" {
 
 // project and environment must be specified via
 // the CLOUDTRUTH_PROJECT and CLOUDTRUTH_ENVIRONMENT environment variables
+// which will set them at the provider level
 const testAccParameterProvEnvProj = `
 data "cloudtruth_parameter" "nonsecret_prov_env_proj" {
   name        = "%s"

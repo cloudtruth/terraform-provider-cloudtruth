@@ -38,8 +38,6 @@ func dataCloudTruthParameter() *schema.Resource {
 	}
 }
 
-// todo: add support for provider level env/project lookup
-func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParameterRead")
 	env := d.Get("environment").(string)
@@ -48,7 +46,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 		if c.config.Environment != "" {
 			env = c.config.Environment
 		} else {
-			return diag.FromErr(errors.New("The CloudTruth environmentt must be specified at the provider or resource level"))
+			return diag.FromErr(errors.New("the CloudTruth environment must be specified at the provider or resource level"))
 		}
 	}
 	project := d.Get("project").(string)
@@ -56,7 +54,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 		if c.config.Project != "" {
 			project = c.config.Project
 		} else {
-			return diag.FromErr(errors.New("The CloudTruth project must be specified at the provider or resource level"))
+			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
 		}
 	}
 
@@ -74,15 +72,18 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	}
 
 	// We know there is only one parameter at this point
-	// The value is indexed by the environment name but we could have an
-	// alias for the specified environment if this value is inherited from a parent env
+	// There will also should only ever be one value per parameter per environment per project
 	param := resp.GetResults()[0]
+	if len
+
 	for _, v := range param.Values {
 		tflog.Debug(ctx, fmt.Sprintf("Found value for %s, lookup env %s, resolved env %s",
 			name, env, v.GetEnvironmentName()))
-		d.Set("value", v.GetValue())
+		err := d.Set("value", v.GetValue())
+		if err != nil {
+			return diag.FromErr(err)
+		}
 		d.SetId(v.GetId())
-		break
 	}
 	return nil
 }

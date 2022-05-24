@@ -7,14 +7,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-var testAccProviders map[string]*schema.Provider
 var testAccProvider *schema.Provider
 
 func init() {
 	testAccProvider = Provider()
-	testAccProviders = map[string]*schema.Provider{
-		"cloudtruth": testAccProvider,
-	}
 }
 
 var (
@@ -36,7 +32,7 @@ func TestProvider_impl(t *testing.T) {
 }
 
 func testAccPreCheck(t *testing.T) {
-	if v := os.Getenv("CLOUDTRUTH_API_KEY"); v == "" {
-		t.Fatal("CLOUDTRUTH_API_KEY must be set for acceptance tests")
+	if v := os.Getenv(apiKeyVarName); v == "" {
+		t.Fatalf("%s must be set for acceptance tests", apiKeyVarName)
 	}
 }
