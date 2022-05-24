@@ -9,16 +9,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 )
 
-// todo:
-// read Parameters based on search/filter, but scoped to one env and project
-// project CRUD
-// env CRUD
-// param CRUD
-// template CRUD
-// import support for all resources
-
 const (
-	// Allow for CloudTruth CLI API key definition in addition to TF_VAR_var_name approach
+	// Allow for CloudTruth CLI API key definitions in addition to TF_VAR_var_name approach
 	// no default
 	apiKeyVarName = "CLOUDTRUTH_API_KEY"
 
@@ -55,7 +47,7 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 		openAPIClient: cloudtruthapi.NewAPIClient(apiConfig),
 	}
 
-	// load caches
+	// populate & load caches
 	err := client.loadProjectNameCache(ctx)
 	if err != nil {
 		return nil, diag.FromErr(err)
@@ -95,7 +87,7 @@ func convertMap(m map[string]string) map[string]string {
 	return inv
 }
 
-// Look up a project ID first by name, then by the ID itself
+// Look up a project identifier first as a name, then as an ID
 func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID string) (*string, error) {
 	tflog.Debug(ctx, fmt.Sprintf("Looking up project with name/ID %s", projNameOrID))
 	if val, ok := c.projectNames[projNameOrID]; ok {
@@ -139,10 +131,34 @@ func (c *cloudTruthClient) loadProjectIDCache(ctx context.Context) error {
 	return nil
 }
 
+// Look up an environment identifier first as a name, then as an ID
+func (c *cloudTruthClient) lookupEnvironment(ctx context.Context, envNameOrID string) (*string, error) {
+	tflog.Debug(ctx, fmt.Sprintf("looking up environment with name/ID %s", envNameOrID))
+	if val, ok := c.envNames[envNameOrID]; ok {
+		tflog.Debug(ctx, fmt.Sprintf("found environment by name %s, with id %s", envNameOrID, val))
+		return &val, nil
+	} else {
+		if val, ok := c.envIDs[envNameOrID]; ok {
+			tflog.Debug(ctx, fmt.Sprintf("found environment by ID %s with name %s", envNameOrID, val))
+			return &envNameOrID, nil
+		}
+	}
+	return nil, errors.New(fmt.Sprintf("environment with name/ID %s not found", envNameOrID))
+}
+
+func (c *cloudTruthClient) getEnvironmentName(ctx context.Context, envID string) (*string, error) {
+	tflog.Debug(ctx, fmt.Sprintf("fetching the name of the environment with ID %s", envID))
+	if val, ok := c.envIDs[envID]; ok {
+		tflog.Debug(ctx, fmt.Sprintf("found environment with name %s, using id %s", envID, val))
+		return &val, nil
+	}
+	return nil, errors.New(fmt.Sprintf("environment with ID %s not found", envID))
+}
+
 // Map of CloudTruth environment names -> environment IDs
 func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 	if c.envNames == nil {
-		tflog.Debug(ctx, "Fetching environment names")
+		tflog.Debug(ctx, "fetching environment names")
 		resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(context.Background()).Execute()
 		if err != nil {
 			return err

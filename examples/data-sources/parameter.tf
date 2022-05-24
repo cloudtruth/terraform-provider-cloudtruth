@@ -28,3 +28,10 @@ data "cloudtruth_parameter" "example" {
 output "parameter_output" {
   value = data.cloudtruth_parameter.example
 }
+
+# This data source collects a map of all values for the parameter
+# in all environments where it's defined
+data "cloudtruth_parameters" "example" {
+  project     = "AcceptanceTest"
+  name        = "DefaultRegularParam"
+}
