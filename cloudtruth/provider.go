@@ -48,20 +48,10 @@ func Provider() *schema.Provider {
 		DataSourcesMap: map[string]*schema.Resource{
 			"cloudtruth_parameter":  dataCloudTruthParameter(),
 			"cloudtruth_parameters": dataCloudTruthParameters(),
-			//"cloudtruth_project": todo()
-			//"cloudtruth_environment": todo()
-			//"cloudtruth_template": todo()
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"cloudtruth_project": resourceProject(),
 		},
-		/*
-			ResourcesMap: map[string]*schema.Resource{
-				"cloudtruth_environment": todo()
-			},
-			ResourcesMap: map[string]*schema.Resource{
-				"cloudtruth_template": todo()
-			},*/
 	}
 
 	provider.ConfigureContextFunc = func(ctx context.Context, d *schema.ResourceData) (any, diag.Diagnostics) {

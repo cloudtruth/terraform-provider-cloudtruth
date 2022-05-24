@@ -3,12 +3,14 @@ module terraform-provider-cloudtruth
 go 1.18
 
 require (
-	github.com/cloudtruth/terraform-provider-cloudtruth v0.0.0-20220523053829-9a7f2b68c81c
+	github.com/cloudtruth/terraform-provider-cloudtruth v0.0.0
 	github.com/hashicorp/terraform-plugin-docs v0.8.1
 	github.com/hashicorp/terraform-plugin-log v0.4.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.16.0
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
 )
+
+replace github.com/cloudtruth/terraform-provider-cloudtruth => ./
 
 require (
 	github.com/Masterminds/goutils v1.1.0 // indirect

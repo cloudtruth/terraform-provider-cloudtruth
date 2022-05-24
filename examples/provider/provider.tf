@@ -9,8 +9,7 @@ registry.terraform.io/hashicorp/aws
 */
 
 terraform {
-  required_version = ">=0.13.0"
-
+  required_version = ">=0.15.0"
   required_providers {
     cloudtruth = {
       source = "cloudtruth/cloudtruth"

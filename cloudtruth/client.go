@@ -146,6 +146,7 @@ func (c *cloudTruthClient) lookupEnvironment(ctx context.Context, envNameOrID st
 	return nil, errors.New(fmt.Sprintf("environment with name/ID %s not found", envNameOrID))
 }
 
+// Fetch the environment name given the environment's ID
 func (c *cloudTruthClient) getEnvironmentName(ctx context.Context, envID string) (*string, error) {
 	tflog.Debug(ctx, fmt.Sprintf("fetching the name of the environment with ID %s", envID))
 	if val, ok := c.envIDs[envID]; ok {
