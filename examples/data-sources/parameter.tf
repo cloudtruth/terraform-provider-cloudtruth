@@ -22,11 +22,11 @@ data "cloudtruth_parameter" "param_example" {
   name        = "DefaultRegularParam"
 }
 
-# This data source collects a map of all values for the parameter
-# in all environments where it's defined
+# This data source collects a map of parameters in a specific
+# environment
 data "cloudtruth_parameters" "params_example" {
   project     = "AcceptanceTest"
-  name        = "DefaultRegularParam"
+  environment = "default"
 }
 
 # Example outputs

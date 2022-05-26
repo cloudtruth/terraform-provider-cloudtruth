@@ -7,7 +7,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"strings"
+	"github.com/mitchellh/hashstructure"
+	"strconv"
 )
 
 func dataCloudTruthParameter() *schema.Resource {
@@ -15,13 +16,13 @@ func dataCloudTruthParameter() *schema.Resource {
 		Description: "A CloudTruth parameter data source",
 		ReadContext: dataCloudTruthParameterRead,
 		Schema: map[string]*schema.Schema{
-			"environment": {
-				Description: "The CloudTruth environment",
+			"project": {
+				Description: "The CloudTruth project",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"project": {
-				Description: "The CloudTruth project",
+			"environment": {
+				Description: "The CloudTruth environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
@@ -100,23 +101,20 @@ func dataCloudTruthParameters() *schema.Resource {
 		Description: "A CloudTruth parameter data source",
 		ReadContext: dataCloudTruthParametersRead,
 		Schema: map[string]*schema.Schema{
-			"environment_values": {
-				Description: "A mapping of environments -> parameter values",
-				Type:        schema.TypeMap,
-				Computed:    true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
-			},
 			"project": {
 				Description: "The CloudTruth project",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"name": {
-				Description: "The name of the parameter",
+			"environment": {
+				Description: "The CloudTruth environment",
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
+			},
+			"parameter_values": {
+				Description: "The CloudTruth project",
+				Type:        schema.TypeMap,
+				Computed:    true,
 			},
 		},
 	}
@@ -134,47 +132,67 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		}
 	}
 
-	name := d.Get("name").(string)
+	environment := d.Get("environment").(string)
 	projectID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(), *projectID).Name(name).Execute()
+	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
+		*projectID).Environment(environment).Ordering("xxx").Execute()
 	if err != nil {
-		return diag.FromErr(errors.New(fmt.Sprintf("error looking up parameter %s: %+v", name, r)))
+		return diag.FromErr(errors.New(
+			fmt.Sprintf("error looking up parameters in the %s environment in the %s project: %+v",
+				environment, project, r)))
 	}
 
-	// We should only get back one Parameter
-	if resp.GetCount() > 1 {
-		return diag.FromErr(errors.New(fmt.Sprintf("unexpectedly found %d results for parameter %s",
-			resp.GetCount(), name)))
-	}
-
-	// We should now have a value for every environment where the parameter is defined, including environments
-	// where the value is inherited from an ancestor environment
-	paramRes := resp.GetResults()[0]
-	values := paramRes.GetValues()
 	valueMap := make(map[string]any)
-	for envURL, v := range values {
-		// Here we take the key, the environment URI e.g.
-		// https://api.cloudtruth.io/api/v1/environments/605de718-4545-4463-852d-288999e5066e/
-		// then we parse the ID and use it to fetch the environment's name, we need this for environment
-		// parameter values that are inherited, otherwise we cannot attribute the value to the child environment's
-		// name
-		segments := strings.Split(envURL, "/")
-		requestedEnvID := segments[6]
-		requestedEnv, err := c.getEnvironmentName(ctx, requestedEnvID)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-		tflog.Debug(ctx, fmt.Sprintf("Found value for %s, lookup env %s, resolved env %s",
-			name, *requestedEnv, v.GetEnvironmentName()))
-		valueMap[*requestedEnv] = v.GetValue()
-	}
-	err = d.Set("environment_values", valueMap)
+	results := resp.GetResults()
+	var pageNum int32 = 1
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	d.SetId(paramRes.Id)
+	for results != nil {
+		for _, res := range results {
+			paramName := res.GetName()
+			// There should only ever be one value but the result is a map, so we iterate over it
+			for _, v := range res.GetValues() {
+				paramEnvValue := v.GetValue()
+				// We need to exclude parameters that do not have values set in the target environment
+				if paramEnvValue != "" {
+					valueMap[paramName] = paramEnvValue
+				}
+			}
+		}
+		// HasNext() doesn't do what we want :(
+		if resp.GetNext() == "" {
+			break
+		} else {
+			pageNum++
+			resp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
+				*projectID).Environment(environment).Page(pageNum).Execute()
+			if err != nil {
+				return diag.FromErr(errors.New(
+					fmt.Sprintf("error looking up parameters in the %s environment in the %s project: %+v",
+						environment, project, r)))
+			}
+			results = resp.GetResults()
+		}
+	}
+	err = d.Set("parameter_values", valueMap)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	hash, err := hashstructure.Hash(valueMap, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	// We has the contents of the map to determine if any parameters have changed
+	// todo: test that this is stable
+	d.SetId(strconv.FormatUint(hash, 10))
+
 	return nil
 }
+
+// To determine if we have any changes to the cloudtruth_parameters type, we take the valueMap,
+// sort it,

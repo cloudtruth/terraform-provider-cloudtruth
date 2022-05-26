@@ -156,6 +156,12 @@ func (c *cloudTruthClient) getEnvironmentName(ctx context.Context, envID string)
 	return nil, errors.New(fmt.Sprintf("environment with ID %s not found", envID))
 }
 
+// Utility function, parameter results are maps which use the environment URLs as keys
+func (c *cloudTruthClient) getEnvironmentURL(ctx context.Context, envID *string) string {
+	tflog.Debug(ctx, fmt.Sprintf("building the URL of the environment with ID %s", *envID))
+	return fmt.Sprintf("%s://%s/environments/%s/", c.config.Protocol, c.config.Domain, *envID)
+}
+
 // Map of CloudTruth environment names -> environment IDs
 func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 	if c.envNames == nil {

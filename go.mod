@@ -7,6 +7,7 @@ require (
 	github.com/hashicorp/terraform-plugin-docs v0.8.1
 	github.com/hashicorp/terraform-plugin-log v0.4.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.16.0
+	github.com/mitchellh/hashstructure v1.1.0
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
 )
 

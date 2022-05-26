@@ -10,15 +10,13 @@ import (
 const testAccParameters = `
 data "cloudtruth_parameters" "multi_env" {
   project     = "%s"
-  name        = "%s"
+  environment = "%s"
 }
 `
 
 var expEnvValues = map[string]interface{}{
-	"environment_values.default":     regularParamVal,
-	"environment_values.development": regularParamVal,
-	"environment_values.staging":     regularParamVal,
-	"environment_values.production":  regularParamVal,
+	"parameter_values.DefaultRegularParam": regularParamVal,
+	"parameter_values.DefaultSecretParam":  secretParamVal,
 }
 
 func TestDataSourceParameters(t *testing.T) {
@@ -27,11 +25,11 @@ func TestDataSourceParameters(t *testing.T) {
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: fmt.Sprintf(testAccParameters, project, regularParam),
+				Config: fmt.Sprintf(testAccParameters, project, "default"),
 				Check: resource.ComposeTestCheckFunc(
 					// regular parameter
 					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", project),
-					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "name", regularParam),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "environment", "default"),
 					testAccCheckParametersValueMap("data.cloudtruth_parameters.multi_env", expEnvValues),
 				),
 			},
