@@ -25,6 +25,7 @@ website/node_modules
 *.test
 *.iml
 terraform-provider-cloudtruth_*
+terraform-provider-cloudtruth
 website/vendor
 
 # Test exclusions

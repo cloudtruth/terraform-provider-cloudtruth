@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+// todo: add force delete and parent project support
 func resourceProject() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.

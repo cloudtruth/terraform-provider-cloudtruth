@@ -7,25 +7,43 @@ import (
 )
 
 const desc = "Just a description"
+const updateDesc = "A new description"
 
 func TestAccResourceProjectBasic(t *testing.T) {
-	basicProjName := fmt.Sprintf("TestProject-%s", resource.UniqueId())
+	createProjName := fmt.Sprintf("TestProject-%s", resource.UniqueId())
+	updateProjName := fmt.Sprintf("updated-%s", createProjName)
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceProjectConfigBasic(basicProjName, desc),
+				Config: testAccResourceProjectCreateBasic(createProjName, desc),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_project.basic", "name", basicProjName),
+					resource.TestCheckResourceAttr("cloudtruth_project.basic", "name", createProjName),
 					resource.TestCheckResourceAttr("cloudtruth_project.basic", "description", desc),
+				),
+			},
+			{
+				Config: testAccResourceProjectUpdateBasic(updateProjName, updateDesc),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("cloudtruth_project.basic", "name", updateProjName),
+					resource.TestCheckResourceAttr("cloudtruth_project.basic", "description", updateDesc),
 				),
 			},
 		},
 	})
 }
 
-func testAccResourceProjectConfigBasic(projName, desc string) string {
+func testAccResourceProjectCreateBasic(projName, desc string) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_project" "basic" {
+  		name        = "%s"
+  		description = "%s"
+	}
+	`, projName, desc)
+}
+
+func testAccResourceProjectUpdateBasic(projName, desc string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_project" "basic" {
   		name        = "%s"
