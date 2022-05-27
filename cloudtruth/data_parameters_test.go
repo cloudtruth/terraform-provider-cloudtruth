@@ -19,7 +19,7 @@ var expEnvValues = map[string]interface{}{
 	"parameter_values.DefaultSecretParam":  secretParamVal,
 }
 
-func TestDataSourceParameters(t *testing.T) {
+func TestAccDataSourceParameters(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -44,7 +44,7 @@ func testAccCheckParametersValueMap(resourceName string, expMap map[string]inter
 		if !ok {
 			return fmt.Errorf("Not found: %s", resourceName)
 		}
-		for k, expVal := range expEnvValues {
+		for k, expVal := range expMap {
 			actVal, ok := rs.Primary.Attributes[k]
 			if !ok {
 				return fmt.Errorf("did not find expected parameter value: %s", k)
