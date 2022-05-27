@@ -120,6 +120,7 @@ func dataCloudTruthParameters() *schema.Resource {
 	}
 }
 
+// todo: maybe break this up into 2 or more smaller functions
 func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParametersRead")
@@ -138,7 +139,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		*projectID).Environment(environment).Ordering("xxx").Execute()
+		*projectID).Environment(environment).Execute()
 	if err != nil {
 		return diag.FromErr(errors.New(
 			fmt.Sprintf("error looking up parameters in the %s environment in the %s project: %+v",
@@ -164,9 +165,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 			}
 		}
 		// HasNext() doesn't do what we want :(
-		if resp.GetNext() == "" {
-			break
-		} else {
+		if resp.GetNext() != "" {
 			pageNum++
 			resp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 				*projectID).Environment(environment).Page(pageNum).Execute()
@@ -176,6 +175,8 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 						environment, project, r)))
 			}
 			results = resp.GetResults()
+		} else {
+			break
 		}
 	}
 	err = d.Set("parameter_values", valueMap)
@@ -187,8 +188,8 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
-	// We has the contents of the map to determine if any parameters have changed
-	// NOTE: this is stable in regards to map entry order, see
+	// We hash the contents of the map to determine if any parameters have changed
+	// NOTE: this is stable in regards to map order, see
 	// https://github.com/mitchellh/hashstructure/blob/master/hashstructure.go#L242
 	d.SetId(strconv.FormatUint(hash, 10))
 	return nil

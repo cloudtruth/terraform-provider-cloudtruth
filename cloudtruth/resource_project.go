@@ -36,14 +36,20 @@ func resourceProject() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
+			"force_delete": {
+				Description: "Whether to allow Terraform to delete the project or not",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+			},
 		},
 	}
 }
 
 func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "resourceProjectCreate")
 	var diags diag.Diagnostics
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceProjectCreate")
 	projectName := d.Get("name").(string)
 	projectDesc := d.Get("description").(string)
 	projectCreate := cloudtruthapi.NewProjectCreate(projectName)
@@ -61,9 +67,9 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 }
 
 func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "resourceProjectRead")
 	var diags diag.Diagnostics
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceProjectRead")
 	projectName := d.Get("name").(string)
 
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
@@ -78,9 +84,41 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 }
 
 func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	return diag.Errorf("not implemented")
+	tflog.Debug(ctx, "resourceProjectUpdate")
+	c := meta.(*cloudTruthClient)
+	projectID := d.Id()
+	projectName := d.Get("name").(string)
+	projectDesc := d.Get("description").(string)
+
+	patchedProject := cloudtruthapi.PatchedProject{}
+	hasChange := false
+	if d.HasChange("name") {
+		patchedProject.SetName(projectName)
+		hasChange = true
+	}
+	if d.HasChange("description") {
+		patchedProject.SetDescription(projectDesc)
+		hasChange = true
+	}
+	if hasChange {
+		_, r, err := c.openAPIClient.ProjectsApi.ProjectsPartialUpdate(ctx,
+			projectID).PatchedProject(patchedProject).Execute()
+		if err != nil {
+			return diag.FromErr(errors.New(fmt.Sprintf("error updating project %s: %+v", projectName, r)))
+		}
+	}
+	d.SetId(projectID)
+	return resourceProjectRead(ctx, d, meta)
 }
 
 func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	return diag.Errorf("not implemented")
+	tflog.Debug(ctx, "resourceProjectDelete")
+	c := meta.(*cloudTruthClient)
+	projectID := d.Id()
+	projectName := d.Get("name")
+	r, err := c.openAPIClient.ProjectsApi.ProjectsDestroy(context.Background(), projectID).Execute()
+	if err != nil {
+		return diag.FromErr(errors.New(fmt.Sprintf("error updating project %s: %+v", projectName, r)))
+	}
+	return nil
 }
