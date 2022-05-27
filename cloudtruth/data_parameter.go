@@ -184,15 +184,12 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	}
 	hash, err := hashstructure.Hash(valueMap, nil)
 	if err != nil {
-		panic(err)
+		return diag.FromErr(err)
 	}
 
 	// We has the contents of the map to determine if any parameters have changed
-	// todo: test that this is stable
+	// NOTE: this is stable in regards to map entry order, see
+	// https://github.com/mitchellh/hashstructure/blob/master/hashstructure.go#L242
 	d.SetId(strconv.FormatUint(hash, 10))
-
 	return nil
 }
-
-// To determine if we have any changes to the cloudtruth_parameters type, we take the valueMap,
-// sort it,
