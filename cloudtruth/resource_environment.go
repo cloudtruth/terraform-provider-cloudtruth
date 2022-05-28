@@ -35,6 +35,7 @@ func resourceEnvironment() *schema.Resource {
 				Description: "The Parent CloudTruth environment",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Default:     "default",
 			},
 			"force_delete": {
 				Description: "Whether to allow Terraform to delete the environment or not",
@@ -52,13 +53,20 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	c := meta.(*cloudTruthClient)
 	envName := d.Get("name").(string)
 	envDesc := d.Get("description").(string)
+	envParent := d.Get("parent").(string)
+	envParentID, err := c.lookupEnvironment(ctx, envParent)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	envCreate := cloudtruthapi.NewEnvironmentCreate(envName)
+	envCreate.SetParent(fmt.Sprintf("https://api.cloudtruth.io/api/v1/environments/%s/", *envParentID))
 	if envDesc != "" {
 		envCreate.SetDescription(envDesc)
 	}
-	resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(context.Background()).EnvironmentCreate(*envCreate).Execute()
+	resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(context.Background()).EnvironmentCreate(*envCreate).Execute()
 	if err != nil {
 		return diag.FromErr(err)
+		fmt.Sprintf("%+v", r)
 	}
 	d.SetId(resp.GetId())
 	return diags

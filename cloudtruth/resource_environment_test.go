@@ -8,9 +8,10 @@ import (
 
 const envdesc = "Just a description of an environment"
 const updateEnvDesc = "A new description of an environment"
+const parentEnv = "default"
 
 func TestAccResourceEnvironmentBasic(t *testing.T) {
-	createEnvName := fmt.Sprintf("TestEnvironment-%s", resource.UniqueId())
+	createEnvName := fmt.Sprintf("TestEnv-%s", resource.UniqueId())
 	updateEnvName := fmt.Sprintf("updated-%s", createEnvName)
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,

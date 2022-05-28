@@ -51,7 +51,7 @@ func Provider() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"cloudtruth_project":     resourceProject(),
-			"cloudtruth_environemnt": resourceEnvironment(),
+			"cloudtruth_environment": resourceEnvironment(),
 			"cloudtruth_parameter":   resourceParameter(),
 			"cloudtruth_template":    resourceTemplate(),
 		},
