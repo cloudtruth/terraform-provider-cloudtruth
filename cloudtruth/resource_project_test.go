@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-const desc = "Just a description"
-const updateDesc = "A new description"
+const desc = "Just a description of a project"
+const updateDesc = "A new description of a project"
 
 func TestAccResourceProjectBasic(t *testing.T) {
 	createProjName := fmt.Sprintf("TestProject-%s", resource.UniqueId())

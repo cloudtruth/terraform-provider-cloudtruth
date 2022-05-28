@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// todo: add force delete and parent project support
+// todo: add force delete and parent project support + tests
 func resourceProject() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.
@@ -58,10 +58,9 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 		projectCreate.SetDescription(projectDesc)
 	}
 
-	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsCreate(ctx).ProjectCreate(*projectCreate).Execute()
+	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsCreate(ctx).ProjectCreate(*projectCreate).Execute()
 	if err != nil {
-		return diag.FromErr(errors.New(
-			fmt.Sprintf("error creating project %s: %+v", projectName, r)))
+		return diag.FromErr(err)
 	}
 	d.SetId(resp.GetId())
 	return diags
@@ -73,17 +72,20 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	c := meta.(*cloudTruthClient)
 	projectName := d.Get("name").(string)
 
-	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
+	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
 	if err != nil {
-		return diag.FromErr(errors.New(
-			fmt.Sprintf("error creating project %s: %+v", projectName, r)))
+		return diag.FromErr(err)
 	}
-	// There should be only one project
-	// todo: test and confirm this
+	// There should be only one project found
+	res := resp.GetResults()
+	if len(res) != 1 {
+		return diag.FromErr(errors.New(fmt.Sprintf("Found %d projects, expcted to find 1", len(res))))
+	}
 	d.SetId(resp.GetResults()[0].GetId())
 	return diags
 }
 
+// A project's name and description can be updated, it cannot be re-parented
 func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceProjectUpdate")
 	c := meta.(*cloudTruthClient)
@@ -102,10 +104,10 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 		hasChange = true
 	}
 	if hasChange {
-		_, r, err := c.openAPIClient.ProjectsApi.ProjectsPartialUpdate(ctx,
+		_, _, err := c.openAPIClient.ProjectsApi.ProjectsPartialUpdate(ctx,
 			projectID).PatchedProject(patchedProject).Execute()
 		if err != nil {
-			return diag.FromErr(errors.New(fmt.Sprintf("error updating project %s: %+v", projectName, r)))
+			return diag.FromErr(err)
 		}
 	}
 	d.SetId(projectID)
@@ -116,10 +118,9 @@ func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any
 	tflog.Debug(ctx, "resourceProjectDelete")
 	c := meta.(*cloudTruthClient)
 	projectID := d.Id()
-	projectName := d.Get("name")
-	r, err := c.openAPIClient.ProjectsApi.ProjectsDestroy(context.Background(), projectID).Execute()
+	_, err := c.openAPIClient.ProjectsApi.ProjectsDestroy(context.Background(), projectID).Execute()
 	if err != nil {
-		return diag.FromErr(errors.New(fmt.Sprintf("error updating project %s: %+v", projectName, r)))
+		return diag.FromErr(err)
 	}
 	return nil
 }
