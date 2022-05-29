@@ -74,19 +74,19 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 		*projectID).Environment(env).Name(name).Execute()
 	if err != nil {
-		return diag.FromErr(errors.New(fmt.Sprintf("error looking up parameter %s: %+v", name, r)))
+		return diag.FromErr(fmt.Errorf("error looking up parameter %s: %+v", name, r))
 	}
 	if resp.GetCount() > 1 {
-		return diag.FromErr(errors.New(fmt.Sprintf("unexpectedly found %d results for parameter %s",
-			resp.GetCount(), name)))
+		return diag.FromErr(fmt.Errorf("unexpectedly found %d results for parameter %s",
+			resp.GetCount(), name))
 	}
 
 	// We know there is only one parameter at this point
 	// There will also should only ever be one value per parameter per environment per project
 	values := resp.GetResults()[0].GetValues()
 	if len(values) > 1 {
-		return diag.FromErr(errors.New(fmt.Sprintf("Unexpectedly found %d values for parameter %s",
-			len(values), name)))
+		return diag.FromErr(fmt.Errorf("Unexpectedly found %d values for parameter %s",
+			len(values), name))
 	}
 	resp.GetResults()[0].GetValues()
 	for _, v := range values {
@@ -147,9 +147,8 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 		*projectID).Environment(environment).Execute()
 	if err != nil {
-		return diag.FromErr(errors.New(
-			fmt.Sprintf("error looking up parameters in the %s environment in the %s project: %+v",
-				environment, project, r)))
+		return diag.FromErr(fmt.Errorf("error looking up parameters in the %s environment in the %s project: %+v",
+			environment, project, r))
 	}
 
 	valueMap := make(map[string]any)
@@ -176,9 +175,8 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 			resp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 				*projectID).Environment(environment).Page(pageNum).Execute()
 			if err != nil {
-				return diag.FromErr(errors.New(
-					fmt.Sprintf("error looking up parameters in the %s environment in the %s project: %+v",
-						environment, project, r)))
+				return diag.FromErr(fmt.Errorf("error looking up parameters in the %s environment in the %s project: %+v",
+					environment, project, r))
 			}
 			results = resp.GetResults()
 		} else {

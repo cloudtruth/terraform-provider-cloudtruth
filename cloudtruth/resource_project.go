@@ -2,7 +2,6 @@ package cloudtruth
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -82,7 +81,7 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	// There should be only one project found
 	res := resp.GetResults()
 	if len(res) != 1 {
-		return diag.FromErr(errors.New(fmt.Sprintf("Found %d projects, expcted to find 1", len(res))))
+		return diag.FromErr(fmt.Errorf("found %d projects, expcted to find 1", len(res)))
 	}
 	d.SetId(resp.GetResults()[0].GetId())
 	return diags

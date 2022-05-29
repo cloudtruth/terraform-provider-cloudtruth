@@ -16,7 +16,6 @@ on:
   # schedule:
   #   - cron: '0 13 * * *'
 jobs:
-  # ensure the code builds...
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -52,6 +51,14 @@ jobs:
         run: |
           git diff --compact-summary --exit-code || \
             (echo; echo "Unexpected difference in directories after code generation. Run 'go generate ./...' command and commit."; exit 1)
+
+  lint:
+    name: Lint with golangci-lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: make golangci-lint
+      run: make golangci-lint
 
   # run acceptance tests in a matrix with Terraform core versions
   test:

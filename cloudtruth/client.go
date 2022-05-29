@@ -2,7 +2,6 @@ package cloudtruth
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -25,7 +24,7 @@ const (
 	environmentVarName = "CLOUDTRUTH_ENVIRONMENT"
 
 	// Hard code the CloudTruth API major version for now
-	apiVersion = 1
+	apiVersion = "v1"
 )
 
 type clientConfig struct {
@@ -106,7 +105,7 @@ func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID strin
 			return &projNameOrID, nil
 		}
 	}
-	return nil, errors.New(fmt.Sprintf("Project with name/ID %s not found", projNameOrID))
+	return nil, fmt.Errorf("project with name/ID %s not found", projNameOrID)
 }
 
 // Map of CloudTruth project names -> project IDs
@@ -150,23 +149,7 @@ func (c *cloudTruthClient) lookupEnvironment(ctx context.Context, envNameOrID st
 			return &envNameOrID, nil
 		}
 	}
-	return nil, errors.New(fmt.Sprintf("environment with name/ID %s not found", envNameOrID))
-}
-
-// Fetch the environment name given the environment's ID
-func (c *cloudTruthClient) getEnvironmentName(ctx context.Context, envID string) (*string, error) {
-	tflog.Debug(ctx, fmt.Sprintf("getEnvironmentName: fetching the name of the environment with ID %s", envID))
-	if val, ok := c.envIDs[envID]; ok {
-		tflog.Debug(ctx, fmt.Sprintf("found environment with name %s, using id %s", envID, val))
-		return &val, nil
-	}
-	return nil, errors.New(fmt.Sprintf("environment with ID %s not found", envID))
-}
-
-// Utility function, used with parameter results which are maps which use the environment URLs as keys
-func (c *cloudTruthClient) getEnvironmentURL(ctx context.Context, envID *string) string {
-	tflog.Debug(ctx, fmt.Sprintf("getEnvironmentURL: building the URL of the environment with ID %s", *envID))
-	return fmt.Sprintf("%s://%s/environments/%s/", c.config.Protocol, c.config.Domain, *envID)
+	return nil, fmt.Errorf("environment with name/ID %s not found", envNameOrID)
 }
 
 // Map of CloudTruth environment names -> environment IDs

@@ -2,7 +2,6 @@ package cloudtruth
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -67,10 +66,9 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	if envDesc != "" {
 		envCreate.SetDescription(envDesc)
 	}
-	resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(context.Background()).EnvironmentCreate(*envCreate).Execute()
+	resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(context.Background()).EnvironmentCreate(*envCreate).Execute()
 	if err != nil {
 		return diag.FromErr(err)
-		fmt.Sprintf("%+v", r)
 	}
 	d.SetId(resp.GetId())
 	return diags
@@ -89,7 +87,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	// There should be only one environment in the results
 	res := resp.GetResults()
 	if len(res) != 1 {
-		return diag.FromErr(errors.New(fmt.Sprintf("Found %d environments, expcted to find 1", len(res))))
+		return diag.FromErr(fmt.Errorf("Found %d environments, expcted to find 1", len(res)))
 	}
 	d.SetId(resp.GetResults()[0].GetId())
 	return diags
