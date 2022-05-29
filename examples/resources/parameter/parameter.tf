@@ -5,6 +5,9 @@ resource "cloudtruth_parameter" "example" {
   project          = "MyCloudTruthProject"
   secret           = false
   type             = "string" # one of string, boolean, integer or custom, defaults to string
+  # defaults to empty string, when a string and 0/false when integer/boolean
+  # if you need to inject this value from elsewhere, omit value and add an ignore_changes lifecycle
+  # rule so that Terraform does not attempt to overwrite this value
   value            = "some_value"
   #evaluate         = true
   #wrap             = false

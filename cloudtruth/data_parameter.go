@@ -138,12 +138,13 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
 		}
 	}
-
-	environment := d.Get("environment").(string)
 	projectID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(err)
 	}
+
+	// todo: default environment lookup needed here likely
+	environment := d.Get("environment").(string)
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 		*projectID).Environment(environment).Execute()
 	if err != nil {
