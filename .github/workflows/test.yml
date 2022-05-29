@@ -58,7 +58,7 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: make golangci-lint
-      run: make golangci-lint
+      run: make lint
 
   # run acceptance tests in a matrix with Terraform core versions
   test:
