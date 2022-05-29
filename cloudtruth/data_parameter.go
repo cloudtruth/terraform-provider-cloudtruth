@@ -15,6 +15,8 @@ import (
 // possible support for wrap, maybe also evaluate and mask_secrets
 // some more tests, including negative cases
 // add filters to the plural data type
+// add type support or just interpret all param sources as strings?
+// the API returns them as strings
 func dataCloudTruthParameter() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth parameter data source",
@@ -35,7 +37,7 @@ func dataCloudTruthParameter() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			"value": &schema.Schema{
+			"value": {
 				Description: "The parameter's value",
 				Type:        schema.TypeString,
 				Computed:    true,

@@ -10,6 +10,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+// todo:
+// add force delete
+// add parent env support + tests, confirm update support i.e. re-parenting
+// data source? import support?
 func resourceEnvironment() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.
