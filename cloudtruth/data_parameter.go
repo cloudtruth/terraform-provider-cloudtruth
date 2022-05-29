@@ -11,6 +11,10 @@ import (
 	"strconv"
 )
 
+// todo:
+// possible support for wrap, maybe also evaluate and mask_secrets
+// some more tests, including negative cases
+// add filters to the plural data type
 func dataCloudTruthParameter() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth parameter data source",

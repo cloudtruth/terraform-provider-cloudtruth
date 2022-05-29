@@ -59,7 +59,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 		return diag.FromErr(err)
 	}
 	envCreate := cloudtruthapi.NewEnvironmentCreate(envName)
-	envCreate.SetParent(fmt.Sprintf("https://api.cloudtruth.io/api/v1/environments/%s/", *envParentID))
+	envCreate.SetParent(fmt.Sprintf("%s/environments/%s/", c.config.BaseURL, *envParentID))
 	if envDesc != "" {
 		envCreate.SetDescription(envDesc)
 	}
@@ -82,7 +82,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	// There should be only one environment found
+	// There should be only one environment in the results
 	res := resp.GetResults()
 	if len(res) != 1 {
 		return diag.FromErr(errors.New(fmt.Sprintf("Found %d environments, expcted to find 1", len(res))))

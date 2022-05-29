@@ -10,7 +10,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// todo: add force delete and parent project support + tests
+// todo:
+// add force delete
+// add parent project support + tests, confirm update support i.e. re-parenting
+// data source? import support?
 func resourceProject() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.
@@ -85,7 +88,7 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	return diags
 }
 
-// A project's name and description can be updated, it cannot be re-parented
+// A project's name and description can be updated
 func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceProjectUpdate")
 	c := meta.(*cloudTruthClient)

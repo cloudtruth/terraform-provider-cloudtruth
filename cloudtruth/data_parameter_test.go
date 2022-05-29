@@ -7,10 +7,11 @@ import (
 	"testing"
 )
 
-/* For now, these tests will rely on the following pre-canned resources
-   Eventually, when resources are in place, it may make more sense to
-   set up full circuit tests. . .
-*/
+// For the sake of isolation/bootstrapping
+// The tests in the file assume that the following resources already exist in the target
+// CloudTruth account, if they are destroyed/altered these tests will fail
+// The resource acceptance tests are "full service" tests which instantiate, modify and destroy
+// all of the resources which they reference.
 const (
 	defaultEnv      = "default"
 	project         = "AcceptanceTest"
@@ -80,7 +81,7 @@ func TestDataSourceParameter(t *testing.T) {
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "value", secretParamVal),
 				),
 			},
-			{ // Environment and project specified at the provider level
+			{ // In this step, the environment and project default to the values specified at the provider level
 				Config: fmt.Sprintf(testAccParameterProvEnvProj, regularParam, secretParam),
 				Check: resource.ComposeTestCheckFunc(
 					// regular parameter
