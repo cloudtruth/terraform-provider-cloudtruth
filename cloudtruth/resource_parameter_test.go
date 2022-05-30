@@ -13,7 +13,6 @@ const updateParamDesc = "A new description of an parameter"
 // and re-parent test if applicable
 func TestAccResourceParameterBasic(t *testing.T) {
 	createParamName := fmt.Sprintf("TestParam-%s", resource.UniqueId())
-	updateParamName := fmt.Sprintf("updated-%s", createParamName)
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -25,10 +24,10 @@ func TestAccResourceParameterBasic(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "description", paramDesc),
 				),
 			},
-			{
-				Config: testAccResourceParameterUpdateBasic(accTestProject, updateParamName, updateEnvDesc),
+			{ // todo: confirm that you cannot update parameter names
+				Config: testAccResourceParameterUpdateBasic(accTestProject, createParamName, updateParamDesc),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "name", updateParamName),
+					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "name", createParamName),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "description", updateParamDesc),
 				),
 			},

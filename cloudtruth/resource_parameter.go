@@ -119,6 +119,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 
 	// Then add its value in the specified environment
 	// guaranteed to be set to "default" if not explicitly specified
+	// todo: refactor this into its own function
 	paramEnv := d.Get("environment").(string)
 	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
 	if err != nil {
@@ -223,7 +224,7 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(fmt.Errorf("failed to extract the Parameter and Parameter Value IDs from %s",
 			paramCompositeID))
 	}
-	paramID, _ := ids[0], ids[1]
+	paramID, paramValueID := ids[0], ids[1]
 	project := d.Get("project").(string)
 	if project == "" {
 		if c.config.Project != "" {
@@ -240,8 +241,44 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	for _, v := range resp.GetValues() {
-		fmt.Printf("%+v", v)
+
+	// todo: proceed only if force_delete is set to true
+	// We iterate over the values for the parameter, where the keys are the URLs of the corresponding
+	// environments. If they are all null, we delete the parameter. If they are all null except the one matching
+	// the specified environment, we delete the parameter.
+	// Otherwise, we delete the specific value defined in the target environment
+	// todo: lots of testing here
+	paramEnv := d.Get("environment").(string)
+	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	targetEnvURL := fmt.Sprintf("%s/environments/%s/", c.config.BaseURL, *paramEnvID)
+	definedOutsideTargetEnv := false
+	values := resp.GetValues()
+	for envURL, _ := range values {
+		value := values[envURL]
+		if (envURL != targetEnvURL) && value.HasInternalValue() {
+			if value.GetEnvironmentName() != paramEnv {
+				definedOutsideTargetEnv = true
+				break
+			}
+		}
+	}
+	if definedOutsideTargetEnv {
+		// delete the specific env value
+		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(context.Background(), paramValueID,
+			paramID, *projID).Execute()
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	} else {
+		// delete the parameter entirely
+		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersDestroy(context.Background(), paramID,
+			*projID).Execute()
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 	return nil
 }
