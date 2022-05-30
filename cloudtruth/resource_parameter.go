@@ -49,6 +49,7 @@ func resourceParameter() *schema.Resource {
 				Description: "The value of the CloudTruth Parameter, specific to an Environment (which can be overridden/inherited)",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Default:     "",
 			},
 			"secret": {
 				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
