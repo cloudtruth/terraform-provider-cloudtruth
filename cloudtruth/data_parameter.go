@@ -31,6 +31,7 @@ func dataCloudTruthParameter() *schema.Resource {
 				Description: "The CloudTruth environment",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Default:     "default",
 			},
 			"name": {
 				Description: "The name of the parameter",
@@ -49,14 +50,14 @@ func dataCloudTruthParameter() *schema.Resource {
 func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParameterRead")
-	env := d.Get("environment").(string)
-	if env == "" {
-		if c.config.Environment != "" {
-			env = c.config.Environment
-		} else {
-			return diag.FromErr(errors.New("the CloudTruth environment must be specified at the provider or resource level"))
-		}
+
+	// guaranteed to be set to "default" if not explicitly specified
+	paramEnv := d.Get("environment").(string)
+	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
+	if err != nil {
+		return diag.FromErr(err)
 	}
+
 	project := d.Get("project").(string)
 	if project == "" {
 		if c.config.Project != "" {
@@ -72,7 +73,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 		return diag.FromErr(err)
 	}
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		*projectID).Environment(env).Name(name).Execute()
+		*projectID).Environment(*paramEnvID).Name(name).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("error looking up parameter %s: %+v", name, r))
 	}
@@ -91,7 +92,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	resp.GetResults()[0].GetValues()
 	for _, v := range values {
 		tflog.Debug(ctx, fmt.Sprintf("Found value for %s, lookup env %s, resolved env %s",
-			name, env, v.GetEnvironmentName()))
+			name, paramEnv, v.GetEnvironmentName()))
 		err := d.Set("value", v.GetValue())
 		if err != nil {
 			return diag.FromErr(err)
@@ -104,21 +105,21 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 // Return a map of env -> parameter values
 func dataCloudTruthParameters() *schema.Resource {
 	return &schema.Resource{
-		Description: "A CloudTruth parameter data source",
+		Description: "A CloudTruth Parameter data source",
 		ReadContext: dataCloudTruthParametersRead,
 		Schema: map[string]*schema.Schema{
 			"project": {
-				Description: "The CloudTruth project",
+				Description: "The CloudTruth Project",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"environment": {
-				Description: "The CloudTruth environment",
+				Description: "The CloudTruth Environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"parameter_values": {
-				Description: "The CloudTruth project",
+				Description: "The computed values for the CloudTruth Parameter",
 				Type:        schema.TypeMap,
 				Computed:    true,
 			},

@@ -29,6 +29,7 @@ data "cloudtruth_parameters" "params_example" {
   environment = "default"
 }
 
+# Note: parameter values are always returned as strings
 # Example outputs
 output "parameter_output" {
   value = data.cloudtruth_parameter.param_example

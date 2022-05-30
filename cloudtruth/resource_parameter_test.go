@@ -7,7 +7,7 @@ import (
 )
 
 const paramDesc = "Just a description of a parameter"
-const updateParamDesc = "A new description of an parametr"
+const updateParamDesc = "A new description of an parameter"
 
 // todo: add a non-default parent test
 // and re-parent test if applicable
@@ -19,14 +19,14 @@ func TestAccResourceParameterBasic(t *testing.T) {
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceParameterCreateBasic(createParamName, paramDesc),
+				Config: testAccResourceParameterCreateBasic(accTestProject, createParamName, paramDesc),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "name", createParamName),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "description", paramDesc),
 				),
 			},
 			{
-				Config: testAccResourceParameterUpdateBasic(updateParamName, updateEnvDesc),
+				Config: testAccResourceParameterUpdateBasic(accTestProject, updateParamName, updateEnvDesc),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "name", updateParamName),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "description", updateParamDesc),
@@ -36,20 +36,22 @@ func TestAccResourceParameterBasic(t *testing.T) {
 	})
 }
 
-func testAccResourceParameterCreateBasic(envName, desc string) string {
+func testAccResourceParameterCreateBasic(projName, paramName, desc string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_parameter" "basic" {
+		project     = "%s"
   		name        = "%s"
   		description = "%s"
 	}
-	`, envName, desc)
+	`, projName, paramName, desc)
 }
 
-func testAccResourceParameterUpdateBasic(envName, desc string) string {
+func testAccResourceParameterUpdateBasic(projName, paramName, desc string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_parameter" "basic" {
+        project     = "%s"
   		name        = "%s"
   		description = "%s"
 	}
-	`, envName, desc)
+	`, projName, paramName, desc)
 }

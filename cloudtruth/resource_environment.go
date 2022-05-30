@@ -30,18 +30,18 @@ func resourceEnvironment() *schema.Resource {
 				Required:    true,
 			},
 			"description": {
-				Description: "Description of the environment",
+				Description: "Description of the CloudTruth Environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"parent": {
-				Description: "The Parent CloudTruth environment",
+				Description: "The parent CloudTruth Environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "default",
 			},
 			"force_delete": {
-				Description: "Whether to allow Terraform to delete the environment or not",
+				Description: "Whether to allow Terraform to delete the Environment or not, default to false/disallow",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,

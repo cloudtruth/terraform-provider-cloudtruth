@@ -3,6 +3,7 @@ package cloudtruth
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -28,31 +29,63 @@ func resourceParameter() *schema.Resource {
 				Required:    true,
 			},
 			"description": {
-				Description: "Description of the environment",
+				Description: "Description of the CloudTruth Parameter",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"project": {
-				Description: "The CloudTruth project",
+				Description: "The CloudTruth project where the Parameter is defined",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"environment": {
-				Description: "The CloudTruth environment",
+				Description: "The CloudTruth environment where the Parameter's value is defined. Defaults to empty string",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "default",
+			},
+			"value": {
+				Description: "The value of the CloudTruth Parameter, specific to an Environment (which can be overridden/inherited)",
+				Type:        schema.TypeString,
+				Optional:    true,
+			},
+			"secret": {
+				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+			},
+			"type": {
+				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
+				Type:        schema.TypeString,
+				Optional:    true,
+			},
+			"evaluate": {
+				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
+				Type:        schema.TypeString,
+				Optional:    true,
+			},
+			"wrap": {
+				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"force_delete": {
-				Description: "Whether to allow Terraform to delete the environment or not",
+				Description: "Whether to allow Terraform to delete the CloudTruth Parameter or not",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
+			},
+			"parameter_values": { // todo: combine this with multi-value support
+				Description: "The CloudTruth project",
+				Type:        schema.TypeMap,
+				Computed:    true,
 			},
 		},
 	}
 }
 
-// We combine the parameter and its value as one object as far as the provider is concerned
+// We treat the parameter and its per environment value as one provider object
 func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterCreate")
 	var diags diag.Diagnostics
@@ -77,24 +110,39 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(err)
 	}
 
-	// todo: default environment lookup needed here likely
-	//environment := d.Get("environment").(string)
-	paramResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(context.Background(), *projID).ParameterCreate(*paramCreate).Execute()
+	// NOTE: a parameter will exist in any/all environments however, its value may be set/overridden/inherited across
+	// multiple environments
+	paramResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(context.Background(),
+		*projID).ParameterCreate(*paramCreate).Execute()
 	if err != nil {
 		return diag.FromErr(err)
 	}
 	paramID := paramResp.GetId()
 
-	// Then add the value
-	// todo: handle failure here? if we create the param but fail to add the value, subsequent param creates will fail
-	value := d.Get("value").(string)
-	valueCreate := cloudtruthapi.NewValueCreate(value) // ValueCreate |
-	//todo: evaluate
-	//todo: wrap
-	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(), paramID, *projID).ValueCreate(*valueCreate).Execute()
+	// Then add its value in the specified environment
+	// guaranteed to be set to "default" if not explicitly specified
+	paramEnv := d.Get("environment").(string)
+	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
 	if err != nil {
 		return diag.FromErr(err)
 	}
+
+	// todo: handle multiple param/value/env instances, possibly with a map
+	// if unset, we default to an empty string/nil
+	value := d.Get("value").(string)
+	valueCreate := cloudtruthapi.NewValueCreate(value)
+	valueCreate.SetInternalValue(value)
+	valueCreate.SetEnvironment(*paramEnvID)
+	// todo: someday support external values
+	valueCreate.SetExternal(false)
+	//todo: evaluate
+	//todo: wrap
+	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
+		paramID, *projID).ValueCreate(*valueCreate).Execute()
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	fmt.Println(valueResp.GetId())
 	d.SetId(valueResp.GetId())
 	return diags
 }
@@ -106,17 +154,16 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 
 func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterUpdate")
+	// todo:
 	// Update parameter level changes if they occurred
-
 	// Update value level changes if they occurred
-
 	return resourceParameterRead(ctx, d, meta)
 }
 
 func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterDelete")
 	// todo:
-	// destroy the parameter and the value?
-
+	// destroy the parameter value
+	// unless defined in another env
 	return nil
 }

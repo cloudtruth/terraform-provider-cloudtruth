@@ -7,20 +7,6 @@ import (
 	"testing"
 )
 
-// For the sake of isolation/bootstrapping
-// The tests in the file assume that the following resources already exist in the target
-// CloudTruth account, if they are destroyed/altered these tests will fail
-// The resource acceptance tests are "full service" tests which instantiate, modify and destroy
-// all of the resources which they reference.
-const (
-	defaultEnv      = "default"
-	project         = "AcceptanceTest"
-	regularParam    = "DefaultRegularParam"
-	regularParamVal = "notreallyasecret"
-	secretParam     = "DefaultSecretParam"
-	secretParamVal  = "ultratopsecret"
-)
-
 const testAccParameter = `
 data "cloudtruth_parameter" "nonsecret" {
   project     = "%s"
@@ -65,18 +51,18 @@ func TestDataSourceParameter(t *testing.T) {
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: fmt.Sprintf(testAccParameter, project, defaultEnv,
-					regularParam, project, defaultEnv, secretParam),
+				Config: fmt.Sprintf(testAccParameter, accTestProject, defaultEnv,
+					regularParam, accTestProject, defaultEnv, secretParam),
 				Check: resource.ComposeTestCheckFunc(
 					// regular parameter
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret", "environment", defaultEnv),
-					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret", "project", project),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret", "project", accTestProject),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret", "name", regularParam),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret", "value", regularParamVal),
 
 					// secret parameter
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "environment", defaultEnv),
-					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "project", project),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "project", accTestProject),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "name", secretParam),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "value", secretParamVal),
 				),
@@ -101,10 +87,10 @@ func TestAccDataSourceParameters(t *testing.T) {
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: fmt.Sprintf(testAccParameters, project, "default"),
+				Config: fmt.Sprintf(testAccParameters, accTestProject, "default"),
 				Check: resource.ComposeTestCheckFunc(
 					// regular parameter
-					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", project),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", accTestProject),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "environment", "default"),
 					testAccCheckParametersValueMap("data.cloudtruth_parameters.multi_env", expEnvValues),
 				),
@@ -118,7 +104,7 @@ func testAccCheckParametersValueMap(resourceName string, expMap map[string]inter
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[resourceName]
 		if !ok {
-			return fmt.Errorf("Not found: %s", resourceName)
+			return fmt.Errorf("not found: %s", resourceName)
 		}
 		for k, expVal := range expMap {
 			actVal, ok := rs.Primary.Attributes[k]
