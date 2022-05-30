@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"os"
 	"strings"
 )
 
@@ -224,7 +223,7 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(fmt.Errorf("failed to extract the Parameter and Parameter Value IDs from %s",
 			paramCompositeID))
 	}
-	paramID, paramValueID := ids[0], ids[1]
+	paramID, _ := ids[0], ids[1]
 	project := d.Get("project").(string)
 	if project == "" {
 		if c.config.Project != "" {
@@ -237,14 +236,12 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(context.Background(), paramID, *projID).Execute()
+	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(context.Background(), paramID, *projID).Execute()
 	if err != nil {
 		return diag.FromErr(err)
 	}
 	for _, v := range resp.GetValues() {
-		v.
+		fmt.Printf("%+v", v)
 	}
-
-
 	return nil
 }
