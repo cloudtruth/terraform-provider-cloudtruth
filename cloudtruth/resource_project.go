@@ -39,7 +39,7 @@ func resourceProject() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"force_delete": {
+			"force_delete": { // todo: handle this
 				Description: "Whether to allow Terraform to delete the project or not",
 				Type:        schema.TypeBool,
 				Optional:    true,

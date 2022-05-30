@@ -40,7 +40,7 @@ func resourceEnvironment() *schema.Resource {
 				Optional:    true,
 				Default:     "default",
 			},
-			"force_delete": {
+			"force_delete": { // todo: handle this
 				Description: "Whether to allow Terraform to delete the Environment or not, default to false/disallow",
 				Type:        schema.TypeBool,
 				Optional:    true,

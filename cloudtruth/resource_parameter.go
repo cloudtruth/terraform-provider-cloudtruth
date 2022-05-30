@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strings"
 )
 
 // todo:
@@ -55,31 +56,26 @@ func resourceParameter() *schema.Resource {
 				Optional:    true,
 				Default:     false,
 			},
-			"type": {
+			"type": { // todo: handle this
 				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"evaluate": {
+			"evaluate": { // todo: handle this
 				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"wrap": {
+			"wrap": { // todo: handle this
 				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"force_delete": {
+			"force_delete": { // todo: handle this
 				Description: "Whether to allow Terraform to delete the CloudTruth Parameter or not",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-			},
-			"parameter_values": { // todo: combine this with multi-value support
-				Description: "The CloudTruth project",
-				Type:        schema.TypeMap,
-				Computed:    true,
 			},
 		},
 	}
@@ -97,6 +93,8 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	if paramDesc != "" {
 		paramCreate.SetDescription(paramDesc)
 	}
+
+	// todo: refactor this to be a shared function
 	project := d.Get("project").(string)
 	if project == "" {
 		if c.config.Project != "" {
@@ -142,28 +140,83 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	fmt.Println(valueResp.GetId())
-	d.SetId(valueResp.GetId())
+
+	// For convenience, we set the ID to be <PARAMATER_ID>:<PARAMETER_VALUE_ID>
+	d.SetId(fmt.Sprintf("%s:%s", paramID, valueResp.GetId()))
 	return diags
 }
 
 func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterRead")
-	return dataCloudTruthParametersRead(ctx, d, meta)
+	return dataCloudTruthParameterRead(ctx, d, meta)
 }
 
 func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterUpdate")
-	// todo:
-	// Update parameter level changes if they occurred
-	// Update value level changes if they occurred
+	c := meta.(*cloudTruthClient)
+	paramCompositeID := d.Id()
+	ids := strings.Split(paramCompositeID, ":")
+	if len(ids) != 2 {
+		return diag.FromErr(fmt.Errorf("failed to extract the Parameter and Parameter Value IDs from %s",
+			paramCompositeID))
+	}
+	paramID, paramValueID := ids[0], ids[1]
+	project := d.Get("project").(string)
+	if project == "" {
+		if c.config.Project != "" {
+			project = c.config.Project
+		} else {
+			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
+		}
+	}
+	projID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	// Two concerns:
+	// 1. Update Parameter level changes
+	// 2. Update Paramater Value level changes
+	patchedParam := cloudtruthapi.PatchedParameter{}
+	hasParamChange := false
+
+	if d.HasChange("description") {
+		paramDesc := d.Get("description").(string)
+		patchedParam.SetDescription(paramDesc)
+		hasParamChange = true
+	}
+	if hasParamChange {
+		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersPartialUpdate(ctx, paramID, *projID).
+			PatchedParameter(patchedParam).Execute()
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	patchedParamValue := cloudtruthapi.NewPatchedValue()
+	hasParamValueChange := false
+	if d.HasChange("value") {
+		paramValue := d.Get("value").(string)
+		patchedParamValue.SetValue(paramValue)
+		hasParamValueChange = true
+	}
+	if hasParamValueChange {
+		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesPartialUpdate(ctx, paramValueID, paramID,
+			*projID).PatchedValue(*patchedParamValue).Execute()
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
+	d.SetId(paramCompositeID)
 	return resourceParameterRead(ctx, d, meta)
 }
 
+// todo:
+// destroy the parameter value
+// unless defined in another env
+// in which case we only delete the env specific value
 func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterDelete")
-	// todo:
-	// destroy the parameter value
-	// unless defined in another env
+
 	return nil
 }

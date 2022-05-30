@@ -47,6 +47,7 @@ func dataCloudTruthParameter() *schema.Resource {
 	}
 }
 
+// FIX: likely need to use the composite ID here too
 func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParameterRead")
@@ -144,7 +145,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
-	// todo: default environment lookup needed here likely
+	// guaranteed to be set to "default" if not explicitly specified
 	environment := d.Get("environment").(string)
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 		*projectID).Environment(environment).Execute()
@@ -156,9 +157,6 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	valueMap := make(map[string]any)
 	results := resp.GetResults()
 	var pageNum int32 = 1
-	if err != nil {
-		return diag.FromErr(err)
-	}
 	for results != nil {
 		for _, res := range results {
 			paramName := res.GetName()
@@ -194,6 +192,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
+	// todo: add tests where the value actually changes
 	// We hash the contents of the map to determine if any parameters have changed
 	// NOTE: this is stable in regards to map order, see
 	// https://github.com/mitchellh/hashstructure/blob/master/hashstructure.go#L242
