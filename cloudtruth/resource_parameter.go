@@ -256,7 +256,7 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	targetEnvURL := fmt.Sprintf("%s/environments/%s/", c.config.BaseURL, *paramEnvID)
 	definedOutsideTargetEnv := false
 	values := resp.GetValues()
-	for envURL, _ := range values {
+	for envURL := range values {
 		value := values[envURL]
 		if (envURL != targetEnvURL) && value.HasInternalValue() {
 			if value.GetEnvironmentName() != paramEnv {
