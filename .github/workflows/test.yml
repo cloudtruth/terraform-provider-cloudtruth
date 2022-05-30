@@ -37,6 +37,8 @@ jobs:
     - uses: golangci/golangci-lint-action@v3
       with:
           args: -v --timeout 1h ./...
+    - name: Lint Terraform
+      uses: actionshub/terraform-lint@main
 
   generate:
     runs-on: ubuntu-latest

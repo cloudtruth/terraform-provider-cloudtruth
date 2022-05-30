@@ -85,12 +85,13 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 
 	// We know there is only one parameter at this point
 	// There will also should only ever be one value per parameter per environment per project
-	values := resp.GetResults()[0].GetValues()
+	param := resp.GetResults()[0]
+	values := param.GetValues()
+	paramID := param.GetId()
 	if len(values) > 1 {
 		return diag.FromErr(fmt.Errorf("Unexpectedly found %d values for parameter %s",
 			len(values), name))
 	}
-	resp.GetResults()[0].GetValues()
 	for _, v := range values {
 		tflog.Debug(ctx, fmt.Sprintf("Found value for %s, lookup env %s, resolved env %s",
 			name, paramEnv, v.GetEnvironmentName()))
@@ -98,7 +99,8 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 		if err != nil {
 			return diag.FromErr(err)
 		}
-		d.SetId(v.GetId())
+		// We use a composite ID - <PARAMATER_ID>:<PARAMETER_VALUE_ID>
+		d.SetId(fmt.Sprintf("%s:%s", paramID, v.GetId()))
 	}
 	return nil
 }

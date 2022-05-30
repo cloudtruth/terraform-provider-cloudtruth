@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"os"
 	"strings"
 )
 
@@ -141,7 +142,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(err)
 	}
 
-	// For convenience, we set the ID to be <PARAMATER_ID>:<PARAMETER_VALUE_ID>
+	// We use a composite ID - <PARAMATER_ID>:<PARAMETER_VALUE_ID>
 	d.SetId(fmt.Sprintf("%s:%s", paramID, valueResp.GetId()))
 	return diags
 }
@@ -211,12 +212,39 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	return resourceParameterRead(ctx, d, meta)
 }
 
-// todo:
-// destroy the parameter value
-// unless defined in another env
-// in which case we only delete the env specific value
+// If a parameter is defined in the target environment only, we destroy it
+// If it is defined in one or more other environments, we only destroy the value
+// defined in the target environment
 func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterDelete")
+	c := meta.(*cloudTruthClient)
+	paramCompositeID := d.Id()
+	ids := strings.Split(paramCompositeID, ":")
+	if len(ids) != 2 {
+		return diag.FromErr(fmt.Errorf("failed to extract the Parameter and Parameter Value IDs from %s",
+			paramCompositeID))
+	}
+	paramID, paramValueID := ids[0], ids[1]
+	project := d.Get("project").(string)
+	if project == "" {
+		if c.config.Project != "" {
+			project = c.config.Project
+		} else {
+			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
+		}
+	}
+	projID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(context.Background(), paramID, *projID).Execute()
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	for _, v := range resp.GetValues() {
+		v.
+	}
+
 
 	return nil
 }
