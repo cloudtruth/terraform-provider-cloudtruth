@@ -89,11 +89,11 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	values := param.GetValues()
 	paramID := param.GetId()
 	if len(values) > 1 {
-		return diag.FromErr(fmt.Errorf("Unexpectedly found %d values for parameter %s",
+		return diag.FromErr(fmt.Errorf("unexpectedly found %d values for parameter %s",
 			len(values), name))
 	}
 	for _, v := range values {
-		tflog.Debug(ctx, fmt.Sprintf("Found value for %s, lookup env %s, resolved env %s",
+		tflog.Debug(ctx, fmt.Sprintf("found value for %s, lookup env %s, resolved env %s",
 			name, paramEnv, v.GetEnvironmentName()))
 		err := d.Set("value", v.GetValue())
 		if err != nil {

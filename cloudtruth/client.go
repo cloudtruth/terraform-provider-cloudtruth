@@ -19,7 +19,7 @@ const (
 	protocolVarName = "CLOUDTRUTH_PROTOCOL"
 	defaultProtocol = "https"
 
-	// Optional config variables with no defaults - settable/overridable per Terraform state
+	// Optional config variables with no defaults - settable/overridable in HCL
 	projectVarName     = "CLOUDTRUTH_PROJECT"
 	environmentVarName = "CLOUDTRUTH_ENVIRONMENT"
 
@@ -83,8 +83,7 @@ type cloudTruthClient struct {
 	projectIDs    map[string]string
 }
 
-// For convenient + fast lookups by ID and name, use this utility function
-// to create a reverse val -> key map
+// Utility function for creating a reverse val -> key map
 func convertMap(m map[string]string) map[string]string {
 	inv := make(map[string]string)
 	for k, v := range m {

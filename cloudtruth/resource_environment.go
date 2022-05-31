@@ -87,7 +87,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	// There should be only one environment in the results
 	res := resp.GetResults()
 	if len(res) != 1 {
-		return diag.FromErr(fmt.Errorf("Found %d environments, expcted to find 1", len(res)))
+		return diag.FromErr(fmt.Errorf("found %d environments, expcted to find 1", len(res)))
 	}
 	d.SetId(resp.GetResults()[0].GetId())
 	return diags
