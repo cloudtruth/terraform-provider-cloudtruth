@@ -121,7 +121,18 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceTemplateUpdate")
 	c := meta.(*cloudTruthClient)
-	projID := d.Get("project").(string)
+	project := d.Get("project").(string)
+	if project == "" {
+		if c.config.Project != "" {
+			project = c.config.Project
+		} else {
+			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
+		}
+	}
+	projID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	templateValue := d.Get("value").(string)
 	templateDesc := d.Get("description").(string)
 	templateID := d.Id()
@@ -129,7 +140,7 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 	patchedTemplate := cloudtruthapi.PatchedTemplate{}
 	hasChange := false
 	if d.HasChange("value") {
-		patchedTemplate.SetName(templateValue)
+		patchedTemplate.SetBody(templateValue)
 		hasChange = true
 	}
 	if d.HasChange("description") {
@@ -138,7 +149,7 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 	}
 	if hasChange {
 		_, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesPartialUpdate(ctx, templateID,
-			projID).PatchedTemplate(patchedTemplate).Execute()
+			*projID).PatchedTemplate(patchedTemplate).Execute()
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -150,8 +161,21 @@ func resourceTemplateDelete(ctx context.Context, d *schema.ResourceData, meta an
 	tflog.Debug(ctx, "resourceTemplateDelete")
 	c := meta.(*cloudTruthClient)
 	templateID := d.Id()
-	projID := d.Get("project").(string)
-	_, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesDestroy(ctx, templateID, projID).Execute()
+
+	project := d.Get("project").(string)
+	if project == "" {
+		if c.config.Project != "" {
+			project = c.config.Project
+		} else {
+			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
+		}
+	}
+	projID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	_, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesDestroy(ctx, templateID, *projID).Execute()
 	if err != nil {
 		return diag.FromErr(err)
 	}
