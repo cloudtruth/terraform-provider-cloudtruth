@@ -95,6 +95,7 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 	projectName := d.Get("name").(string)
 	projectDesc := d.Get("description").(string)
 
+	// force_delete is not a property in the API, it is only a guard rail used by this TF provider
 	patchedProject := cloudtruthapi.PatchedProject{}
 	hasChange := false
 	if d.HasChange("name") {
@@ -120,6 +121,12 @@ func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any
 	tflog.Debug(ctx, "resourceProjectDelete")
 	c := meta.(*cloudTruthClient)
 	projectID := d.Id()
+	projectName := d.Get("name").(string)
+	forceDelete := d.Get("force_delete").(bool)
+	if !forceDelete {
+		return diag.Errorf("%s cannot be deleted from the CloudTruth provider, you must enable 'force_delete' to allow this deletes",
+			projectName)
+	}
 	_, err := c.openAPIClient.ProjectsApi.ProjectsDestroy(context.Background(), projectID).Execute()
 	if err != nil {
 		return diag.FromErr(err)

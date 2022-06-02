@@ -2,7 +2,6 @@ package cloudtruth
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -66,13 +65,6 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 		templateCreate.SetBody(templateValue) // This will fail when we attempt to create the template if invalid
 	}
 	project := d.Get("project").(string)
-	if project == "" {
-		if c.config.Project != "" {
-			project = c.config.Project
-		} else {
-			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
-		}
-	}
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(err)
@@ -94,13 +86,6 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 	c := meta.(*cloudTruthClient)
 	templateName := d.Get("name").(string)
 	project := d.Get("project").(string)
-	if project == "" {
-		if c.config.Project != "" {
-			project = c.config.Project
-		} else {
-			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
-		}
-	}
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(err)
@@ -122,13 +107,6 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 	tflog.Debug(ctx, "resourceTemplateUpdate")
 	c := meta.(*cloudTruthClient)
 	project := d.Get("project").(string)
-	if project == "" {
-		if c.config.Project != "" {
-			project = c.config.Project
-		} else {
-			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
-		}
-	}
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(err)
@@ -163,13 +141,6 @@ func resourceTemplateDelete(ctx context.Context, d *schema.ResourceData, meta an
 	templateID := d.Id()
 
 	project := d.Get("project").(string)
-	if project == "" {
-		if c.config.Project != "" {
-			project = c.config.Project
-		} else {
-			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
-		}
-	}
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(err)

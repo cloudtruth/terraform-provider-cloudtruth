@@ -2,6 +2,7 @@ package cloudtruth
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -95,6 +96,13 @@ func convertMap(m map[string]string) map[string]string {
 // Look up a project identifier first as a name, then as an ID
 func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID string) (*string, error) {
 	tflog.Debug(ctx, fmt.Sprintf("lookupProject: looking up project with name/ID %s", projNameOrID))
+	if projNameOrID == "" {
+		if c.config.Project != "" {
+			projNameOrID = c.config.Project
+		} else {
+			return nil, errors.New("the CloudTruth project must be specified at the provider or resource level")
+		}
+	}
 	if val, ok := c.projectNames[projNameOrID]; ok {
 		tflog.Debug(ctx, fmt.Sprintf("Found project by name %s, with id %s", projNameOrID, val))
 		return &val, nil

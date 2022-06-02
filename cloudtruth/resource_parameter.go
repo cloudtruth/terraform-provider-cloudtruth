@@ -2,7 +2,6 @@ package cloudtruth
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -67,17 +66,6 @@ func resourceParameter() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"wrap": { // todo: handle this
-				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
-				Type:        schema.TypeString,
-				Optional:    true,
-			},
-			"force_delete": { // todo: handle this
-				Description: "Whether to allow Terraform to delete the CloudTruth Parameter or not",
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-			},
 		},
 	}
 }
@@ -89,21 +77,17 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	// First create the parameter
 	c := meta.(*cloudTruthClient)
 	paramName := d.Get("name").(string)
-	paramDesc := d.Get("description").(string)
 	paramCreate := cloudtruthapi.NewParameterCreate(paramName)
+	paramDesc := d.Get("description").(string)
 	if paramDesc != "" {
 		paramCreate.SetDescription(paramDesc)
 	}
-
-	// todo: refactor this to be a shared function
-	project := d.Get("project").(string)
-	if project == "" {
-		if c.config.Project != "" {
-			project = c.config.Project
-		} else {
-			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
-		}
+	paramIsSecret := d.Get("secret").(bool)
+	if paramIsSecret {
+		paramCreate.SetSecret(paramIsSecret)
 	}
+
+	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(err)
@@ -164,13 +148,6 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	}
 	paramID, paramValueID := ids[0], ids[1]
 	project := d.Get("project").(string)
-	if project == "" {
-		if c.config.Project != "" {
-			project = c.config.Project
-		} else {
-			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
-		}
-	}
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(err)
@@ -227,13 +204,6 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	}
 	paramID, paramValueID := ids[0], ids[1]
 	project := d.Get("project").(string)
-	if project == "" {
-		if c.config.Project != "" {
-			project = c.config.Project
-		} else {
-			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
-		}
-	}
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(err)

@@ -2,7 +2,6 @@ package cloudtruth
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -60,13 +59,6 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	}
 
 	project := d.Get("project").(string)
-	if project == "" {
-		if c.config.Project != "" {
-			project = c.config.Project
-		} else {
-			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
-		}
-	}
 	name := d.Get("name").(string)
 
 	projectID, err := c.lookupProject(ctx, project)
@@ -135,13 +127,6 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParametersRead")
 	project := d.Get("project").(string)
-	if project == "" {
-		if c.config.Project != "" {
-			project = c.config.Project
-		} else {
-			return diag.FromErr(errors.New("the CloudTruth project must be specified at the provider or resource level"))
-		}
-	}
 	projectID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(err)
