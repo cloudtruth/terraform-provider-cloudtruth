@@ -10,7 +10,6 @@ import (
 )
 
 // todo:
-// add force delete
 // add parent env support + tests, confirm update support i.e. re-parenting
 // data source? import support?
 func resourceEnvironment() *schema.Resource {
@@ -40,7 +39,7 @@ func resourceEnvironment() *schema.Resource {
 				Optional:    true,
 				Default:     "default",
 			},
-			"force_delete": { // todo: handle this
+			"force_delete": {
 				Description: "Whether to allow Terraform to delete the Environment or not, default to false/disallow",
 				Type:        schema.TypeBool,
 				Optional:    true,
@@ -124,6 +123,12 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 	tflog.Debug(ctx, "resourceEnvironmentDelete")
 	c := meta.(*cloudTruthClient)
 	envID := d.Id()
+	envName := d.Get("name")
+	forceDelete := d.Get("force_delete").(bool)
+	if !forceDelete {
+		return diag.Errorf("environment %s cannot be deleted unless you set the 'force_delete' property to be true",
+			envName)
+	}
 	_, err := c.openAPIClient.EnvironmentsApi.EnvironmentsDestroy(context.Background(), envID).Execute()
 	if err != nil {
 		return diag.FromErr(err)

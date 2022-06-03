@@ -39,8 +39,9 @@ func TestAccResourceEnvironmentBasic(t *testing.T) {
 func testAccResourceEnvironmentCreateBasic(envName, desc string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_environment" "basic" {
-  		name        = "%s"
-  		description = "%s"
+  		name         = "%s"
+  		description  = "%s"
+        force_delete = true
 	}
 	`, envName, desc)
 }
@@ -48,8 +49,9 @@ func testAccResourceEnvironmentCreateBasic(envName, desc string) string {
 func testAccResourceEnvironmentUpdateBasic(envName, desc string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_environment" "basic" {
-  		name        = "%s"
-  		description = "%s"
+  		name         = "%s"
+  		description  = "%s"
+        force_delete = true
 	}
 	`, envName, desc)
 }

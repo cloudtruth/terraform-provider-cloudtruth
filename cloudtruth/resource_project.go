@@ -124,7 +124,7 @@ func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any
 	projectName := d.Get("name").(string)
 	forceDelete := d.Get("force_delete").(bool)
 	if !forceDelete {
-		return diag.Errorf("%s cannot be deleted from the CloudTruth provider, you must enable 'force_delete' to allow this deletes",
+		return diag.Errorf("project %s cannot be deleted unless you set the 'force_delete' property to be true",
 			projectName)
 	}
 	_, err := c.openAPIClient.ProjectsApi.ProjectsDestroy(context.Background(), projectID).Execute()

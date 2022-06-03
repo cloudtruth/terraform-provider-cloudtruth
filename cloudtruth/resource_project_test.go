@@ -3,7 +3,6 @@ package cloudtruth
 import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"strconv"
 	"testing"
 )
@@ -13,20 +12,12 @@ const updateDesc = "A new description of a project"
 
 // todo: add a non-default parent test
 // and re-parent test if applicable
-
-func testAccCheckFoo(s *terraform.State) error {
-	fmt.Println("here we are")
-	return nil
-}
-
 func TestAccResourceProjectBasic(t *testing.T) {
 	createProjName := fmt.Sprintf("TestProject-%s", resource.UniqueId())
 	updateProjName := fmt.Sprintf("updated-%s", createProjName)
-	forceDeleteProjName := fmt.Sprintf("TestDeleteProject-%s", resource.UniqueId())
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
-		CheckDestroy:      testAccCheckFoo,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccResourceProjectCreateBasic(createProjName, desc),
@@ -46,13 +37,24 @@ func TestAccResourceProjectBasic(t *testing.T) {
 						strconv.FormatBool(true)),
 				),
 			},
+		},
+	})
+}
+
+func TestAccResourceProjectForceDelete(t *testing.T) {
+	forceDeleteProjName := fmt.Sprintf("TestDeleteProject-%s", resource.UniqueId())
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		// todo: uncomment when https://github.com/hashicorp/terraform-plugin-sdk/pull/976 has been merged
+		//ExpectDestroyError: regexp.MustCompile(`.*cannot be deleted from the CloudTruth provider, you must enable 'force_delete' to allow this deletes.*`),
+		Steps: []resource.TestStep{
 			{ // The delete should fail
 				Config: testAccResourceProjectForceDeleteDisabled(forceDeleteProjName, desc),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "name", forceDeleteProjName),
 					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "description", desc),
 				),
-				//ExpectError: regexp.MustCompile(`.*cannot be deleted from the CloudTruth provider, you must enable 'force_delete' to allow this deletes.*`),
 			},
 			{ // Then set force_delete = true and there should be no errors
 				Config: testAccResourceProjectForceDeleteEnabled(forceDeleteProjName, desc),
