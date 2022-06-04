@@ -7,7 +7,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/mitchellh/hashstructure"
+	"github.com/nav-inc/datetime"
 	"strconv"
+	"time"
 )
 
 // todo:
@@ -113,8 +115,18 @@ func dataCloudTruthParameters() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
+			"as_of": {
+				Description: "Filter for all parameter values defined 'as of' the specified ISO 8601 date, , mutually exclusive with 'tag'",
+				Type:        schema.TypeString,
+				Optional:    true,
+			},
+			"tag": {
+				Description: "Filter for parameter values matching a specific tag, mutually exclusive with 'as_of'",
+				Type:        schema.TypeString,
+				Optional:    true,
+			},
 			"parameter_values": {
-				Description: "The computed values for the CloudTruth Parameter",
+				Description: "The computed values for all CloudTruth Parameters matching the filter(s) and environment",
 				Type:        schema.TypeMap,
 				Computed:    true,
 			},
@@ -132,10 +144,29 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
-	// guaranteed to be set to "default" if not explicitly specified
+	// set to "default" if not explicitly specified
 	environment := d.Get("environment").(string)
-	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		*projectID).Environment(environment).Execute()
+
+	// Handle as_of and tag filters
+	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
+		*projectID).Environment(environment)
+	asOf := d.Get("as_of").(string)
+	tag := d.Get("tag").(string)
+	if asOf != "" {
+		if tag != "" {
+			return diag.Errorf("'as_of' and 'tag' cannot both be specified as parameter filters")
+		}
+		asOfTime, err := datetime.Parse(asOf, time.UTC)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		paramListRequest = paramListRequest.AsOf(asOfTime)
+	}
+	if tag != "" {
+		paramListRequest = paramListRequest.Tag(tag)
+	}
+
+	resp, r, err := paramListRequest.Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("error looking up parameters in the %s environment in the %s project: %+v",
 			environment, project, r))
@@ -159,8 +190,9 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		// HasNext() doesn't do what we want :(
 		if resp.GetNext() != "" {
 			pageNum++
-			resp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-				*projectID).Environment(environment).Page(pageNum).Execute()
+			paramListRequest = c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
+				*projectID).Environment(environment).Page(pageNum)
+			resp, r, err = paramListRequest.Execute()
 			if err != nil {
 				return diag.FromErr(fmt.Errorf("error looking up parameters in the %s environment in the %s project: %+v",
 					environment, project, r))
@@ -180,6 +212,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	}
 
 	// todo: add tests where the value actually changes
+	// also pagination tests
 	// We hash the contents of the map to determine if any parameters have changed
 	// NOTE: this is stable in regards to map order, see
 	// https://github.com/mitchellh/hashstructure/blob/master/hashstructure.go#L242

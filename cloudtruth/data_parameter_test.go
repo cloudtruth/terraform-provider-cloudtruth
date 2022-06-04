@@ -100,6 +100,7 @@ func TestAccDataSourceParameters(t *testing.T) {
 }
 
 // Confirm that we have the correct map of parameter values for each environment
+// We only check for these parameters, other ephemeral parameters will exist when resource tests run
 func testAccCheckParametersValueMap(resourceName string, expMap map[string]interface{}) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[resourceName]
