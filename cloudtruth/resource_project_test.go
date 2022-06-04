@@ -47,20 +47,26 @@ func TestAccResourceProjectForceDelete(t *testing.T) {
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
 		// todo: uncomment when https://github.com/hashicorp/terraform-plugin-sdk/pull/976 has been merged
+		// and allows us to confirm that the delete indeed fails, for now we
 		//ExpectDestroyError: regexp.MustCompile(`.*cannot be deleted from the CloudTruth provider, you must enable 'force_delete' to allow this deletes.*`),
 		Steps: []resource.TestStep{
-			{ // The delete should fail
+			{
 				Config: testAccResourceProjectForceDeleteDisabled(forceDeleteProjName, desc),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "name", forceDeleteProjName),
 					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "description", desc),
+					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "force_delete",
+						strconv.FormatBool(false)),
 				),
 			},
-			{ // Then set force_delete = true and there should be no errors
+			{ // todo: move this to a new Test(Step) when we can validate that the above delete fails
+				// keeping it here now ensures that temporary resource cleanup will happen
 				Config: testAccResourceProjectForceDeleteEnabled(forceDeleteProjName, desc),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "name", forceDeleteProjName),
 					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "description", desc),
+					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "force_delete",
+						strconv.FormatBool(true)),
 				),
 			},
 		},
