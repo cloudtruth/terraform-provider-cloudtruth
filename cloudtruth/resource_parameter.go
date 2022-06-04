@@ -56,13 +56,8 @@ func resourceParameter() *schema.Resource {
 				Optional:    true,
 				Default:     false,
 			},
-			"type": { // todo: handle this
-				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
-				Type:        schema.TypeString,
-				Optional:    true,
-			},
 			"evaluate": { // todo: handle this
-				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
+				Description: "Whether or not the Parameter is a secret, defaults to false/non-se",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
@@ -104,23 +99,18 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 
 	// Then add its value in the specified environment
 	// guaranteed to be set to "default" if not explicitly specified
-	// todo: refactor this into its own function
 	paramEnv := d.Get("environment").(string)
 	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	// todo: handle multiple param/value/env instances, possibly with a map
 	// if unset, we default to an empty string/nil
 	value := d.Get("value").(string)
 	valueCreate := cloudtruthapi.NewValueCreate(value)
 	valueCreate.SetInternalValue(value)
 	valueCreate.SetEnvironment(*paramEnvID)
-	// todo: someday support external values
 	valueCreate.SetExternal(false)
-	//todo: evaluate
-	//todo: wrap
 	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
 		paramID, *projID).ValueCreate(*valueCreate).Execute()
 	if err != nil {
@@ -164,6 +154,11 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		patchedParam.SetDescription(paramDesc)
 		hasParamChange = true
 	}
+	if d.HasChange("secret") {
+		paramIsSecret := d.Get("secret").(bool)
+		patchedParam.SetSecret(paramIsSecret)
+		hasParamChange = true
+	}
 	if hasParamChange {
 		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersPartialUpdate(ctx, paramID, *projID).
 			PatchedParameter(patchedParam).Execute()
@@ -172,16 +167,23 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		}
 	}
 
-	patchedParamValue := cloudtruthapi.NewPatchedValue()
+	updateValue := cloudtruthapi.NewValueWithDefaults()
 	hasParamValueChange := false
 	if d.HasChange("value") {
-		paramValue := d.Get("value").(string)
-		patchedParamValue.SetValue(paramValue)
+		value := d.Get("value").(string)
+		updateValue.SetInternalValue(value)
+		paramEnv := d.Get("environment").(string)
+		paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		updateValue.SetEnvironment(*paramEnvID)
+		updateValue.SetExternal(false)
 		hasParamValueChange = true
 	}
 	if hasParamValueChange {
-		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesPartialUpdate(ctx, paramValueID, paramID,
-			*projID).PatchedValue(*patchedParamValue).Execute()
+		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
+			*projID).Value(*updateValue).Execute()
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -213,12 +215,10 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(err)
 	}
 
-	// todo: proceed only if force_delete is set to true
 	// We iterate over the values for the parameter, where the keys are the URLs of the corresponding
 	// environments. If they are all null, we delete the parameter. If they are all null except the one matching
 	// the specified environment, we delete the parameter.
 	// Otherwise, we delete the specific value defined in the target environment
-	// todo: lots of testing here
 	paramEnv := d.Get("environment").(string)
 	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
 	if err != nil {
