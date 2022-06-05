@@ -57,10 +57,10 @@ func resourceParameter() *schema.Resource {
 				Default:     false,
 			},
 			"evaluate": {
-				Description: "Whether to run template evaluation on the Parameter's value aka 'dynamic'",
+				Description: "Whether to run template evaluation on the Parameter's value aka 'dynamic', incompatible with secret parameters",
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Default:     false,
+				Default:     true,
 			},
 			"external": {
 				Description: "Whether the value is a reference to a value in an external system or defined in CloudTruth, defaults to false",
@@ -119,17 +119,19 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	// if unset, we default to an empty string/nil
 	value := d.Get("value").(string)
 	external := d.Get("external").(bool)
+	evaluate := d.Get("evaluate").(bool)
 	valueCreate := cloudtruthapi.NewValueCreate(value)
 	valueCreate.SetInternalValue(value)
 	valueCreate.SetEnvironment(*paramEnvID)
 	valueCreate.SetExternal(external)
+	valueCreate.SetInterpolated(evaluate)
 	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
 		paramID, *projID).ValueCreate(*valueCreate).Execute()
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	// We use a composite ID - <PARAMATER_ID>:<PARAMETER_VALUE_ID>
+	// Composite ID - <PARAMATER_ID>:<PARAMETER_VALUE_ID>
 	d.SetId(fmt.Sprintf("%s:%s", paramID, valueResp.GetId()))
 	return diags
 }
@@ -197,7 +199,11 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		updateValue.SetExternal(external)
 		hasParamValueChange = true
 	}
-
+	if d.HasChange("evaluate") {
+		evalValue := d.Get("evaluate").(bool)
+		updateValue.SetInterpolated(evalValue)
+		hasParamChange = true
+	}
 	if hasParamValueChange {
 		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
 			*projID).Value(*updateValue).Execute()
