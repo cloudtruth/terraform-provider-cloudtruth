@@ -8,9 +8,6 @@ import (
 )
 
 // providerVersion represents the current version of the provider.
-// todo:
-// overwrite it during the release process.
-// support env and project IDs for a entities which accept names
 var providerVersion = "dev"
 
 func Provider() *schema.Provider {

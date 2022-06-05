@@ -10,8 +10,6 @@ import (
 	"strings"
 )
 
-// todo:
-// force_delete support
 func resourceParameter() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.
@@ -202,7 +200,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	if d.HasChange("evaluate") {
 		evalValue := d.Get("evaluate").(bool)
 		updateValue.SetInterpolated(evalValue)
-		hasParamChange = true
+		hasParamValueChange = true
 	}
 	if hasParamValueChange {
 		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,

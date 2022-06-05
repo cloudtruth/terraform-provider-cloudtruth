@@ -12,8 +12,6 @@ const updateParamDesc = "A new description of an parameter"
 const paramVal = "A useful string"
 const updateParamVal = "A new useful string"
 
-// todo: add a non-default parent test
-// and re-parent test if applicable
 func TestAccResourceParameterBasic(t *testing.T) {
 	createParamName := fmt.Sprintf("TestParam-%s", resource.UniqueId())
 	resource.Test(t, resource.TestCase{
