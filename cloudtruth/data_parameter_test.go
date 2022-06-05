@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+// todo generate the parameters on the fly in a TF state instead of relying on pre-canned ones
+// we can rely on a project and the default environments but that's it
 const testAccParameter = `
 data "cloudtruth_parameter" "nonsecret" {
   project     = "%s"

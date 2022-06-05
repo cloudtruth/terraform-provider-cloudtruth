@@ -28,6 +28,8 @@ func TestAccResourceParameterBasic(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "value", paramVal),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "secret",
 						strconv.FormatBool(false)),
+					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "external",
+						strconv.FormatBool(false)),
 				),
 			},
 			{
@@ -38,6 +40,8 @@ func TestAccResourceParameterBasic(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "value", updateParamVal),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "secret",
 						strconv.FormatBool(true)),
+					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "external",
+						strconv.FormatBool(false)),
 				),
 			},
 		},
@@ -55,6 +59,7 @@ func testAccResourceParameterCreateBasic(projName, paramName, desc, value string
 	`, projName, paramName, desc, value)
 }
 
+// todo external test
 func testAccResourceParameterUpdateBasic(projName, paramName, desc, value string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_parameter" "basic" {

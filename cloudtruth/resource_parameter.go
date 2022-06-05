@@ -56,16 +56,27 @@ func resourceParameter() *schema.Resource {
 				Optional:    true,
 				Default:     false,
 			},
-			"evaluate": { // todo: handle this
-				Description: "Whether or not the Parameter is a secret, defaults to false/non-se",
-				Type:        schema.TypeString,
+			"evaluate": {
+				Description: "Whether to run template evaluation on the Parameter's value aka 'dynamic'",
+				Type:        schema.TypeBool,
 				Optional:    true,
+				Default:     false,
+			},
+			"external": {
+				Description: "Whether the value is a reference to a value in an external system or defined in CloudTruth, defaults to false",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
 			},
 		},
 	}
 }
 
-// We treat the parameter and its per environment value as one provider object
+// todo: test and handle cases where the parameter exists by name in the target env and create only needs
+// to add a new value
+// In Terraform terms, a 'resource_parameter' represents a CloudTruth Parameter AND its environment specific value
+// Therefore, when this provider destroys a parameter resource, it only removes the per-environment value unless
+// the parameter is only defined in one environment, in which case it is destroyed entirely
 func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterCreate")
 	var diags diag.Diagnostics
@@ -107,10 +118,11 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 
 	// if unset, we default to an empty string/nil
 	value := d.Get("value").(string)
+	external := d.Get("external").(bool)
 	valueCreate := cloudtruthapi.NewValueCreate(value)
 	valueCreate.SetInternalValue(value)
 	valueCreate.SetEnvironment(*paramEnvID)
-	valueCreate.SetExternal(false)
+	valueCreate.SetExternal(external)
 	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
 		paramID, *projID).ValueCreate(*valueCreate).Execute()
 	if err != nil {
@@ -178,9 +190,14 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 			return diag.FromErr(err)
 		}
 		updateValue.SetEnvironment(*paramEnvID)
-		updateValue.SetExternal(false)
 		hasParamValueChange = true
 	}
+	if d.HasChange("external") {
+		external := d.Get("external").(bool)
+		updateValue.SetExternal(external)
+		hasParamValueChange = true
+	}
+
 	if hasParamValueChange {
 		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
 			*projID).Value(*updateValue).Execute()
