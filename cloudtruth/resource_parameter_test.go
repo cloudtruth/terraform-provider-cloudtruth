@@ -11,6 +11,7 @@ const paramDesc = "Just a description of a parameter"
 const updateParamDesc = "A new description of an parameter"
 const paramVal = "A useful string"
 const updateParamVal = "A new useful string"
+const prodParamVal = "A useful string only in production"
 
 func TestAccResourceParameterBasic(t *testing.T) {
 	createParamName := fmt.Sprintf("TestParam-%s", resource.UniqueId())
@@ -25,7 +26,7 @@ func TestAccResourceParameterBasic(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "description", paramDesc),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "value", paramVal),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "secret",
-						strconv.FormatBool(true)),
+						strconv.FormatBool(false)),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "external",
 						strconv.FormatBool(false)),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "evaluate",
@@ -43,21 +44,14 @@ func TestAccResourceParameterBasic(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "external",
 						strconv.FormatBool(false)),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "evaluate",
-						strconv.FormatBool(true)),
+						strconv.FormatBool(false)),
 				),
 			},
 			{
-				Config: testAccResourceParameterCreateProdOnly(accTestProject, createParamName, paramDesc, paramVal),
+				Config: testAccResourceParameterCreateProdOnly(createParamName, paramVal, createParamName, prodParamVal),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "name", createParamName),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "description", paramDesc),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "value", paramVal),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "secret",
-						strconv.FormatBool(false)),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "external",
-						strconv.FormatBool(false)),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "evaluate",
-						strconv.FormatBool(true)),
+					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "value", prodParamVal),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "environment", "production"),
 				),
 			},
@@ -72,13 +66,10 @@ func testAccResourceParameterCreateBasic(projName, paramName, desc, value string
   		name        = "%s"
   		description = "%s"
         value       = "%s"
-        secret      = true # start off as secret == true, evaluate == false
-        evaluate    = false
 	}
 	`, projName, paramName, desc, value)
 }
 
-// todo external test
 func testAccResourceParameterUpdateBasic(projName, paramName, desc, value string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_parameter" "basic" {
@@ -86,24 +77,27 @@ func testAccResourceParameterUpdateBasic(projName, paramName, desc, value string
   		name        = "%s"
   		description = "%s"
         value       = "%s"
-        secret      = false 
-        evaluate    = true # secrets cannot be evaluated/dynamic
 	}
 	`, projName, paramName, desc, value)
 }
 
 // This is a case where we create a parameter using the same name but overriding it in the
 // production environment i.e. not inheriting from the default environment
-func testAccResourceParameterCreateProdOnly(projName, paramName, desc, value string) string {
+func testAccResourceParameterCreateProdOnly(defaultParam, value, prodParam, prodValue string) string {
 	return fmt.Sprintf(`
+	resource "cloudtruth_parameter" "basic" {
+        project     = "AcceptanceTest"
+  		name        = "%s"
+  		description = "Just a description of a parameter"
+        value       = "%s"
+	}	
+
 	resource "cloudtruth_parameter" "prod_only" {
-		project     = "%s"
+		project     = "AcceptanceTest"
         environment = "production"
   		name        = "%s"
-  		description = "%s"
+  		description = "Just a description of a parameter"
         value       = "%s"
-        secret      = false
-        evaluate    = true
 	}
-	`, projName, paramName, desc, value)
+	`, defaultParam, value, prodParam, prodValue)
 }
