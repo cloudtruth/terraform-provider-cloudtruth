@@ -96,6 +96,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 		// We use a composite ID - <PARAMATER_ID>:<PARAMETER_VALUE_ID>
 		d.SetId(fmt.Sprintf("%s:%s", paramID, v.GetId()))
 	}
+
 	return nil
 }
 

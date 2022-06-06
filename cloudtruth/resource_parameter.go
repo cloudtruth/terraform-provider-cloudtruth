@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"io"
 	"strings"
 )
 
@@ -70,8 +71,6 @@ func resourceParameter() *schema.Resource {
 	}
 }
 
-// todo: test and handle cases where the parameter exists by name in the target env and create only needs
-// to add a new value
 // In Terraform terms, a 'resource_parameter' represents a CloudTruth Parameter AND its environment specific value
 // Therefore, when this provider destroys a parameter resource, it only removes the per-environment value unless
 // the parameter is only defined in one environment, in which case it is destroyed entirely
@@ -97,41 +96,86 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(err)
 	}
 
-	// NOTE: a parameter will exist in any/all environments however, its value may be set/overridden/inherited across
-	// multiple environments
-	paramResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(context.Background(),
-		*projID).ParameterCreate(*paramCreate).Execute()
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	paramID := paramResp.GetId()
-
-	// Then add its value in the specified environment
-	// guaranteed to be set to "default" if not explicitly specified
 	paramEnv := d.Get("environment").(string)
 	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	// if unset, we default to an empty string/nil
-	value := d.Get("value").(string)
-	external := d.Get("external").(bool)
-	evaluate := d.Get("evaluate").(bool)
-	valueCreate := cloudtruthapi.NewValueCreate(value)
-	valueCreate.SetInternalValue(value)
-	valueCreate.SetEnvironment(*paramEnvID)
-	valueCreate.SetExternal(external)
-	valueCreate.SetInterpolated(evaluate)
-	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
-		paramID, *projID).ValueCreate(*valueCreate).Execute()
-	if err != nil {
-		return diag.FromErr(err)
+	// NOTE: a parameter will exist in any/all environments however, its value may be set/overridden/inherited across
+	// multiple environments
+	var paramID, valueID string
+	paramResp, resp, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(context.Background(),
+		*projID).ParameterCreate(*paramCreate).Execute()
+	if err != nil { // Handle the case where the parameter exists but might not be explicitly defined in this env
+		b, err := io.ReadAll(resp.Body)
+		if err != nil {
+			diag.FromErr(err)
+		}
+		if strings.Contains(string(b), "Parameter with this Project and Name already exists") {
+			fetchParamID, fetchErr := fetchParamIDForValueCreate(ctx, *paramEnvID, paramEnv, *projID, paramName, meta)
+			fmt.Println(paramID)
+			if fetchErr != nil {
+				return diag.FromErr(err)
+			}
+			paramID = fetchParamID
+		}
+	} else {
+		// if good, we use this
+		// else we set
+		paramID = paramResp.GetId() // if unset, we default to an empty string/nil
+		value := d.Get("value").(string)
+		external := d.Get("external").(bool)
+		evaluate := d.Get("evaluate").(bool)
+		valueCreate := cloudtruthapi.NewValueCreate(value)
+		valueCreate.SetInternalValue(value)
+		valueCreate.SetEnvironment(*paramEnvID)
+		valueCreate.SetExternal(external)
+		valueCreate.SetInterpolated(evaluate)
+		valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
+			paramID, *projID).ValueCreate(*valueCreate).Execute()
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		valueID = valueResp.GetId()
 	}
 
-	// Composite ID - <PARAMATER_ID>:<PARAMETER_VALUE_ID>
-	d.SetId(fmt.Sprintf("%s:%s", paramID, valueResp.GetId()))
+	// Then add its value in the specified environment
+	// Composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
+	d.SetId(fmt.Sprintf("%s:%s", paramID, valueID))
 	return diags
+}
+
+func fetchParamIDForValueCreate(ctx context.Context, paramEnvID, paramEnv, projectID, name string, meta any) (string, error) {
+	c := meta.(*cloudTruthClient)
+	tflog.Debug(ctx, "fetchValueIDAndEnv")
+
+	// We look up the parameter value in the target env
+	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
+		projectID).Environment(paramEnvID).Name(name).Execute()
+	if err != nil {
+		return "", fmt.Errorf("error looking up parameter %s: %+v", name, r)
+	}
+
+	// There should be 0 or 1
+	// todo: handle 0, maybe just 1
+	if resp.GetCount() == 1 {
+		param := resp.GetResults()[0]
+		values := param.GetValues()
+		paramID := param.GetId()
+		for _, v := range values {
+			if v.GetEnvironmentName() != paramEnv {
+				// We can add it
+				fmt.Println(paramID)
+				return paramID, nil
+			} else {
+				return "", fmt.Errorf("the parameter %s is already explicitly defined in the %s environment",
+					name, paramEnv)
+			}
+		}
+	}
+
+	return "", nil
 }
 
 func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
