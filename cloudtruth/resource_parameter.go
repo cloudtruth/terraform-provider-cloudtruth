@@ -111,75 +111,36 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	value := d.Get("value").(string)
 	if lookupResp.GetCount() == 1 {
 		paramID = lookupResp.GetResults()[0].GetId()
-		external := d.Get("external").(bool)
-		evaluate := d.Get("evaluate").(bool)
-		valueCreate := cloudtruthapi.NewValueCreate(value)
-		valueCreate.SetInternalValue(value)
-		valueCreate.SetEnvironment(*paramEnvID)
-		valueCreate.SetExternal(external)
-		valueCreate.SetInterpolated(evaluate)
-		valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
-			paramID, *projID).ValueCreate(*valueCreate).Execute()
-		if err != nil {
-			return diag.FromErr(err)
-		}
-		valueID = valueResp.GetId()
+
 	} else {
 		// if good, we use this
 		// else we set
 		paramCreateResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(context.Background(),
 			*projID).ParameterCreate(*paramCreate).Execute()
-		paramID = paramCreateResp.GetId() // if unset, we default to an empty string/nil
-		external := d.Get("external").(bool)
-		evaluate := d.Get("evaluate").(bool)
-		valueCreate := cloudtruthapi.NewValueCreate(value)
-		valueCreate.SetInternalValue(value)
-		valueCreate.SetEnvironment(*paramEnvID)
-		valueCreate.SetExternal(external)
-		valueCreate.SetInterpolated(evaluate)
-		valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
-			paramID, *projID).ValueCreate(*valueCreate).Execute()
 		if err != nil {
 			return diag.FromErr(err)
 		}
-		valueID = valueResp.GetId()
+		paramID = paramCreateResp.GetId()
 	}
+	external := d.Get("external").(bool)
+	evaluate := d.Get("evaluate").(bool)
+	valueCreate := cloudtruthapi.NewValueCreate(value)
+	valueCreate.SetInternalValue(value)
+	valueCreate.SetEnvironment(*paramEnvID)
+	valueCreate.SetExternal(external)
+	valueCreate.SetInterpolated(evaluate)
+	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
+		paramID, *projID).ValueCreate(*valueCreate).Execute()
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	valueID = valueResp.GetId()
 
 	// Then add its value in the specified environment
 	// Composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
 	internalID := fmt.Sprintf("%s:%s", paramID, valueID)
 	d.SetId(internalID)
 	return diags
-}
-
-func fetchParamIDForValueUpdate(ctx context.Context, paramEnvID, paramEnv, projectID, name string, meta any) (string, string, error) {
-	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "fetchValueIDAndEnv")
-
-	// We look up the parameter value in the target env
-	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		projectID).Environment(paramEnvID).Name(name).Execute()
-	if err != nil {
-		return "", "", fmt.Errorf("error looking up parameter %s: %+v", name, r)
-	}
-
-	// There should be 1
-	if resp.GetCount() == 1 {
-		param := resp.GetResults()[0]
-		values := param.GetValues()
-		paramID := param.GetId()
-		for _, v := range values {
-			if v.GetEnvironmentName() != paramEnv {
-				// We can add it
-				fmt.Println(paramID)
-				return paramID, v.GetId(), nil
-			} else {
-				return "", "", fmt.Errorf("the parameter %s is already explicitly defined in the %s environment",
-					name, paramEnv)
-			}
-		}
-	}
-	return "", "", fmt.Errorf("failed to fetch the ID for parameter %s", name)
 }
 
 func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
