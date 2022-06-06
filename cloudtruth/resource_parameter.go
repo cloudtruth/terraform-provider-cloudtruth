@@ -108,29 +108,28 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("error looking up parameter %s: %+v", paramName, r))
 	}
+	value := d.Get("value").(string)
 	if lookupResp.GetCount() == 1 {
-		value := d.Get("value").(string)
-		updateValue := cloudtruthapi.NewValueWithDefaults()
-		updateValue.SetInternalValue(value)
-		updateValue.SetEnvironment(*paramEnvID)
-		fetchParamID, paramValID, fetchErr := fetchParamIDForValueUpdate(ctx, *paramEnvID, paramEnv, *projID, paramName, meta)
-		if fetchErr != nil {
-			return diag.FromErr(err)
-		}
-		paramID = fetchParamID
-		resp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValID, paramID,
-			*projID).Value(*updateValue).Execute()
+		paramID = lookupResp.GetResults()[0].GetId()
+		external := d.Get("external").(bool)
+		evaluate := d.Get("evaluate").(bool)
+		valueCreate := cloudtruthapi.NewValueCreate(value)
+		valueCreate.SetInternalValue(value)
+		valueCreate.SetEnvironment(*paramEnvID)
+		valueCreate.SetExternal(external)
+		valueCreate.SetInterpolated(evaluate)
+		valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
+			paramID, *projID).ValueCreate(*valueCreate).Execute()
 		if err != nil {
 			return diag.FromErr(err)
 		}
-		valueID = resp.GetId()
+		valueID = valueResp.GetId()
 	} else {
 		// if good, we use this
 		// else we set
 		paramCreateResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(context.Background(),
 			*projID).ParameterCreate(*paramCreate).Execute()
 		paramID = paramCreateResp.GetId() // if unset, we default to an empty string/nil
-		value := d.Get("value").(string)
 		external := d.Get("external").(bool)
 		evaluate := d.Get("evaluate").(bool)
 		valueCreate := cloudtruthapi.NewValueCreate(value)
