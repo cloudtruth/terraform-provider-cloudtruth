@@ -9,10 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// todo:
-// add force delete
-// add parent project support + tests, confirm update support i.e. re-parenting
-// data source? import support?
 func resourceProject() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.
@@ -39,7 +35,7 @@ func resourceProject() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"force_delete": { // todo: handle this
+			"force_delete": {
 				Description: "Whether to allow Terraform to delete the project or not",
 				Type:        schema.TypeBool,
 				Optional:    true,

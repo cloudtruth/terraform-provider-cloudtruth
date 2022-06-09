@@ -12,12 +12,6 @@ import (
 	"time"
 )
 
-// todo:
-// possible support for wrap, maybe also evaluate and mask_secrets
-// some more tests, including negative cases
-// add filters to the plural data type
-// add type support or just interpret all param sources as strings?
-// the API returns them as strings
 func dataCloudTruthParameter() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth parameter data source",
@@ -48,7 +42,6 @@ func dataCloudTruthParameter() *schema.Resource {
 	}
 }
 
-// FIX: likely need to use the composite ID here too
 func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParameterRead")
@@ -100,7 +93,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	return nil
 }
 
-// Return a map of env -> parameter values
+// Return a map of parameter names -> parameter values
 func dataCloudTruthParameters() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth Parameter data source",
@@ -117,7 +110,7 @@ func dataCloudTruthParameters() *schema.Resource {
 				Optional:    true,
 			},
 			"as_of": {
-				Description: "Filter for all parameter values defined 'as of' the specified ISO 8601 date, , mutually exclusive with 'tag'",
+				Description: "Filter for all parameter values defined 'as of' the specified ISO 8601 date, mutually exclusive with 'tag'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
@@ -135,7 +128,6 @@ func dataCloudTruthParameters() *schema.Resource {
 	}
 }
 
-// todo: maybe break this up into 2 or more smaller functions
 func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParametersRead")
@@ -179,7 +171,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	for results != nil {
 		for _, res := range results {
 			paramName := res.GetName()
-			// There should only ever be one value but the result is a map, so we iterate over it
+			// There should only be one value but the result is a map, so we iterate over it
 			for _, v := range res.GetValues() {
 				paramEnvValue := v.GetValue()
 				// We need to exclude parameters that do not have values set in the target environment
@@ -212,10 +204,10 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
-	// todo: add tests where the value actually changes
-	// also pagination tests
+	// todo: this needs to be re-worked. . . the ID should actually be something like
+	// environment name + filter id(s)
 	// We hash the contents of the map to determine if any parameters have changed
-	// NOTE: this is stable in regards to map order, see
+	// NOTE: this is stable regarding map order, see
 	// https://github.com/mitchellh/hashstructure/blob/master/hashstructure.go#L242
 	d.SetId(strconv.FormatUint(hash, 10))
 	return nil

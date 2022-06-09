@@ -10,10 +10,12 @@ package cloudtruth
 // Constants and variables which are unique per resource/data source type are located in the
 // corresponding *_test.go files
 const (
-	defaultEnv      = "default"
-	accTestProject  = "AcceptanceTest"
-	regularParam    = "DefaultRegularParam"
-	regularParamVal = "notreallyasecret"
-	secretParam     = "DefaultSecretParam"
-	secretParamVal  = "ultratopsecret"
+	defaultEnv       = "default"
+	accTestProject   = "AcceptanceTest"
+	regularParam     = "DefaultRegularParam"
+	regularParamVal  = "notreallyasecret"
+	secretParam      = "DefaultSecretParam"
+	secretParamVal   = "ultratopsecret"
+	basicTemplate    = "BasicTemplate"
+	basicTemplateVal = "Regular Parameter: notreallyasecret, Secret Parameter ultratopsecret"
 )

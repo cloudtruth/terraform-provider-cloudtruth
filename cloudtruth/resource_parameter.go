@@ -54,8 +54,8 @@ func resourceParameter() *schema.Resource {
 				Optional:    true,
 				Default:     false,
 			},
-			"evaluate": {
-				Description: "Whether to run template evaluation on the Parameter's value aka 'dynamic', incompatible with secret parameters",
+			"dynamic": {
+				Description: "Whether to run template evaluation on the Parameter's value incompatible with secret parameters",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
@@ -123,12 +123,12 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		paramID = paramCreateResp.GetId()
 	}
 	external := d.Get("external").(bool)
-	evaluate := d.Get("evaluate").(bool)
+	dynamic := d.Get("dynamic").(bool)
 	valueCreate := cloudtruthapi.NewValueCreate(value)
 	valueCreate.SetInternalValue(value)
 	valueCreate.SetEnvironment(*paramEnvID)
 	valueCreate.SetExternal(external)
-	valueCreate.SetInterpolated(evaluate)
+	valueCreate.SetInterpolated(dynamic)
 	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
 		paramID, *projID).ValueCreate(*valueCreate).Execute()
 	if err != nil {
@@ -206,8 +206,8 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		updateValue.SetExternal(external)
 		hasParamValueChange = true
 	}
-	if d.HasChange("evaluate") {
-		evalValue := d.Get("evaluate").(bool)
+	if d.HasChange("dynamic") {
+		evalValue := d.Get("dynamic").(bool)
 		updateValue.SetInterpolated(evalValue)
 		hasParamValueChange = true
 	}

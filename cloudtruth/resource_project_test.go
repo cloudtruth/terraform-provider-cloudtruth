@@ -10,8 +10,6 @@ import (
 const desc = "Just a description of a project"
 const updateDesc = "A new description of a project"
 
-// todo: add a non-default parent test
-// and re-parent test if applicable
 func TestAccResourceProjectBasic(t *testing.T) {
 	createProjName := fmt.Sprintf("TestProject-%s", resource.UniqueId())
 	updateProjName := fmt.Sprintf("updated-%s", createProjName)

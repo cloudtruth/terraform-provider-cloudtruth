@@ -39,12 +39,6 @@ func resourceTemplate() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"force_delete": { // todo: handle this
-				Description: "Whether to allow Terraform to delete the CloudTruth Parameter or not",
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-			},
 		},
 	}
 }
