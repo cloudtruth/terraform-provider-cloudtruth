@@ -37,6 +37,7 @@ jobs:
     - uses: golangci/golangci-lint-action@v3.2.0
       with:
           args: -v --timeout 1h ./...
+	  skip-cache: true
     - name: Lint Terraform
       uses: actionshub/terraform-lint@main
 
@@ -64,9 +65,9 @@ jobs:
       matrix:
         # list whatever Terraform versions here you would like to support
         terraform:
-          #- '0.15.*'
+          - '0.15.*'
           #- '1.0.*'
-          - '1.1.*'
+          #- '1.1.*'
     steps:
 
     - name: Set up Go
