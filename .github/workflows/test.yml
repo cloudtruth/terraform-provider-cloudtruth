@@ -37,7 +37,7 @@ jobs:
     - uses: golangci/golangci-lint-action@v3.2.0
       with:
           args: -v --timeout 1h ./...
-	  skip-cache: true
+          skip-cache: true
     - name: Lint Terraform
       uses: actionshub/terraform-lint@main
 
