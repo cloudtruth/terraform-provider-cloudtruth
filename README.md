@@ -32,7 +32,9 @@ Then commit the changes to `go.mod` and `go.sum`.
 
 ## Using the provider
 
-Fill this in for each provider
+To run the provider locally, run `make install` from the repository root. Note that this currently only works on Linux. 
+See the `.tf` files in the examples directory. Note that you may need to modify the path and version fields in your provider block
+to target your locally installed instance.
 
 ## Developing the Provider
 
@@ -45,6 +47,13 @@ To generate or update documentation, run `go generate`.
 In order to run the full suite of Acceptance tests, run `make testacc`.
 
 *Note:* Acceptance tests create real resources, and often cost money to run.
+
+If you run the tests in a fork of this repo, you will need to recreate the boilerplate CloudTruth resources which exist in the dedicated
+acceptance test account. We will provide a bootstrapping script to ensure that these resource exist in your account.
+Additionally, you will need to specify the target CloudTruth project and environment(s) as well as your CloudTruth API key. You can
+specify the API key with a `TF_VAR_cloudtruth_api_key` environment variable or with a `CLOUDTRUTH_API_KEY` environment variable (a la the CloudTruth 
+CLI). You can specify the the project and/or environments inline in your HCL files or via the `CLOUDTRUTH_PROJECT` and `CLOUDTRUTH_ENVIRONMENT` 
+environment variables. 
 
 ```sh
 $ make testacc
