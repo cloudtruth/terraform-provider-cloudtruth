@@ -38,8 +38,9 @@ func TestAccResourceEnvBasic(t *testing.T) {
 func TestAccResourceEnvForceDelete(t *testing.T) {
 	forceDeleteEnvName := fmt.Sprintf("TestDeleteEnv-%s", resource.UniqueId())
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
-		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
 		// todo: uncomment when https://github.com/hashicorp/terraform-plugin-sdk/pull/976 has been merged
 		// and allows us to confirm that the delete indeed fails, for now we
 		//ExpectDestroyError: regexp.MustCompile(`.*cannot be deleted from the CloudTruth provider, you must enable 'force_delete' to allow this deletes.*`),

@@ -47,8 +47,9 @@ var expEnvValues = map[string]interface{}{
 
 func TestDataSourceParameter(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
-		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
 				Config: fmt.Sprintf(testAccParameter, accTestProject, defaultEnv,
@@ -83,8 +84,9 @@ func TestDataSourceParameter(t *testing.T) {
 
 func TestAccDataSourceParameters(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
-		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
 				Config: fmt.Sprintf(testAccParameters, accTestProject, "default"),

@@ -16,8 +16,9 @@ data "cloudtruth_template" "basic" {
 
 func TestDataSourceTemplate(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
-		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
 				Config: fmt.Sprintf(testAccTemplate, accTestProject, defaultEnv, basicTemplate),

@@ -14,8 +14,9 @@ const updateTemplateValue = "some_other_var={{ProdOnlyRegularParam}}"
 func TestAccResourceTemplateBasic(t *testing.T) {
 	createTemplateName := fmt.Sprintf("TestTemplate-%s", resource.UniqueId())
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
-		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccResourceTemplateCreateBasic(createTemplateName, templateDesc, templateValue),

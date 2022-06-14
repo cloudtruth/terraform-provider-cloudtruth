@@ -16,8 +16,9 @@ const prodParamVal = "A useful string only in production"
 func TestAccResourceParameterBasic(t *testing.T) {
 	createParamName := fmt.Sprintf("TestParam-%s", resource.UniqueId())
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
-		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccResourceParameterCreateBasic(accTestProject, createParamName, paramDesc, paramVal),

@@ -14,8 +14,9 @@ func TestAccResourceProjectBasic(t *testing.T) {
 	createProjName := fmt.Sprintf("TestProject-%s", resource.UniqueId())
 	updateProjName := fmt.Sprintf("updated-%s", createProjName)
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
-		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccResourceProjectCreateBasic(createProjName, desc),
@@ -42,8 +43,9 @@ func TestAccResourceProjectBasic(t *testing.T) {
 func TestAccResourceProjectForceDelete(t *testing.T) {
 	forceDeleteProjName := fmt.Sprintf("TestDeleteProject-%s", resource.UniqueId())
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
-		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
 		// todo: uncomment when https://github.com/hashicorp/terraform-plugin-sdk/pull/976 has been merged
 		// and allows us to confirm that the delete indeed fails, for now we set force_
 		//ExpectDestroyError: regexp.MustCompile(`.*cannot be deleted from the CloudTruth provider, you must enable 'force_delete' to allow this deletes.*`),
