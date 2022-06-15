@@ -8,9 +8,8 @@ import (
 )
 
 var (
-// used by goreleaser
-// version string = "dev"
-// commit  string = ""
+	// used by goreleaser
+	version string = "dev"
 )
 
 func main() {
@@ -21,7 +20,7 @@ func main() {
 	opts := &plugin.ServeOpts{
 		Debug:        debugMode,
 		ProviderAddr: "registry.terraform.io/terraform-provider-cloudtruth/cloudtruth",
-		ProviderFunc: cloudtruth.Provider,
+		ProviderFunc: cloudtruth.New(version),
 	}
 	plugin.Serve(opts)
 }

@@ -6,10 +6,8 @@ GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 PKG_NAME=cloudtruth
 WEBSITE_REPO=github.com/hashicorp/terraform-website
 
-# todo: revert this
-# VERSION=$(shell [ ! -z `git tag -l --contains HEAD` ] && git tag -l --contains HEAD || git rev-parse --short HEAD)
+VERSION=$(shell [ ! -z `git tag -l --contains HEAD` ] && git tag -l --contains HEAD || git rev-parse --short HEAD)
 
-VERSION=0.0.1
 GOPATH=$(shell go env GOPATH)
 
 default: build
