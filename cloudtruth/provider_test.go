@@ -10,19 +10,19 @@ import (
 var (
 	testProviderFactories = map[string]func() (*schema.Provider, error){
 		"cloudtruth": func() (*schema.Provider, error) {
-			return Provider(), nil
+			return New("dev")(), nil
 		},
 	}
 )
 
 func TestProvider(t *testing.T) {
-	if err := Provider().InternalValidate(); err != nil {
+	if err := New("dev")().InternalValidate(); err != nil {
 		t.Fatalf("err: %s", err)
 	}
 }
 
 func TestProvider_impl(t *testing.T) {
-	var _ = Provider()
+	var _ = New("dev")
 }
 
 func testAccPreCheck(t *testing.T) {
