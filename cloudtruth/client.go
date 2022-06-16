@@ -104,7 +104,7 @@ func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID strin
 		}
 	}
 	if val, ok := c.projectNames[projNameOrID]; ok {
-		tflog.Debug(ctx, fmt.Sprintf("Found project by name %s, with id %s", projNameOrID, val))
+		tflog.Debug(ctx, fmt.Sprintf("found project by name %s, with id %s", projNameOrID, val))
 		return &val, nil
 	} else {
 		if val, ok := c.projectIDs[projNameOrID]; ok {
