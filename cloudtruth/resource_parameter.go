@@ -250,24 +250,29 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	// the specified environment, we delete the parameter.
 	// Otherwise, we delete the specific value defined in the target environment
 	paramEnv := d.Get("environment").(string)
-	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
+	/*paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 	targetEnvURL := fmt.Sprintf("%s/environments/%s/", c.config.BaseURL, *paramEnvID)
-	definedOutsideTargetEnv := false
+	*/
+	definedInMoreThanOneEnv := false
 	values := resp.GetValues()
+	count := 1 // the param value is defined in the target environment
+	// check to see if it's explicitly defined in any others
 	for envURL := range values {
 		value := values[envURL]
-		if (envURL != targetEnvURL) && value.HasInternalValue() {
-			if value.GetEnvironmentName() != paramEnv {
-				definedOutsideTargetEnv = true
+		if (value.GetEnvironmentName() != paramEnv) && value.HasInternalValue() {
+			count++
+			if count > 1 {
+				definedInMoreThanOneEnv = true
 				break
 			}
 		}
 	}
-	if definedOutsideTargetEnv {
-		// delete the specific env value
+
+	if definedInMoreThanOneEnv {
+		// delete the specific env value only, because there are explicit definitions in one or more other envs
 		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(context.Background(), paramValueID,
 			paramID, *projID).Execute()
 		if err != nil {

@@ -3,7 +3,6 @@ package cloudtruth
 import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"strconv"
 	"testing"
 )
 
@@ -13,12 +12,12 @@ const paramVal = "A useful string"
 const updateParamVal = "A new useful string"
 const prodParamVal = "A useful string only in production"
 
+/*
 func TestAccResourceParameterBasic(t *testing.T) {
-	createParamName := fmt.Sprintf("TestParam-%s", resource.UniqueId())
+	createParamName := fmt.Sprintf("Test-%s", resource.UniqueId())
 	resource.Test(t, resource.TestCase{
-		ProviderFactories:         testProviderFactories,
-		PreCheck:                  func() { testAccPreCheck(t) },
-		PreventPostDestroyRefresh: true,
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
 				Config: testAccResourceParameterCreateBasic(accTestProject, createParamName, paramDesc, paramVal),
@@ -48,12 +47,22 @@ func TestAccResourceParameterBasic(t *testing.T) {
 						strconv.FormatBool(false)),
 				),
 			},
+		},
+	})
+}
+*/
+func TestAccResourceParameterProdOverride(t *testing.T) {
+	createParamName := fmt.Sprintf("Test-%s", resource.UniqueId())
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceParameterCreateProdOnly(createParamName, paramVal, createParamName, prodParamVal),
+				Config: testAccResourceParameterCreateProdOverride(createParamName, paramVal, createParamName, prodParamVal),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "name", createParamName),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "value", prodParamVal),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_only", "environment", "production"),
+					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_override", "name", createParamName),
+					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_override", "value", prodParamVal),
+					resource.TestCheckResourceAttr("cloudtruth_parameter.prod_override", "environment", "production"),
 				),
 			},
 		},
@@ -84,7 +93,7 @@ func testAccResourceParameterUpdateBasic(projName, paramName, desc, value string
 
 // This is a case where we create a parameter using the same name but overriding it in the
 // production environment i.e. not inheriting from the default environment
-func testAccResourceParameterCreateProdOnly(defaultParam, value, prodParam, prodValue string) string {
+func testAccResourceParameterCreateProdOverride(defaultParam, value, prodParam, prodValue string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_parameter" "basic" {
         project     = "AcceptanceTest"
@@ -93,12 +102,15 @@ func testAccResourceParameterCreateProdOnly(defaultParam, value, prodParam, prod
         value       = "%s"
 	}	
 
-	resource "cloudtruth_parameter" "prod_only" {
+	resource "cloudtruth_parameter" "prod_override" {
 		project     = "AcceptanceTest"
         environment = "production"
   		name        = "%s"
   		description = "Just a description of a parameter"
         value       = "%s"
+        depends_on = [
+        	cloudtruth_parameter.basic
+        ]
 	}
 	`, defaultParam, value, prodParam, prodValue)
 }
