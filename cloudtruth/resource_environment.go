@@ -64,7 +64,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	}
 	resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(context.Background()).EnvironmentCreate(*envCreate).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceEnvironmentCreate: %w", err))
 	}
 	d.SetId(resp.GetId())
 	return diags
@@ -78,7 +78,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 
 	resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Name(envName).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceEnvironmentRead: %w", err))
 	}
 	// There should be only one environment in the results
 	res := resp.GetResults()
@@ -109,7 +109,7 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta
 		_, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsPartialUpdate(ctx,
 			envID).PatchedEnvironment(patchedEnv).Execute()
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("resourceEnvironmentUpdate: %w", err))
 		}
 	}
 	d.SetId(envID)
@@ -123,7 +123,7 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 	envName := d.Get("name")
 	forceDelete := d.Get("force_delete").(bool)
 	if !forceDelete {
-		return diag.Errorf("environment %s cannot be deleted unless you set the 'force_delete' property to be true",
+		return diag.Errorf("resourceEnvironmentDelete: environment %s cannot be deleted unless you set the 'force_delete' property to be true",
 			envName)
 	}
 	_, err := c.openAPIClient.EnvironmentsApi.EnvironmentsDestroy(context.Background(), envID).Execute()

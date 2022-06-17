@@ -60,7 +60,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	templateList, r, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
 		*projectID).Environment(*templateEnvID).Name(name).Execute()
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("error looking up template %s: %+v", name, r))
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: error looking up template %s: %+v", name, r))
 	}
 	if templateList.GetCount() > 1 {
 		return diag.FromErr(fmt.Errorf("unexpectedly found %d results for template %s",
@@ -79,7 +79,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	previewCreate, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatePreviewCreate(ctx, *projectID).
 		TemplatePreviewCreateRequest(*templatePrevReq).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
 	}
 	previewBody := previewCreate.GetBody()
 	err = d.Set("value", previewBody)
