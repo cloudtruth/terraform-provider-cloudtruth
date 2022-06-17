@@ -58,7 +58,7 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 
 	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsCreate(ctx).ProjectCreate(*projectCreate).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceProjectCreate: %w", err))
 	}
 	d.SetId(resp.GetId())
 	return diags
@@ -72,12 +72,12 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 
 	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceProjectRead: %w", err))
 	}
 	// There should be only one project found
 	res := resp.GetResults()
 	if len(res) != 1 {
-		return diag.FromErr(fmt.Errorf("found %d projects, expcted to find 1", len(res)))
+		return diag.FromErr(fmt.Errorf("resourceProjectRead: found %d projects, expcted to find 1", len(res)))
 	}
 	d.SetId(resp.GetResults()[0].GetId())
 	return diags
@@ -106,7 +106,7 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 		_, _, err := c.openAPIClient.ProjectsApi.ProjectsPartialUpdate(ctx,
 			projectID).PatchedProject(patchedProject).Execute()
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("resourceProjectUpdate: %w", err))
 		}
 	}
 	d.SetId(projectID)
@@ -120,12 +120,12 @@ func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any
 	projectName := d.Get("name").(string)
 	forceDelete := d.Get("force_delete").(bool)
 	if !forceDelete {
-		return diag.Errorf("project %s cannot be deleted unless you set the 'force_delete' property to be true",
+		return diag.Errorf("resourceProjectDelete: project %s cannot be deleted unless you set the 'force_delete' property to be true",
 			projectName)
 	}
 	_, err := c.openAPIClient.ProjectsApi.ProjectsDestroy(context.Background(), projectID).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceProjectDelete: %w", err))
 	}
 	return nil
 }

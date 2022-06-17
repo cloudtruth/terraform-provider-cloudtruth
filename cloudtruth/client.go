@@ -57,19 +57,19 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 	// populate & load caches
 	err := client.loadProjectNameCache(ctx)
 	if err != nil {
-		return nil, diag.FromErr(err)
+		return nil, diag.FromErr(fmt.Errorf("configureClient: %w", err))
 	}
 	err = client.loadProjectIDCache(ctx)
 	if err != nil {
-		return nil, diag.FromErr(err)
+		return nil, diag.FromErr(fmt.Errorf("configureClient: %w", err))
 	}
 	err = client.loadEnvNameCache(ctx)
 	if err != nil {
-		return nil, diag.FromErr(err)
+		return nil, diag.FromErr(fmt.Errorf("configureClient: %w", err))
 	}
 	err = client.loadEnvIDCache(ctx)
 	if err != nil {
-		return nil, diag.FromErr(err)
+		return nil, diag.FromErr(fmt.Errorf("configureClient: %w", err))
 	}
 
 	return &client, nil
@@ -100,11 +100,11 @@ func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID strin
 		if c.config.Project != "" {
 			projNameOrID = c.config.Project
 		} else {
-			return nil, errors.New("the CloudTruth project must be specified at the provider or resource level")
+			return nil, errors.New("lookupProject: the CloudTruth project must be specified at the provider or resource level")
 		}
 	}
 	if val, ok := c.projectNames[projNameOrID]; ok {
-		tflog.Debug(ctx, fmt.Sprintf("found project by name %s, with id %s", projNameOrID, val))
+		tflog.Debug(ctx, fmt.Sprintf("lookupProject: found project by name %s, with id %s", projNameOrID, val))
 		return &val, nil
 	} else {
 		if val, ok := c.projectIDs[projNameOrID]; ok {
@@ -112,7 +112,7 @@ func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID strin
 			return &projNameOrID, nil
 		}
 	}
-	return nil, fmt.Errorf("project with name/ID %s not found", projNameOrID)
+	return nil, fmt.Errorf("lookupProject: project with name/ID %s not found", projNameOrID)
 }
 
 // Map of CloudTruth project names -> project IDs
@@ -121,7 +121,7 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 		tflog.Debug(ctx, "loadProjectNameCache: fetching project names")
 		resp, _, err := c.openAPIClient.ProjectsApi.ProjectsList(context.Background()).Execute()
 		if err != nil {
-			return err
+			return fmt.Errorf("loadProjectNameCache: %w", err)
 		}
 		c.projectNames = make(map[string]string)
 		for _, p := range resp.Results {
@@ -137,7 +137,7 @@ func (c *cloudTruthClient) loadProjectIDCache(ctx context.Context) error {
 		tflog.Debug(ctx, "loadProjectIDCache: fetching project IDs")
 		err := c.loadProjectNameCache(ctx)
 		if err != nil {
-			return err
+			return fmt.Errorf("loadProjectIDCache: %w", err)
 		}
 		c.projectIDs = convertMap(c.projectNames)
 	}
@@ -156,7 +156,7 @@ func (c *cloudTruthClient) lookupEnvironment(ctx context.Context, envNameOrID st
 			return &envNameOrID, nil
 		}
 	}
-	return nil, fmt.Errorf("environment with name/ID %s not found", envNameOrID)
+	return nil, fmt.Errorf("lookupEnvironment: environment with name/ID %s not found", envNameOrID)
 }
 
 // Map of CloudTruth environment names -> environment IDs
@@ -165,7 +165,7 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 		tflog.Debug(ctx, "loadEnvNameCache: fetching environment names")
 		resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(context.Background()).Execute()
 		if err != nil {
-			return err
+			return fmt.Errorf("loadEnvNameCache: %w", err)
 		}
 		c.envNames = make(map[string]string)
 		for _, p := range resp.Results {
@@ -181,7 +181,7 @@ func (c *cloudTruthClient) loadEnvIDCache(ctx context.Context) error {
 		tflog.Debug(ctx, "loadEnvIDCache: fetching environment IDs")
 		err := c.loadEnvNameCache(ctx)
 		if err != nil {
-			return err
+			return fmt.Errorf("loadEnvIDCache: %w", err)
 		}
 		c.envIDs = convertMap(c.envNames)
 	}

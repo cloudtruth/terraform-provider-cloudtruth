@@ -90,13 +90,13 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
 
 	paramEnv := d.Get("environment").(string)
 	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
 
 	// NOTE: a parameter will exist in any/all environments however, its value may be set/overridden/inherited across
@@ -106,7 +106,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	lookupResp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 		*projID).Environment(*paramEnvID).Name(paramName).Execute()
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("error looking up parameter %s: %+v", paramName, r))
+		return diag.FromErr(fmt.Errorf("resourceParameterCreate: error looking up parameter %s: %+v", paramName, r))
 	}
 	value := d.Get("value").(string)
 	if lookupResp.GetCount() == 1 {
@@ -118,7 +118,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		paramCreateResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(context.Background(),
 			*projID).ParameterCreate(*paramCreate).Execute()
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 		}
 		paramID = paramCreateResp.GetId()
 	}
@@ -132,7 +132,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
 		paramID, *projID).ValueCreate(*valueCreate).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
 	valueID = valueResp.GetId()
 
@@ -154,14 +154,14 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	paramCompositeID := d.Id()
 	ids := strings.Split(paramCompositeID, ":")
 	if len(ids) != 2 {
-		return diag.FromErr(fmt.Errorf("failed to extract the Parameter and Parameter Value IDs from %s",
+		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: ;failed to extract the Parameter and Parameter Value IDs from %s",
 			paramCompositeID))
 	}
 	paramID, paramValueID := ids[0], ids[1]
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
 	}
 
 	// Two concerns:
@@ -184,7 +184,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersPartialUpdate(ctx, paramID, *projID).
 			PatchedParameter(patchedParam).Execute()
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
 		}
 	}
 
@@ -196,7 +196,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		paramEnv := d.Get("environment").(string)
 		paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
 		}
 		updateValue.SetEnvironment(*paramEnvID)
 		hasParamValueChange = true
@@ -215,7 +215,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
 			*projID).Value(*updateValue).Execute()
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
 		}
 	}
 	d.SetId(paramCompositeID)
@@ -231,18 +231,18 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	paramCompositeID := d.Id()
 	ids := strings.Split(paramCompositeID, ":")
 	if len(ids) != 2 {
-		return diag.FromErr(fmt.Errorf("failed to extract the Parameter and Parameter Value IDs from %s",
+		return diag.FromErr(fmt.Errorf("resourceParameterDelete: failed to extract the Parameter and Parameter Value IDs from %s",
 			paramCompositeID))
 	}
 	paramID, paramValueID := ids[0], ids[1]
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
 	}
 	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(context.Background(), paramID, *projID).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
 	}
 
 	// We iterate over the values for the parameter, where the keys are the URLs of the corresponding
@@ -250,12 +250,6 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	// the specified environment, we delete the parameter.
 	// Otherwise, we delete the specific value defined in the target environment
 	paramEnv := d.Get("environment").(string)
-	/*paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	targetEnvURL := fmt.Sprintf("%s/environments/%s/", c.config.BaseURL, *paramEnvID)
-	*/
 	definedInMoreThanOneEnv := false
 	values := resp.GetValues()
 	count := 1 // the param value is defined in the target environment
@@ -276,14 +270,14 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(context.Background(), paramValueID,
 			paramID, *projID).Execute()
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
 		}
 	} else {
 		// delete the parameter entirely
 		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersDestroy(context.Background(), paramID,
 			*projID).Execute()
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
 		}
 	}
 	return nil

@@ -61,12 +61,12 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceTemplateCreate: %w", err))
 	}
 	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(context.Background(),
 		*projID).TemplateCreate(*templateCreate).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceTemplateCreate: %w", err))
 	}
 
 	// Templates exist at the project level and span all environments
@@ -82,16 +82,16 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceTemplateRead: %w", err))
 	}
 	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx, *projID).Name(templateName).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceTemplateRead: %w", err))
 	}
 	// There should be only one template found
 	res := resp.GetResults()
 	if len(res) != 1 {
-		return diag.FromErr(fmt.Errorf("found %d templates, expcted to find 1", len(res)))
+		return diag.FromErr(fmt.Errorf("resourceTemplateRead: found %d templates, expcted to find 1", len(res)))
 	}
 	d.SetId(resp.GetResults()[0].GetId())
 	return diags
@@ -103,7 +103,7 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceTemplateUpdate: %w", err))
 	}
 	templateValue := d.Get("value").(string)
 	templateDesc := d.Get("description").(string)
@@ -123,7 +123,7 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 		_, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesPartialUpdate(ctx, templateID,
 			*projID).PatchedTemplate(patchedTemplate).Execute()
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("resourceTemplateUpdate: %w", err))
 		}
 	}
 	return resourceTemplateRead(ctx, d, meta)
@@ -137,12 +137,12 @@ func resourceTemplateDelete(ctx context.Context, d *schema.ResourceData, meta an
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceTemplateDelete: %w", err))
 	}
 
 	_, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesDestroy(ctx, templateID, *projID).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceTemplateDelete: %w", err))
 	}
 	return nil
 }

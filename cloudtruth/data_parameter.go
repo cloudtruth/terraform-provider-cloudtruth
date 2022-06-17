@@ -50,7 +50,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	paramEnv := d.Get("environment").(string)
 	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
 	project := d.Get("project").(string)
@@ -58,15 +58,15 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 
 	projectID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 		*projectID).Environment(*paramEnvID).Name(name).Execute()
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("error looking up parameter %s: %+v", name, r))
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: error looking up parameter %s: %+v", name, r))
 	}
 	if resp.GetCount() > 1 {
-		return diag.FromErr(fmt.Errorf("unexpectedly found %d results for parameter %s",
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: unexpectedly found %d results for parameter %s",
 			resp.GetCount(), name))
 	}
 
@@ -76,15 +76,15 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	values := param.GetValues()
 	paramID := param.GetId()
 	if len(values) > 1 {
-		return diag.FromErr(fmt.Errorf("unexpectedly found %d values for parameter %s",
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: unexpectedly found %d values for parameter %s",
 			len(values), name))
 	}
 	for _, v := range values {
-		tflog.Debug(ctx, fmt.Sprintf("found value for %s, lookup env %s, resolved env %s",
+		tflog.Debug(ctx, fmt.Sprintf("dataCloudTruthParameterRead: found value for %s, lookup env %s, resolved env %s",
 			name, paramEnv, v.GetEnvironmentName()))
 		err := d.Set("value", v.GetValue())
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
 		}
 		// We use a composite ID - <PARAMATER_ID>:<PARAMETER_VALUE_ID>
 		d.SetId(fmt.Sprintf("%s:%s", paramID, v.GetId()))
@@ -134,7 +134,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	project := d.Get("project").(string)
 	projectID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
 	// set to "default" if not explicitly specified
@@ -147,11 +147,11 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	tag := d.Get("tag").(string)
 	if asOf != "" {
 		if tag != "" {
-			return diag.Errorf("'as_of' and 'tag' cannot both be specified as parameter filters")
+			return diag.Errorf("dataCloudTruthParametersRead: 'as_of' and 'tag' cannot both be specified as parameter filters")
 		}
 		asOfTime, err := datetime.Parse(asOf, time.UTC)
 		if err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 		}
 		paramListRequest = paramListRequest.AsOf(asOfTime)
 	}
@@ -161,7 +161,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 
 	resp, r, err := paramListRequest.Execute()
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("error looking up parameters in the %s environment in the %s project: %+v",
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: error looking up parameters in the %s environment in the %s project: %+v",
 			environment, project, r))
 	}
 
@@ -187,7 +187,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 				*projectID).Environment(environment).Page(pageNum)
 			resp, r, err = paramListRequest.Execute()
 			if err != nil {
-				return diag.FromErr(fmt.Errorf("error looking up parameters in the %s environment in the %s project: %+v",
+				return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: error looking up parameters in the %s environment in the %s project: %+v",
 					environment, project, r))
 			}
 			results = resp.GetResults()
@@ -197,11 +197,11 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	}
 	err = d.Set("parameter_values", valueMap)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 	hash, err := hashstructure.Hash(valueMap, nil)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
 	// todo: this needs to be re-worked. . . the ID should actually be something like

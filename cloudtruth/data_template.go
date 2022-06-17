@@ -47,7 +47,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	templateEnv := d.Get("environment").(string)
 	templateEnvID, err := c.lookupEnvironment(ctx, templateEnv)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
 	}
 
 	project := d.Get("project").(string)
@@ -55,7 +55,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 
 	projectID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
 	}
 	templateList, r, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
 		*projectID).Environment(*templateEnvID).Name(name).Execute()
@@ -63,7 +63,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: error looking up template %s: %+v", name, r))
 	}
 	if templateList.GetCount() > 1 {
-		return diag.FromErr(fmt.Errorf("unexpectedly found %d results for template %s",
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: unexpectedly found %d results for template %s",
 			templateList.GetCount(), name))
 	}
 
@@ -84,7 +84,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	previewBody := previewCreate.GetBody()
 	err = d.Set("value", previewBody)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
 	}
 
 	// We use a composite ID - <ENV_ID>:<TEMPLATE_ID>
@@ -128,6 +128,7 @@ func dataCloudTruthTemplates() *schema.Resource {
 	}
 }
 
+// todo: implement
 func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	return nil
 }

@@ -55,7 +55,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	envParent := d.Get("parent").(string)
 	envParentID, err := c.lookupEnvironment(ctx, envParent)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceEnvironmentCreate: %w", err))
 	}
 	envCreate := cloudtruthapi.NewEnvironmentCreate(envName)
 	envCreate.SetParent(fmt.Sprintf("%s/environments/%s/", c.config.BaseURL, *envParentID))
@@ -83,7 +83,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	// There should be only one environment in the results
 	res := resp.GetResults()
 	if len(res) != 1 {
-		return diag.FromErr(fmt.Errorf("found %d environments, expcted to find 1", len(res)))
+		return diag.FromErr(fmt.Errorf("resourceEnvironmentRead: found %d environments, expcted to find 1", len(res)))
 	}
 	d.SetId(resp.GetResults()[0].GetId())
 	return diags
@@ -128,7 +128,7 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 	}
 	_, err := c.openAPIClient.EnvironmentsApi.EnvironmentsDestroy(context.Background(), envID).Execute()
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(fmt.Errorf("resourceEnvironmentDelete: %w", err))
 	}
 	return nil
 }
