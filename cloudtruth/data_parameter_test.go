@@ -4,9 +4,13 @@ import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"regexp"
 	"testing"
+	"time"
 )
 
+// todo:
+// add tag tests when setup/cleanup scripts are in place i.e. for now minimized the amount and complexity
 const testAccParameter = `
 data "cloudtruth_parameter" "nonsecret" {
   project     = "%s"
@@ -37,6 +41,14 @@ const testAccParameters = `
 data "cloudtruth_parameters" "multi_env" {
   project     = "%s"
   environment = "%s"
+}
+`
+
+const testAccParametersAsOf = `
+data "cloudtruth_parameters" "multi_env" {
+  project     = "%s"
+  environment = "%s"
+  as_of       = "%s"
 }
 `
 
@@ -91,7 +103,36 @@ func TestAccDataSourceParameters(t *testing.T) {
 			{
 				Config: fmt.Sprintf(testAccParameters, accTestProject, "default"),
 				Check: resource.ComposeTestCheckFunc(
-					// regular parameter
+					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", accTestProject),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "environment", "default"),
+					testAccCheckParametersValueMap("data.cloudtruth_parameters.multi_env", expEnvValues),
+				),
+			},
+		},
+	})
+}
+
+func TestAccAsOfDataSourceParameters(t *testing.T) {
+	now := time.Now().Format("2006-01-02T15:04:05.000Z")
+	resource.Test(t, resource.TestCase{
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				// Use a date when the parameters did not exist
+				Config: fmt.Sprintf(testAccParametersAsOf, accTestProject, "default", "2000-01-01T00:00:00"),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", accTestProject),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "environment", "default"),
+					testAccCheckParametersValueMap("data.cloudtruth_parameters.multi_env", expEnvValues),
+				),
+				ExpectError: regexp.MustCompile("404 Not Found"),
+			},
+			{
+				// And a date when the parameters definitely do exist, for simplicity we use time.Now
+				Config: fmt.Sprintf(testAccParametersAsOf, accTestProject, "default", now),
+				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", accTestProject),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "environment", "default"),
 					testAccCheckParametersValueMap("data.cloudtruth_parameters.multi_env", expEnvValues),
@@ -102,7 +143,9 @@ func TestAccDataSourceParameters(t *testing.T) {
 }
 
 // Confirm that we have the correct map of parameter values for each environment
-// We only check for these parameters, other ephemeral parameters will exist when resource tests run
+// We only check for the existence of expected parameters, we do NOT check that unexpected parameters do NOT exist as
+// ephemeral parameters will come and go when resource tests run. We can also expect occasional cruft parameters to linger
+// if tests and/or cleanup scripts fail
 func testAccCheckParametersValueMap(resourceName string, expMap map[string]interface{}) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[resourceName]

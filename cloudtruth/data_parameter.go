@@ -165,7 +165,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 			environment, project, r))
 	}
 
-	valueMap := make(map[string]any)
+	paramsMap := make(map[string]any)
 	results := resp.GetResults()
 	var pageNum int32 = 1
 	for results != nil {
@@ -176,7 +176,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 				paramEnvValue := v.GetValue()
 				// We need to exclude parameters that do not have values set in the target environment
 				if paramEnvValue != "" {
-					valueMap[paramName] = paramEnvValue
+					paramsMap[paramName] = paramEnvValue
 				}
 			}
 		}
@@ -195,20 +195,23 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 			break
 		}
 	}
-	err = d.Set("parameter_values", valueMap)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
-	}
-	hash, err := hashstructure.Hash(valueMap, nil)
+
+	err = d.Set("parameter_values", paramsMap)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
-	// todo: this needs to be re-worked. . . the ID should actually be something like
-	// environment name + filter id(s)
+	hash, err := hashstructure.Hash(paramsMap, nil)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
+	}
+
 	// We hash the contents of the map to determine if any parameters have changed
 	// NOTE: this is stable regarding map order, see
 	// https://github.com/mitchellh/hashstructure/blob/master/hashstructure.go#L242
+	// ALSO NOTE: we are keying off of the returned parameter/value results to generate and set the data source
+	// ID, the metadata may change (e.g. as_of/tag filter updated) but if the results are the same, the ID
+	// will not change
 	d.SetId(strconv.FormatUint(hash, 10))
 	return nil
 }
