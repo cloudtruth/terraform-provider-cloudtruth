@@ -24,7 +24,6 @@ const (
 	secretParamVal     = "ultratopsecret"
 	basicTemplate      = "BasicTemplate"
 	basicTemplateVal   = "Regular Parameter: notreallyasecret, Secret Parameter ultratopsecret"
-	defaultTemplate    = "DefaultTemplate"
 	defaultTemplateVal = "notreallyasecret"
 )
 
