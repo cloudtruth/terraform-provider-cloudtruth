@@ -3,7 +3,6 @@ package cloudtruth
 import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"regexp"
 	"testing"
 	"time"
@@ -52,7 +51,7 @@ data "cloudtruth_parameters" "multi_env" {
 }
 `
 
-var expEnvValues = map[string]interface{}{
+var expParameterValues = map[string]interface{}{
 	"parameter_values.DefaultRegularParam": regularParamVal,
 	"parameter_values.DefaultSecretParam":  secretParamVal,
 }
@@ -105,7 +104,7 @@ func TestAccDataSourceParameters(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", accTestProject),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "environment", "default"),
-					testAccCheckParametersValueMap("data.cloudtruth_parameters.multi_env", expEnvValues),
+					testAccCheckDataSourceValueMap("data.cloudtruth_parameters.multi_env", expParameterValues),
 				),
 			},
 		},
@@ -125,7 +124,7 @@ func TestAccAsOfDataSourceParameters(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", accTestProject),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "environment", "default"),
-					testAccCheckParametersValueMap("data.cloudtruth_parameters.multi_env", expEnvValues),
+					testAccCheckDataSourceValueMap("data.cloudtruth_parameters.multi_env", expParameterValues),
 				),
 				ExpectError: regexp.MustCompile("404 Not Found"),
 			},
@@ -135,32 +134,9 @@ func TestAccAsOfDataSourceParameters(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", accTestProject),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "environment", "default"),
-					testAccCheckParametersValueMap("data.cloudtruth_parameters.multi_env", expEnvValues),
+					testAccCheckDataSourceValueMap("data.cloudtruth_parameters.multi_env", expParameterValues),
 				),
 			},
 		},
 	})
-}
-
-// Confirm that we have the correct map of parameter values for each environment
-// We only check for the existence of expected parameters, we do NOT check that unexpected parameters do NOT exist as
-// ephemeral parameters will come and go when resource tests run. We can also expect occasional cruft parameters to linger
-// if tests and/or cleanup scripts fail
-func testAccCheckParametersValueMap(resourceName string, expMap map[string]interface{}) resource.TestCheckFunc {
-	return func(s *terraform.State) error {
-		rs, ok := s.RootModule().Resources[resourceName]
-		if !ok {
-			return fmt.Errorf("not found: %s", resourceName)
-		}
-		for k, expVal := range expMap {
-			actVal, ok := rs.Primary.Attributes[k]
-			if !ok {
-				return fmt.Errorf("did not find expected parameter value: %s", k)
-			}
-			if expVal != actVal {
-				return fmt.Errorf("expected parameter value: %s, actual parameter value %s", expVal, actVal)
-			}
-		}
-		return nil
-	}
 }

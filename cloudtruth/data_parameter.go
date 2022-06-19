@@ -180,7 +180,6 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 				}
 			}
 		}
-		// HasNext() doesn't do what we want :(
 		if resp.GetNext() != "" {
 			pageNum++
 			paramListRequest = c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),

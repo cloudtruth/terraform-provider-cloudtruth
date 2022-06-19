@@ -7,6 +7,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/mitchellh/hashstructure"
+	"github.com/nav-inc/datetime"
+	"strconv"
+	"time"
 )
 
 func dataCloudTruthTemplate() *schema.Resource {
@@ -72,25 +76,34 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	templateID := template.GetId()
 
 	// We extract its body and request that its referenced parameters/templates be interpolated
-	t := template.GetBody()
-	tflog.Info(ctx, t)
+	body := template.GetBody()
+	tflog.Debug(ctx, fmt.Sprintf("dataCloudTruthTemplateRead: template body - %s", body))
 
-	templatePrevReq := cloudtruthapi.NewTemplatePreviewCreateRequest(t)
-	previewCreate, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatePreviewCreate(ctx, *projectID).
-		TemplatePreviewCreateRequest(*templatePrevReq).Execute()
+	previewBody, err := renderTemplateBody(ctx, body, *projectID, meta)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
 	}
-	previewBody := previewCreate.GetBody()
-	err = d.Set("value", previewBody)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
-	}
-
+	_ = d.Set("value", previewBody)
 	// We use a composite ID - <ENV_ID>:<TEMPLATE_ID>
 	// This data source represents the evaluation of a template in a given environment (and project)
 	d.SetId(fmt.Sprintf("%s:%s", *templateEnvID, templateID))
 	return nil
+}
+
+func renderTemplateBody(ctx context.Context, body, projectID string, meta any) (*string, error) {
+	c := meta.(*cloudTruthClient)
+	tflog.Debug(ctx, "renderTemplateBody")
+	templatePrevReq := cloudtruthapi.NewTemplatePreviewCreateRequest(body)
+	previewCreate, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatePreviewCreate(ctx, projectID).
+		TemplatePreviewCreateRequest(*templatePrevReq).Execute()
+	if err != nil {
+		return nil, err
+	}
+	previewBody := previewCreate.GetBody()
+	if err != nil {
+		return nil, err
+	}
+	return &previewBody, nil
 }
 
 // Return a map of template names -> template values
@@ -128,7 +141,84 @@ func dataCloudTruthTemplates() *schema.Resource {
 	}
 }
 
-// todo: implement
 func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	c := meta.(*cloudTruthClient)
+	tflog.Debug(ctx, "dataCloudTruthTemplatesRead")
+	project := d.Get("project").(string)
+	projectID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
+	}
+
+	// set to "default" if not explicitly specified
+	environment := d.Get("environment").(string)
+
+	// Handle as_of and tag filters
+	templateListRequest := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
+		*projectID).Environment(environment)
+	asOf := d.Get("as_of").(string)
+	tag := d.Get("tag").(string)
+	if asOf != "" {
+		if tag != "" {
+			return diag.Errorf("dataCloudTruthTemplatesRead: 'as_of' and 'tag' cannot both be specified as parameter filters")
+		}
+		asOfTime, err := datetime.Parse(asOf, time.UTC)
+		if err != nil {
+			return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
+		}
+		templateListRequest = templateListRequest.AsOf(asOfTime)
+	}
+	if tag != "" {
+		templateListRequest = templateListRequest.Tag(tag)
+	}
+
+	resp, r, err := templateListRequest.Execute()
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: error looking up parameters in the %s environment in the %s project: %+v",
+			environment, project, r))
+	}
+
+	templateMap := make(map[string]any)
+	results := resp.GetResults()
+	var pageNum int32 = 1
+	for results != nil {
+		for _, res := range results {
+			templateName := res.GetName()
+			templateBody := res.GetBody()
+			previewBody, err := renderTemplateBody(ctx, templateBody, *projectID, meta)
+			if err != nil {
+				return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
+			} else {
+				templateMap[templateName] = previewBody
+			}
+		}
+		if resp.GetNext() != "" {
+			pageNum++
+			templateListRequest = c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
+				*projectID).Environment(environment).Page(pageNum)
+			resp, r, err = templateListRequest.Execute()
+			if err != nil {
+				return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: error looking up parameters in the %s environment in the %s project: %+v",
+					environment, project, r))
+			}
+			results = resp.GetResults()
+		} else {
+			break
+		}
+	}
+
+	err = d.Set("template_values", templateMap)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
+	}
+
+	hash, err := hashstructure.Hash(templateMap, nil)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
+	}
+
+	// We use the same approach here as with the parameter data source, create a hash of the results
+	// map for the ID
+	d.SetId(strconv.FormatUint(hash, 10))
 	return nil
 }
