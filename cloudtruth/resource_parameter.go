@@ -13,7 +13,7 @@ import (
 func resourceParameter() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.
-		Description: "A Cloudtruth Parameter.",
+		Description: "A CloudTruth Parameter.",
 
 		CreateContext: resourceParameterCreate,
 		ReadContext:   resourceParameterRead,
@@ -43,7 +43,7 @@ func resourceParameter() *schema.Resource {
 				Default:     "default",
 			},
 			"value": {
-				Description: "The value of the CloudTruth Parameter, specific to an Environment (which can be overridden/inherited)",
+				Description: "The value of the CloudTruth Parameter, specific to an environment (which can be overridden/inherited)",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
@@ -55,16 +55,28 @@ func resourceParameter() *schema.Resource {
 				Default:     false,
 			},
 			"dynamic": {
-				Description: "Whether to run template evaluation on the Parameter's value incompatible with secret parameters",
+				Description: "Whether or not to evaluate the Parameter's value (incompatible with secret parameters)",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
 			},
 			"external": {
-				Description: "Whether the value is a reference to a value in an external system or defined in CloudTruth, defaults to false",
+				Description: "Whether or not the value is external, defaults to false",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
+			},
+			"location": {
+				Description: "The location of the secret value, required for external parameters, otherwise optional",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "",
+			},
+			"filter": {
+				Description: "An optional filter (path/query) used only with external parameters",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "",
 			},
 		},
 	}
@@ -83,29 +95,19 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
 
-	// First create the parameter
+	// NOTE: parameters exist in all environments however, specific values can be assigned in any set of environments
 	paramName := d.Get("name").(string)
-	paramCreate := cloudtruthapi.NewParameterCreate(paramName)
-	paramDesc := d.Get("description").(string)
-	if paramDesc != "" {
-		paramCreate.SetDescription(paramDesc)
-	}
-	paramIsSecret := d.Get("secret").(bool)
-	paramCreate.SetSecret(paramIsSecret)
-
-	// NOTE: a parameter will exist in any/all environments however, its value may be set/overridden/inherited across
-	// multiple environments
 	var paramID, valueID string
-	// First check to see if it exists, if it does grab the parameter's ID
 	lookupResp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 		*projID).Environment(*envID).Name(paramName).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: error looking up parameter %s: %+v", paramName, r))
 	}
-	value := d.Get("value").(string)
-	if lookupResp.GetCount() == 1 {
+
+	if lookupResp.GetCount() == 1 { // Named parameter already exists
 		paramID = lookupResp.GetResults()[0].GetId()
 	} else {
+		paramCreate := paramCreateConfig(d)
 		paramCreateResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(context.Background(),
 			*projID).ParameterCreate(*paramCreate).Execute()
 		if err != nil {
@@ -113,13 +115,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		}
 		paramID = paramCreateResp.GetId()
 	}
-	external := d.Get("external").(bool)
-	dynamic := d.Get("dynamic").(bool)
-	valueCreate := cloudtruthapi.NewValueCreate(value)
-	valueCreate.SetInternalValue(value)
-	valueCreate.SetEnvironment(*envID)
-	valueCreate.SetExternal(external)
-	valueCreate.SetInterpolated(dynamic)
+	valueCreate := valueCreateConfig(*envID, d)
 	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
 		paramID, *projID).ValueCreate(*valueCreate).Execute()
 	if err != nil {
@@ -132,6 +128,30 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	internalID := fmt.Sprintf("%s:%s", paramID, valueID)
 	d.SetId(internalID)
 	return nil
+}
+
+func paramCreateConfig(d *schema.ResourceData) *cloudtruthapi.ParameterCreate {
+	paramName := d.Get("name").(string)
+	paramCreate := cloudtruthapi.NewParameterCreate(paramName)
+	paramDesc := d.Get("description").(string)
+	if paramDesc != "" {
+		paramCreate.SetDescription(paramDesc)
+	}
+	isSecret := d.Get("secret").(bool)
+	paramCreate.SetSecret(isSecret)
+	return paramCreate
+}
+
+func valueCreateConfig(envID string, d *schema.ResourceData) *cloudtruthapi.ValueCreate {
+	value := d.Get("value").(string)
+	external := d.Get("external").(bool)
+	dynamic := d.Get("dynamic").(bool)
+	valueCreate := cloudtruthapi.NewValueCreate(value)
+	valueCreate.SetInternalValue(value)
+	valueCreate.SetEnvironment(envID)
+	valueCreate.SetExternal(external)
+	valueCreate.SetInterpolated(dynamic)
+	return valueCreate
 }
 
 func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -156,11 +176,9 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	}
 	paramID, paramValueID := ids[0], ids[1]
 
-	// 1. Update Parameter level changes
-	// 2. Update Parameter Value level changes
+	// First update Parameter level changes
 	patchedParam := cloudtruthapi.PatchedParameter{}
 	hasParamChange := false
-
 	if d.HasChange("description") {
 		paramDesc := d.Get("description").(string)
 		patchedParam.SetDescription(paramDesc)
@@ -179,6 +197,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		}
 	}
 
+	// Then update Parameter Value level changes
 	updateValue := cloudtruthapi.NewValueWithDefaults()
 	hasParamValueChange := false
 	if d.HasChange("value") {

@@ -3,12 +3,12 @@
 page_title: "cloudtruth_project Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A Cloudtruth project.
+  A CloudTruth project.
 ---
 
 # cloudtruth_project (Resource)
 
-A Cloudtruth project.
+A CloudTruth project.
 
 
 

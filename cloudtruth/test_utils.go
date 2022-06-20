@@ -25,6 +25,7 @@ const (
 	basicTemplate      = "BasicTemplate"
 	basicTemplateVal   = "Regular Parameter: notreallyasecret, Secret Parameter ultratopsecret"
 	defaultTemplateVal = "notreallyasecret"
+	github
 )
 
 // Utility function to use with data sources and resources that are maps

@@ -3,12 +3,12 @@
 page_title: "cloudtruth_environment Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A Cloudtruth Environment.
+  A CloudTruth Environment.
 ---
 
 # cloudtruth_environment (Resource)
 
-A Cloudtruth Environment.
+A CloudTruth Environment.
 
 
 

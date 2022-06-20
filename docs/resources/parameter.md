@@ -3,12 +3,12 @@
 page_title: "cloudtruth_parameter Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A Cloudtruth Parameter.
+  A CloudTruth Parameter.
 ---
 
 # cloudtruth_parameter (Resource)
 
-A Cloudtruth Parameter.
+A CloudTruth Parameter.
 
 
 
@@ -22,12 +22,14 @@ A Cloudtruth Parameter.
 ### Optional
 
 - `description` (String) Description of the CloudTruth Parameter
-- `dynamic` (Boolean) Whether to run template evaluation on the Parameter's value incompatible with secret parameters
+- `dynamic` (Boolean) Whether or not to evaluate the Parameter's value (incompatible with secret parameters)
 - `environment` (String) The CloudTruth environment where the Parameter's value is defined. Defaults to empty string
-- `external` (Boolean) Whether the value is a reference to a value in an external system or defined in CloudTruth, defaults to false
+- `external` (Boolean) Whether or not the value is external, defaults to false
+- `filter` (String) An optional filter (path/query) used only with external parameters
+- `location` (String) The location of the secret value, required for external parameters, otherwise optional
 - `project` (String) The CloudTruth project where the Parameter is defined
 - `secret` (Boolean) Whether or not the Parameter is a secret, defaults to false/non-secret
-- `value` (String) The value of the CloudTruth Parameter, specific to an Environment (which can be overridden/inherited)
+- `value` (String) The value of the CloudTruth Parameter, specific to an environment (which can be overridden/inherited)
 
 ### Read-Only
 

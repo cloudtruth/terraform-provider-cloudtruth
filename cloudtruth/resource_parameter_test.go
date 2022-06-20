@@ -70,6 +70,23 @@ func TestAccResourceParameterProdOverride(t *testing.T) {
 	})
 }
 
+/* wip
+func TestAccResourceParameterExternal(t *testing.T) {
+	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: testAccResourceParameterCreateExternal(createParamName, createParamName, prodParamVal),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("cloudtruth_parameter.external", "name", createParamName),
+				),
+			},
+		},
+	})
+}*/
+
 func testAccResourceParameterCreateBasic(projName, paramName, desc, value string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_parameter" "basic" {
@@ -114,4 +131,17 @@ func testAccResourceParameterCreateProdOverride(defaultParam, value, prodParam, 
         ]
 	}
 	`, defaultParam, value, prodParam, prodValue)
+}
+
+func testAccResourceParameterCreateExternal(projName, paramName, desc, ext_fqn, ext_filter string) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_parameter" "external" {
+		project          = "%s"
+  		name             = "%s"
+  		description      = "%s"
+        external         = true
+        external_fqn     = "%s"
+        external_filter  = "%s"
+	}
+	`, projName, paramName, desc, ext_fqn, ext_filter)
 }

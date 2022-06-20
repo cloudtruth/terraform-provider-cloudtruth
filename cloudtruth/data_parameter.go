@@ -119,42 +119,6 @@ func dataCloudTruthParameters() *schema.Resource {
 	}
 }
 
-/*
-func listParameters(ctx context.Context, c *cloudTruthClient, d *schema.ResourceData, meta any) diag.Diagnostics {
-	// set to "default" if not explicitly specified
-	environment := d.Get("environment").(string)
-	envID, err := c.lookupEnvironment(ctx, environment)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("listParameters: %w", err))
-	}
-
-	// Handle as_of and tag filters
-	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		*projID).Environment(environment)
-	asOf := d.Get("as_of").(string)
-	tag := d.Get("tag").(string)
-	if asOf != "" {
-		if tag != "" {
-			return diag.Errorf("listParameters: 'as_of' and 'tag' cannot both be specified as parameter filters")
-		}
-		asOfTime, err := datetime.Parse(asOf, time.UTC)
-		if err != nil {
-			return diag.FromErr(fmt.Errorf("listParameters: %w", err))
-		}
-		paramListRequest = paramListRequest.AsOf(asOfTime)
-	}
-	if tag != "" {
-		paramListRequest = paramListRequest.Tag(tag)
-	}
-
-	resp, r, err := paramListRequest.Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("listParameters: error looking up parameters in the %s environment in the %s project: %+v",
-			environment, project, r))
-	}
-	return nil
-}
-*/
 func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParametersRead")
