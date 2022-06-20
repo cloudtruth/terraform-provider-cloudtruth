@@ -2,6 +2,7 @@ package cloudtruth
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"testing"
 )
@@ -12,7 +13,7 @@ const templateValue = "some_var={{ProdOnlyRegularParam}}"
 const updateTemplateValue = "some_other_var={{ProdOnlyRegularParam}}"
 
 func TestAccResourceTemplateBasic(t *testing.T) {
-	createTemplateName := fmt.Sprintf("TestTemplate-%s", resource.UniqueId())
+	createTemplateName := fmt.Sprintf("TestTemplate-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
 		ProviderFactories:         testProviderFactories,
 		PreCheck:                  func() { testAccPreCheck(t) },

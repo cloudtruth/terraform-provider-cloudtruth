@@ -2,6 +2,7 @@ package cloudtruth
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"strconv"
 	"testing"
@@ -14,7 +15,7 @@ const updateParamVal = "A new useful string"
 const prodParamVal = "A useful string only in production"
 
 func TestAccResourceParameterBasic(t *testing.T) {
-	createParamName := fmt.Sprintf("Test-%s", resource.UniqueId())
+	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -52,7 +53,7 @@ func TestAccResourceParameterBasic(t *testing.T) {
 }
 
 func TestAccResourceParameterProdOverride(t *testing.T) {
-	createParamName := fmt.Sprintf("Test-%s", resource.UniqueId())
+	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },

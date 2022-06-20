@@ -2,6 +2,7 @@ package cloudtruth
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"strconv"
 	"testing"
@@ -11,7 +12,7 @@ const desc = "Just a description of a project"
 const updateDesc = "A new description of a project"
 
 func TestAccResourceProjectBasic(t *testing.T) {
-	createProjName := fmt.Sprintf("TestProject-%s", resource.UniqueId())
+	createProjName := fmt.Sprintf("TestProject-%s", uuid.New().String())
 	updateProjName := fmt.Sprintf("updated-%s", createProjName)
 	resource.Test(t, resource.TestCase{
 		ProviderFactories:         testProviderFactories,
@@ -41,7 +42,7 @@ func TestAccResourceProjectBasic(t *testing.T) {
 }
 
 func TestAccResourceProjectForceDelete(t *testing.T) {
-	forceDeleteProjName := fmt.Sprintf("TestDeleteProject-%s", resource.UniqueId())
+	forceDeleteProjName := fmt.Sprintf("TestDeleteProject-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
 		ProviderFactories:         testProviderFactories,
 		PreCheck:                  func() { testAccPreCheck(t) },

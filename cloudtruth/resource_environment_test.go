@@ -2,6 +2,7 @@ package cloudtruth
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"strconv"
 	"testing"
@@ -11,7 +12,7 @@ const envdesc = "Just a description of an environment"
 const updateEnvDesc = "A new description of an environment"
 
 func TestAccResourceEnvBasic(t *testing.T) {
-	createEnvName := fmt.Sprintf("TestEnv-%s", resource.UniqueId())
+	createEnvName := fmt.Sprintf("TestEnv-%s", uuid.New().String())
 	updateEnvName := fmt.Sprintf("updated-%s", createEnvName)
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
@@ -36,7 +37,7 @@ func TestAccResourceEnvBasic(t *testing.T) {
 }
 
 func TestAccResourceEnvForceDelete(t *testing.T) {
-	forceDeleteEnvName := fmt.Sprintf("TestDeleteEnv-%s", resource.UniqueId())
+	forceDeleteEnvName := fmt.Sprintf("TestDeleteEnv-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
 		ProviderFactories:         testProviderFactories,
 		PreCheck:                  func() { testAccPreCheck(t) },
