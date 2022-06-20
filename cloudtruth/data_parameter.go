@@ -6,9 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/mitchellh/hashstructure"
 	"github.com/nav-inc/datetime"
-	"strconv"
 	"time"
 )
 
@@ -50,7 +48,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	paramEnv := d.Get("environment").(string)
 	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
 	}
 
 	project := d.Get("project").(string)
@@ -58,7 +56,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 
 	projectID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
 	}
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 		*projectID).Environment(*paramEnvID).Name(name).Execute()
@@ -86,7 +84,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 		if err != nil {
 			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
 		}
-		// We use a composite ID - <PARAMATER_ID>:<PARAMETER_VALUE_ID>
+		// We use a composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
 		d.SetId(fmt.Sprintf("%s:%s", paramID, v.GetId()))
 	}
 
@@ -139,6 +137,10 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 
 	// set to "default" if not explicitly specified
 	environment := d.Get("environment").(string)
+	paramEnvID, err := c.lookupEnvironment(ctx, environment)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
+	}
 
 	// Handle as_of and tag filters
 	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
@@ -200,17 +202,12 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
-	hash, err := hashstructure.Hash(paramsMap, nil)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
-	}
-
-	// We hash the contents of the map to determine if any parameters have changed
-	// NOTE: this is stable regarding map order, see
-	// https://github.com/mitchellh/hashstructure/blob/master/hashstructure.go#L242
-	// ALSO NOTE: we are keying off of the returned parameter/value results to generate and set the data source
-	// ID, the metadata may change (e.g. as_of/tag filter updated) but if the results are the same, the ID
-	// will not change
-	d.SetId(strconv.FormatUint(hash, 10))
+	// We use a composite ID - <PROJECT_ID>:<ENVIRONMENT_ID>
+	// The results represent a set of possibly filtered parameters in a given environment and project
+	// Ideally, these will be shared across all TF resources in a given state
+	// However, we do need to be mindful that a user could pull in the set of parameters more than once
+	// within the same state, with possible variations on filters, if that turns out to be an issue
+	// then we may need to rethink the ID strategy here
+	d.SetId(fmt.Sprintf("%s:%s", *projectID, *paramEnvID))
 	return nil
 }

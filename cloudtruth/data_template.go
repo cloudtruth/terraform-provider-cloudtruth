@@ -7,9 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/mitchellh/hashstructure"
 	"github.com/nav-inc/datetime"
-	"strconv"
 	"time"
 )
 
@@ -152,6 +150,10 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 
 	// set to "default" if not explicitly specified
 	environment := d.Get("environment").(string)
+	paramEnvID, err := c.lookupEnvironment(ctx, environment)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
+	}
 
 	// Handle as_of and tag filters
 	templateListRequest := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
@@ -212,13 +214,8 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
 	}
 
-	hash, err := hashstructure.Hash(templateMap, nil)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
-	}
-
-	// We use the same approach here as with the parameter data source, create a hash of the results
-	// map for the ID
-	d.SetId(strconv.FormatUint(hash, 10))
+	// As with the parameters (plural) data source,we may need to use a more complex ID strategy
+	// here
+	d.SetId(fmt.Sprintf("%s:%s", *projectID, *paramEnvID))
 	return nil
 }
