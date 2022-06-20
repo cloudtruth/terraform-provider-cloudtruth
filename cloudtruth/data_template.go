@@ -44,18 +44,14 @@ func dataCloudTruthTemplate() *schema.Resource {
 func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthTemplateRead")
-	project := d.Get("project").(string)
 	environment := d.Get("environment").(string)
-	envID, err := c.lookupEnvironment(ctx, environment)
+	project := d.Get("project").(string)
+	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
 	}
 	name := d.Get("name").(string)
 
-	projID, err := c.lookupProject(ctx, project)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
-	}
 	templateList, r, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
 		*projID).Environment(*envID).Name(name).Execute()
 	if err != nil {
@@ -139,18 +135,11 @@ func dataCloudTruthTemplates() *schema.Resource {
 func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthTemplatesRead")
-	project := d.Get("project").(string)
 	environment := d.Get("environment").(string)
-
-	projID, err := c.lookupProject(ctx, project)
+	project := d.Get("project").(string)
+	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
-	}
-
-	// set to "default" if not explicitly specified
-	envID, err := c.lookupEnvironment(ctx, environment)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
 	// Handle as_of and tag filters

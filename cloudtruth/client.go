@@ -187,3 +187,17 @@ func (c *cloudTruthClient) loadEnvIDCache(ctx context.Context) error {
 	}
 	return nil
 }
+
+// Look up an environment identifier first as a name, then as an ID
+func (c *cloudTruthClient) lookupEnvProj(ctx context.Context, envNameOrID, projNameOrID string) (*string, *string, error) {
+	tflog.Debug(ctx, fmt.Sprintf("lookupEnvProj: looking up environment %s and projec %st", envNameOrID, projNameOrID))
+	envID, err := c.lookupEnvironment(ctx, envNameOrID)
+	if err != nil {
+		return nil, nil, err
+	}
+	projID, err := c.lookupProject(ctx, projNameOrID)
+	if err != nil {
+		return nil, nil, err
+	}
+	return envID, projID, nil
+}

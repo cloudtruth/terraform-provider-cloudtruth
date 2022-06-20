@@ -44,49 +44,48 @@ func resourceTemplate() *schema.Resource {
 }
 
 func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTemplateCreate")
 	project := d.Get("project").(string)
-	c := meta.(*cloudTruthClient)
+	projID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("resourceTemplateCreate: %w", err))
+	}
+
 	templateName := d.Get("name").(string)
 	templateDesc := d.Get("description").(string)
 	templateCreate := cloudtruthapi.NewTemplateCreate(templateName)
 	if templateDesc != "" {
 		templateCreate.SetDescription(templateDesc)
 	}
-	// Template values can be empty
 	templateValue := d.Get("value").(string)
 	if templateValue != "" {
 		templateCreate.SetBody(templateValue) // This will fail when we attempt to create the template if invalid
-	}
-	projID, err := c.lookupProject(ctx, project)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceTemplateCreate: %w", err))
 	}
 	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(context.Background(),
 		*projID).TemplateCreate(*templateCreate).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateCreate: %w", err))
 	}
-
-	// Templates exist at the project level and span all environments
 	d.SetId(resp.GetId())
 	return nil
 }
 
 func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTemplateRead")
 	project := d.Get("project").(string)
-	c := meta.(*cloudTruthClient)
-	templateName := d.Get("name").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateRead: %w", err))
 	}
+
+	templateName := d.Get("name").(string)
 	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx, *projID).Name(templateName).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateRead: %w", err))
 	}
-	// There should be only one template found
+
 	res := resp.GetResults()
 	if len(res) != 1 {
 		return diag.FromErr(fmt.Errorf("resourceTemplateRead: found %d templates, expcted to find 1", len(res)))
@@ -96,9 +95,9 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 }
 
 func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTemplateUpdate")
 	project := d.Get("project").(string)
-	c := meta.(*cloudTruthClient)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateUpdate: %w", err))
@@ -128,15 +127,14 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 }
 
 func resourceTemplateDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTemplateDelete")
 	project := d.Get("project").(string)
-	c := meta.(*cloudTruthClient)
-	templateID := d.Id()
-
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateDelete: %w", err))
 	}
+	templateID := d.Id()
 
 	_, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesDestroy(ctx, templateID, *projID).Execute()
 	if err != nil {

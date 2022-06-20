@@ -43,14 +43,9 @@ func dataCloudTruthParameter() *schema.Resource {
 func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParameterRead")
-	project := d.Get("project").(string)
 	environment := d.Get("environment").(string)
-
-	envID, err := c.lookupEnvironment(ctx, environment)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
-	}
-	projID, err := c.lookupProject(ctx, project)
+	project := d.Get("project").(string)
+	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
 	}
@@ -163,15 +158,9 @@ func listParameters(ctx context.Context, c *cloudTruthClient, d *schema.Resource
 func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParametersRead")
-	project := d.Get("project").(string)
 	environment := d.Get("environment").(string)
-	projID, err := c.lookupProject(ctx, project)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
-	}
-
-	// set to "default" if not explicitly specified
-	envID, err := c.lookupEnvironment(ctx, environment)
+	project := d.Get("project").(string)
+	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}

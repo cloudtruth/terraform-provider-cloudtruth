@@ -74,11 +74,16 @@ func resourceParameter() *schema.Resource {
 // Therefore, when this provider destroys a parameter resource, it only removes the per-environment value unless
 // the parameter is only defined in one environment, in which case it is destroyed entirely
 func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceParameterCreate")
-	project := d.Get("project").(string)
-	environment := d.Get("environment").(string)
-	// First create the parameter
 	c := meta.(*cloudTruthClient)
+	tflog.Debug(ctx, "resourceParameterCreate")
+	environment := d.Get("environment").(string)
+	project := d.Get("project").(string)
+	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
+	}
+
+	// First create the parameter
 	paramName := d.Get("name").(string)
 	paramCreate := cloudtruthapi.NewParameterCreate(paramName)
 	paramDesc := d.Get("description").(string)
@@ -87,16 +92,6 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	}
 	paramIsSecret := d.Get("secret").(bool)
 	paramCreate.SetSecret(paramIsSecret)
-
-	projID, err := c.lookupProject(ctx, project)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
-	}
-
-	envID, err := c.lookupEnvironment(ctx, environment)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
-	}
 
 	// NOTE: a parameter will exist in any/all environments however, its value may be set/overridden/inherited across
 	// multiple environments
@@ -145,9 +140,14 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 }
 
 func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceParameterUpdate")
 	project := d.Get("project").(string)
-	c := meta.(*cloudTruthClient)
+	projID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
+	}
+
 	paramCompositeID := d.Id()
 	ids := strings.Split(paramCompositeID, ":")
 	if len(ids) != 2 {
@@ -155,14 +155,9 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 			paramCompositeID))
 	}
 	paramID, paramValueID := ids[0], ids[1]
-	projID, err := c.lookupProject(ctx, project)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
-	}
 
-	// Two concerns:
 	// 1. Update Parameter level changes
-	// 2. Update Paramater Value level changes
+	// 2. Update Parameter Value level changes
 	patchedParam := cloudtruthapi.PatchedParameter{}
 	hasParamChange := false
 
@@ -223,9 +218,14 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 // defined in the target environment
 func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterDelete")
-	project := d.Get("project").(string)
-	environment := d.Get("environment").(string)
 	c := meta.(*cloudTruthClient)
+	environment := d.Get("environment").(string)
+	project := d.Get("project").(string)
+	projID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
+	}
+
 	paramCompositeID := d.Id()
 	ids := strings.Split(paramCompositeID, ":")
 	if len(ids) != 2 {
@@ -233,10 +233,6 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 			paramCompositeID))
 	}
 	paramID, paramValueID := ids[0], ids[1]
-	projID, err := c.lookupProject(ctx, project)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
-	}
 	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(context.Background(), paramID, *projID).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
