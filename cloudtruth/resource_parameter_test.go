@@ -133,6 +133,7 @@ func testAccResourceParameterCreateProdOverride(defaultParam, value, prodParam, 
 	`, defaultParam, value, prodParam, prodValue)
 }
 
+/* wip
 func testAccResourceParameterCreateExternal(projName, paramName, desc, ext_fqn, ext_filter string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_parameter" "external" {
@@ -145,3 +146,4 @@ func testAccResourceParameterCreateExternal(projName, paramName, desc, ext_fqn, 
 	}
 	`, projName, paramName, desc, ext_fqn, ext_filter)
 }
+*/
