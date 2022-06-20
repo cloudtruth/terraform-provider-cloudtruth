@@ -12,7 +12,7 @@ import (
 func resourceEnvironment() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.
-		Description: "A Cloudtruth Environment.",
+		Description: "A CloudTruth Environment.",
 
 		CreateContext: resourceEnvironmentCreate,
 		ReadContext:   resourceEnvironmentRead,
@@ -52,13 +52,13 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	c := meta.(*cloudTruthClient)
 	envName := d.Get("name").(string)
 	envDesc := d.Get("description").(string)
-	envParent := d.Get("parent").(string)
-	envParentID, err := c.lookupEnvironment(ctx, envParent)
+	parentEnv := d.Get("parent").(string)
+	parentEnvID, err := c.lookupEnvironment(ctx, parentEnv)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceEnvironmentCreate: %w", err))
 	}
 	envCreate := cloudtruthapi.NewEnvironmentCreate(envName)
-	envCreate.SetParent(fmt.Sprintf("%s/environments/%s/", c.config.BaseURL, *envParentID))
+	envCreate.SetParent(fmt.Sprintf("%s/environments/%s/", c.config.BaseURL, *parentEnvID))
 	if envDesc != "" {
 		envCreate.SetDescription(envDesc)
 	}

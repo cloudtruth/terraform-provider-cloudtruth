@@ -75,7 +75,8 @@ func resourceParameter() *schema.Resource {
 // the parameter is only defined in one environment, in which case it is destroyed entirely
 func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterCreate")
-	var diags diag.Diagnostics
+	project := d.Get("project").(string)
+	environment := d.Get("environment").(string)
 	// First create the parameter
 	c := meta.(*cloudTruthClient)
 	paramName := d.Get("name").(string)
@@ -87,14 +88,12 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	paramIsSecret := d.Get("secret").(bool)
 	paramCreate.SetSecret(paramIsSecret)
 
-	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
 
-	paramEnv := d.Get("environment").(string)
-	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
+	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
@@ -104,17 +103,14 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	var paramID, valueID string
 	// First check to see if it exists, if it does grab the parameter's ID
 	lookupResp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		*projID).Environment(*paramEnvID).Name(paramName).Execute()
+		*projID).Environment(*envID).Name(paramName).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: error looking up parameter %s: %+v", paramName, r))
 	}
 	value := d.Get("value").(string)
 	if lookupResp.GetCount() == 1 {
 		paramID = lookupResp.GetResults()[0].GetId()
-
 	} else {
-		// if good, we use this
-		// else we set
 		paramCreateResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(context.Background(),
 			*projID).ParameterCreate(*paramCreate).Execute()
 		if err != nil {
@@ -126,7 +122,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	dynamic := d.Get("dynamic").(bool)
 	valueCreate := cloudtruthapi.NewValueCreate(value)
 	valueCreate.SetInternalValue(value)
-	valueCreate.SetEnvironment(*paramEnvID)
+	valueCreate.SetEnvironment(*envID)
 	valueCreate.SetExternal(external)
 	valueCreate.SetInterpolated(dynamic)
 	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
@@ -140,7 +136,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	// Composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
 	internalID := fmt.Sprintf("%s:%s", paramID, valueID)
 	d.SetId(internalID)
-	return diags
+	return nil
 }
 
 func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -150,6 +146,7 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 
 func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterUpdate")
+	project := d.Get("project").(string)
 	c := meta.(*cloudTruthClient)
 	paramCompositeID := d.Id()
 	ids := strings.Split(paramCompositeID, ":")
@@ -158,7 +155,6 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 			paramCompositeID))
 	}
 	paramID, paramValueID := ids[0], ids[1]
-	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
@@ -194,11 +190,11 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		value := d.Get("value").(string)
 		updateValue.SetInternalValue(value)
 		paramEnv := d.Get("environment").(string)
-		paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
+		envID, err := c.lookupEnvironment(ctx, paramEnv)
 		if err != nil {
 			return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
 		}
-		updateValue.SetEnvironment(*paramEnvID)
+		updateValue.SetEnvironment(*envID)
 		hasParamValueChange = true
 	}
 	if d.HasChange("external") {
@@ -227,6 +223,8 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 // defined in the target environment
 func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterDelete")
+	project := d.Get("project").(string)
+	environment := d.Get("environment").(string)
 	c := meta.(*cloudTruthClient)
 	paramCompositeID := d.Id()
 	ids := strings.Split(paramCompositeID, ":")
@@ -235,7 +233,6 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 			paramCompositeID))
 	}
 	paramID, paramValueID := ids[0], ids[1]
-	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
@@ -249,14 +246,13 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	// environments. If they are all null, we delete the parameter. If they are all null except the one matching
 	// the specified environment, we delete the parameter.
 	// Otherwise, we delete the specific value defined in the target environment
-	paramEnv := d.Get("environment").(string)
 	definedInMoreThanOneEnv := false
 	values := resp.GetValues()
 	count := 1 // the param value is defined in the target environment
 	// check to see if it's explicitly defined in any others
 	for envURL := range values {
 		value := values[envURL]
-		if (value.GetEnvironmentName() != paramEnv) && value.HasInternalValue() {
+		if (value.GetEnvironmentName() != environment) && value.HasInternalValue() {
 			count++
 			if count > 1 {
 				definedInMoreThanOneEnv = true

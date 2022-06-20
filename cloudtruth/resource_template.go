@@ -45,7 +45,7 @@ func resourceTemplate() *schema.Resource {
 
 func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceTemplateCreate")
-	var diags diag.Diagnostics
+	project := d.Get("project").(string)
 	c := meta.(*cloudTruthClient)
 	templateName := d.Get("name").(string)
 	templateDesc := d.Get("description").(string)
@@ -58,7 +58,6 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 	if templateValue != "" {
 		templateCreate.SetBody(templateValue) // This will fail when we attempt to create the template if invalid
 	}
-	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateCreate: %w", err))
@@ -71,15 +70,14 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 
 	// Templates exist at the project level and span all environments
 	d.SetId(resp.GetId())
-	return diags
+	return nil
 }
 
 func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceTemplateRead")
-	var diags diag.Diagnostics
+	project := d.Get("project").(string)
 	c := meta.(*cloudTruthClient)
 	templateName := d.Get("name").(string)
-	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateRead: %w", err))
@@ -94,13 +92,13 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 		return diag.FromErr(fmt.Errorf("resourceTemplateRead: found %d templates, expcted to find 1", len(res)))
 	}
 	d.SetId(resp.GetResults()[0].GetId())
-	return diags
+	return nil
 }
 
 func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceTemplateUpdate")
-	c := meta.(*cloudTruthClient)
 	project := d.Get("project").(string)
+	c := meta.(*cloudTruthClient)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateUpdate: %w", err))
@@ -131,10 +129,10 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 
 func resourceTemplateDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceTemplateDelete")
+	project := d.Get("project").(string)
 	c := meta.(*cloudTruthClient)
 	templateID := d.Id()
 
-	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateDelete: %w", err))

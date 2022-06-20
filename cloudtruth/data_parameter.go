@@ -43,23 +43,21 @@ func dataCloudTruthParameter() *schema.Resource {
 func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParameterRead")
+	project := d.Get("project").(string)
+	environment := d.Get("environment").(string)
 
-	// guaranteed to be set to "default" if not explicitly specified
-	paramEnv := d.Get("environment").(string)
-	paramEnvID, err := c.lookupEnvironment(ctx, paramEnv)
+	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
 	}
-
-	project := d.Get("project").(string)
+	projID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
+	}
 	name := d.Get("name").(string)
 
-	projectID, err := c.lookupProject(ctx, project)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
-	}
 	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		*projectID).Environment(*paramEnvID).Name(name).Execute()
+		*projID).Environment(*envID).Name(name).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: error looking up parameter %s: %+v", name, r))
 	}
@@ -69,8 +67,9 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	}
 
 	// We know there is only one parameter at this point
-	// There will also should only ever be one value per parameter per environment per project
-	param := resp.GetResults()[0]
+	// There should only ever be one value per parameter per environment per project
+	results := resp.GetResults()
+	param := results[0]
 	values := param.GetValues()
 	paramID := param.GetId()
 	if len(values) > 1 {
@@ -79,7 +78,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	}
 	for _, v := range values {
 		tflog.Debug(ctx, fmt.Sprintf("dataCloudTruthParameterRead: found value for %s, lookup env %s, resolved env %s",
-			name, paramEnv, v.GetEnvironmentName()))
+			name, environment, v.GetEnvironmentName()))
 		err := d.Set("value", v.GetValue())
 		if err != nil {
 			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
@@ -87,7 +86,6 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 		// We use a composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
 		d.SetId(fmt.Sprintf("%s:%s", paramID, v.GetId()))
 	}
-
 	return nil
 }
 
@@ -126,25 +124,61 @@ func dataCloudTruthParameters() *schema.Resource {
 	}
 }
 
+/*
+func listParameters(ctx context.Context, c *cloudTruthClient, d *schema.ResourceData, meta any) diag.Diagnostics {
+	// set to "default" if not explicitly specified
+	environment := d.Get("environment").(string)
+	envID, err := c.lookupEnvironment(ctx, environment)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("listParameters: %w", err))
+	}
+
+	// Handle as_of and tag filters
+	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
+		*projID).Environment(environment)
+	asOf := d.Get("as_of").(string)
+	tag := d.Get("tag").(string)
+	if asOf != "" {
+		if tag != "" {
+			return diag.Errorf("listParameters: 'as_of' and 'tag' cannot both be specified as parameter filters")
+		}
+		asOfTime, err := datetime.Parse(asOf, time.UTC)
+		if err != nil {
+			return diag.FromErr(fmt.Errorf("listParameters: %w", err))
+		}
+		paramListRequest = paramListRequest.AsOf(asOfTime)
+	}
+	if tag != "" {
+		paramListRequest = paramListRequest.Tag(tag)
+	}
+
+	resp, r, err := paramListRequest.Execute()
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("listParameters: error looking up parameters in the %s environment in the %s project: %+v",
+			environment, project, r))
+	}
+	return nil
+}
+*/
 func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParametersRead")
 	project := d.Get("project").(string)
-	projectID, err := c.lookupProject(ctx, project)
+	environment := d.Get("environment").(string)
+	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
 	// set to "default" if not explicitly specified
-	environment := d.Get("environment").(string)
-	paramEnvID, err := c.lookupEnvironment(ctx, environment)
+	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
 	// Handle as_of and tag filters
 	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		*projectID).Environment(environment)
+		*projID).Environment(environment)
 	asOf := d.Get("as_of").(string)
 	tag := d.Get("tag").(string)
 	if asOf != "" {
@@ -167,8 +201,8 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 			environment, project, r))
 	}
 
-	paramsMap := make(map[string]any)
 	results := resp.GetResults()
+	paramsMap := make(map[string]any)
 	var pageNum int32 = 1
 	for results != nil {
 		for _, res := range results {
@@ -185,7 +219,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		if resp.GetNext() != "" {
 			pageNum++
 			paramListRequest = c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-				*projectID).Environment(environment).Page(pageNum)
+				*projID).Environment(environment).Page(pageNum)
 			resp, r, err = paramListRequest.Execute()
 			if err != nil {
 				return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: error looking up parameters in the %s environment in the %s project: %+v",
@@ -208,6 +242,6 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	// However, we do need to be mindful that a user could pull in the set of parameters more than once
 	// within the same state, with possible variations on filters, if that turns out to be an issue
 	// then we may need to rethink the ID strategy here
-	d.SetId(fmt.Sprintf("%s:%s", *projectID, *paramEnvID))
+	d.SetId(fmt.Sprintf("%s:%s", *projID, *envID))
 	return nil
 }

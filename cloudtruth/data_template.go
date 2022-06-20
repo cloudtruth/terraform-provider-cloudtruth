@@ -44,23 +44,20 @@ func dataCloudTruthTemplate() *schema.Resource {
 func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthTemplateRead")
-
-	// guaranteed to be set to "default" if not explicitly specified
-	templateEnv := d.Get("environment").(string)
-	templateEnvID, err := c.lookupEnvironment(ctx, templateEnv)
+	project := d.Get("project").(string)
+	environment := d.Get("environment").(string)
+	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
 	}
-
-	project := d.Get("project").(string)
 	name := d.Get("name").(string)
 
-	projectID, err := c.lookupProject(ctx, project)
+	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
 	}
 	templateList, r, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
-		*projectID).Environment(*templateEnvID).Name(name).Execute()
+		*projID).Environment(*envID).Name(name).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: error looking up template %s: %+v", name, r))
 	}
@@ -77,14 +74,14 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	body := template.GetBody()
 	tflog.Debug(ctx, fmt.Sprintf("dataCloudTruthTemplateRead: template body - %s", body))
 
-	previewBody, err := renderTemplateBody(ctx, body, *projectID, meta)
+	previewBody, err := renderTemplateBody(ctx, body, *projID, meta)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
 	}
 	_ = d.Set("value", previewBody)
 	// We use a composite ID - <ENV_ID>:<TEMPLATE_ID>
 	// This data source represents the evaluation of a template in a given environment (and project)
-	d.SetId(fmt.Sprintf("%s:%s", *templateEnvID, templateID))
+	d.SetId(fmt.Sprintf("%s:%s", *envID, templateID))
 	return nil
 }
 
@@ -143,21 +140,22 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthTemplatesRead")
 	project := d.Get("project").(string)
-	projectID, err := c.lookupProject(ctx, project)
+	environment := d.Get("environment").(string)
+
+	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
 	}
 
 	// set to "default" if not explicitly specified
-	environment := d.Get("environment").(string)
-	paramEnvID, err := c.lookupEnvironment(ctx, environment)
+	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
 	// Handle as_of and tag filters
 	templateListRequest := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
-		*projectID).Environment(environment)
+		*projID).Environment(environment)
 	asOf := d.Get("as_of").(string)
 	tag := d.Get("tag").(string)
 	if asOf != "" {
@@ -187,7 +185,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 		for _, res := range results {
 			templateName := res.GetName()
 			templateBody := res.GetBody()
-			previewBody, err := renderTemplateBody(ctx, templateBody, *projectID, meta)
+			previewBody, err := renderTemplateBody(ctx, templateBody, *projID, meta)
 			if err != nil {
 				return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
 			} else {
@@ -197,7 +195,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 		if resp.GetNext() != "" {
 			pageNum++
 			templateListRequest = c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
-				*projectID).Environment(environment).Page(pageNum)
+				*projID).Environment(environment).Page(pageNum)
 			resp, r, err = templateListRequest.Execute()
 			if err != nil {
 				return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: error looking up parameters in the %s environment in the %s project: %+v",
@@ -214,8 +212,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
 	}
 
-	// As with the parameters (plural) data source,we may need to use a more complex ID strategy
-	// here
-	d.SetId(fmt.Sprintf("%s:%s", *projectID, *paramEnvID))
+	// As with the parameters (plural) data source,we may need to use a more complex ID strategy here
+	d.SetId(fmt.Sprintf("%s:%s", *projID, *envID))
 	return nil
 }
