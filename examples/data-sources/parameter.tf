@@ -3,7 +3,6 @@ terraform {
   required_providers {
     cloudtruth = {
       source  = "cloudtruth/cloudtruth"
-      version = "0.0.3"
     }
   }
 }
