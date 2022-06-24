@@ -27,12 +27,18 @@ data "cloudtruth_parameter" "secret" {
 // the CLOUDTRUTH_PROJECT and CLOUDTRUTH_ENVIRONMENT environment variables
 // which will set them at the provider level
 const testAccParameterProvEnvProj = `
-data "cloudtruth_parameter" "nonsecret_prov_env_proj" {
+data "cloudtruth_parameter" "nonsecret_param" {
   name        = "%s"
 }
 
-data "cloudtruth_parameter" "secret_prov_env_proj" {
+data "cloudtruth_parameter" "secret_param" {
   name        = "%s"
+}
+`
+
+const testAccMissingParameter = `
+data "cloudtruth_parameter" "missing" {
+  name     = "idontexist"
 }
 `
 
@@ -44,7 +50,7 @@ data "cloudtruth_parameters" "multi_env" {
 `
 
 const testAccParametersAsOf = `
-data "cloudtruth_parameters" "multi_env" {
+data "cloudtruth_parameters" "as_of_params" {
   project     = "%s"
   environment = "%s"
   as_of       = "%s"
@@ -54,6 +60,20 @@ data "cloudtruth_parameters" "multi_env" {
 var expParameterValues = map[string]interface{}{
 	"parameter_values.DefaultRegularParam": regularParamVal,
 	"parameter_values.DefaultSecretParam":  secretParamVal,
+}
+
+func TestMissingDataSourceParameter(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccMissingParameter,
+				ExpectError: regexp.MustCompile("expected 1 value for parameter"),
+			},
+		},
+	})
 }
 
 func TestDataSourceParameter(t *testing.T) {
@@ -83,10 +103,10 @@ func TestDataSourceParameter(t *testing.T) {
 				Config: fmt.Sprintf(testAccParameterProvEnvProj, regularParam, secretParam),
 				Check: resource.ComposeTestCheckFunc(
 					// regular parameter
-					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret_prov_env_proj", "value", regularParamVal),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret_param", "value", regularParamVal),
 
 					// secret parameter
-					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret_prov_env_proj", "value", secretParamVal),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret_param", "value", secretParamVal),
 				),
 			},
 		},
@@ -120,21 +140,16 @@ func TestAccAsOfDataSourceParameters(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				// Use a date when the parameters did not exist
-				Config: fmt.Sprintf(testAccParametersAsOf, accTestProject, "default", "2000-01-01T00:00:00"),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", accTestProject),
-					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "environment", "default"),
-					testAccCheckDataSourceValueMap("data.cloudtruth_parameters.multi_env", expParameterValues),
-				),
+				Config:      fmt.Sprintf(testAccParametersAsOf, accTestProject, "default", "2000-01-01T00:00:00"),
 				ExpectError: regexp.MustCompile("404 Not Found"),
 			},
 			{
 				// And a date when the parameters definitely do exist, for simplicity we use time.Now
 				Config: fmt.Sprintf(testAccParametersAsOf, accTestProject, "default", now),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "project", accTestProject),
-					resource.TestCheckResourceAttr("data.cloudtruth_parameters.multi_env", "environment", "default"),
-					testAccCheckDataSourceValueMap("data.cloudtruth_parameters.multi_env", expParameterValues),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameters.as_of_params", "project", accTestProject),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameters.as_of_params", "environment", "default"),
+					testAccCheckDataSourceValueMap("data.cloudtruth_parameters.as_of_params", expParameterValues),
 				),
 			},
 		},

@@ -56,9 +56,9 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: error looking up parameter %s: %+v", name, r))
 	}
-	if resp.GetCount() > 1 {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: unexpectedly found %d results for parameter %s",
-			resp.GetCount(), name))
+	if resp.GetCount() != 1 {
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: expected 1 value for parameter %s, found %d instead",
+			name, resp.GetCount()))
 	}
 
 	// We know there is only one parameter at this point
