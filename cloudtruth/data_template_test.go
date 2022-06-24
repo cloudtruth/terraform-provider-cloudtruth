@@ -3,6 +3,7 @@ package cloudtruth
 import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"regexp"
 	"testing"
 )
 
@@ -11,6 +12,14 @@ data "cloudtruth_template" "basic" {
   project     = "%s"
   environment = "%s"
   name        = "%s"
+}
+`
+
+const testAccMissingTemplate = `
+data "cloudtruth_template" "basic" {
+  project     = "%s"
+  environment = "%s"
+  name        = "idonotexist"
 }
 `
 
@@ -24,6 +33,20 @@ data "cloudtruth_templates" "basic_default" {
 var expTemplateValues = map[string]interface{}{
 	"template_values.BasicTemplate":   basicTemplateVal,
 	"template_values.DefaultTemplate": defaultTemplateVal,
+}
+
+func TestMissingDataSourceTemplate(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				Config:      fmt.Sprintf(testAccMissingTemplate, accTestProject, defaultEnv),
+				ExpectError: regexp.MustCompile("expected 1 value for template"),
+			},
+		},
+	})
 }
 
 func TestDataSourceTemplate(t *testing.T) {

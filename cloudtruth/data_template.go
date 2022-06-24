@@ -57,9 +57,9 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: error looking up template %s: %+v", name, r))
 	}
-	if templateList.GetCount() > 1 {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: unexpectedly found %d results for template %s",
-			templateList.GetCount(), name))
+	if templateList.GetCount() != 1 {
+		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: expected 1 value for template %s, found %d instead",
+			name, templateList.GetCount()))
 	}
 
 	// There should only be one template with the specified name per environment per project
