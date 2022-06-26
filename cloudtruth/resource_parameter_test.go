@@ -71,6 +71,12 @@ func TestAccResourceParameterProdOverride(t *testing.T) {
 }
 
 /* wip
+func TestParamCreateConfig(t *testing.T) {
+}
+
+func TestParamValueCreateConfig(t *testing.T) {
+}
+
 func TestAccResourceParameterExternal(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{

@@ -10,10 +10,22 @@ import (
 	"strings"
 )
 
+/* Notes:
+   At the Parameter level, only the secret property and description are mutable. We disallow changing
+   the parameter name, project and environment and instead instruct the user to destroy and recreate
+   the Parameter.
+
+	At the Parameter Value level, we allow toggling internal/external + dynamic/non-dynamic as well as
+    updating the value itself. However, we must block certain invalid combinations such as:
+    * changing a value from internal -> external when the Parameter is a secret Parameter
+    * changing a value from non-dynamic -> dynamic when the Value is external
+    There are likely many corner cases to consider here.
+*/
+
 func resourceParameter() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.
-		Description: "A CloudTruth Parameter.",
+		Description: "A CloudTruth Parameter and environment specific value (defaulting to the 'default' environment)",
 
 		CreateContext: resourceParameterCreate,
 		ReadContext:   resourceParameterRead,
@@ -22,7 +34,7 @@ func resourceParameter() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Description: "The name of the CloudTruth Parameter",
+				Description: "The name of the CloudTruth Parameter, unique per project",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
@@ -37,25 +49,25 @@ func resourceParameter() *schema.Resource {
 				Optional:    true,
 			},
 			"environment": {
-				Description: "The CloudTruth environment where the Parameter's value is defined. Defaults to empty string",
+				Description: "The CloudTruth environment where the Parameter's value is defined. Defaults to the 'default' environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "default",
 			},
-			"value": {
-				Description: "The value of the CloudTruth Parameter, specific to an environment (which can be overridden/inherited)",
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
-			},
 			"secret": {
-				Description: "Whether or not the Parameter is a secret, defaults to false/non-secret",
+				Description: "Whether or not the Parameter is a secret, defaults to false (non-secret)",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
 			},
+			"value": {
+				Description: "The value of the CloudTruth Parameter, specific to an environment (can be overridden/inherited relative to other environments)",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "",
+			},
 			"dynamic": {
-				Description: "Whether or not to evaluate the Parameter's value (incompatible with secret parameters)",
+				Description: "Whether or not to evaluate/interpolate the Parameter's value (incompatible with secret parameters)",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
@@ -67,13 +79,13 @@ func resourceParameter() *schema.Resource {
 				Default:     false,
 			},
 			"location": {
-				Description: "The location of the secret value, required for external parameters, otherwise optional",
+				Description: "The location of the secret value, required for external parameters",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
 			},
 			"filter": {
-				Description: "An optional filter (path/query) used only with external parameters",
+				Description: "An optional filter (path/query), optional and used only with external parameters",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
