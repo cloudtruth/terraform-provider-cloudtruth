@@ -16,15 +16,17 @@ import (
 // Constants and variables which are unique per resource/data source type are located in the
 // corresponding *_test.go files
 const (
-	defaultEnv         = "default"
-	accTestProject     = "AcceptanceTest"
-	regularParam       = "DefaultRegularParam"
-	regularParamVal    = "notreallyasecret"
-	secretParam        = "DefaultSecretParam"
-	secretParamVal     = "ultratopsecret"
-	basicTemplate      = "BasicTemplate"
-	basicTemplateVal   = "Regular Parameter: notreallyasecret, Secret Parameter ultratopsecret"
-	defaultTemplateVal = "notreallyasecret"
+	defaultEnv              = "default"
+	accTestProject          = "AcceptanceTest"
+	regularParam            = "DefaultRegularParam"
+	regularParamVal         = "notreallyasecret"
+	secretParam             = "DefaultSecretParam"
+	secretParamVal          = "ultratopsecret"
+	regularExternalParam    = "DefaultSecretParam"
+	regularExternalParamVal = "ultratopsecret"
+	basicTemplate           = "BasicTemplate"
+	basicTemplateVal        = "Regular Parameter: notreallyasecret, Secret Parameter ultratopsecret"
+	defaultTemplateVal      = "notreallyasecret"
 	// githubLocation = "github://cloudtruth/terraform-provider-cloudtruth/main/terraform-registry-manifest.json"
 	// githubFilter   = "metadata.protocol_versions[0]"
 )

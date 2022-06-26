@@ -261,7 +261,7 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	// environments. If they are all null, we delete the parameter. If they are all null except the one matching
 	// the specified environment, we delete the parameter.
 	// Otherwise, we delete the specific value defined in the target environment
-	definedInMoreThanOneEnv := false
+	multiEnv := false
 	values := resp.GetValues()
 	count := 1 // the param value is defined in the target environment
 	// check to see if it's explicitly defined in any others
@@ -270,13 +270,13 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 		if (value.GetEnvironmentName() != environment) && value.HasInternalValue() {
 			count++
 			if count > 1 {
-				definedInMoreThanOneEnv = true
+				multiEnv = true
 				break
 			}
 		}
 	}
 
-	if definedInMoreThanOneEnv {
+	if multiEnv {
 		// delete the specific env value only, because there are explicit definitions in one or more other envs
 		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(context.Background(), paramValueID,
 			paramID, *projID).Execute()

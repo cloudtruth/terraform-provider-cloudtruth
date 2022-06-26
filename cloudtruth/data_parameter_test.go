@@ -34,6 +34,10 @@ data "cloudtruth_parameter" "nonsecret_param" {
 data "cloudtruth_parameter" "secret_param" {
   name        = "%s"
 }
+
+data "cloudtruth_parameter" "external_param" {
+  name        = "%s"
+}
 `
 
 const testAccMissingParameter = `
@@ -100,13 +104,16 @@ func TestDataSourceParameter(t *testing.T) {
 				),
 			},
 			{ // In this step, the environment and project default to the values specified at the provider level
-				Config: fmt.Sprintf(testAccParameterProvEnvProj, regularParam, secretParam),
+				Config: fmt.Sprintf(testAccParameterProvEnvProj, regularParam, secretParam, regularExternalParam),
 				Check: resource.ComposeTestCheckFunc(
 					// regular parameter
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret_param", "value", regularParamVal),
 
 					// secret parameter
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret_param", "value", secretParamVal),
+
+					// regular external parameter
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.external_param", "value", regularExternalParamVal),
 				),
 			},
 		},
