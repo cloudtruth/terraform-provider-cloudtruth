@@ -70,28 +70,25 @@ func TestAccResourceParameterProdOverride(t *testing.T) {
 	})
 }
 
-/* wip
-func TestParamCreateConfig(t *testing.T) {
-}
-
-func TestParamValueCreateConfig(t *testing.T) {
-}
-
 func TestAccResourceParameterExternal(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
-		PreCheck:          func() { testAccPreCheck(t) },
+		ProviderFactories:         testProviderFactories,
+		PreventPostDestroyRefresh: true,
+		PreCheck:                  func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceParameterCreateExternal(createParamName, createParamName, prodParamVal),
+				Config: testAccResourceParameterCreateExternal(createParamName, paramDesc, githubLocation, githubFilter),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_parameter.external", "name", createParamName),
+					resource.TestCheckResourceAttr("cloudtruth_parameter.external", "description", paramDesc),
+					resource.TestCheckResourceAttr("cloudtruth_parameter.external", "location", githubLocation),
+					resource.TestCheckResourceAttr("cloudtruth_parameter.external", "filter", githubFilter),
 				),
 			},
 		},
 	})
-}*/
+}
 
 func testAccResourceParameterCreateBasic(projName, paramName, desc, value string) string {
 	return fmt.Sprintf(`
@@ -139,17 +136,15 @@ func testAccResourceParameterCreateProdOverride(defaultParam, value, prodParam, 
 	`, defaultParam, value, prodParam, prodValue)
 }
 
-/* wip
-func testAccResourceParameterCreateExternal(projName, paramName, desc, ext_fqn, ext_filter string) string {
+func testAccResourceParameterCreateExternal(paramName, desc, location, filter string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_parameter" "external" {
-		project          = "%s"
+		project          = "AcceptanceTest"
   		name             = "%s"
   		description      = "%s"
         external         = true
-        external_fqn     = "%s"
-        external_filter  = "%s"
+        location         = "%s"
+        filter           = "%s"
 	}
-	`, projName, paramName, desc, ext_fqn, ext_filter)
+	`, paramName, desc, location, filter)
 }
-*/

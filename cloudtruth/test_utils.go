@@ -27,8 +27,8 @@ const (
 	basicTemplate           = "BasicTemplate"
 	basicTemplateVal        = "Regular Parameter: notreallyasecret, Secret Parameter ultratopsecret"
 	defaultTemplateVal      = "notreallyasecret"
-	// githubLocation = "github://cloudtruth/terraform-provider-cloudtruth/main/terraform-registry-manifest.json"
-	// githubFilter   = "metadata.protocol_versions[0]"
+	githubLocation          = "github://cloudtruth/terraform-provider-cloudtruth/main/terraform-registry-manifest.json"
+	githubFilter            = "metadata.protocol_versions[0]"
 )
 
 // Utility function to use with data sources and resources that are maps

@@ -65,6 +65,15 @@ func resourceParameter() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
+				// With external parameters, the value is computed but should not be used to diff/detect changes
+				// It is only useful in read operations. A change to the location and/or filter field would indicate a resource change
+				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+					external := d.Get("external").(bool)
+					if external {
+						return true
+					}
+					return false
+				},
 			},
 			"dynamic": {
 				Description: "Whether or not to evaluate/interpolate the Parameter's value (incompatible with secret parameters)",
@@ -107,7 +116,6 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
 
-	// NOTE: parameters exist in all environments however, specific values can be assigned in any set of environments
 	paramName := d.Get("name").(string)
 	var paramID, valueID string
 	lookupResp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
@@ -127,7 +135,10 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		}
 		paramID = paramCreateResp.GetId()
 	}
-	valueCreate := valueCreateConfig(*envID, d)
+	valueCreate, err := valueCreateConfig(*envID, d)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
+	}
 	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
 		paramID, *projID).ValueCreate(*valueCreate).Execute()
 	if err != nil {
@@ -135,8 +146,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	}
 	valueID = valueResp.GetId()
 
-	// Then add its value in the specified environment
-	// Composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
+	// Then add its value in the specified environment with composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
 	internalID := fmt.Sprintf("%s:%s", paramID, valueID)
 	d.SetId(internalID)
 	return nil
@@ -154,16 +164,31 @@ func paramCreateConfig(d *schema.ResourceData) *cloudtruthapi.ParameterCreate {
 	return paramCreate
 }
 
-func valueCreateConfig(envID string, d *schema.ResourceData) *cloudtruthapi.ValueCreate {
+func valueCreateConfig(envID string, d *schema.ResourceData) (*cloudtruthapi.ValueCreate, error) {
+	name := d.Get("name").(string)
 	value := d.Get("value").(string)
-	external := d.Get("external").(bool)
 	dynamic := d.Get("dynamic").(bool)
 	valueCreate := cloudtruthapi.NewValueCreate(value)
-	valueCreate.SetInternalValue(value)
+	external := d.Get("external").(bool)
+	if external && value != "" {
+		return nil, fmt.Errorf("you cannot specify a value (%s)with the external parameter %s", value, name)
+	}
+	if value != "" {
+		valueCreate.SetInternalValue(value)
+		valueCreate.SetInterpolated(dynamic)
+	} else {
+		valueCreate.SetExternal(external)
+		location, filter := d.Get("location").(string), d.Get("filter").(string)
+		if location == "" {
+			return nil, fmt.Errorf("you must specify the location of the external parameter %s", name)
+		}
+		valueCreate.SetExternalFqn(location)
+		if filter != "" {
+			valueCreate.SetExternalFilter(filter)
+		}
+	}
 	valueCreate.SetEnvironment(envID)
-	valueCreate.SetExternal(external)
-	valueCreate.SetInterpolated(dynamic)
-	return valueCreate
+	return valueCreate, nil
 }
 
 func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {

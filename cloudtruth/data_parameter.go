@@ -31,6 +31,11 @@ func dataCloudTruthParameter() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
+			"external": {
+				Description: "Whether or not the value is external, defaults to false",
+				Type:        schema.TypeBool,
+				Computed:    true,
+			},
 			"value": {
 				Description: "The parameter's value",
 				Type:        schema.TypeString,
