@@ -69,10 +69,7 @@ func resourceParameter() *schema.Resource {
 				// It is only useful in read operations. A change to the location and/or filter field would indicate a resource change
 				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
 					external := d.Get("external").(bool)
-					if external {
-						return true
-					}
-					return false
+					return external
 				},
 			},
 			"dynamic": {
