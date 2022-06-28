@@ -183,12 +183,8 @@ func (c *cloudTruthClient) addNewEnvToCaches(envName, envID string) {
 }
 
 func (c *cloudTruthClient) removeEnvFromCaches(envName, envID string) {
-	if _, ok := c.envNames[envName]; ok {
-		delete(c.envNames, envName)
-	}
-	if _, ok := c.envIDs[envID]; ok {
-		delete(c.envIDs, envID)
-	}
+	delete(c.envNames, envName)
+	delete(c.envIDs, envID)
 }
 
 // Map of CloudTruth environment IDs -> project names
