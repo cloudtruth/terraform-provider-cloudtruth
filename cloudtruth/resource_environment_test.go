@@ -69,6 +69,26 @@ func TestAccResourceEnvForceDelete(t *testing.T) {
 	})
 }
 
+func TestAccResourceEnvNested(t *testing.T) {
+	envOneName := fmt.Sprintf("TestEnv1-%s", uuid.New().String())
+	envTwoName := fmt.Sprintf("TestEnv2-%s", uuid.New().String())
+	envThreeName := fmt.Sprintf("TestEnv3-%s", uuid.New().String())
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: testAccResourceEnvNested(envOneName, envTwoName, envThreeName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("cloudtruth_environment.env_one", "name", envOneName),
+					resource.TestCheckResourceAttr("cloudtruth_environment.env_two", "name", envTwoName),
+					resource.TestCheckResourceAttr("cloudtruth_environment.env_three", "name", envThreeName),
+				),
+			},
+		},
+	})
+}
+
 func testAccResourceEnvCreateBasic(envName, desc string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_environment" "basic" {
@@ -106,4 +126,25 @@ func testAccResourceEnvForceDeleteEnabled(envName, desc string) string {
 		force_delete = true
 	}
 	`, envName, desc)
+}
+
+func testAccResourceEnvNested(envOne, envTwo, envThree string) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_environment" "env_one" {
+  		name         = "%s"
+        force_delete = true
+	}
+
+	resource "cloudtruth_environment" "env_two" {
+  		name         = "%s"
+        force_delete = true
+  		parent       = cloudtruth_environment.env_one.name
+	}
+
+	resource "cloudtruth_environment" "env_three" {
+  		name         = "%s"
+        force_delete = true
+  		parent       = cloudtruth_environment.env_two.name
+	}
+	`, envOne, envTwo, envThree)
 }

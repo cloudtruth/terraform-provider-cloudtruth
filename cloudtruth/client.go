@@ -175,6 +175,22 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 	return nil
 }
 
+// todo:
+// update project caches
+func (c *cloudTruthClient) addNewEnvToCaches(envName, envID string) {
+	c.envNames[envName] = envID
+	c.envIDs[envID] = envName
+}
+
+func (c *cloudTruthClient) removeEnvFromCaches(envName, envID string) {
+	if _, ok := c.envNames[envName]; ok {
+		delete(c.envNames, envName)
+	}
+	if _, ok := c.envIDs[envID]; ok {
+		delete(c.envIDs, envID)
+	}
+}
+
 // Map of CloudTruth environment IDs -> project names
 func (c *cloudTruthClient) loadEnvIDCache(ctx context.Context) error {
 	if c.envIDs == nil {
@@ -190,7 +206,7 @@ func (c *cloudTruthClient) loadEnvIDCache(ctx context.Context) error {
 
 // Look up an environment identifier first as a name, then as an ID
 func (c *cloudTruthClient) lookupEnvProj(ctx context.Context, envNameOrID, projNameOrID string) (*string, *string, error) {
-	tflog.Debug(ctx, fmt.Sprintf("lookupEnvProj: looking up environment %s and projec %st", envNameOrID, projNameOrID))
+	tflog.Debug(ctx, fmt.Sprintf("lookupEnvProj: looking up environment %s and project %s", envNameOrID, projNameOrID))
 	envID, err := c.lookupEnvironment(ctx, envNameOrID)
 	if err != nil {
 		return nil, nil, err

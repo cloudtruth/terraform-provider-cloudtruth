@@ -66,7 +66,9 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceEnvironmentCreate: %w", err))
 	}
-	d.SetId(resp.GetId())
+	envID := resp.GetId()
+	d.SetId(envID)
+	c.addNewEnvToCaches(envName, envID)
 	return diags
 }
 
@@ -120,7 +122,7 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 	tflog.Debug(ctx, "resourceEnvironmentDelete")
 	c := meta.(*cloudTruthClient)
 	envID := d.Id()
-	envName := d.Get("name")
+	envName := d.Get("name").(string)
 	forceDelete := d.Get("force_delete").(bool)
 	if !forceDelete {
 		return diag.Errorf("resourceEnvironmentDelete: environment %s cannot be deleted unless you set the 'force_delete' property to be true",
@@ -130,5 +132,6 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceEnvironmentDelete: %w", err))
 	}
+	c.removeEnvFromCaches(envName, envID)
 	return nil
 }
