@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"strconv"
 	"testing"
 )
 
 const desc = "Just a description of a project"
 const updateDesc = "A new description of a project"
 
+/*
 func TestAccResourceProjectBasic(t *testing.T) {
 	createProjName := fmt.Sprintf("TestProject-%s", uuid.New().String())
 	updateProjName := fmt.Sprintf("updated-%s", createProjName)
@@ -73,7 +73,7 @@ func TestAccResourceProjectForceDelete(t *testing.T) {
 		},
 	})
 }
-
+*/
 func TestAccResourceProjectNested(t *testing.T) {
 	projectOneName := fmt.Sprintf("TestProject1-%s", uuid.New().String())
 	projectTwoName := fmt.Sprintf("TestProject2-%s", uuid.New().String())
@@ -142,13 +142,13 @@ func testAccResourceProjectNested(projectOne, projectTwo, projectThree string) s
 
 	resource "cloudtruth_project" "project_two" {
   		name         = "%s"
-		parent       = "cloudtruth_project.project_one"
+		parent       = cloudtruth_project.project_one.name
 		force_delete = true
 	}
 
 	resource "cloudtruth_project" "project_three" {
   		name         = "%s"
-		parent       = "cloudtruth_project.project_three"
+		parent       = cloudtruth_project.project_two.name
 		force_delete = true
 	}
 	`, projectOne, projectTwo, projectThree)

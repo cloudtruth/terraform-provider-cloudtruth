@@ -144,6 +144,16 @@ func (c *cloudTruthClient) loadProjectIDCache(ctx context.Context) error {
 	return nil
 }
 
+func (c *cloudTruthClient) addNewProjectToCaches(projectName, projectID string) {
+	c.projectNames[projectName] = projectID
+	c.projectIDs[projectID] = projectName
+}
+
+func (c *cloudTruthClient) removeProjectFromCaches(projectName, projectID string) {
+	delete(c.projectNames, projectName)
+	delete(c.projectIDs, projectID)
+}
+
 // Look up an environment identifier first as a name, then as an ID
 func (c *cloudTruthClient) lookupEnvironment(ctx context.Context, envNameOrID string) (*string, error) {
 	tflog.Debug(ctx, fmt.Sprintf("lookupEnvironment: looking up environment with name/ID %s", envNameOrID))
@@ -175,8 +185,6 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 	return nil
 }
 
-// todo:
-// update project caches
 func (c *cloudTruthClient) addNewEnvToCaches(envName, envID string) {
 	c.envNames[envName] = envID
 	c.envIDs[envID] = envName

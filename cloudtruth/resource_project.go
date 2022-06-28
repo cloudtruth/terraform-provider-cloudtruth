@@ -60,7 +60,9 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceProjectCreate: %w", err))
 	}
-	d.SetId(resp.GetId())
+	projectID := resp.GetId()
+	d.SetId(projectID)
+	c.addNewProjectToCaches(projectName, projectID)
 	return diags
 }
 
@@ -127,5 +129,6 @@ func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceProjectDelete: %w", err))
 	}
+	c.removeProjectFromCaches(projectName, projectID)
 	return nil
 }
