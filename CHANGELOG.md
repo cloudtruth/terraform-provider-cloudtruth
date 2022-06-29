@@ -1,3 +1,10 @@
+## 0.3.0 (June 28, 2022)
+
+BUG FIXES:
+
+* https://github.com/cloudtruth/terraform-provider-cloudtruth/issues/8
+
+
 ## 0.2.0 (June 24, 2022)
 
 BUG FIXES:
