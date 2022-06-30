@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/cloudtruth/terraform-provider-cloudtruth v0.0.0
 	github.com/google/uuid v1.3.0
-	github.com/hashicorp/terraform-plugin-docs v0.11.0
+	github.com/hashicorp/terraform-plugin-docs v0.12.0
 	github.com/hashicorp/terraform-plugin-log v0.4.1
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.17.0
 	github.com/nav-inc/datetime v0.1.3
