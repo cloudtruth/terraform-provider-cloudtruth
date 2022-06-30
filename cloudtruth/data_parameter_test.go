@@ -8,8 +8,6 @@ import (
 	"time"
 )
 
-// todo:
-// add tag tests when setup/cleanup scripts are in place i.e. for now minimized the amount and complexity
 const testAccParameter = `
 data "cloudtruth_parameter" "nonsecret" {
   project     = "%s"

@@ -3,12 +3,12 @@
 page_title: "cloudtruth_parameter Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A CloudTruth Parameter.
+  A CloudTruth Parameter and environment specific value (defaulting to the 'default' environment)
 ---
 
 # cloudtruth_parameter (Resource)
 
-A CloudTruth Parameter.
+A CloudTruth Parameter and environment specific value (defaulting to the 'default' environment)
 
 
 
@@ -17,19 +17,19 @@ A CloudTruth Parameter.
 
 ### Required
 
-- `name` (String) The name of the CloudTruth Parameter
+- `name` (String) The name of the CloudTruth Parameter, unique per project
 
 ### Optional
 
 - `description` (String) Description of the CloudTruth Parameter
-- `dynamic` (Boolean) Whether or not to evaluate the Parameter's value (incompatible with secret parameters)
-- `environment` (String) The CloudTruth environment where the Parameter's value is defined. Defaults to empty string
+- `dynamic` (Boolean) Whether or not to evaluate/interpolate the Parameter's value (incompatible with secret parameters)
+- `environment` (String) The CloudTruth environment where the Parameter's value is defined. Defaults to the 'default' environment
 - `external` (Boolean) Whether or not the value is external, defaults to false
-- `filter` (String) An optional filter (path/query) used only with external parameters
-- `location` (String) The location of the secret value, required for external parameters, otherwise optional
+- `filter` (String) An optional filter (path/query), optional and used only with external parameters
+- `location` (String) The location of the secret value, required for external parameters
 - `project` (String) The CloudTruth project where the Parameter is defined
-- `secret` (Boolean) Whether or not the Parameter is a secret, defaults to false/non-secret
-- `value` (String) The value of the CloudTruth Parameter, specific to an environment (which can be overridden/inherited)
+- `secret` (Boolean) Whether or not the Parameter is a secret, defaults to false (non-secret)
+- `value` (String) The value of the CloudTruth Parameter, specific to an environment (can be overridden/inherited relative to other environments)
 
 ### Read-Only
 
