@@ -32,7 +32,7 @@ Then commit the changes to `go.mod` and `go.sum`.
 
 ## Using the provider
 
-To run the provider locally, run `make install` from the repository root. Note that this currently only works on Linux. 
+To run the provider locally, run `make install` from the repository root. Note that this currently only works on Linux.
 See the `.tf` files in the examples directory. Note that you may need to modify the path and version fields in your provider block
 to target your locally installed instance.
 
@@ -52,10 +52,13 @@ If you run the tests in a fork of this repo, you will need to recreate the boile
 acceptance test account. We will provide a bootstrapping script to ensure that these resource exist in your account.
 
 Additionally, you will need to specify the target CloudTruth project and environment(s) as well as your CloudTruth API key. You can
-specify the API key with a `TF_VAR_cloudtruth_api_key` environment variable or with a `CLOUDTRUTH_API_KEY` environment variable (a la the CloudTruth 
-CLI). You can specify the the project and/or environments inline in your HCL files or via the `CLOUDTRUTH_PROJECT` and `CLOUDTRUTH_ENVIRONMENT` 
-environment variables. 
+specify the API key with a `TF_VAR_cloudtruth_api_key` environment variable or with a `CLOUDTRUTH_API_KEY` environment variable (a la the CloudTruth
+CLI). You can specify the the project and/or environments inline in your HCL files or via the `CLOUDTRUTH_PROJECT` and `CLOUDTRUTH_ENVIRONMENT`
+environment variables.
 
 ```sh
 $ make testacc
 ```
+
+### Commit hooks
+To enable the commit hooks stored in `.githooks` in your local repo, run `git config --local core.hooksPath .githooks/`
