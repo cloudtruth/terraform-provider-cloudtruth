@@ -73,7 +73,7 @@ func dataCloudTruthTagRead(ctx context.Context, d *schema.ResourceData, meta any
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTagRead: %w", err))
 	}
-	d.SetId(fmt.Sprintf("%s", tagID))
+	d.SetId(tagID)
 	return nil
 }
 
