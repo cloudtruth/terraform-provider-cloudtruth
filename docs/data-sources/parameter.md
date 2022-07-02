@@ -26,6 +26,7 @@ A CloudTruth parameter data source
 
 ### Read-Only
 
+- `description` (String) The parameter's description
 - `external` (Boolean) Whether or not the value is external, defaults to false
 - `id` (String) The ID of this resource.
 - `value` (String) The parameter's value

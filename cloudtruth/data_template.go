@@ -114,7 +114,7 @@ func dataCloudTruthTemplates() *schema.Resource {
 				Optional:    true,
 			},
 			"as_of": {
-				Description: "Filter for all template values defined 'as of' the specified ISO 8601 date, , mutually exclusive with 'tag'",
+				Description: "Filter for all template values defined 'as of' the specified RFC3333 date, , mutually exclusive with 'tag'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},

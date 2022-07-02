@@ -92,12 +92,14 @@ func TestDataSourceParameter(t *testing.T) {
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret", "environment", defaultEnv),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret", "project", accTestProject),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret", "name", regularParam),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret", "description", paramDesc),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.nonsecret", "value", regularParamVal),
 
 					// secret parameter
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "environment", defaultEnv),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "project", accTestProject),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "name", secretParam),
+					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "description", secretParamDesc),
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter.secret", "value", secretParamVal),
 				),
 			},

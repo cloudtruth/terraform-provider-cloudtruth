@@ -17,7 +17,7 @@ A CloudTruth Parameter data source
 
 ### Optional
 
-- `as_of` (String) Filter for all parameter values defined 'as of' the specified ISO 8601 date, mutually exclusive with 'tag'
+- `as_of` (String) Filter for all parameter values defined 'as of' the specified RFC3333 date, mutually exclusive with 'tag'
 - `environment` (String) The CloudTruth Environment
 - `project` (String) The CloudTruth Project
 - `tag` (String) Filter for parameter values matching a specific tag, mutually exclusive with 'as_of'

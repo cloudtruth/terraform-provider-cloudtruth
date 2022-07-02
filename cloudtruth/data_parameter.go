@@ -31,6 +31,11 @@ func dataCloudTruthParameter() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
+			"description": {
+				Description: "The parameter's description",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
 			"external": {
 				Description: "Whether or not the value is external, defaults to false",
 				Type:        schema.TypeBool,
@@ -83,6 +88,11 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 		if err != nil {
 			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
 		}
+		desc := param.GetDescription()
+		err = d.Set("description", desc)
+		if err != nil {
+			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
+		}
 		// We use a composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
 		d.SetId(fmt.Sprintf("%s:%s", paramID, v.GetId()))
 	}
@@ -106,7 +116,7 @@ func dataCloudTruthParameters() *schema.Resource {
 				Optional:    true,
 			},
 			"as_of": {
-				Description: "Filter for all parameter values defined 'as of' the specified ISO 8601 date, mutually exclusive with 'tag'",
+				Description: "Filter for all parameter values defined 'as of' the specified RFC3333 date, mutually exclusive with 'tag'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},

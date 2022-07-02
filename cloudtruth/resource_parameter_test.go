@@ -8,12 +8,6 @@ import (
 	"testing"
 )
 
-const paramDesc = "Just a description of a parameter"
-const updateParamDesc = "A new description of an parameter"
-const paramVal = "A useful string"
-const updateParamVal = "A new useful string"
-const prodParamVal = "A useful string only in production"
-
 func TestAccResourceParameterBasic(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
