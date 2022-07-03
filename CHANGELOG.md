@@ -1,8 +1,14 @@
+## 0.3.1 (July 3, 2022)
+
+FEATURES:
+
+* Support for tags as data sources and resources
+
 ## 0.3.0 (June 28, 2022)
 
 BUG FIXES:
 
-* https://github.com/cloudtruth/terraform-provider-cloudtruth/issues/8
+* https://github.com/cloudtruth/terraform-provider-cloudtruth/issues/8 - the provider handles nest environments and projects correctly now, allowing multiple levels of nesting in an initial apply.
 
 
 ## 0.2.0 (June 24, 2022)
