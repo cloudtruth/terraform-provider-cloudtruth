@@ -1,6 +1,5 @@
 package cloudtruth
 
-/*
 import (
 	"context"
 	"fmt"
@@ -8,13 +7,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"strings"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+	"github.com/nav-inc/datetime"
+	"time"
 )
 
 func resourceTag() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.
-		Description: "A CloudTruth Tag and environment specific value (defaulting to the 'default' environment)",
+		Description: "A CloudTruth Tag - unique per environment, defaulting to the 'default' environment",
 
 		CreateContext: resourceTagCreate,
 		ReadContext:   resourceTagRead,
@@ -23,17 +24,12 @@ func resourceTag() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Description: "The name of the CloudTruth Tag, unique per project",
+				Description: "The name of the CloudTruth Tag, unique per project, per environment",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
 			"description": {
 				Description: "Description of the CloudTruth Tag",
-				Type:        schema.TypeString,
-				Optional:    true,
-			},
-			"project": {
-				Description: "The CloudTruth project where the Tag is defined",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
@@ -43,118 +39,45 @@ func resourceTag() *schema.Resource {
 				Optional:    true,
 				Default:     "default",
 			},
-			"secret": {
-				Description: "Whether or not the Tag is a secret, defaults to false (non-secret)",
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-			},
-			"value": {
-				Description: "The value of the CloudTruth Tag, specific to an environment (can be overridden/inherited relative to other environments)",
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
-				// With external tags, the value is computed but should not be used to diff/detect changes
-				// It is only useful in read operations. A change to the location and/or filter field would indicate a resource change
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					external := d.Get("external").(bool)
-					return external
-				},
-			},
-			"dynamic": {
-				Description: "Whether or not to evaluate/interpolate the Tag's value (incompatible with secret tags)",
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-			},
-			"external": {
-				Description: "Whether or not the value is external, defaults to false",
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-			},
-			"location": {
-				Description: "The location of the secret value, required for external tags",
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
-			},
-			"filter": {
-				Description: "An optional filter (path/query), optional and used only with external tags",
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
+			"timestamp": {
+				Description:  "The tag's RFC 3339 timestamp e.g. 2022-07-03T21:44:00.171Z",
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.IsRFC3339Time,
 			},
 		},
 	}
 }
 
-// In Terraform terms, a 'resource_tag' represents a CloudTruth Tag AND its environment specific value
-// Therefore, when this provider destroys a tag resource, it only removes the per-environment value unless
-// the tag is only defined in one environment, in which case it is destroyed entirely
 func resourceTagCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTagCreate")
 	environment := d.Get("environment").(string)
-	project := d.Get("project").(string)
-	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
+	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTagCreate: %w", err))
 	}
 
 	tagName := d.Get("name").(string)
-	var tagID, valueID string
-	lookupResp, r, err := c.openAPIClient.ProjectsApi.ProjectsTagsList(context.Background(),
-		*projID).Environment(*envID).Name(tagName).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceTagCreate: error looking up tag %s: %+v", tagName, r))
+	var tagID string
+	tagCreate := cloudtruthapi.NewTagCreate(tagName)
+	desc := d.Get("description").(string)
+	if desc != "" {
+		tagCreate.SetDescription(desc)
 	}
-
-	if lookupResp.GetCount() == 1 { // Named tag already exists
-		tagID = lookupResp.GetResults()[0].GetId()
-	} else {
-		tagCreate := paramCreateConfig(d)
-		tagCreateResp, _, err := c.openAPIClient.ProjectsApi.ProjectsTagsCreate(context.Background(),
-			*projID).TagCreate(*tagCreate).Execute()
-		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceTagCreate: %w", err))
-		}
-		tagID = paramCreateResp.GetId()
-	}
-	valueCreate, err := valueCreateConfig(*envID, d)
+	timestamp := d.Get("timestamp").(string)
+	tsTime, err := datetime.Parse(timestamp, time.UTC)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTagCreate: %w", err))
 	}
-	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsTagsValuesCreate(context.Background(),
-		tagID, *projID).ValueCreate(*valueCreate).Execute()
+	tagCreate.SetTimestamp(tsTime)
+	tagCreateResp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsTagsCreate(ctx, *envID).TagCreate(*tagCreate).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTagCreate: %w", err))
 	}
-	valueID = valueResp.GetId()
-
-	// Then add its value in the specified environment with composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
-	internalID := fmt.Sprintf("%s:%s", tagID, valueID)
-	d.SetId(internalID)
+	tagID = tagCreateResp.GetId()
+	d.SetId(tagID)
 	return nil
-}
-
-func tagCreateConfig(d *schema.ResourceData) *cloudtruthapi.TagCreate {
-	tagName := d.Get("name").(string)
-	tagCreate := cloudtruthapi.NewTagCreate(paramName)
-	tagDesc := d.Get("description").(string)
-	if tagDesc != "" {
-		tagCreate.SetDescription(paramDesc)
-	}
-	isSecret := d.Get("secret").(bool)
-	tagCreate.SetSecret(isSecret)
-	return tagCreate
-}
-
-func valueCreateConfig(envID string, d *schema.ResourceData) (*cloudtruthapi.ValueCreate, error) {
-	name := d.Get("name").(string)
-	value := d.Get("value").(string)
-	dynamic := d.Get("dynamic").(bool)
-	valueCreate := cloudtruthapi.NewValueCreate(value)
 }
 
 func resourceTagRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -165,27 +88,52 @@ func resourceTagRead(ctx context.Context, d *schema.ResourceData, meta any) diag
 func resourceTagUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTagUpdate")
-	project := d.Get("project").(string)
-	projID, err := c.lookupProject(ctx, project)
+	environment := d.Get("environment").(string)
+	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTagUpdate: %w", err))
 	}
+	hasChange := false
+	patchedTagUpdate := cloudtruthapi.NewPatchedTagUpdate()
+	if d.HasChange("description") {
+		tagDesc := d.Get("description").(string)
+		patchedTagUpdate.SetDescription(tagDesc)
+		hasChange = true
+	}
+	if d.HasChange("timestamp") {
+		timestamp := d.Get("timestamp").(string)
+		tsTime, err := datetime.Parse(timestamp, time.UTC)
+		if err != nil {
+			return diag.FromErr(fmt.Errorf("resourceTagCreate: %w", err))
+		}
+		patchedTagUpdate.SetTimestamp(tsTime)
+		hasChange = true
+	}
+	tagID := d.Id()
+	if hasChange {
+		_, _, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsPartialUpdate(ctx, *envID, tagID).PatchedTagUpdate(*patchedTagUpdate).Execute()
+		if err != nil {
+			return diag.FromErr(fmt.Errorf("resourceTagUpdate: %w", err))
+		}
+	}
+	d.SetId(tagID)
 	return resourceTagRead(ctx, d, meta)
 }
 
-// If a tag is defined in the target environment only, we destroy it
-// If it is defined in one or more other environments, we only destroy the value
-// defined in the target environment
 func resourceTagDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceTagDelete")
 	c := meta.(*cloudTruthClient)
+	tflog.Debug(ctx, "resourceTagDelete")
 	environment := d.Get("environment").(string)
-	project := d.Get("project").(string)
-	projID, err := c.lookupProject(ctx, project)
+	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTagDelete: %w", err))
 	}
 
+	tagID := d.Id()
+	_, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsDestroy(ctx, *envID, tagID).Execute()
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("resourceTagDelete: %w", err))
+	}
+	d.SetId(tagID)
 	return nil
 }
-*/

@@ -28,6 +28,6 @@ A CloudTruth tag data source
 
 - `description` (String) The tag's description
 - `id` (String) The ID of this resource.
-- `timestamp` (String) The tag's value
+- `timestamp` (String) The tag's RFC 3339 timestamp
 
 
