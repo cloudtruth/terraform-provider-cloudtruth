@@ -4,6 +4,11 @@ FEATURES:
 
 * Support for tags as data sources and resources
 
+ENHANCEMENTS:
+
+* Lint and format pre-commit hook
+* Various doc updates
+
 ## 0.3.0 (June 28, 2022)
 
 BUG FIXES:
