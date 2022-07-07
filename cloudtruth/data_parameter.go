@@ -3,6 +3,7 @@ package cloudtruth
 import (
 	"context"
 	"fmt"
+	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -46,6 +47,16 @@ func dataCloudTruthParameter() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
+			"as_of": {
+				Description: "Retrieve the parameter's historical value 'as of' the specified RFC3333 date, mutually exclusive with 'tag'",
+				Type:        schema.TypeString,
+				Optional:    true,
+			},
+			"tag": {
+				Description: "Retrieve the parameter's historical value that matches a specific tag, mutually exclusive with 'as_of'",
+				Type:        schema.TypeString,
+				Optional:    true,
+			},
 		},
 	}
 }
@@ -61,8 +72,14 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	}
 	name := d.Get("name").(string)
 
-	resp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		*projID).Environment(*envID).Name(name).Execute()
+	// Handle as_of and tag filters
+	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
+		*projID).Environment(*envID).Name(name)
+	filteredParamListRequest, err := parseFilters(paramListRequest, d)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	resp, r, err := filteredParamListRequest.Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: error looking up parameter %s: %+v", name, r))
 	}
@@ -134,6 +151,26 @@ func dataCloudTruthParameters() *schema.Resource {
 	}
 }
 
+func parseFilters(paramListRequest cloudtruthapi.ApiProjectsParametersListRequest,
+	d *schema.ResourceData) (*cloudtruthapi.ApiProjectsParametersListRequest, error) {
+	asOf := d.Get("as_of").(string)
+	tag := d.Get("tag").(string)
+	if asOf != "" {
+		if tag != "" {
+			return nil, fmt.Errorf("dataCloudTruthParametersRead: 'as_of' and 'tag' cannot both be specified as parameter filters")
+		}
+		asOfTime, err := datetime.Parse(asOf, time.UTC)
+		if err != nil {
+			return nil, fmt.Errorf("dataCloudTruthParametersRead: %w", err)
+		}
+		paramListRequest = paramListRequest.AsOf(asOfTime)
+	}
+	if tag != "" {
+		paramListRequest = paramListRequest.Tag(tag)
+	}
+	return &paramListRequest, nil
+}
+
 func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParametersRead")
@@ -147,23 +184,11 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	// Handle as_of and tag filters
 	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
 		*projID).Environment(environment)
-	asOf := d.Get("as_of").(string)
-	tag := d.Get("tag").(string)
-	if asOf != "" {
-		if tag != "" {
-			return diag.Errorf("dataCloudTruthParametersRead: 'as_of' and 'tag' cannot both be specified as parameter filters")
-		}
-		asOfTime, err := datetime.Parse(asOf, time.UTC)
-		if err != nil {
-			return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
-		}
-		paramListRequest = paramListRequest.AsOf(asOfTime)
+	filteredParamListRequest, err := parseFilters(paramListRequest, d)
+	if err != nil {
+		return diag.FromErr(err)
 	}
-	if tag != "" {
-		paramListRequest = paramListRequest.Tag(tag)
-	}
-
-	resp, r, err := paramListRequest.Execute()
+	resp, r, err := filteredParamListRequest.Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: error looking up parameters in the %s environment in the %s project: %+v",
 			environment, project, r))
