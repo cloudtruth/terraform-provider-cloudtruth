@@ -21,8 +21,10 @@ A CloudTruth parameter data source
 
 ### Optional
 
+- `as_of` (String) Retrieve the parameter's historical value 'as of' the specified RFC3333 date, mutually exclusive with 'tag'
 - `environment` (String) The CloudTruth environment
 - `project` (String) The CloudTruth project
+- `tag` (String) Retrieve the parameter's historical value that matches a specific tag, mutually exclusive with 'as_of'
 
 ### Read-Only
 

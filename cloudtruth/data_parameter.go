@@ -153,8 +153,16 @@ func dataCloudTruthParameters() *schema.Resource {
 
 func parseFilters(paramListRequest cloudtruthapi.ApiProjectsParametersListRequest,
 	d *schema.ResourceData) (*cloudtruthapi.ApiProjectsParametersListRequest, error) {
-	asOf := d.Get("as_of").(string)
-	tag := d.Get("tag").(string)
+	asOf, tag := "", ""
+	var ok bool
+	// when used in the context of a cloudtruth_parameter (non data source), these two properties will not exist,
+	// therefore we check for unset/nil values first
+	if _, ok = d.GetOk("as_of"); ok {
+		asOf = d.Get("as_of").(string)
+	}
+	if _, ok = d.GetOk("tag"); ok {
+		tag = d.Get("tag").(string)
+	}
 	if asOf != "" {
 		if tag != "" {
 			return nil, fmt.Errorf("dataCloudTruthParametersRead: 'as_of' and 'tag' cannot both be specified as parameter filters")
