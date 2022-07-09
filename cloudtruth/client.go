@@ -26,6 +26,9 @@ const (
 
 	// Hard code the CloudTruth API major version for now
 	apiVersion = "v1"
+
+	// Number of times to attempt reloading project and env caches
+	loadCacheRetries = 5
 )
 
 type clientConfig struct {
@@ -119,13 +122,25 @@ func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID strin
 func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 	if c.projectNames == nil {
 		tflog.Debug(ctx, "loadProjectNameCache: fetching project names")
-		resp, _, err := c.openAPIClient.ProjectsApi.ProjectsList(context.Background()).Execute()
-		if err != nil {
-			return fmt.Errorf("loadProjectNameCache: %w", err)
+		retry := 0
+		var apiError error
+		for retry < loadCacheRetries {
+			resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(context.Background()).Execute()
+			if r.StatusCode >= 500 {
+				tflog.Debug(ctx, fmt.Sprintf("loadProjectNameCache: %s", apiError))
+				apiError = err
+				retry++
+			} else {
+				c.projectNames = make(map[string]string)
+				for _, p := range resp.Results {
+					c.projectNames[p.Name] = p.Id
+				}
+				apiError = nil
+				break
+			}
 		}
-		c.projectNames = make(map[string]string)
-		for _, p := range resp.Results {
-			c.projectNames[p.Name] = p.Id
+		if apiError != nil {
+			return fmt.Errorf("loadProjectNameCache: %w", apiError)
 		}
 	}
 	return nil
@@ -173,13 +188,25 @@ func (c *cloudTruthClient) lookupEnvironment(ctx context.Context, envNameOrID st
 func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 	if c.envNames == nil {
 		tflog.Debug(ctx, "loadEnvNameCache: fetching environment names")
-		resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(context.Background()).Execute()
-		if err != nil {
-			return fmt.Errorf("loadEnvNameCache: %w", err)
+		retry := 0
+		var apiError error
+		for retry < loadCacheRetries {
+			resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(context.Background()).Execute()
+			if r.StatusCode >= 500 {
+				tflog.Debug(ctx, fmt.Sprintf("loadEnvNameCache: %s", apiError))
+				apiError = err
+				retry++
+			} else {
+				c.envNames = make(map[string]string)
+				for _, p := range resp.Results {
+					c.envNames[p.Name] = p.Id
+				}
+				apiError = nil
+				break
+			}
 		}
-		c.envNames = make(map[string]string)
-		for _, p := range resp.Results {
-			c.envNames[p.Name] = p.Id
+		if apiError != nil {
+			return fmt.Errorf("loadEnvNameCache: %w", apiError)
 		}
 	}
 	return nil
