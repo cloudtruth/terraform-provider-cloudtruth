@@ -52,7 +52,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	}
 	name := d.Get("name").(string)
 
-	templateList, r, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
+	templateList, r, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx,
 		*projID).Environment(*envID).Name(name).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: error looking up template %s: %+v", name, r))
@@ -143,7 +143,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 	}
 
 	// Handle as_of and tag filters
-	templateListRequest := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
+	templateListRequest := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx,
 		*projID).Environment(environment)
 	asOf := d.Get("as_of").(string)
 	tag := d.Get("tag").(string)
@@ -183,7 +183,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 		}
 		if resp.GetNext() != "" {
 			pageNum++
-			templateListRequest = c.openAPIClient.ProjectsApi.ProjectsTemplatesList(context.Background(),
+			templateListRequest = c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx,
 				*projID).Environment(environment).Page(pageNum)
 			resp, r, err = templateListRequest.Execute()
 			if err != nil {

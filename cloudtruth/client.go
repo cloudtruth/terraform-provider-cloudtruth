@@ -125,7 +125,7 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 		retry := 0
 		var apiError error
 		for retry < loadCacheRetries {
-			resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(context.Background()).Execute()
+			resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Execute()
 			if r.StatusCode >= 500 {
 				tflog.Debug(ctx, fmt.Sprintf("loadProjectNameCache: %s", apiError))
 				apiError = err
@@ -191,7 +191,7 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 		retry := 0
 		var apiError error
 		for retry < loadCacheRetries {
-			resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(context.Background()).Execute()
+			resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Execute()
 			if r.StatusCode >= 500 {
 				tflog.Debug(ctx, fmt.Sprintf("loadEnvNameCache: %s", apiError))
 				apiError = err

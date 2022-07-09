@@ -62,7 +62,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	if envDesc != "" {
 		envCreate.SetDescription(envDesc)
 	}
-	resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(context.Background()).EnvironmentCreate(*envCreate).Execute()
+	resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceEnvironmentCreate: %w", err))
 	}
@@ -128,7 +128,7 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 		return diag.Errorf("resourceEnvironmentDelete: environment %s cannot be deleted unless you set the 'force_delete' property to be true",
 			envName)
 	}
-	_, err := c.openAPIClient.EnvironmentsApi.EnvironmentsDestroy(context.Background(), envID).Execute()
+	_, err := c.openAPIClient.EnvironmentsApi.EnvironmentsDestroy(ctx, envID).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceEnvironmentDelete: %w", err))
 	}

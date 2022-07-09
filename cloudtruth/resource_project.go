@@ -125,7 +125,7 @@ func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any
 		return diag.Errorf("resourceProjectDelete: project %s cannot be deleted unless you set the 'force_delete' property to be true",
 			projectName)
 	}
-	_, err := c.openAPIClient.ProjectsApi.ProjectsDestroy(context.Background(), projectID).Execute()
+	_, err := c.openAPIClient.ProjectsApi.ProjectsDestroy(ctx, projectID).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceProjectDelete: %w", err))
 	}

@@ -115,7 +115,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 
 	paramName := d.Get("name").(string)
 	var paramID, valueID string
-	lookupResp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
+	lookupResp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx,
 		*projID).Environment(*envID).Name(paramName).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: error looking up parameter %s: %+v", paramName, r))
@@ -125,7 +125,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		paramID = lookupResp.GetResults()[0].GetId()
 	} else {
 		paramCreate := paramCreateConfig(d)
-		paramCreateResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(context.Background(),
+		paramCreateResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(ctx,
 			*projID).ParameterCreate(*paramCreate).Execute()
 		if err != nil {
 			return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
@@ -136,7 +136,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
-	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(context.Background(),
+	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx,
 		paramID, *projID).ValueCreate(*valueCreate).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
@@ -286,7 +286,7 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 			paramCompositeID))
 	}
 	paramID, paramValueID := ids[0], ids[1]
-	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(context.Background(), paramID, *projID).Execute()
+	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(ctx, paramID, *projID).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
 	}
@@ -312,14 +312,14 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 
 	if multiEnv {
 		// delete the specific env value only, because there are explicit definitions in one or more other envs
-		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(context.Background(), paramValueID,
+		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(ctx, paramValueID,
 			paramID, *projID).Execute()
 		if err != nil {
 			return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
 		}
 	} else {
 		// delete the parameter entirely
-		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersDestroy(context.Background(), paramID,
+		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersDestroy(ctx, paramID,
 			*projID).Execute()
 		if err != nil {
 			return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))

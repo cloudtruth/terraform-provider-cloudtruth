@@ -62,7 +62,7 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 	if templateValue != "" {
 		templateCreate.SetBody(templateValue) // This will fail when we attempt to create the template if invalid
 	}
-	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(context.Background(),
+	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(ctx,
 		*projID).TemplateCreate(*templateCreate).Execute()
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateCreate: %w", err))

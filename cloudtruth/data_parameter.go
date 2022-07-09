@@ -6,8 +6,10 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/nav-inc/datetime"
+	"net/http"
 	"time"
 )
 
@@ -73,21 +75,35 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	name := d.Get("name").(string)
 
 	// Handle as_of and tag filters
-	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		*projID).Environment(*envID).Name(name)
+	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(name)
 	filteredParamListRequest, err := parseFilters(paramListRequest, d)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	resp, r, err := filteredParamListRequest.Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: error looking up parameter %s: %+v", name, r))
+
+	var resp *cloudtruthapi.PaginatedParameterList
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		resp, r, err = filteredParamListRequest.Execute()
+		if err != nil {
+			outErr := fmt.Errorf("dataCloudTruthParameterRead: error looking up parameter %s: %+v", name, r)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
+
 	if resp.GetCount() != 1 {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: expected 1 value for parameter %s, found %d instead",
 			name, resp.GetCount()))
 	}
-
 	// We know there is only one parameter at this point
 	// There should only ever be one value per parameter per environment per project
 	results := resp.GetResults()
@@ -189,23 +205,36 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
-	// Handle as_of and tag filters
-	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-		*projID).Environment(environment)
-	filteredParamListRequest, err := parseFilters(paramListRequest, d)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	resp, r, err := filteredParamListRequest.Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: error looking up parameters in the %s environment in the %s project: %+v",
-			environment, project, r))
-	}
-
-	results := resp.GetResults()
+	var paramListRequest cloudtruthapi.ApiProjectsParametersListRequest
 	paramsMap := make(map[string]any)
-	var pageNum int32 = 1
-	for results != nil {
+	var pageNum int32 = 0
+	for {
+		paramListRequest = c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(environment)
+		if pageNum > 0 {
+			paramListRequest = paramListRequest.Page(pageNum)
+		}
+		filteredParamListRequest, err := parseFilters(paramListRequest, d)
+
+		var resp *cloudtruthapi.PaginatedParameterList
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+			var r *http.Response
+			resp, r, err = filteredParamListRequest.Execute()
+			if err != nil {
+				outErr := fmt.Errorf("dataCloudTruthParametersRead: error looking up parameters in the %s environment: %+v", environment, r)
+				if r.StatusCode >= http.StatusInternalServerError { // A 5xx error
+					return resource.RetryableError(outErr)
+				} else {
+					return resource.NonRetryableError(outErr)
+				}
+			}
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
+		}
+		results := resp.GetResults()
+		pageNum++
+
 		for _, res := range results {
 			paramName := res.GetName()
 			// There should only be one value but the result is a map, so we iterate over it
@@ -217,17 +246,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 				}
 			}
 		}
-		if resp.GetNext() != "" {
-			pageNum++
-			paramListRequest = c.openAPIClient.ProjectsApi.ProjectsParametersList(context.Background(),
-				*projID).Environment(environment).Page(pageNum)
-			resp, r, err = paramListRequest.Execute()
-			if err != nil {
-				return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: error looking up parameters in the %s environment in the %s project: %+v",
-					environment, project, r))
-			}
-			results = resp.GetResults()
-		} else {
+		if resp.GetNext() == "" {
 			break
 		}
 	}
@@ -237,12 +256,12 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
 	}
 
-	// We use a composite ID - <PROJECT_ID>:<ENVIRONMENT_ID>
-	// The results represent a set of possibly filtered parameters in a given environment and project
-	// Ideally, these will be shared across all TF resources in a given state
-	// However, we do need to be mindful that a user could pull in the set of parameters more than once
-	// within the same state, with possible variations on filters, if that turns out to be an issue
-	// then we may need to rethink the ID strategy here
+	/* We use a composite ID for a cloudtruth_parameters result - <PROJECT_ID>:<ENVIRONMENT_ID>
+	   The results represent a set of possibly filtered parameters in a given environment and project
+	   Ideally, these will be shared across all TF resources in a given state
+	   However, we do need to be mindful that a user could pull in the set of parameters more than once
+	   within the same state, with possible variations on filters, if that turns out to be an issue
+	   then we may need to rethink the ID strategy here */
 	d.SetId(fmt.Sprintf("%s:%s", *projID, *envID))
 	return nil
 }
