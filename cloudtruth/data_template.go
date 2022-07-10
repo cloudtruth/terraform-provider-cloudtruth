@@ -100,7 +100,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	body := template.GetBody()
 	tflog.Debug(ctx, fmt.Sprintf("dataCloudTruthTemplateRead: template body - %s", body))
 
-	previewBody, err := renderTemplateBody(ctx, d, body, *projID, meta)
+	previewBody, err := renderTemplateBody(ctx, name, body, *projID, meta)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
 	}
@@ -111,10 +111,9 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	return nil
 }
 
-func renderTemplateBody(ctx context.Context, d *schema.ResourceData, body, projectID string, meta any) (*string, error) {
+func renderTemplateBody(ctx context.Context, name, body, projectID string, meta any) (*string, error) {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "renderTemplateBody")
-	name := d.Get("name").(string)
 	templatePrevReq := cloudtruthapi.NewTemplatePreviewCreateRequest(body)
 	var previewBody string
 	retry := 0
@@ -223,7 +222,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 		for _, res := range results {
 			templateName := res.GetName()
 			templateBody := res.GetBody()
-			previewBody, err := renderTemplateBody(ctx, d, templateBody, *projID, meta)
+			previewBody, err := renderTemplateBody(ctx, templateName, templateBody, *projID, meta)
 			if err != nil {
 				return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
 			} else {
