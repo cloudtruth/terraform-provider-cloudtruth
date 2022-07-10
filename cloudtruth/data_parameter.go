@@ -193,7 +193,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 			resp, r, err = filteredParamListRequest.Execute()
 			if err != nil {
 				outErr := fmt.Errorf("dataCloudTruthParametersRead: error looking up parameters in the %s environment: %w", environment, err)
-				if r.StatusCode >= http.StatusInternalServerError { // A 5xx error
+				if r.StatusCode >= http.StatusInternalServerError {
 					return resource.RetryableError(outErr)
 				} else {
 					return resource.NonRetryableError(outErr)

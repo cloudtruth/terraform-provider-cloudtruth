@@ -6,9 +6,11 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"github.com/nav-inc/datetime"
+	"net/http"
 	"time"
 )
 
@@ -71,10 +73,26 @@ func resourceTagCreate(ctx context.Context, d *schema.ResourceData, meta any) di
 		return diag.FromErr(fmt.Errorf("resourceTagCreate: %w", err))
 	}
 	tagCreate.SetTimestamp(tsTime)
-	tagCreateResp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsTagsCreate(ctx, *envID).TagCreate(*tagCreate).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceTagCreate: %w", err))
+
+	var tagCreateResp *cloudtruthapi.Tag
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		tagCreateResp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsCreate(ctx, *envID).TagCreate(*tagCreate).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceTagCreate: error creating tag %s: %w", tagName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
+
 	tagID = tagCreateResp.GetId()
 	d.SetId(tagID)
 	return nil
@@ -93,6 +111,7 @@ func resourceTagUpdate(ctx context.Context, d *schema.ResourceData, meta any) di
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTagUpdate: %w", err))
 	}
+	tagName := d.Get("name").(string)
 	hasChange := false
 	patchedTagUpdate := cloudtruthapi.NewPatchedTagUpdate()
 	if d.HasChange("description") {
@@ -104,16 +123,29 @@ func resourceTagUpdate(ctx context.Context, d *schema.ResourceData, meta any) di
 		timestamp := d.Get("timestamp").(string)
 		tsTime, err := datetime.Parse(timestamp, time.UTC)
 		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceTagCreate: %w", err))
+			return diag.FromErr(fmt.Errorf("resourceTagUpdate: %w", err))
 		}
 		patchedTagUpdate.SetTimestamp(tsTime)
 		hasChange = true
 	}
 	tagID := d.Id()
 	if hasChange {
-		_, _, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsPartialUpdate(ctx, *envID, tagID).PatchedTagUpdate(*patchedTagUpdate).Execute()
-		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceTagUpdate: %w", err))
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+			var r *http.Response
+			var err error
+			_, _, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsPartialUpdate(ctx, *envID, tagID).PatchedTagUpdate(*patchedTagUpdate).Execute()
+			if err != nil {
+				outErr := fmt.Errorf("resourceTagUpdate: error updating tag %s: %w", tagName, err)
+				if r.StatusCode >= http.StatusInternalServerError {
+					return resource.RetryableError(outErr)
+				} else {
+					return resource.NonRetryableError(outErr)
+				}
+			}
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
 		}
 	}
 	d.SetId(tagID)
@@ -128,12 +160,27 @@ func resourceTagDelete(ctx context.Context, d *schema.ResourceData, meta any) di
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTagDelete: %w", err))
 	}
-
+	tagName := d.Get("name").(string)
 	tagID := d.Id()
-	_, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsDestroy(ctx, *envID, tagID).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceTagDelete: %w", err))
+
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsDestroy(ctx, *envID, tagID).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceTagDelete: error deleting tag %s: %w", tagName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
+
 	d.SetId(tagID)
 	return nil
 }

@@ -6,7 +6,9 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"net/http"
 )
 
 func resourceProject() *schema.Resource {
@@ -56,10 +58,25 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 		projectCreate.SetDescription(projectDesc)
 	}
 
-	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsCreate(ctx).ProjectCreate(*projectCreate).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceProjectCreate: %w", err))
+	var resp *cloudtruthapi.Project
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		resp, r, err = c.openAPIClient.ProjectsApi.ProjectsCreate(ctx).ProjectCreate(*projectCreate).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceProjectCreate: error creating project %s: %w", projectName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
+
 	projectID := resp.GetId()
 	d.SetId(projectID)
 	c.addNewProjectToCaches(projectName, projectID)
@@ -72,10 +89,25 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	c := meta.(*cloudTruthClient)
 	projectName := d.Get("name").(string)
 
-	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceProjectRead: %w", err))
+	var resp *cloudtruthapi.PaginatedProjectList
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		resp, _, err = c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceProjectRead: error reading project %s: %w", projectName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
+
 	// There should be only one project found
 	res := resp.GetResults()
 	if len(res) != 1 {
@@ -93,7 +125,7 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 	projectName := d.Get("name").(string)
 	projectDesc := d.Get("description").(string)
 
-	// force_delete is not a property in the API, it is only a guard rail used by this TF provider
+	// force_delete is not a property in the API, it is only a guard rail used by this provider
 	patchedProject := cloudtruthapi.PatchedProject{}
 	hasChange := false
 	if d.HasChange("name") {
@@ -105,10 +137,23 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 		hasChange = true
 	}
 	if hasChange {
-		_, _, err := c.openAPIClient.ProjectsApi.ProjectsPartialUpdate(ctx,
-			projectID).PatchedProject(patchedProject).Execute()
-		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceProjectUpdate: %w", err))
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+			var r *http.Response
+			var err error
+			_, r, err = c.openAPIClient.ProjectsApi.ProjectsPartialUpdate(ctx,
+				projectID).PatchedProject(patchedProject).Execute()
+			if err != nil {
+				outErr := fmt.Errorf("resourceProjectUpdate: error updating project %s: %w", projectName, err)
+				if r.StatusCode >= http.StatusInternalServerError {
+					return resource.RetryableError(outErr)
+				} else {
+					return resource.NonRetryableError(outErr)
+				}
+			}
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
 		}
 	}
 	d.SetId(projectID)
@@ -125,10 +170,25 @@ func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any
 		return diag.Errorf("resourceProjectDelete: project %s cannot be deleted unless you set the 'force_delete' property to be true",
 			projectName)
 	}
-	_, err := c.openAPIClient.ProjectsApi.ProjectsDestroy(ctx, projectID).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceProjectDelete: %w", err))
+
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		r, err = c.openAPIClient.ProjectsApi.ProjectsDestroy(ctx, projectID).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceProjectDelete: error destroying project %s: %w", projectName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
+
 	c.removeProjectFromCaches(projectName, projectID)
 	return nil
 }

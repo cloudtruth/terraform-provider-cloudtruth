@@ -6,7 +6,9 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"net/http"
 )
 
 func resourceTemplate() *schema.Resource {
@@ -24,18 +26,18 @@ func resourceTemplate() *schema.Resource {
 				Required:    true,
 			},
 			"description": {
-				Description: "Description of the CloudTruth Parameter",
+				Description: "Description of the CloudTruth Template",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"value": {
-				Description: "The value of the CloudTruth Parameter, specific to an Environment (which can be overridden/inherited)",
+				Description: "The non-evaluated value of the CloudTruth Template, use a Template data source to access the evaluated output in a specific environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
 			},
 			"project": {
-				Description: "The CloudTruth project where the Parameter is defined",
+				Description: "The CloudTruth project where the Template is defined",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
@@ -62,15 +64,33 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 	if templateValue != "" {
 		templateCreate.SetBody(templateValue) // This will fail when we attempt to create the template if invalid
 	}
-	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(ctx,
-		*projID).TemplateCreate(*templateCreate).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceTemplateCreate: %w", err))
+
+	var resp *cloudtruthapi.Template
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		resp, _, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(ctx,
+			*projID).TemplateCreate(*templateCreate).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceTemplateCreate: error creating template %s: %w", templateName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
+
 	d.SetId(resp.GetId())
 	return nil
 }
 
+// todo: we may want a read which evaluates the template in a specific environment
+// as is, this read returns the raw template string
 func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTemplateRead")
@@ -79,11 +99,25 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateRead: %w", err))
 	}
-
 	templateName := d.Get("name").(string)
-	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx, *projID).Name(templateName).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceTemplateRead: %w", err))
+
+	var resp *cloudtruthapi.PaginatedTemplateList
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		resp, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx, *projID).Name(templateName).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceTemplateRead: error reading template %s: %w", templateName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
 
 	res := resp.GetResults()
@@ -102,6 +136,7 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateUpdate: %w", err))
 	}
+	templateName := d.Get("name").(string)
 	templateValue := d.Get("value").(string)
 	templateDesc := d.Get("description").(string)
 	templateID := d.Id()
@@ -117,8 +152,25 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 		hasChange = true
 	}
 	if hasChange {
-		_, _, err := c.openAPIClient.ProjectsApi.ProjectsTemplatesPartialUpdate(ctx, templateID,
-			*projID).PatchedTemplate(patchedTemplate).Execute()
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+			var r *http.Response
+			var err error
+			_, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesPartialUpdate(ctx, templateID,
+				*projID).PatchedTemplate(patchedTemplate).Execute()
+			if err != nil {
+				outErr := fmt.Errorf("resourceTemplateUpdate: error updating project %s: %w", templateName, err)
+				if r.StatusCode >= http.StatusInternalServerError {
+					return resource.RetryableError(outErr)
+				} else {
+					return resource.NonRetryableError(outErr)
+				}
+			}
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
+		}
+
 		if err != nil {
 			return diag.FromErr(fmt.Errorf("resourceTemplateUpdate: %w", err))
 		}
@@ -134,11 +186,26 @@ func resourceTemplateDelete(ctx context.Context, d *schema.ResourceData, meta an
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceTemplateDelete: %w", err))
 	}
+	templateName := d.Get("name").(string)
 	templateID := d.Id()
 
-	_, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesDestroy(ctx, templateID, *projID).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceTemplateDelete: %w", err))
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		_, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesDestroy(ctx, templateID, *projID).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceTemplateDelete: error destroying template %s: %w", templateName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
+
 	return nil
 }

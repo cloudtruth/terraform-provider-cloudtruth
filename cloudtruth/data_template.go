@@ -53,6 +53,7 @@ func dataCloudTruthTemplate() *schema.Resource {
 	}
 }
 
+// This data source represents the evaluation of a template in a given environment (and project)
 func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthTemplateRead")
@@ -106,7 +107,6 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	}
 	_ = d.Set("value", previewBody)
 	// We use a composite ID - <ENV_ID>:<TEMPLATE_ID>
-	// This data source represents the evaluation of a template in a given environment (and project)
 	d.SetId(fmt.Sprintf("%s:%s", *envID, templateID))
 	return nil
 }

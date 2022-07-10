@@ -21,9 +21,9 @@ A CloudTruth Template.
 
 ### Optional
 
-- `description` (String) Description of the CloudTruth Parameter
-- `project` (String) The CloudTruth project where the Parameter is defined
-- `value` (String) The value of the CloudTruth Parameter, specific to an Environment (which can be overridden/inherited)
+- `description` (String) Description of the CloudTruth Template
+- `project` (String) The CloudTruth project where the Template is defined
+- `value` (String) The non-evaluated value of the CloudTruth Template, use a Template data source to access the evaluated output in a specific environment
 
 ### Read-Only
 
