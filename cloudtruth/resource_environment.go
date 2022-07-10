@@ -6,7 +6,9 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"net/http"
 )
 
 func resourceEnvironment() *schema.Resource {
@@ -62,10 +64,26 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	if envDesc != "" {
 		envCreate.SetDescription(envDesc)
 	}
-	resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceEnvironmentCreate: %w", err))
+
+	var resp *cloudtruthapi.Environment
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		resp, _, err = c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceEnvironmentCreate: error creating environment %s: %w", envName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
+
 	envID := resp.GetId()
 	d.SetId(envID)
 	c.addNewEnvToCaches(envName, envID)
@@ -78,11 +96,25 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	c := meta.(*cloudTruthClient)
 	envName := d.Get("name").(string)
 
-	resp, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Name(envName).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceEnvironmentRead: %w", err))
+	var resp *cloudtruthapi.PaginatedEnvironmentList
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		resp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Name(envName).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceEnvironmentRead: error reading environment %s: %w", envName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
-	// There should be only one environment in the results
+
 	res := resp.GetResults()
 	if len(res) != 1 {
 		return diag.FromErr(fmt.Errorf("resourceEnvironmentRead: found %d environments, expcted to find 1", len(res)))
@@ -108,10 +140,23 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta
 		hasChange = true
 	}
 	if hasChange {
-		_, _, err := c.openAPIClient.EnvironmentsApi.EnvironmentsPartialUpdate(ctx,
-			envID).PatchedEnvironment(patchedEnv).Execute()
-		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceEnvironmentUpdate: %w", err))
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+			var r *http.Response
+			var err error
+			_, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsPartialUpdate(ctx,
+				envID).PatchedEnvironment(patchedEnv).Execute()
+			if err != nil {
+				outErr := fmt.Errorf("resourceEnvironmentUpdate: error updating environment %s: %w", envName, err)
+				if r.StatusCode >= http.StatusInternalServerError {
+					return resource.RetryableError(outErr)
+				} else {
+					return resource.NonRetryableError(outErr)
+				}
+			}
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
 		}
 	}
 	d.SetId(envID)
@@ -125,13 +170,28 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 	envName := d.Get("name").(string)
 	forceDelete := d.Get("force_delete").(bool)
 	if !forceDelete {
-		return diag.Errorf("resourceEnvironmentDelete: environment %s cannot be deleted unless you set the 'force_delete' property to be true",
+		return diag.Errorf("resourceEnvironmentDelete: environment %s cannot be deleted unless you set the 'force_delete' property to true",
 			envName)
 	}
-	_, err := c.openAPIClient.EnvironmentsApi.EnvironmentsDestroy(ctx, envID).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceEnvironmentDelete: %w", err))
+
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsDestroy(ctx, envID).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceEnvironmentDelete: error destroying environment %s: %w", envName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
+
 	c.removeEnvFromCaches(envName, envID)
 	return nil
 }
