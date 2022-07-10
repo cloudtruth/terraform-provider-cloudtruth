@@ -16,7 +16,6 @@ import (
 
 func resourceTag() *schema.Resource {
 	return &schema.Resource{
-		// This description is used by the documentation generator and the language server.
 		Description: "A CloudTruth Tag - unique per environment, defaulting to the 'default' environment",
 
 		CreateContext: resourceTagCreate,

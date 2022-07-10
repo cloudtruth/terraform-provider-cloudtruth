@@ -13,7 +13,6 @@ import (
 
 func resourceEnvironment() *schema.Resource {
 	return &schema.Resource{
-		// This description is used by the documentation generator and the language server.
 		Description: "A CloudTruth Environment.",
 
 		CreateContext: resourceEnvironmentCreate,

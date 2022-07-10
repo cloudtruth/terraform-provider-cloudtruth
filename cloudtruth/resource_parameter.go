@@ -24,7 +24,6 @@ import (
 
 func resourceParameter() *schema.Resource {
 	return &schema.Resource{
-		// This description is used by the documentation generator and the language server.
 		Description: "A CloudTruth Parameter and environment specific value (defaulting to the 'default' environment)",
 
 		CreateContext: resourceParameterCreate,
