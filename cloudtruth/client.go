@@ -124,11 +124,13 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 		tflog.Debug(ctx, "loadProjectNameCache: fetching project names")
 		retry := 0
 		var apiError error
+		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
+		// not client initialization so we employ a simple retry loop instead
 		for retry < loadCacheRetries {
 			resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Execute()
 			if r.StatusCode >= 500 {
-				tflog.Debug(ctx, fmt.Sprintf("loadProjectNameCache: %s", apiError))
 				apiError = err
+				tflog.Debug(ctx, fmt.Sprintf("loadProjectNameCache: %s", apiError))
 				retry++
 			} else {
 				c.projectNames = make(map[string]string)
@@ -190,6 +192,8 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 		tflog.Debug(ctx, "loadEnvNameCache: fetching environment names")
 		retry := 0
 		var apiError error
+		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
+		// not client initialization so we employ a simple retry loop instead
 		for retry < loadCacheRetries {
 			resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Execute()
 			if r.StatusCode >= 500 {

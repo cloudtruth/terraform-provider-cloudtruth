@@ -76,13 +76,13 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 
 	// Handle as_of and tag filters
 	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(name)
-	filteredParamListRequest, err := parseFilters(paramListRequest, d)
+	filteredParamListRequest, err := parseParamListFilters(paramListRequest, d)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	var resp *cloudtruthapi.PaginatedParameterList
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		resp, r, err = filteredParamListRequest.Execute()
 		if err != nil {
@@ -167,34 +167,6 @@ func dataCloudTruthParameters() *schema.Resource {
 	}
 }
 
-func parseFilters(paramListRequest cloudtruthapi.ApiProjectsParametersListRequest,
-	d *schema.ResourceData) (*cloudtruthapi.ApiProjectsParametersListRequest, error) {
-	asOf, tag := "", ""
-	var ok bool
-	// when used in the context of a cloudtruth_parameter (non data source), these two properties will not exist,
-	// therefore we check for unset/nil values first
-	if _, ok = d.GetOk("as_of"); ok {
-		asOf = d.Get("as_of").(string)
-	}
-	if _, ok = d.GetOk("tag"); ok {
-		tag = d.Get("tag").(string)
-	}
-	if asOf != "" {
-		if tag != "" {
-			return nil, fmt.Errorf("dataCloudTruthParametersRead: 'as_of' and 'tag' cannot both be specified as parameter filters")
-		}
-		asOfTime, err := datetime.Parse(asOf, time.UTC)
-		if err != nil {
-			return nil, fmt.Errorf("dataCloudTruthParametersRead: %w", err)
-		}
-		paramListRequest = paramListRequest.AsOf(asOfTime)
-	}
-	if tag != "" {
-		paramListRequest = paramListRequest.Tag(tag)
-	}
-	return &paramListRequest, nil
-}
-
 func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParametersRead")
@@ -213,10 +185,10 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 		if pageNum > 0 {
 			paramListRequest = paramListRequest.Page(pageNum)
 		}
-		filteredParamListRequest, err := parseFilters(paramListRequest, d)
+		filteredParamListRequest, err := parseParamListFilters(paramListRequest, d)
 
 		var resp *cloudtruthapi.PaginatedParameterList
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 			var r *http.Response
 			resp, r, err = filteredParamListRequest.Execute()
 			if err != nil {
@@ -264,4 +236,32 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 	   then we may need to rethink the ID strategy here */
 	d.SetId(fmt.Sprintf("%s:%s", *projID, *envID))
 	return nil
+}
+
+func parseParamListFilters(paramListRequest cloudtruthapi.ApiProjectsParametersListRequest,
+	d *schema.ResourceData) (*cloudtruthapi.ApiProjectsParametersListRequest, error) {
+	asOf, tag := "", ""
+	var ok bool
+	// when used in the context of a cloudtruth_parameter (non data source), these two properties will not exist,
+	// therefore we check for unset/nil values first
+	if _, ok = d.GetOk("as_of"); ok {
+		asOf = d.Get("as_of").(string)
+	}
+	if _, ok = d.GetOk("tag"); ok {
+		tag = d.Get("tag").(string)
+	}
+	if asOf != "" {
+		if tag != "" {
+			return nil, fmt.Errorf("parseParamListFilters: 'as_of' and 'tag' cannot both be specified as parameter filters")
+		}
+		asOfTime, err := datetime.Parse(asOf, time.UTC)
+		if err != nil {
+			return nil, fmt.Errorf("parseParamListFilters: %w", err)
+		}
+		paramListRequest = paramListRequest.AsOf(asOfTime)
+	}
+	if tag != "" {
+		paramListRequest = paramListRequest.Tag(tag)
+	}
+	return &paramListRequest, nil
 }
