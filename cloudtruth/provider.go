@@ -52,6 +52,7 @@ func New(version string) func() *schema.Provider {
 			ResourcesMap: map[string]*schema.Resource{
 				"cloudtruth_project":     resourceProject(),
 				"cloudtruth_environment": resourceEnvironment(),
+				"cloudtruth_group":       resourceGroup(),
 				"cloudtruth_parameter":   resourceParameter(),
 				"cloudtruth_tag":         resourceTag(),
 				"cloudtruth_template":    resourceTemplate(),

@@ -206,6 +206,5 @@ func resourceTemplateDelete(ctx context.Context, d *schema.ResourceData, meta an
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-
 	return nil
 }

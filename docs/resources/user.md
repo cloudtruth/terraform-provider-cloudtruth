@@ -18,6 +18,9 @@ A CloudTruth User
 ### Required
 
 - `email` (String) The user's email address, used for the initial invite
+
+### Optional
+
 - `role` (String) The user's access role in the target CloudTruth organization
 
 ### Read-Only

@@ -1,19 +1,25 @@
 package cloudtruth
 
+/*
+import (
+	"fmt"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"math/rand"
+	"time"
+)
+
+DISABLE FOR NOW
+
 import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"math/rand"
 	"testing"
+	"time"
 )
 
-const ownerRole = "OWNER"
-
-/*const contRole = "CONTRIBUTOR"
-const adminRole = "ADMIN"
-const viewerRole = "VIEWER"*/
-
 func TestAccResourceUserBasic(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
 	email := fmt.Sprintf("matthewcummings516+%d@gmail.com", rand.Intn(100000))
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
@@ -38,3 +44,5 @@ func testAccResourceUserCreateBasic(email, role string) string {
 	}
 	`, email, role)
 }
+
+*/

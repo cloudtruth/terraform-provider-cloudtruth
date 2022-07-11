@@ -11,6 +11,14 @@ import (
 	"net/http"
 )
 
+const viewerRole = "VIEWER"
+
+/*
+const ownerRole = "OWNER"
+const contRole = "CONTRIBUTOR"
+const adminRole = "ADMIN"
+*/
+
 func resourceUser() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth User",
@@ -27,14 +35,19 @@ func resourceUser() *schema.Resource {
 				Required:    true,
 			},
 			"role": {
+				// todo add validation here, only valid role names allowed
 				Description: "The user's access role in the target CloudTruth organization",
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
+				Default:     viewerRole,
 			},
 		},
 	}
 }
 
+// todo:
+// determine how to manage users via the API alone
+// determine what level of support we need for service accounts
 func resourceUserCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceUserCreate")
