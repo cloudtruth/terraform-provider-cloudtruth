@@ -13,7 +13,7 @@ const updateGroupDesc = "A new description of a group"
 
 // For convenience, reuse the API token used in CI for the
 // acceptance tests
-const tokenUser = "ACCEPTANCE_TEST_TOKEN"
+// const tokenUser = "ACCEPTANCE_TEST_TOKEN"
 
 func TestAccResourceGroupBasic(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
@@ -40,6 +40,7 @@ func TestAccResourceGroupBasic(t *testing.T) {
 	})
 }
 
+/*
 func TestAccResourceGroupWithUser(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	groupName := fmt.Sprintf("TestGroup-%d", rand.Intn(100000))
@@ -66,6 +67,7 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 		},
 	})
 }
+*/
 
 func testAccResourceGroupCreateBasic(name, desc string) string {
 	return fmt.Sprintf(`
@@ -85,6 +87,7 @@ func testAccResourceGroupUpdateBasic(name, desc string) string {
 	`, name, desc)
 }
 
+/*
 func testAccResourceGroupCreateWithUser(name, desc, user string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_group" "user_test" {
@@ -103,4 +106,4 @@ func testAccResourceGroupCreateWithoutUser(name, desc string) string {
         users       = []
 	}
 	`, name, desc)
-}
+}*/

@@ -11,8 +11,6 @@ import (
 	"net/http"
 )
 
-//const userFetchRetries = 5
-
 func resourceGroup() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth User",

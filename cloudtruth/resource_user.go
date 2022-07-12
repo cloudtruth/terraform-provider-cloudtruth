@@ -1,6 +1,6 @@
 package cloudtruth
 
-// TODO: possibly delete this
+// TODO: determine path forward for managing users
 /*
 import (
 	"context"

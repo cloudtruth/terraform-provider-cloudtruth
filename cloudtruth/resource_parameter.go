@@ -6,7 +6,9 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"net/http"
 	"strings"
 )
 
@@ -112,37 +114,80 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
 
+	// Check for the parameter
 	paramName := d.Get("name").(string)
-	var paramID, valueID string
-	lookupResp, r, err := c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx,
-		*projID).Environment(*envID).Name(paramName).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterCreate: error looking up parameter %s: %+v", paramName, r))
+	var paramListResp *cloudtruthapi.PaginatedParameterList
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		paramListResp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(paramName).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceParameterCreate: error looking up parameter %s: %w", paramName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
 
-	if lookupResp.GetCount() == 1 { // Named parameter already exists
-		paramID = lookupResp.GetResults()[0].GetId()
+	// Create the parameter if it doesn't exist
+	var paramID, valueID string
+	var paramCreateResp *cloudtruthapi.Parameter
+	if paramListResp.GetCount() == 1 { // Named parameter already exists, we reuse it and a new value
+		paramID = paramListResp.GetResults()[0].GetId()
 	} else {
-		paramCreate := paramCreateConfig(d)
-		paramCreateResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersCreate(ctx,
-			*projID).ParameterCreate(*paramCreate).Execute()
-		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+			var r *http.Response
+			var err error
+			paramCreate := paramCreateConfig(d)
+			paramCreateResp, _, err = c.openAPIClient.ProjectsApi.ProjectsParametersCreate(ctx,
+				*projID).ParameterCreate(*paramCreate).Execute()
+			if err != nil {
+				outErr := fmt.Errorf("resourceParameterCreate: error creating parameter %s: %w", paramName, err)
+				if r.StatusCode >= http.StatusInternalServerError {
+					return resource.RetryableError(outErr)
+				} else {
+					return resource.NonRetryableError(outErr)
+				}
+			}
+			paramID = paramCreateResp.GetId()
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
 		}
-		paramID = paramCreateResp.GetId()
 	}
+
+	// Create its per-environment value
 	valueCreate, err := valueCreateConfig(*envID, d)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
-	valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx,
-		paramID, *projID).ValueCreate(*valueCreate).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
+	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx, paramID, *projID).ValueCreate(*valueCreate).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceParameterCreate: error creating the value for parameter %s: %w", paramName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		valueID = valueResp.GetId()
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
-	valueID = valueResp.GetId()
 
-	// Then add its value in the specified environment with composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
+	// add its value in the specified environment with composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
 	internalID := fmt.Sprintf("%s:%s", paramID, valueID)
 	d.SetId(internalID)
 	return nil
