@@ -11,6 +11,8 @@ import (
 	"net/http"
 )
 
+//const userFetchRetries = 5
+
 func resourceGroup() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth User",
@@ -46,16 +48,23 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 	tflog.Debug(ctx, "resourceGroupCreate")
 	groupName := d.Get("name").(string)
 	desc := d.Get("description").(string)
-	users := []string{}
-	if _, ok := d.GetOk("users"); ok {
-		users = d.Get("users").([]string)
-	}
+
+	userURIs := []string{}
 	groupCreate := cloudtruthapi.NewGroupWithDefaults()
 	groupCreate.SetName(groupName)
 	if desc != "" {
 		groupCreate.SetDescription(desc)
 	}
-	groupCreate.SetUsers(users)
+	if _, ok := d.GetOk("users"); ok {
+		users := d.Get("users").([]interface{})
+		userURIs = make([]string, len(users))
+		/* todo: need a user cache here, we can't rely on user names, we need to lookup IDs
+		for i, v := range users {
+			userName := fmt.Sprint(v)
+			userURIs[i], err = fetchUserURI(userName)
+		} */
+	}
+	groupCreate.SetUsers(userURIs)
 
 	var group *cloudtruthapi.Group
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
@@ -146,7 +155,7 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 			return diag.FromErr(retryError)
 		}
 	}
-	return resourceTemplateRead(ctx, d, meta)
+	return resourceGroupRead(ctx, d, meta)
 }
 
 func resourceGroupDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {

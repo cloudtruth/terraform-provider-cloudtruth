@@ -1,5 +1,7 @@
 package cloudtruth
 
+// TODO: possibly delete this
+/*
 import (
 	"context"
 	"fmt"
@@ -13,11 +15,10 @@ import (
 
 const viewerRole = "VIEWER"
 
-/*
+
 const ownerRole = "OWNER"
 const contRole = "CONTRIBUTOR"
 const adminRole = "ADMIN"
-*/
 
 func resourceUser() *schema.Resource {
 	return &schema.Resource{
@@ -95,3 +96,4 @@ func resourceUserDelete(ctx context.Context, d *schema.ResourceData, meta any) d
 
 	return nil
 }
+*/
