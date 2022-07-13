@@ -56,11 +56,15 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 	if _, ok := d.GetOk("users"); ok {
 		users := d.Get("users").([]interface{})
 		userURIs = make([]string, len(users))
-		/* todo: need a user cache here, we can't rely on user names, we need to lookup IDs
-		for i, v := range users {
+		for _, v := range users {
 			userName := fmt.Sprint(v)
-			userURIs[i], err = fetchUserURI(userName)
-		} */
+			user, err := c.lookupUser(ctx, userName)
+			if err != nil {
+				return diag.FromErr(err)
+			} else if user == nil {
+				return diag.FromErr(fmt.Errorf("resourceGroupCreate: failed to find user %s", userName))
+			}
+		}
 	}
 	groupCreate.SetUsers(userURIs)
 

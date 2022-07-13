@@ -75,7 +75,6 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 	if err != nil {
 		return nil, diag.FromErr(fmt.Errorf("configureClient - loadEnvIDCache: %w", err))
 	}
-
 	err = client.loadUserCache(ctx)
 	if err != nil {
 		return nil, diag.FromErr(fmt.Errorf("configureClient - loadUserCache: %w", err))
@@ -288,8 +287,7 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 					for _, p := range userList.Results {
 						c.users[p.GetName()] = &p
 						if p.GetEmail() != "" {
-							// A second email key pointing to the same User pointer
-							c.users[p.GetEmail()] = &p
+							c.users[p.GetEmail()] = &p // An email key pointing to the same User pointer
 						}
 					}
 					apiError = nil
@@ -305,4 +303,13 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 		}
 	}
 	return nil
+}
+
+// Look up a user by email or name
+func (c *cloudTruthClient) lookupUser(ctx context.Context, userNameOrEmail string) (*cloudtruthapi.User, error) {
+	tflog.Debug(ctx, fmt.Sprintf("lookupUser: looking up the user account for %s", userNameOrEmail))
+	if user, ok := c.users[userNameOrEmail]; ok {
+		return user, nil
+	}
+	return nil, nil
 }
