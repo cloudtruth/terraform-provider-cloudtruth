@@ -7,6 +7,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"net/http"
 )
 
 const (
@@ -60,19 +61,24 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 	// populate & load caches
 	err := client.loadProjectNameCache(ctx)
 	if err != nil {
-		return nil, diag.FromErr(fmt.Errorf("configureClient: %w", err))
+		return nil, diag.FromErr(fmt.Errorf("configureClient - loadProjectNameCache: %w", err))
 	}
 	err = client.loadProjectIDCache(ctx)
 	if err != nil {
-		return nil, diag.FromErr(fmt.Errorf("configureClient: %w", err))
+		return nil, diag.FromErr(fmt.Errorf("configureClient - loadProjectIDCache: %w", err))
 	}
 	err = client.loadEnvNameCache(ctx)
 	if err != nil {
-		return nil, diag.FromErr(fmt.Errorf("configureClient: %w", err))
+		return nil, diag.FromErr(fmt.Errorf("configureClient - loadEnvNameCache: %w", err))
 	}
 	err = client.loadEnvIDCache(ctx)
 	if err != nil {
-		return nil, diag.FromErr(fmt.Errorf("configureClient: %w", err))
+		return nil, diag.FromErr(fmt.Errorf("configureClient - loadEnvIDCache: %w", err))
+	}
+
+	err = client.loadUserCache(ctx)
+	if err != nil {
+		return nil, diag.FromErr(fmt.Errorf("configureClient - loadUserCache: %w", err))
 	}
 
 	return &client, nil
@@ -85,6 +91,7 @@ type cloudTruthClient struct {
 	envIDs        map[string]string
 	projectNames  map[string]string
 	projectIDs    map[string]string
+	users         map[string]*cloudtruthapi.User
 }
 
 // Utility function for creating a reverse val -> key map
@@ -122,19 +129,20 @@ func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID strin
 func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 	if c.projectNames == nil {
 		tflog.Debug(ctx, "loadProjectNameCache: fetching project names")
-		retry := 0
+		retryCount := 0
 		var apiError error
 		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
 		// not client initialization so we employ a simple retry loop instead
-		for retry < loadCacheRetries {
+		for retryCount < loadCacheRetries {
 			resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Execute()
 			if r.StatusCode >= 500 {
 				apiError = err
 				tflog.Debug(ctx, fmt.Sprintf("loadProjectNameCache: %s", apiError))
-				retry++
+				retryCount++
 			} else {
 				c.projectNames = make(map[string]string)
 				for _, p := range resp.Results {
+
 					c.projectNames[p.Name] = p.Id
 				}
 				apiError = nil
@@ -190,16 +198,16 @@ func (c *cloudTruthClient) lookupEnvironment(ctx context.Context, envNameOrID st
 func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 	if c.envNames == nil {
 		tflog.Debug(ctx, "loadEnvNameCache: fetching environment names")
-		retry := 0
+		retryCount := 0
 		var apiError error
 		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
-		// not client initialization so we employ a simple retry loop instead
-		for retry < loadCacheRetries {
+		// not client initialization so we employ a simple retryCount loop instead
+		for retryCount < loadCacheRetries {
 			resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Execute()
 			if r.StatusCode >= 500 {
 				tflog.Debug(ctx, fmt.Sprintf("loadEnvNameCache: %s", apiError))
 				apiError = err
-				retry++
+				retryCount++
 			} else {
 				c.envNames = make(map[string]string)
 				for _, p := range resp.Results {
@@ -251,4 +259,50 @@ func (c *cloudTruthClient) lookupEnvProj(ctx context.Context, envNameOrID, projN
 		return nil, nil, err
 	}
 	return envID, projID, nil
+}
+
+// map of ALL user names -> user structs
+// we also add email -> user struct entries for easy lookups by name or email
+func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
+	if c.users == nil {
+		tflog.Debug(ctx, "loadUserCache: fetching user accounts")
+		c.users = make(map[string]*cloudtruthapi.User)
+		var pageNum int32 = 0
+		for {
+			userListRequest := c.openAPIClient.UsersApi.UsersList(ctx)
+			var userList *cloudtruthapi.PaginatedUserList
+			if pageNum > 0 {
+				userListRequest = userListRequest.Page(pageNum)
+			}
+			pageNum++
+			retryCount := 0
+			var apiError, err error
+			var r *http.Response
+			for retryCount < loadCacheRetries {
+				userList, r, err = userListRequest.Execute()
+				if r.StatusCode >= 500 {
+					tflog.Debug(ctx, fmt.Sprintf("loadUserCache: %s", apiError))
+					apiError = err
+					retryCount++
+				} else {
+					for _, p := range userList.Results {
+						c.users[p.GetName()] = &p
+						if p.GetEmail() != "" {
+							// A second email key pointing to the same User pointer
+							c.users[p.GetEmail()] = &p
+						}
+					}
+					apiError = nil
+					break
+				}
+			}
+			if apiError != nil {
+				return fmt.Errorf("loadUserCache: %w", apiError)
+			}
+			if userList.GetNext() == "" {
+				break
+			}
+		}
+	}
+	return nil
 }
