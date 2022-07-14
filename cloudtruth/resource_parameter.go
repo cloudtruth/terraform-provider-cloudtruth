@@ -237,24 +237,7 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 	return dataCloudTruthParameterRead(ctx, d, meta)
 }
 
-func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceParameterUpdate")
-	project := d.Get("project").(string)
-	projID, err := c.lookupProject(ctx, project)
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
-	}
-
-	paramCompositeID := d.Id()
-	ids := strings.Split(paramCompositeID, ":")
-	if len(ids) != 2 {
-		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: ;failed to extract the Parameter and Parameter Value IDs from %s",
-			paramCompositeID))
-	}
-	paramID, paramValueID := ids[0], ids[1]
-
-	// First update Parameter level changes
+func updateParameter(ctx context.Context, paramID, projID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
 	patchedParam := cloudtruthapi.PatchedParameter{}
 	hasParamChange := false
 	if d.HasChange("description") {
@@ -267,15 +250,19 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		patchedParam.SetSecret(paramIsSecret)
 		hasParamChange = true
 	}
+	var r *http.Response
+	var err error
 	if hasParamChange {
-		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersPartialUpdate(ctx, paramID, *projID).
+		_, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersPartialUpdate(ctx, paramID, projID).
 			PatchedParameter(patchedParam).Execute()
 		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
+			return r, err
 		}
 	}
+	return r, nil
+}
 
-	// Then update Parameter Value level changes
+func updateParameterValue(ctx context.Context, paramID, paramValueID, projID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
 	updateValue := cloudtruthapi.NewValueWithDefaults()
 	hasParamValueChange := false
 	if d.HasChange("value") {
@@ -284,7 +271,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		paramEnv := d.Get("environment").(string)
 		envID, err := c.lookupEnvironment(ctx, paramEnv)
 		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
+			return nil, err
 		}
 		updateValue.SetEnvironment(*envID)
 		hasParamValueChange = true
@@ -299,13 +286,70 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		updateValue.SetInterpolated(evalValue)
 		hasParamValueChange = true
 	}
+	var r *http.Response
+	var err error
 	if hasParamValueChange {
-		_, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
-			*projID).Value(*updateValue).Execute()
+		_, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
+			projID).Value(*updateValue).Execute()
 		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
+			return r, err
 		}
 	}
+	return nil, nil
+}
+
+func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	c := meta.(*cloudTruthClient)
+	tflog.Debug(ctx, "resourceParameterUpdate")
+	project := d.Get("project").(string)
+	projID, err := c.lookupProject(ctx, project)
+	if err != nil {
+		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
+	}
+
+	paramCompositeID := d.Id()
+	ids := strings.Split(paramCompositeID, ":")
+	if len(ids) != 2 {
+		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: failed to extract the Parameter and Parameter Value IDs from %s",
+			paramCompositeID))
+	}
+	paramID, paramValueID := ids[0], ids[1]
+	paramName := d.Get("name").(string)
+
+	// First update Parameter level changes, no-op if there are none
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		r, err := updateParameter(ctx, paramID, *projID, d, c)
+		if err != nil {
+			outErr := fmt.Errorf("resourceParameterUpdate: error updating parameter level config for parameter %s: %w", paramName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
+
+	// Then update Parameter Value level changes
+	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		r, err := updateParameterValue(ctx, paramID, paramValueID, *projID, d, c)
+		if err != nil {
+			outErr := fmt.Errorf("resourceParameterUpdate: error updating the parameter value config for parameter %s: %w", paramName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
+
 	d.SetId(paramCompositeID)
 	return resourceParameterRead(ctx, d, meta)
 }
