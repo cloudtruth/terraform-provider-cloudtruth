@@ -11,9 +11,11 @@ import (
 const groupDesc = "Just a description of a group"
 const updateGroupDesc = "A new description of a group"
 
-// For convenience, reuse the API token used in CI for the
-// acceptance tests
-// const tokenUser = "ACCEPTANCE_TEST_TOKEN"
+// Use internal accounts since they guaranteed to exist
+// Need to document/support a way for external contributors to
+// specify their own users
+const testUser1 = "matthewcummings516@gmail.com"
+const testUser2 = "matt@cloudtruth.com"
 
 func TestAccResourceGroupBasic(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
@@ -40,7 +42,6 @@ func TestAccResourceGroupBasic(t *testing.T) {
 	})
 }
 
-/*
 func TestAccResourceGroupWithUser(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	groupName := fmt.Sprintf("TestGroup-%d", rand.Intn(100000))
@@ -49,25 +50,51 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceGroupCreateWithUser(groupName, groupDesc, tokenUser),
+				Config: testAccResourceGroupCreateWithUser(groupName, groupDesc, testUser1),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_group.basic", "name", groupName),
-					resource.TestCheckResourceAttr("cloudtruth_group.basic", "description", groupDesc),
-					//resource.TestCheckR("cloudtruth_group.basic", "users", []string{tokenUser}),
+					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "name", groupName),
+					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "description", groupDesc),
+					//resource.T("cloudtruth_group.user_test", "users", []string{testUser1}),
 				),
 			},
-			{
+			{ // Change group membership & description
 				Config: testAccResourceGroupCreateWithoutUser(groupName, updateGroupDesc),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_group.basic", "name", groupName),
-					resource.TestCheckResourceAttr("cloudtruth_group.basic", "description", updateGroupDesc),
-					//resource.TestCheckR("cloudtruth_group.basic", "users", []string{tokenUser}),
+					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "name", groupName),
+					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "description", updateGroupDesc),
+					//resource.TestCheckR("cloudtruth_group.user_test", "users", []string{testUser1}),
 				),
 			},
 		},
 	})
 }
-*/
+
+// todo: need a custom check function
+func TestAccResourceGroupWithUsers(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	groupName := fmt.Sprintf("TestGroup-%d", rand.Intn(100000))
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: testAccResourceGroupCreateWithUsers(groupName, groupDesc, testUser1, testUser2),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("cloudtruth_group.multi_user", "name", groupName),
+					resource.TestCheckResourceAttr("cloudtruth_group.multi_user", "description", groupDesc),
+					//resource.T("cloudtruth_group.multi_user", "users", []string{testUser1}),
+				),
+			},
+			{ // Reverse the order of names in the list
+				Config: testAccResourceGroupCreateWithUsers(groupName, groupDesc, testUser2, testUser1),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("cloudtruth_group.multi_user", "name", groupName),
+					//resource.TestCheckR("cloudtruth_group.multi_user", "users", []string{testUser1}),
+				),
+			},
+		},
+	})
+}
 
 func testAccResourceGroupCreateBasic(name, desc string) string {
 	return fmt.Sprintf(`
@@ -87,7 +114,6 @@ func testAccResourceGroupUpdateBasic(name, desc string) string {
 	`, name, desc)
 }
 
-/*
 func testAccResourceGroupCreateWithUser(name, desc, user string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_group" "user_test" {
@@ -106,4 +132,14 @@ func testAccResourceGroupCreateWithoutUser(name, desc string) string {
         users       = []
 	}
 	`, name, desc)
-}*/
+}
+
+func testAccResourceGroupCreateWithUsers(name, desc, user1, user2 string) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_group" "multi_user" {
+  		name        = "%s"
+  		description = "%s"
+        users       = ["%s", "%s"]
+	}
+	`, name, desc, user1, user2)
+}

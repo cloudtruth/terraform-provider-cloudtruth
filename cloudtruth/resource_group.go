@@ -55,10 +55,10 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 	}
 	if _, ok := d.GetOk("users"); ok {
 		users := d.Get("users").([]interface{})
-		userURIs = make([]string, len(users))
 		for _, v := range users {
 			userName := fmt.Sprint(v)
 			user, err := c.lookupUser(ctx, userName)
+			userURIs = append(userURIs, user.GetUrl())
 			if err != nil {
 				return diag.FromErr(err)
 			} else if user == nil {
@@ -131,7 +131,19 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 	patchedGroup := cloudtruthapi.PatchedGroup{}
 	hasChange := false
 	if d.HasChange("users") {
-		patchedGroup.SetUsers(d.Get("users").([]string))
+		userURIs := []string{}
+		users := d.Get("users").([]interface{})
+		for _, v := range users {
+			userName := fmt.Sprint(v)
+			user, err := c.lookupUser(ctx, userName)
+			userURIs = append(userURIs, user.GetUrl())
+			if err != nil {
+				return diag.FromErr(err)
+			} else if user == nil {
+				return diag.FromErr(fmt.Errorf("resourceGroupCreate: failed to find user %s", userName))
+			}
+		}
+		patchedGroup.SetUsers(userURIs)
 		hasChange = true
 	}
 	if d.HasChange("description") {
