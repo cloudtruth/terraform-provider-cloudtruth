@@ -1,3 +1,14 @@
+## 0.3.2 (July 15, 2022)
+
+FEATURES:
+
+* as_of and tag support for the cloudtruth_paramater data source.
+* cloudtruth_group resource for users and service accounts
+
+ENHANCEMENTS:
+
+* Retry logic for all API operations
+
 ## 0.3.1 (July 3, 2022)
 
 FEATURES:
