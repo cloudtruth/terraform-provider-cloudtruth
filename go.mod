@@ -6,7 +6,7 @@ require (
 	github.com/cloudtruth/terraform-provider-cloudtruth v0.0.0
 	github.com/google/uuid v1.3.0
 	github.com/hashicorp/terraform-plugin-docs v0.13.0
-	github.com/hashicorp/terraform-plugin-log v0.4.1
+	github.com/hashicorp/terraform-plugin-log v0.5.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.18.0
 	github.com/nav-inc/datetime v0.1.3
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
