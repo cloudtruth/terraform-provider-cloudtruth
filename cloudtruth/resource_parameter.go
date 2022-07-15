@@ -366,7 +366,6 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
 	}
-
 	paramCompositeID := d.Id()
 	ids := strings.Split(paramCompositeID, ":")
 	if len(ids) != 2 {
@@ -374,17 +373,34 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 			paramCompositeID))
 	}
 	paramID, paramValueID := ids[0], ids[1]
-	resp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(ctx, paramID, *projID).Execute()
-	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
+
+	var paramResp *cloudtruthapi.Parameter
+	paramName := d.Get("name")
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		paramResp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(ctx, paramID, *projID).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceParameterDelete: error fetching parameter %s: %w", paramName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
 
-	// We iterate over the values for the parameter, where the keys are the URLs of the corresponding
-	// environments. If they are all null, we delete the parameter. If they are all null except the one matching
-	// the specified environment, we delete the parameter.
-	// Otherwise, we delete the specific value defined in the target environment
+	// We iterate over the values for the parameter across all environments
+	// If the values are all null, we delete the parameter.
+	// If the values are all null except for the target environment, we delete the parameter.
+	// Otherwise, we only delete the specific parameter value in the target environment i.e. the parameter
+	// exists in at least one other environment.
 	multiEnv := false
-	values := resp.GetValues()
+	values := paramResp.GetValues()
 	count := 1 // the param value is defined in the target environment
 	// check to see if it's explicitly defined in any others
 	for envURL := range values {
@@ -398,20 +414,30 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 		}
 	}
 
-	if multiEnv {
-		// delete the specific env value only, because there are explicit definitions in one or more other envs
-		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(ctx, paramValueID,
-			paramID, *projID).Execute()
-		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
+	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		if multiEnv {
+			// delete the specific env value only, because there are explicit definitions in one or more other envs
+			r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(ctx, paramValueID,
+				paramID, *projID).Execute()
+		} else {
+			// delete the parameter entirely
+			r, err = c.openAPIClient.ProjectsApi.ProjectsParametersDestroy(ctx, paramID,
+				*projID).Execute()
 		}
-	} else {
-		// delete the parameter entirely
-		_, err := c.openAPIClient.ProjectsApi.ProjectsParametersDestroy(ctx, paramID,
-			*projID).Execute()
 		if err != nil {
-			return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
+			outErr := fmt.Errorf("resourceParameterDelete: error deleting parameter %s: %w", paramName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
 		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
 	}
 	return nil
 }
