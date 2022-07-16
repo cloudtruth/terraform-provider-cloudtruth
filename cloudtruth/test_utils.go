@@ -42,7 +42,7 @@ const (
 // Utility function to use with data sources and resources that are maps
 // Note that this function only checks the existence of expected key/value pairs
 // The acceptance tests create ephemeral resources which means that occasionally
-// lingering cruft resources may exist in the CloudTruth Acceptance Test account
+// lingering resources may exist in the CloudTruth Acceptance Test account
 // when tests and/or cleanup scripts fail
 func testAccCheckDataSourceValueMap(resourceName string, expMap map[string]interface{}) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
