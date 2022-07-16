@@ -14,8 +14,8 @@ const updateGroupDesc = "A new description of a group"
 // Use internal accounts since they guaranteed to exist
 // Need to document/support a way for external contributors to
 // specify their own users
-const testUser1 = "matthewcummings516@gmail.com"
-const testUser2 = "matt@cloudtruth.com"
+const groupTestUser1 = "matthewcummings516@gmail.com"
+const groupTestUser2 = "matt@cloudtruth.com"
 
 func TestAccResourceGroupBasic(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
@@ -50,11 +50,11 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceGroupCreateWithUser(groupName, groupDesc, testUser1),
+				Config: testAccResourceGroupCreateWithUser(groupName, groupDesc, groupTestUser1),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "name", groupName),
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "description", groupDesc),
-					//resource.T("cloudtruth_group.user_test", "users", []string{testUser1}),
+					//resource.T("cloudtruth_group.user_test", "users", []string{groupTestUser1}),
 				),
 			},
 			{ // Change group membership & description
@@ -62,7 +62,7 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "name", groupName),
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "description", updateGroupDesc),
-					//resource.TestCheckR("cloudtruth_group.user_test", "users", []string{testUser1}),
+					//resource.TestCheckR("cloudtruth_group.user_test", "users", []string{groupTestUser1}),
 				),
 			},
 		},
@@ -78,18 +78,18 @@ func TestAccResourceGroupWithUsers(t *testing.T) {
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceGroupCreateWithUsers(groupName, groupDesc, testUser1, testUser2),
+				Config: testAccResourceGroupCreateWithUsers(groupName, groupDesc, groupTestUser1, groupTestUser2),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_group.multi_user", "name", groupName),
 					resource.TestCheckResourceAttr("cloudtruth_group.multi_user", "description", groupDesc),
-					//resource.T("cloudtruth_group.multi_user", "users", []string{testUser1}),
+					//resource.T("cloudtruth_group.multi_user", "users", []string{groupTestUser1}),
 				),
 			},
 			{ // Reverse the order of names in the list
-				Config: testAccResourceGroupCreateWithUsers(groupName, groupDesc, testUser2, testUser1),
+				Config: testAccResourceGroupCreateWithUsers(groupName, groupDesc, groupTestUser2, groupTestUser1),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_group.multi_user", "name", groupName),
-					//resource.TestCheckR("cloudtruth_group.multi_user", "users", []string{testUser1}),
+					//resource.TestCheckR("cloudtruth_group.multi_user", "users", []string{groupTestUser1}),
 				),
 			},
 		},

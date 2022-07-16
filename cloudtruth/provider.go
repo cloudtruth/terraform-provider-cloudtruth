@@ -48,7 +48,7 @@ func New(version string) func() *schema.Provider {
 				"cloudtruth_tag":        dataCloudTruthTag(),
 				"cloudtruth_template":   dataCloudTruthTemplate(),
 				"cloudtruth_templates":  dataCloudTruthTemplates(),
-				//"cloudtruth_user":       dataCloudTruthUser(),
+				"cloudtruth_user":       dataCloudTruthUser(),
 				//"cloudtruth_users":      dataCloudTruthUsers(),
 			},
 			ResourcesMap: map[string]*schema.Resource{
