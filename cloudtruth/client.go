@@ -90,7 +90,7 @@ type cloudTruthClient struct {
 	envIDs        map[string]string
 	projectNames  map[string]string
 	projectIDs    map[string]string
-	users         map[string]*cloudtruthapi.User
+	users         map[string]cloudtruthapi.User
 }
 
 // Utility function for creating a reverse val -> key map
@@ -265,7 +265,7 @@ func (c *cloudTruthClient) lookupEnvProj(ctx context.Context, envNameOrID, projN
 func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 	if c.users == nil {
 		tflog.Debug(ctx, "loadUserCache: fetching user accounts")
-		c.users = make(map[string]*cloudtruthapi.User)
+		c.users = make(map[string]cloudtruthapi.User)
 		var pageNum int32 = 0
 		for {
 			userListRequest := c.openAPIClient.UsersApi.UsersList(ctx)
@@ -285,9 +285,9 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 					retryCount++
 				} else {
 					for _, p := range userList.Results {
-						c.users[p.GetName()] = &p
+						c.users[p.GetName()] = p
 						if p.GetEmail() != "" {
-							c.users[p.GetEmail()] = &p // An email key pointing to the same User pointer
+							c.users[p.GetEmail()] = p // An email key pointing to the same User (pointer)
 						}
 					}
 					apiError = nil
@@ -309,7 +309,7 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 func (c *cloudTruthClient) lookupUser(ctx context.Context, userNameOrEmail string) (*cloudtruthapi.User, error) {
 	tflog.Debug(ctx, fmt.Sprintf("lookupUser: looking up the user account for %s", userNameOrEmail))
 	if user, ok := c.users[userNameOrEmail]; ok {
-		return user, nil
+		return &user, nil
 	}
 	return nil, nil
 }
