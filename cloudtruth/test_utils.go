@@ -37,6 +37,8 @@ const (
 	githubFilter            = "metadata.protocol_versions[0]"
 	epochTimeTag            = "EpochTime"
 	epochTimeTagTimestamp   = "1970-01-01T05:00:00Z"
+	ciServiceAccountName    = "ACCEPTANCE_TEST_TOKEN" // used in tests and CI
+	ciServiceAccountRole    = "OWNER"
 )
 
 // Utility function to use with data sources and resources that are maps
