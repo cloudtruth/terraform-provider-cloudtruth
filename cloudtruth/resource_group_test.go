@@ -69,7 +69,6 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 	})
 }
 
-// todo: need a custom check function
 func TestAccResourceGroupWithUsers(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	groupName := fmt.Sprintf("TestGroup-%d", rand.Intn(100000))
