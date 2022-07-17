@@ -79,6 +79,10 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 	if err != nil {
 		return nil, diag.FromErr(fmt.Errorf("configureClient - loadUserCache: %w", err))
 	}
+	err = client.loadGroupCache(ctx)
+	if err != nil {
+		return nil, diag.FromErr(fmt.Errorf("configureClient - loadGroupCache: %w", err))
+	}
 
 	return &client, nil
 }
@@ -91,9 +95,11 @@ type cloudTruthClient struct {
 	projectNames  map[string]string
 	projectIDs    map[string]string
 	users         map[string]cloudtruthapi.User
+	groups        map[string]cloudtruthapi.Group
 }
 
-// Utility function for creating a reverse val -> key map
+// Utility function with an input k -> v map, returns the "reverse"
+// v -> k map
 func convertMap(m map[string]string) map[string]string {
 	inv := make(map[string]string)
 	for k, v := range m {
@@ -141,7 +147,6 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 			} else {
 				c.projectNames = make(map[string]string)
 				for _, p := range resp.Results {
-
 					c.projectNames[p.Name] = p.Id
 				}
 				apiError = nil
@@ -284,10 +289,10 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 					apiError = err
 					retryCount++
 				} else {
-					for _, p := range userList.Results {
-						c.users[p.GetName()] = p
-						if p.GetEmail() != "" {
-							c.users[p.GetEmail()] = p // An email key pointing to the same User (pointer)
+					for _, u := range userList.Results {
+						c.users[u.GetName()] = u
+						if u.GetEmail() != "" {
+							c.users[u.GetEmail()] = u // An email key pointing to the same User (pointer)
 						}
 					}
 					apiError = nil
@@ -310,6 +315,54 @@ func (c *cloudTruthClient) lookupUser(ctx context.Context, userNameOrEmail strin
 	tflog.Debug(ctx, fmt.Sprintf("lookupUser: looking up the user account for %s", userNameOrEmail))
 	if user, ok := c.users[userNameOrEmail]; ok {
 		return &user, nil
+	}
+	return nil, nil
+}
+
+func (c *cloudTruthClient) loadGroupCache(ctx context.Context) error {
+	if c.groups == nil {
+		tflog.Debug(ctx, "loadGroupCache: fetching groups")
+		c.groups = make(map[string]cloudtruthapi.Group)
+		var pageNum int32 = 0
+		for {
+			groupListRequest := c.openAPIClient.GroupsApi.GroupsList(ctx)
+			var groupList *cloudtruthapi.PaginatedGroupList
+			if pageNum > 0 {
+				groupListRequest = groupListRequest.Page(pageNum)
+			}
+			pageNum++
+			retryCount := 0
+			var apiError, err error
+			var r *http.Response
+			for retryCount < loadCacheRetries {
+				groupList, r, err = groupListRequest.Execute()
+				if r.StatusCode >= 500 {
+					tflog.Debug(ctx, fmt.Sprintf("loadGroupCache: %s", apiError))
+					apiError = err
+					retryCount++
+				} else {
+					for _, g := range groupList.Results {
+						c.groups[g.GetName()] = g
+					}
+					apiError = nil
+					break
+				}
+			}
+			if apiError != nil {
+				return fmt.Errorf("loadGroupCache: %w", apiError)
+			}
+			if groupList.GetNext() == "" {
+				break
+			}
+		}
+	}
+	return nil
+}
+
+func (c *cloudTruthClient) lookupGroup(ctx context.Context, groupName string) (*cloudtruthapi.Group, error) {
+	tflog.Debug(ctx, fmt.Sprintf("lookupUser: looking up the group %s", groupName))
+	if group, ok := c.groups[groupName]; ok {
+		return &group, nil
 	}
 	return nil, nil
 }

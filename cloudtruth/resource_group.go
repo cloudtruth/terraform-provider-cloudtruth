@@ -119,7 +119,9 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	if len(res) != 1 {
 		return diag.FromErr(fmt.Errorf("resourceGroupRead: found %d groups, expcted to find 1", len(res)))
 	}
-	d.SetId(resp.GetResults()[0].GetId())
+	group := resp.GetResults()[0]
+	c.groups[groupName] = group
+	d.SetId(group.GetId())
 	return nil
 }
 
@@ -195,5 +197,6 @@ func resourceGroupDelete(ctx context.Context, d *schema.ResourceData, meta any) 
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
+	delete(c.groups, groupName)
 	return nil
 }

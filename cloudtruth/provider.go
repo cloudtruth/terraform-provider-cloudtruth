@@ -52,12 +52,13 @@ func New(version string) func() *schema.Provider {
 				"cloudtruth_users":      dataCloudTruthUsers(),
 			},
 			ResourcesMap: map[string]*schema.Resource{
-				"cloudtruth_project":     resourceProject(),
-				"cloudtruth_environment": resourceEnvironment(),
-				"cloudtruth_group":       resourceGroup(),
-				"cloudtruth_parameter":   resourceParameter(),
-				"cloudtruth_tag":         resourceTag(),
-				"cloudtruth_template":    resourceTemplate(),
+				"cloudtruth_access_grant": resourceAccessGrant(),
+				"cloudtruth_environment":  resourceEnvironment(),
+				"cloudtruth_group":        resourceGroup(),
+				"cloudtruth_parameter":    resourceParameter(),
+				"cloudtruth_project":      resourceProject(),
+				"cloudtruth_tag":          resourceTag(),
+				"cloudtruth_template":     resourceTemplate(),
 			},
 		}
 
