@@ -58,6 +58,7 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 		openAPIClient: cloudtruthapi.NewAPIClient(apiConfig),
 	}
 
+	// todo: parallelize this
 	// populate & load caches
 	err := client.loadProjectNameCache(ctx)
 	if err != nil {
@@ -290,7 +291,12 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 					retryCount++
 				} else {
 					for _, u := range userList.Results {
-						c.users[u.GetName()] = u
+						name := u.GetName()
+						if _, ok := c.users[name]; ok {
+							tflog.Warn(ctx,
+								fmt.Sprintf("loadUserCache: duplicate users found with the name '%s', use emails to disambiguate in user data source", name))
+						}
+						c.users[name] = u
 						if u.GetEmail() != "" {
 							c.users[u.GetEmail()] = u // An email key pointing to the same User (pointer)
 						}

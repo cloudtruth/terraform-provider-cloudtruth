@@ -21,7 +21,7 @@ var userSchema = map[string]*schema.Schema{
 		Optional:    true,
 	},
 	"organization": {
-		Description: "The name of the CloudTruth organization containging the user",
+		Description: "The name of the CloudTruth organization containing the user",
 		Type:        schema.TypeString,
 		Computed:    true,
 	},

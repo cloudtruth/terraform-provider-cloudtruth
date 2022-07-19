@@ -86,7 +86,7 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-
+	c.groups[groupName] = *group
 	d.SetId(group.Id)
 	return nil
 }
@@ -120,7 +120,6 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 		return diag.FromErr(fmt.Errorf("resourceGroupRead: found %d groups, expcted to find 1", len(res)))
 	}
 	group := resp.GetResults()[0]
-	c.groups[groupName] = group
 	d.SetId(group.GetId())
 	return nil
 }

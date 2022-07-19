@@ -38,72 +38,90 @@ func resourceAccessGrant() *schema.Resource {
 			},
 			"user": {
 				Description: "The user which will be granted the role, mutually exclusive with 'group'",
-				Type:        schema.TypeList,
-				Elem:        &schema.Schema{Type: schema.TypeString},
+				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"group": {
 				Description: "The group which will be granted the role, mutually exclusive with 'user'",
-				Type:        schema.TypeList,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Required:    true,
+				Type:        schema.TypeString,
+				Optional:    true,
 			},
 		},
 	}
 }
 
-// todo: break this up in to 2+ smaller functions
-func resourceAccessGrantCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+func parsePrincipalInput(ctx context.Context, d *schema.ResourceData, meta any) (*string, error) {
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceAccessGrantCreate")
+	tflog.Debug(ctx, "parsePrincipalInput")
 	var principalName, principalURL string
 	if _, ok := d.GetOk("user"); ok {
 		principalName = d.Get("user").(string)
 		user, err := c.lookupUser(ctx, principalName)
 		if err != nil {
-			return diag.FromErr(err)
+			return nil, err
 		}
 		principalURL = fmt.Sprintf("https://api.cloudtruth.io/api/v1/users/%s/", user.GetId())
 	}
 	if _, ok := d.GetOk("group"); ok {
 		if principalName != "" {
-			return diag.FromErr(fmt.Errorf("resourceAccessGrantCreate: cannot specity both user and group names with an access grant"))
+			return nil, fmt.Errorf("parsePrincipalInput: cannot specity both user and group names with an access grant")
 		}
 		principalName = d.Get("group").(string)
 		group, err := c.lookupGroup(ctx, principalName)
 		if err != nil {
-			return diag.FromErr(err)
+			return nil, err
 		}
 		principalURL = fmt.Sprintf("https://api.cloudtruth.io/api/v1/groups/%s/", group.GetId())
 	}
+	return &principalURL, nil
+}
 
+func parseScopeInput(ctx context.Context, d *schema.ResourceData, meta any) (*string, error) {
+	c := meta.(*cloudTruthClient)
+	tflog.Debug(ctx, "parseScopeInput")
 	var scopeName, scopeURL string
 	if _, ok := d.GetOk("environment"); ok {
 		scopeName = d.Get("environment").(string)
 		envID, err := c.lookupEnvironment(ctx, scopeName)
 		if err != nil {
-			return diag.FromErr(err)
+			return nil, err
 		}
 		scopeURL = fmt.Sprintf("https://api.cloudtruth.io/api/v1/environments/%s/", *envID)
 	}
 	if _, ok := d.GetOk("project"); ok {
 		if scopeName != "" {
-			return diag.FromErr(fmt.Errorf("resourceAccessGrantCreate: cannot specity both projet and environment names with an access grant"))
+			return nil, fmt.Errorf("resourceAccessGrantCreate: cannot specity both projet and environment names with an access grant")
 		}
 		scopeName = d.Get("project").(string)
 		projectID, err := c.lookupProject(ctx, scopeName)
 		if err != nil {
-			return diag.FromErr(err)
+			return nil, err
 		}
 		scopeURL = fmt.Sprintf("https://api.cloudtruth.io/api/v1/projects/%s/", *projectID)
 	}
+	return &scopeURL, nil
+}
+
+func resourceAccessGrantCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	c := meta.(*cloudTruthClient)
+	tflog.Debug(ctx, "resourceAccessGrantCreate")
+	principalURL, err := parsePrincipalInput(ctx, d, meta)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	scopeURL, err := parseScopeInput(ctx, d, meta)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	role, err := cloudtruthapi.NewRoleEnumFromValue(d.Get("role").(string))
 	if err != nil {
 		return diag.FromErr(err)
 	}
 	grantCreate := cloudtruthapi.NewGrantWithDefaults()
-	grantCreate.SetPrincipal(principalURL)
-	grantCreate.SetScope(scopeURL)
+	grantCreate.SetPrincipal(*principalURL)
+	grantCreate.SetScope(*scopeURL)
 	grantCreate.SetRole(*role)
 
 	var grant *cloudtruthapi.Grant
@@ -113,7 +131,7 @@ func resourceAccessGrantCreate(ctx context.Context, d *schema.ResourceData, meta
 		grant, r, err = c.openAPIClient.GrantsApi.GrantsCreate(ctx).Grant(*grantCreate).Execute()
 		if err != nil {
 			outErr := fmt.Errorf("resourceAccessGrantCreate: error creating grant for principle %s and scope %s: %w",
-				principalURL, scopeURL, err)
+				*principalURL, *scopeURL, err)
 			if r.StatusCode >= http.StatusInternalServerError {
 				return resource.RetryableError(outErr)
 			} else {
@@ -160,7 +178,53 @@ func resourceAccessGrantRead(ctx context.Context, d *schema.ResourceData, meta a
 
 func resourceAccessGrantUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceAccessGrantUpdate")
-	// todo: update implementation. . . maybe refactor field parsing/validation now
+	c := meta.(*cloudTruthClient)
+	patchedGrant := cloudtruthapi.PatchedGrant{}
+	hasChange := false
+	if d.HasChanges("user", "group") {
+		principalURL, err := parsePrincipalInput(ctx, d, meta)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		patchedGrant.SetPrincipal(*principalURL)
+		hasChange = true
+	}
+	if d.HasChanges("environment", "project") {
+		scopeURL, err := parseScopeInput(ctx, d, meta)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		patchedGrant.SetScope(*scopeURL)
+		hasChange = true
+	}
+	if d.HasChange("role") {
+		role, err := cloudtruthapi.NewRoleEnumFromValue(d.Get("role").(string))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		patchedGrant.SetRole(*role)
+		hasChange = true
+	}
+
+	if hasChange {
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+			var r *http.Response
+			var err error
+			_, r, err = c.openAPIClient.GrantsApi.GrantsPartialUpdate(ctx, d.Id()).PatchedGrant(patchedGrant).Execute()
+			if err != nil {
+				outErr := fmt.Errorf("resourceAccessGrantCreate: error creating grant for principle")
+				if r.StatusCode >= http.StatusInternalServerError {
+					return resource.RetryableError(outErr)
+				} else {
+					return resource.NonRetryableError(outErr)
+				}
+			}
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
+		}
+	}
 	return resourceAccessGrantRead(ctx, d, meta)
 }
 
