@@ -69,7 +69,7 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, _, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(ctx,
+		resp, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(ctx,
 			*projID).TemplateCreate(*templateCreate).Execute()
 		if err != nil {
 			outErr := fmt.Errorf("resourceTemplateCreate: error creating template %s: %w", templateName, err)
@@ -192,7 +192,7 @@ func resourceTemplateDelete(ctx context.Context, d *schema.ResourceData, meta an
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		_, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesDestroy(ctx, templateID, *projID).Execute()
+		r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesDestroy(ctx, templateID, *projID).Execute()
 		if err != nil {
 			outErr := fmt.Errorf("resourceTemplateDelete: error destroying template %s: %w", templateName, err)
 			if r.StatusCode >= http.StatusInternalServerError {

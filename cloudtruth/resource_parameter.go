@@ -168,10 +168,11 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
 	}
+	var value *cloudtruthapi.Value
 	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		valueResp, _, err := c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx, paramID, *projID).ValueCreate(*valueCreate).Execute()
+		value, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx, paramID, *projID).ValueCreate(*valueCreate).Execute()
 		if err != nil {
 			outErr := fmt.Errorf("resourceParameterCreate: error creating the value for parameter %s: %w", paramName, err)
 			if r.StatusCode >= http.StatusInternalServerError {
@@ -180,7 +181,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 				return resource.NonRetryableError(outErr)
 			}
 		}
-		valueID = valueResp.GetId()
+		valueID = value.GetId()
 		return nil
 	})
 	if retryError != nil {

@@ -3,12 +3,16 @@
 page_title: "cloudtruth_access_grant Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A grant which assigns a access role to a principal (user/group) to an environment or project
+  A grant which assigns a access role to a principal (user/group) to an environment or project.
+  NOTE: in order to assign access to users and groups, you must set one interactive user as the owner of the resource first.
+  After that you can assign non-owner roles to other users and groups.
 ---
 
 # cloudtruth_access_grant (Resource)
 
-A grant which assigns a access role to a principal (user/group) to an environment or project
+A grant which assigns a access role to a principal (user/group) to an environment or project.
+NOTE: in order to assign access to users and groups, you must set one interactive user as the owner of the resource first.
+After that you can assign non-owner roles to other users and groups.
 
 
 
@@ -17,7 +21,8 @@ A grant which assigns a access role to a principal (user/group) to an environmen
 
 ### Required
 
-- `role` (String) The user's email address, used for the initial invite
+- `role` (String) The principal's role: one of OWNER, ADMIN, CONTRIB, VIEWER. You must assign an owner access grant to the target resource
+before creating any non-owner grants. Then, with a non-owner grant, use depends_on (depending on the owner grant) to ensure that the non-owner grant will be created.
 
 ### Optional
 

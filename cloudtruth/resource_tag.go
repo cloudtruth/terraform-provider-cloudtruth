@@ -132,7 +132,7 @@ func resourceTagUpdate(ctx context.Context, d *schema.ResourceData, meta any) di
 		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
 			var r *http.Response
 			var err error
-			_, _, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsPartialUpdate(ctx, *envID, tagID).PatchedTagUpdate(*patchedTagUpdate).Execute()
+			_, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsPartialUpdate(ctx, *envID, tagID).PatchedTagUpdate(*patchedTagUpdate).Execute()
 			if err != nil {
 				outErr := fmt.Errorf("resourceTagUpdate: error updating tag %s: %w", tagName, err)
 				if r.StatusCode >= http.StatusInternalServerError {

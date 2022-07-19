@@ -68,7 +68,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, _, err = c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
+		resp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
 		if err != nil {
 			outErr := fmt.Errorf("resourceEnvironmentCreate: error creating environment %s: %w", envName, err)
 			if r.StatusCode >= http.StatusInternalServerError {

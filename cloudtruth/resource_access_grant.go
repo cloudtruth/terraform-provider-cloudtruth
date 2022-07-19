@@ -13,7 +13,9 @@ import (
 
 func resourceAccessGrant() *schema.Resource {
 	return &schema.Resource{
-		Description: "A grant which assigns a access role to a principal (user/group) to an environment or project",
+		Description: `A grant which assigns a access role to a principal (user/group) to an environment or project.
+NOTE: in order to assign access to users and groups, you must set one interactive user as the owner of the resource first.
+After that you can assign non-owner roles to other users and groups.`,
 
 		CreateContext: resourceAccessGrantCreate,
 		ReadContext:   resourceAccessGrantRead,
@@ -22,9 +24,10 @@ func resourceAccessGrant() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"role": {
-				Description: "The user's email address, used for the initial invite",
-				Type:        schema.TypeString,
-				Required:    true,
+				Description: `The principal's role: one of OWNER, ADMIN, CONTRIB, VIEWER. You must assign an owner access grant to the target resource
+before creating any non-owner grants. Then, with a non-owner grant, use depends_on (depending on the owner grant) to ensure that the non-owner grant will be created.`,
+				Type:     schema.TypeString,
+				Required: true,
 			},
 			"environment": {
 				Description: "The target environment to which the role will provide access, mutually exclusive with 'project'",
@@ -90,7 +93,7 @@ func parseScopeInput(ctx context.Context, d *schema.ResourceData, meta any) (*st
 	}
 	if _, ok := d.GetOk("project"); ok {
 		if scopeName != "" {
-			return nil, fmt.Errorf("resourceAccessGrantCreate: cannot specity both projet and environment names with an access grant")
+			return nil, fmt.Errorf("resourceAccessGrantCreate: cannot specity both project and environment names with an access grant")
 		}
 		scopeName = d.Get("project").(string)
 		projectID, err := c.lookupProject(ctx, scopeName)
@@ -130,7 +133,7 @@ func resourceAccessGrantCreate(ctx context.Context, d *schema.ResourceData, meta
 		var err error
 		grant, r, err = c.openAPIClient.GrantsApi.GrantsCreate(ctx).Grant(*grantCreate).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceAccessGrantCreate: error creating grant for principle %s and scope %s: %w",
+			outErr := fmt.Errorf("resourceAccessGrantCreate: error creating grant for principal %s and scope %s: %w",
 				*principalURL, *scopeURL, err)
 			if r.StatusCode >= http.StatusInternalServerError {
 				return resource.RetryableError(outErr)
@@ -212,7 +215,7 @@ func resourceAccessGrantUpdate(ctx context.Context, d *schema.ResourceData, meta
 			var err error
 			_, r, err = c.openAPIClient.GrantsApi.GrantsPartialUpdate(ctx, d.Id()).PatchedGrant(patchedGrant).Execute()
 			if err != nil {
-				outErr := fmt.Errorf("resourceAccessGrantCreate: error creating grant for principle")
+				outErr := fmt.Errorf("resourceAccessGrantCreate: error creating grant for principal")
 				if r.StatusCode >= http.StatusInternalServerError {
 					return resource.RetryableError(outErr)
 				} else {

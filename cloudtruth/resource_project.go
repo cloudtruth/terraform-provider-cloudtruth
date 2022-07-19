@@ -92,7 +92,7 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, _, err = c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
+		resp, r, err = c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
 		if err != nil {
 			outErr := fmt.Errorf("resourceProjectRead: error reading project %s: %w", projectName, err)
 			if r.StatusCode >= http.StatusInternalServerError {
