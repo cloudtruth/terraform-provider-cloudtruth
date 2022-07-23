@@ -3,16 +3,23 @@
 page_title: "cloudtruth_access_grant Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A grant which assigns a access role to a principal (user/group) to an environment or project.
-  NOTE: in order to assign access to users and groups, you must set one interactive user as the owner of the resource first.
-  After that you can assign non-owner roles to other users and groups.
+  A grant which assigns an access role to a principal (a user or group) to an environment or project.
+  In order to use access grants, you must have a CloudTruth Business Subscription.
+  To assign viewer or contributor access grants to users and groups, you must create a grant specifying at least one interactive
+  user as the owner the resource first. After that you can create additional grants with non-owner roles to other users
+  and groups.
+  Your provider API key must have organization OWNER or ADMIN access to create, update and delete access grants.
 ---
 
 # cloudtruth_access_grant (Resource)
 
-A grant which assigns a access role to a principal (user/group) to an environment or project.
-NOTE: in order to assign access to users and groups, you must set one interactive user as the owner of the resource first.
-After that you can assign non-owner roles to other users and groups.
+A grant which assigns an access role to a principal (a user or group) to an environment or project.
+In order to use access grants, you must have a CloudTruth Business Subscription.
+To assign viewer or contributor access grants to users and groups, you must create a grant specifying at least one interactive 
+user as the owner the resource first. After that you can create additional grants with non-owner roles to other users 
+and groups.
+
+Your provider API key must have organization OWNER or ADMIN access to create, update and delete access grants.
 
 
 
@@ -21,8 +28,10 @@ After that you can assign non-owner roles to other users and groups.
 
 ### Required
 
-- `role` (String) The principal's role: one of OWNER, ADMIN, CONTRIB, VIEWER. You must assign an owner access grant to the target resource
-before creating any non-owner grants. Then, with a non-owner grant, use depends_on (depending on the owner grant) to ensure that the non-owner grant will be created.
+- `role` (String) The grant role: one of OWNER, ADMIN, CONTRIB, VIEWER. You must create an OWNER access 
+grant to the target resource before creating any non-owner grants. If you are creating the owner and non-owner grants at 
+the same time, use the 'depends_on' directive (with the non-owner grant depending on the owner grant) to ensure that the 
+non-owner grant(s) is created after the owner grant is created.
 
 ### Optional
 

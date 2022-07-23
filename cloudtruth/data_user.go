@@ -108,10 +108,9 @@ func dataCloudTruthUsersRead(ctx context.Context, d *schema.ResourceData, meta a
 	dataUsers := make(map[string]interface{})
 	var org string
 	for _, user := range c.users {
-		if (*user.Type == typeFilter) || (typeFilter == "all") {
+		if (typeFilter == *user.Type) || (typeFilter == "all") {
 			// Since we cache dataUsers by name and email, use the user object's name as the new map key
 			// to dedupe (double write)
-			//dataUsers[user.Name] =
 			dataUser := make(map[string]interface{})
 			name := user.GetName()
 			dataUser["name"] = name

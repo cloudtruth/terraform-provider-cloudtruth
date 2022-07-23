@@ -13,7 +13,10 @@ import (
 
 func resourceGroup() *schema.Resource {
 	return &schema.Resource{
-		Description: "A CloudTruth User",
+		Description: `A CloudTruth Group for managing access to a set of users.
+
+Your provider API key must have organization OWNER or ADMIN access to create, update and delete groups.
+`,
 
 		CreateContext: resourceGroupCreate,
 		ReadContext:   resourceGroupRead,
@@ -22,17 +25,17 @@ func resourceGroup() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Description: "The user's email address, used for the initial invite",
+				Description: "The name of the group",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
 			"description": {
-				Description: "The user's access role in the target CloudTruth organization",
+				Description: "A description of the group",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"users": {
-				Description: "The user's access role in the target CloudTruth organization",
+				Description: "The CloudTruth users who are members of the group",
 				Type:        schema.TypeList,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Optional:    true,
@@ -141,7 +144,7 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 			if err != nil {
 				return diag.FromErr(err)
 			} else if user == nil {
-				return diag.FromErr(fmt.Errorf("resourceGroupCreate: failed to find user %s", userName))
+				return diag.FromErr(fmt.Errorf("resourceGroupUpdate: failed to find user %s", userName))
 			}
 		}
 		patchedGroup.SetUsers(userURIs)

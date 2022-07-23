@@ -294,7 +294,7 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 						name := u.GetName()
 						if _, ok := c.users[name]; ok {
 							tflog.Warn(ctx,
-								fmt.Sprintf("loadUserCache: duplicate users found with the name '%s', use emails to disambiguate in user data source", name))
+								fmt.Sprintf("loadUserCache: duplicate users found with the name '%s', specify user emails instead to disambiguate user data source", name))
 						}
 						c.users[name] = u
 						if u.GetEmail() != "" {

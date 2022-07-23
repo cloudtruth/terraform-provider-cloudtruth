@@ -3,12 +3,15 @@
 page_title: "cloudtruth_group Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A CloudTruth User
+  A CloudTruth Group for managing access to a set of users.
+  Your provider API key must have organization OWNER or ADMIN access to create, update and delete groups.
 ---
 
 # cloudtruth_group (Resource)
 
-A CloudTruth User
+A CloudTruth Group for managing access to a set of users.
+
+Your provider API key must have organization OWNER or ADMIN access to create, update and delete groups.
 
 
 
@@ -17,12 +20,12 @@ A CloudTruth User
 
 ### Required
 
-- `name` (String) The user's email address, used for the initial invite
+- `name` (String) The name of the group
 
 ### Optional
 
-- `description` (String) The user's access role in the target CloudTruth organization
-- `users` (List of String) The user's access role in the target CloudTruth organization
+- `description` (String) A description of the group
+- `users` (List of String) The CloudTruth users who are members of the group
 
 ### Read-Only
 
