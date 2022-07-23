@@ -1,8 +1,15 @@
-## 0.3.2 (July 15, 2022)
+## 0.3.5 (July 22, 2022)
+
+FEATURES:
+* cloudtruth_user and cloudtruth_users (all org users) data sources.
+* cloudtruth_access_grant resource for assigning owner/admin/contributor/viewer access to
+a user or group (of users) for a target environment or project
+
+## 0.3.3 (July 15, 2022)
 
 FEATURES:
 
-* as_of and tag support for the cloudtruth_paramater data source.
+* as_of and tag support for the cloudtruth_parameter data source.
 * cloudtruth_group resource for users and service accounts
 
 ENHANCEMENTS:
