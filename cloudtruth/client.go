@@ -142,8 +142,8 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 		for retryCount < loadCacheRetries {
 			resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Execute()
 			if r.StatusCode >= 500 {
+				tflog.Debug(ctx, fmt.Sprintf("loadProjectNameCache: %s", err))
 				apiError = err
-				tflog.Debug(ctx, fmt.Sprintf("loadProjectNameCache: %s", apiError))
 				retryCount++
 			} else {
 				c.projectNames = make(map[string]string)
@@ -210,7 +210,7 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 		for retryCount < loadCacheRetries {
 			resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Execute()
 			if r.StatusCode >= 500 {
-				tflog.Debug(ctx, fmt.Sprintf("loadEnvNameCache: %s", apiError))
+				tflog.Debug(ctx, fmt.Sprintf("loadEnvNameCache: %s", err))
 				apiError = err
 				retryCount++
 			} else {
@@ -281,19 +281,21 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 			}
 			pageNum++
 			retryCount := 0
-			var apiError, err error
+			var err error
 			var r *http.Response
 			for retryCount < loadCacheRetries {
 				userList, r, err = userListRequest.Execute()
 				if r.StatusCode >= 500 {
-					tflog.Debug(ctx, fmt.Sprintf("loadUserCache: %s", apiError))
-					apiError = err
+					tflog.Debug(ctx, fmt.Sprintf("loadUserCache: %s", err))
+					retryCount++
+				} else if userList == nil {
+					tflog.Debug(ctx, "loadUserCache: nil user list response")
 					retryCount++
 				} else {
 					for _, u := range userList.Results {
 						name := u.GetName()
 						if _, ok := c.users[name]; ok {
-							tflog.Warn(ctx,
+							tflog.Error(ctx,
 								fmt.Sprintf("loadUserCache: duplicate users found with the name '%s', specify user emails instead to disambiguate user data source", name))
 						}
 						c.users[name] = u
@@ -301,12 +303,12 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 							c.users[u.GetEmail()] = u // An email key pointing to the same User (pointer)
 						}
 					}
-					apiError = nil
+					err = nil
 					break
 				}
 			}
-			if apiError != nil {
-				return fmt.Errorf("loadUserCache: %w", apiError)
+			if err != nil {
+				return fmt.Errorf("loadUserCache: %w", err)
 			}
 			if userList.GetNext() == "" {
 				break
@@ -343,7 +345,7 @@ func (c *cloudTruthClient) loadGroupCache(ctx context.Context) error {
 			for retryCount < loadCacheRetries {
 				groupList, r, err = groupListRequest.Execute()
 				if r.StatusCode >= 500 {
-					tflog.Debug(ctx, fmt.Sprintf("loadGroupCache: %s", apiError))
+					tflog.Debug(ctx, fmt.Sprintf("loadGroupCache: %s", err))
 					apiError = err
 					retryCount++
 				} else {
