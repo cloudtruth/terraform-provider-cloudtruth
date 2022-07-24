@@ -31,7 +31,7 @@ ENHANCEMENTS:
 
 BUG FIXES:
 
-* https://github.com/cloudtruth/terraform-provider-cloudtruth/issues/8 - the provider handles nest environments and projects correctly now, allowing multiple levels of nesting in an initial apply.
+* https://github.com/cloudtruth/terraform-provider-cloudtruth/issues/8 - the provider handles nested environments and projects correctly now, allowing multiple levels of nesting in an initial apply.
 
 
 ## 0.2.0 (June 24, 2022)

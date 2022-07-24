@@ -180,6 +180,5 @@ func resourceTagDelete(ctx context.Context, d *schema.ResourceData, meta any) di
 		return diag.FromErr(retryError)
 	}
 
-	d.SetId(tagID)
 	return nil
 }

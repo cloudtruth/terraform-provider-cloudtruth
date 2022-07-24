@@ -48,12 +48,14 @@ func resourceParameter() *schema.Resource {
 				Description: "The CloudTruth project where the Parameter is defined",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Deprecated:  "The 'project' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 			},
 			"environment": {
 				Description: "The CloudTruth environment where the Parameter's value is defined. Defaults to the 'default' environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "default",
+				Deprecated:  "The 'environment' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 			},
 			"secret": {
 				Description: "Whether or not the Parameter is a secret, defaults to false (non-secret)",
@@ -66,6 +68,7 @@ func resourceParameter() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
+				Deprecated:  "The 'value' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 				// With external parameters, the value is computed but should not be used to diff/detect changes
 				// It is only useful in read operations. A change to the location and/or filter field would indicate a resource change
 				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
@@ -78,24 +81,28 @@ func resourceParameter() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
+				Deprecated:  "The 'dynamic' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 			},
 			"external": {
 				Description: "Whether or not the value is external, defaults to false",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
+				Deprecated:  "The 'external' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 			},
 			"location": {
 				Description: "The location of the secret value, required for external parameters",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
+				Deprecated:  "The 'location' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 			},
 			"filter": {
 				Description: "An optional filter (path/query), optional and used only with external parameters",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
+				Deprecated:  "The 'filter' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 			},
 		},
 	}

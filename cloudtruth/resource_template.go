@@ -89,6 +89,7 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 	return nil
 }
 
+// todo: handle pagination
 func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTemplateRead")

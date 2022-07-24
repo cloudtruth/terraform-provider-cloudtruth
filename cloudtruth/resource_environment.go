@@ -91,7 +91,6 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 
 func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceEnvironmentRead")
-	var diags diag.Diagnostics
 	c := meta.(*cloudTruthClient)
 	envName := d.Get("name").(string)
 
@@ -119,7 +118,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(fmt.Errorf("resourceEnvironmentRead: found %d environments, expcted to find 1", len(res)))
 	}
 	d.SetId(resp.GetResults()[0].GetId())
-	return diags
+	return nil
 }
 
 func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
