@@ -144,6 +144,9 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 				tflog.Debug(ctx, fmt.Sprintf("loadProjectNameCache: %s", err))
 				apiError = err
 				retryCount++
+			} else if resp == nil {
+				tflog.Debug(ctx, "loadProjectNameCache: nil project list response")
+				retryCount++
 			} else {
 				c.projectNames = make(map[string]string)
 				for _, p := range resp.Results {
@@ -211,6 +214,9 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 			if r.StatusCode >= 500 {
 				tflog.Debug(ctx, fmt.Sprintf("loadEnvNameCache: %s", err))
 				apiError = err
+				retryCount++
+			} else if resp == nil {
+				tflog.Debug(ctx, "loadEnvNameCache: nil environment list response")
 				retryCount++
 			} else {
 				c.envNames = make(map[string]string)
