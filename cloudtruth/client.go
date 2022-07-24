@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"net/http"
+	"sync"
 )
 
 const (
@@ -58,32 +59,37 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 		openAPIClient: cloudtruthapi.NewAPIClient(apiConfig),
 	}
 
-	// populate & load caches
-	err := client.loadProjectNameCache(ctx)
-	if err != nil {
-		return nil, diag.FromErr(fmt.Errorf("configureClient - loadProjectNameCache: %w", err))
-	}
-	err = client.loadProjectIDCache(ctx)
-	if err != nil {
-		return nil, diag.FromErr(fmt.Errorf("configureClient - loadProjectIDCache: %w", err))
-	}
-	err = client.loadEnvNameCache(ctx)
-	if err != nil {
-		return nil, diag.FromErr(fmt.Errorf("configureClient - loadEnvNameCache: %w", err))
-	}
-	err = client.loadEnvIDCache(ctx)
-	if err != nil {
-		return nil, diag.FromErr(fmt.Errorf("configureClient - loadEnvIDCache: %w", err))
-	}
-	err = client.loadUserCache(ctx)
-	if err != nil {
-		return nil, diag.FromErr(fmt.Errorf("configureClient - loadUserCache: %w", err))
-	}
-	err = client.loadGroupCache(ctx)
-	if err != nil {
-		return nil, diag.FromErr(fmt.Errorf("configureClient - loadGroupCache: %w", err))
-	}
+	errors := make(chan error, 6)
+	var wg sync.WaitGroup
+	wg.Add(3)
+	go func() { // load project caches, ID cache is generated from the name cache
+		defer wg.Done()
+		errors <- client.loadProjectNameCache(ctx)
+		errors <- client.loadProjectIDCache(ctx)
+	}()
 
+	go func() { // load environment caches, ID cache is generated from the name cache
+		defer wg.Done()
+		errors <- client.loadEnvNameCache(ctx)
+		errors <- client.loadEnvIDCache(ctx)
+	}()
+
+	go func() { // load user + group caches, no inter-dependencies, these actually could be done in parallel
+		defer wg.Done()
+		errors <- client.loadUserCache(ctx)
+		errors <- client.loadGroupCache(ctx)
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errors)
+	}()
+
+	for err := range errors {
+		if err != nil {
+			return nil, diag.FromErr(fmt.Errorf("configureClient: %w", err))
+		}
+	}
 	return &client, nil
 }
 
