@@ -31,6 +31,7 @@ const (
 
 	// Number of times to attempt reloading project and env caches
 	loadCacheRetries = 5
+	cacheCount       = 7
 )
 
 type clientConfig struct {
@@ -59,33 +60,37 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 		openAPIClient: cloudtruthapi.NewAPIClient(apiConfig),
 	}
 
-	errors := make(chan error, 6)
+	loadErrors := make(chan error, cacheCount)
 	var wg sync.WaitGroup
-	wg.Add(3)
+	wg.Add(5)
 	go func() { // load project caches, ID cache is generated from the name cache
 		defer wg.Done()
-		errors <- client.loadProjectNameCache(ctx)
-		errors <- client.loadProjectIDCache(ctx)
+		loadErrors <- client.loadProjectNameCache(ctx)
+		loadErrors <- client.loadProjectIDCache(ctx)
 	}()
-
 	go func() { // load environment caches, ID cache is generated from the name cache
 		defer wg.Done()
-		errors <- client.loadEnvNameCache(ctx)
-		errors <- client.loadEnvIDCache(ctx)
+		loadErrors <- client.loadEnvNameCache(ctx)
+		loadErrors <- client.loadEnvIDCache(ctx)
 	}()
-
-	go func() { // load user + group caches, no inter-dependencies, these actually could be done in parallel
+	go func() { // load user cache
 		defer wg.Done()
-		errors <- client.loadUserCache(ctx)
-		errors <- client.loadGroupCache(ctx)
+		loadErrors <- client.loadUserCache(ctx)
+	}()
+	go func() { // load group cache
+		defer wg.Done()
+		loadErrors <- client.loadGroupCache(ctx)
+	}()
+	go func() { // load type cache
+		defer wg.Done()
+		loadErrors <- client.loadTypeCache(ctx)
 	}()
 
 	go func() {
 		wg.Wait()
-		close(errors)
+		close(loadErrors)
 	}()
-
-	for err := range errors {
+	for err := range loadErrors {
 		if err != nil {
 			return nil, diag.FromErr(fmt.Errorf("configureClient: %w", err))
 		}
@@ -102,6 +107,7 @@ type cloudTruthClient struct {
 	projectIDs    map[string]string
 	users         map[string]cloudtruthapi.User
 	groups        map[string]cloudtruthapi.Group
+	types         map[string]cloudtruthapi.ParameterType
 }
 
 // Utility function with an input k -> v map, returns the "reverse"
@@ -384,4 +390,44 @@ func (c *cloudTruthClient) lookupGroup(ctx context.Context, groupName string) (*
 		return &group, nil
 	}
 	return nil, nil
+}
+
+func (c *cloudTruthClient) loadTypeCache(ctx context.Context) error {
+	if c.types == nil {
+		tflog.Debug(ctx, "loadTypeCache: fetching custom and builtin types")
+		c.types = make(map[string]cloudtruthapi.ParameterType)
+		var pageNum int32 = 0 // Pagination is likely overkill here
+		for {
+			typeListRequest := c.openAPIClient.TypesApi.TypesList(ctx).PageSize(pageNum)
+			var typeList *cloudtruthapi.PaginatedParameterTypeList
+			if pageNum > 0 {
+				typeListRequest = typeListRequest.Page(pageNum)
+			}
+			pageNum++
+			retryCount := 0
+			var apiError, err error
+			var r *http.Response
+			for retryCount < loadCacheRetries {
+				typeList, r, err = typeListRequest.Execute()
+				if r.StatusCode >= 500 {
+					tflog.Debug(ctx, fmt.Sprintf("loadTypeCache: %s", err))
+					apiError = err
+					retryCount++
+				} else {
+					for _, t := range typeList.Results {
+						c.types[t.GetName()] = t
+					}
+					apiError = nil
+					break
+				}
+			}
+			if apiError != nil {
+				return fmt.Errorf("loadTypeCache: %w", apiError)
+			}
+			if typeList.GetNext() == "" {
+				break
+			}
+		}
+	}
+	return nil
 }
