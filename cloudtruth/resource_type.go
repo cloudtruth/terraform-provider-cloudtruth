@@ -26,14 +26,14 @@ func resourceType() *schema.Resource {
 				Description: "The name of the CloudTruth Type, unique per project",
 				Type:        schema.TypeString,
 				Required:    true,
-			}, /*
-				"base_type": {
-					Description: "The base type for this custom type",
-					Type:        schema.TypeString,
-					Required:    true,
-				},*/
+			},
+			"base_type": {
+				Description: "The name of the base type, can be a builtin (string/int/boolean) or another custom type",
+				Type:        schema.TypeString,
+				Required:    true,
+			},
 			"description": {
-				Description: "Description of the CloudTruth Type",
+				Description: "A description of the CloudTruth Type",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
@@ -50,6 +50,12 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 	if typeDesc != "" {
 		typeCreate.SetDescription(typeDesc)
 	}
+	baseTypeName := d.Get("base_type").(string)
+	baseType := c.lookupType(ctx, baseTypeName)
+	if baseType == nil {
+		return diag.FromErr(fmt.Errorf("unknown base parameter type %s", baseTypeName))
+	}
+	typeCreate.SetParent(baseType.GetUrl())
 	var typeID string
 	var typeCreateResp *cloudtruthapi.ParameterType
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
@@ -83,7 +89,7 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.TypesApi.TypesList(ctx).Execute()
+		resp, r, err = c.openAPIClient.TypesApi.TypesList(ctx).NameIexact(typeName).Execute()
 		if err != nil {
 			outErr := fmt.Errorf("resourceTypeRead: error reading type %s: %w", typeName, err)
 			if r.StatusCode >= http.StatusInternalServerError {

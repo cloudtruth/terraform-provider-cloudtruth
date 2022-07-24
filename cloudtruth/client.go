@@ -431,3 +431,12 @@ func (c *cloudTruthClient) loadTypeCache(ctx context.Context) error {
 	}
 	return nil
 }
+
+// Look up a type (custom or builtin) by name
+func (c *cloudTruthClient) lookupType(ctx context.Context, typeName string) *cloudtruthapi.ParameterType {
+	tflog.Debug(ctx, fmt.Sprintf("lookupType: looking up the parameter type %s", typeName))
+	if paramType, ok := c.types[typeName]; ok {
+		return &paramType
+	}
+	return nil
+}

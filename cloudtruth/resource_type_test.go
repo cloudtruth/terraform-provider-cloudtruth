@@ -1,6 +1,5 @@
 package cloudtruth
 
-/*
 import (
 	"fmt"
 	"github.com/google/uuid"
@@ -40,6 +39,7 @@ func testAccResourceTypeCreateBasic(typeName, desc string) string {
 	resource "cloudtruth_type" "basic" {
   		name        = "%s"
   		description = "%s"
+		base_type   = "string"
 	}
 	`, typeName, desc)
 }
@@ -49,7 +49,7 @@ func testAccResourceTypeUpdateBasic(tagName, desc string) string {
 	resource "cloudtruth_type" "basic" {
   		name        = "%s"
   		description = "%s"
+		base_type   = "string"
 	}
 	`, tagName, desc)
 }
-*/
