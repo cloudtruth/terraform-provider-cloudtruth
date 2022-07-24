@@ -59,6 +59,7 @@ func New(version string) func() *schema.Provider {
 				"cloudtruth_project":      resourceProject(),
 				"cloudtruth_tag":          resourceTag(),
 				"cloudtruth_template":     resourceTemplate(),
+				"cloudtruth_type":         resourceType(),
 			},
 		}
 

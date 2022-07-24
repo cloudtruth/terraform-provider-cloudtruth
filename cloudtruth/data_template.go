@@ -244,7 +244,6 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 	return nil
 }
 
-// todo: can likely make a shared method here using interfaces or generics
 func parseTemplateListFilters(templateListRequest cloudtruthapi.ApiProjectsTemplatesListRequest,
 	d *schema.ResourceData) (*cloudtruthapi.ApiProjectsTemplatesListRequest, error) {
 	asOf, tag := "", ""

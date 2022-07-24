@@ -58,7 +58,6 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 		openAPIClient: cloudtruthapi.NewAPIClient(apiConfig),
 	}
 
-	// todo: parallelize this
 	// populate & load caches
 	err := client.loadProjectNameCache(ctx)
 	if err != nil {

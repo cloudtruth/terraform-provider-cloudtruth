@@ -30,8 +30,6 @@ data "cloudtruth_users" "%s" {
 `, sourceName, userType)
 }
 
-// todo: provide an way to set test input in the file (and others)
-// so that this can run against any CloudTruth organization
 var testUser1 = user{
 	name:     "Matthew Conway",
 	email:    "matt@cloudtruth.com",

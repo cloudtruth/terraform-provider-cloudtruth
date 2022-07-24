@@ -89,8 +89,6 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 	return nil
 }
 
-// todo: we may want a read which evaluates the template in a specific environment
-// as is, this read returns the raw template string
 func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTemplateRead")
