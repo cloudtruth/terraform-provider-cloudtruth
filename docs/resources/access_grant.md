@@ -3,21 +3,21 @@
 page_title: "cloudtruth_access_grant Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A grant which assigns an access role to a principal (a user or group) to an environment or project.
-  In order to use access grants, you must have a CloudTruth Business Subscription.
-  To assign viewer or contributor access grants to users and groups, you must create a grant specifying at least one interactive
-  user as the owner the resource first. After that you can create additional grants with non-owner roles to other users
-  and groups.
+  A grant which assigns an access role to a principal (a user or group) for a specific environment
+  or project. In order to use access grants, you must have a CloudTruth Business Subscription. To assign viewer,
+  contributor or admin level access grants to users and groups, you must create an owner grant specifying at least one
+  interactive user as the grant owner first. After that you can create additional grants with non-owner roles to other
+  users and groups.
   Your provider API key must have organization OWNER or ADMIN access to create, update and delete access grants.
 ---
 
 # cloudtruth_access_grant (Resource)
 
-A grant which assigns an access role to a principal (a user or group) to an environment or project.
-In order to use access grants, you must have a CloudTruth Business Subscription.
-To assign viewer or contributor access grants to users and groups, you must create a grant specifying at least one interactive 
-user as the owner the resource first. After that you can create additional grants with non-owner roles to other users 
-and groups.
+A grant which assigns an access role to a principal (a user or group) for a specific environment
+or project. In order to use access grants, you must have a CloudTruth Business Subscription. To assign viewer,
+contributor or admin level access grants to users and groups, you must create an owner grant specifying at least one
+interactive user as the grant owner first. After that you can create additional grants with non-owner roles to other
+users and groups.
 
 Your provider API key must have organization OWNER or ADMIN access to create, update and delete access grants.
 
@@ -28,10 +28,10 @@ Your provider API key must have organization OWNER or ADMIN access to create, up
 
 ### Required
 
-- `role` (String) The grant role: one of OWNER, ADMIN, CONTRIB, VIEWER. You must create an OWNER access 
-grant to the target resource before creating any non-owner grants. If you are creating the owner and non-owner grants at 
-the same time, use the 'depends_on' directive (with the non-owner grant depending on the owner grant) to ensure that the 
-non-owner grant(s) is created after the owner grant is created.
+- `role` (String) The grant role: one of OWNER, ADMIN, CONTRIB, VIEWER. You must create an owner access
+grant to the target resource before creating any non-owner grants. If you are creating owner and non-owner grants at
+the same time, use the 'depends_on' directive (with the non-owner grant depending on the owner grant) to ensure that the
+non-owner grant(s) the owner grant is created before the non-owner grant(s) is created.
 
 ### Optional
 

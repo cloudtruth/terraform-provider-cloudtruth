@@ -11,7 +11,8 @@ import (
 	"net/http"
 )
 
-// todo: add handling for rules
+const addRuleRetries = 5
+
 func resourceType() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth Type, a user-defined type which can be used to create CloudTruth Parameters",
@@ -27,15 +28,24 @@ func resourceType() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			"base_type": {
-				Description: "The name of the base type, can be a builtin (string/int/boolean) or another custom type",
-				Type:        schema.TypeString,
-				Required:    true,
-			},
 			"description": {
 				Description: "A description of the CloudTruth Type",
 				Type:        schema.TypeString,
 				Optional:    true,
+			},
+			"base_type": {
+				Description: "The name of the base type, can be a builtin (string|int|boolean) or another custom type",
+				Type:        schema.TypeString,
+				Required:    true,
+			},
+			"rule": {
+				Description: `The rule(s) describing allowable values for a parameter of this type. Add separate blocks per rule. 
+Note that string types support max_len|min_len|regex rules, integets support min|max rules and booleans don't support any rules.'`,
+				Type:     schema.TypeList,
+				Optional: true, // Optional and disallowed with boolean types
+				Elem: &schema.Resource{
+					Schema: ruleSchema,
+				},
 			},
 		},
 	}
@@ -76,7 +86,47 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
+
+	if _, ok := d.GetOk("rule"); ok {
+		rules := d.Get("rule").([]any)
+		for _, r := range rules {
+			err := addRuleToType(ctx, c, typeID, r.(map[string]any))
+			if err != nil {
+				return diag.FromErr(err)
+			}
+		}
+	}
+
 	d.SetId(typeID)
+	return nil
+}
+
+func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, rule map[string]any) error {
+	tflog.Debug(ctx, "addRuleToType")
+	retryCount := 0
+	var apiError error
+	var createTypeRule cloudtruthapi.ParameterTypeRuleCreate
+	typeEnum, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(rule["type"].(string))
+	if err != nil {
+		return err
+	}
+	createTypeRule.SetType(*typeEnum)
+	createTypeRule.SetConstraint(rule["constraint"].(string))
+
+	for retryCount < addRuleRetries {
+		_, r, err := c.openAPIClient.TypesApi.TypesRulesCreate(ctx, typeID).ParameterTypeRuleCreate(createTypeRule).Execute()
+		if r.StatusCode >= 500 {
+			tflog.Debug(ctx, fmt.Sprintf("addRuleToType: %s", err))
+			apiError = err
+			retryCount++
+		} else {
+			apiError = nil
+			break
+		}
+	}
+	if apiError != nil {
+		return apiError
+	}
 	return nil
 }
 
