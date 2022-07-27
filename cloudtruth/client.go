@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"net/http"
 	"sync"
+	"time"
 )
 
 const (
@@ -31,6 +32,7 @@ const (
 
 	// Number of times to attempt reloading project and env caches
 	loadCacheRetries = 5
+	retrySleep       = 1
 	cacheCount       = 7
 )
 
@@ -44,6 +46,7 @@ type clientConfig struct {
 	BaseURL     string
 }
 
+// todo consolidate and refactor retry logic
 func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient, diag.Diagnostics) {
 	tflog.Debug(ctx, "configureClient")
 	tflog.Debug(ctx, fmt.Sprintf("%+v", conf))
@@ -152,12 +155,13 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 		// not client initialization so we employ a simple retry loop instead
 		for retryCount < loadCacheRetries {
 			resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Execute()
+			if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
+				apiError = err
+				break
+			}
 			if r.StatusCode >= 500 {
 				tflog.Debug(ctx, fmt.Sprintf("loadProjectNameCache: %s", err))
 				apiError = err
-				retryCount++
-			} else if resp == nil {
-				tflog.Debug(ctx, "loadProjectNameCache: nil project list response")
 				retryCount++
 			} else {
 				c.projectNames = make(map[string]string)
@@ -167,6 +171,7 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 				apiError = nil
 				break
 			}
+			time.Sleep(retrySleep * time.Second)
 		}
 		if apiError != nil {
 			return fmt.Errorf("loadProjectNameCache: %w", apiError)
@@ -223,14 +228,15 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 		// not client initialization so we employ a simple retryCount loop instead
 		for retryCount < loadCacheRetries {
 			resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Execute()
+			if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
+				apiError = err
+				break
+			}
 			if r.StatusCode >= 500 {
 				tflog.Debug(ctx, fmt.Sprintf("loadEnvNameCache: %s", err))
 				apiError = err
 				retryCount++
-			} else if resp == nil {
-				tflog.Debug(ctx, "loadEnvNameCache: nil environment list response")
-				retryCount++
-			} else {
+			} else if resp != nil {
 				c.envNames = make(map[string]string)
 				for _, p := range resp.Results {
 					c.envNames[p.Name] = p.Id
@@ -238,6 +244,7 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 				apiError = nil
 				break
 			}
+			time.Sleep(retrySleep * time.Second)
 		}
 		if apiError != nil {
 			return fmt.Errorf("loadEnvNameCache: %w", apiError)
@@ -298,15 +305,16 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 			}
 			pageNum++
 			retryCount := 0
-			var err error
+			var apiError, err error
 			var r *http.Response
 			for retryCount < loadCacheRetries {
 				userList, r, err = userListRequest.Execute()
+				if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
+					apiError = err
+					break
+				}
 				if r.StatusCode >= 500 {
 					tflog.Debug(ctx, fmt.Sprintf("loadUserCache: %s", err))
-					retryCount++
-				} else if userList == nil {
-					tflog.Debug(ctx, "loadUserCache: nil user list response")
 					retryCount++
 				} else {
 					for _, u := range userList.Results {
@@ -323,9 +331,10 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 					err = nil
 					break
 				}
+				time.Sleep(retrySleep * time.Second)
 			}
-			if err != nil {
-				return fmt.Errorf("loadUserCache: %w", err)
+			if apiError != nil {
+				return fmt.Errorf("loadUserCache: %w", apiError)
 			}
 			if userList.GetNext() == "" {
 				break
@@ -361,17 +370,22 @@ func (c *cloudTruthClient) loadGroupCache(ctx context.Context) error {
 			var r *http.Response
 			for retryCount < loadCacheRetries {
 				groupList, r, err = groupListRequest.Execute()
+				if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
+					apiError = err
+					break
+				}
 				if r.StatusCode >= 500 {
 					tflog.Debug(ctx, fmt.Sprintf("loadGroupCache: %s", err))
 					apiError = err
 					retryCount++
-				} else {
+				} else if groupList != nil { // No groups exist
 					for _, g := range groupList.Results {
 						c.groups[g.GetName()] = g
 					}
 					apiError = nil
 					break
 				}
+				time.Sleep(retrySleep * time.Second)
 			}
 			if apiError != nil {
 				return fmt.Errorf("loadGroupCache: %w", apiError)
@@ -409,17 +423,22 @@ func (c *cloudTruthClient) loadTypeCache(ctx context.Context) error {
 			var r *http.Response
 			for retryCount < loadCacheRetries {
 				typeList, r, err = typeListRequest.Execute()
+				if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
+					apiError = err
+					break
+				}
 				if r.StatusCode >= 500 {
 					tflog.Debug(ctx, fmt.Sprintf("loadTypeCache: %s", err))
 					apiError = err
 					retryCount++
-				} else {
+				} else if typeList != nil {
 					for _, t := range typeList.Results {
 						c.types[t.GetName()] = t
 					}
 					apiError = nil
 					break
 				}
+				time.Sleep(retrySleep * time.Second)
 			}
 			if apiError != nil {
 				return fmt.Errorf("loadTypeCache: %w", apiError)
