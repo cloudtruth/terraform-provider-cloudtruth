@@ -1,3 +1,18 @@
+## 0.3.6 (July 27, 2022)
+
+FEATURES:
+* cloudtruth_type resource for managing custom parameter types
+
+BUG FIXES:
+* fixed a panic when client initialization requests return 4xx errors e.g. 401 Unauthorized
+
+ENHANCEMENTS:
+* Parallelized cache loading during client initialization
+* Improved retry logic
+
+DEPRECATIONS:
+* The environment, value, dynamic, external, location and filter fields will be removed from the cloudtruth_parameter resource in the next minor point release to allow for the provider to support a new cloudtruth_parameter_value resource which, together with cloudtruth_parameter, will map directly to the backing API constructs and allow for a cleaner/decoupled implementation of additional Parameter and Parameter Value support.
+
 ## 0.3.5 (July 22, 2022)
 
 FEATURES:

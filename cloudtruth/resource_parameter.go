@@ -48,7 +48,6 @@ func resourceParameter() *schema.Resource {
 				Description: "The CloudTruth project where the Parameter is defined",
 				Type:        schema.TypeString,
 				Optional:    true,
-				Deprecated:  "The 'project' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 			},
 			"environment": {
 				Description: "The CloudTruth environment where the Parameter's value is defined. Defaults to the 'default' environment",
