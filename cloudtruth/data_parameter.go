@@ -13,6 +13,13 @@ import (
 	"time"
 )
 
+/*
+todo:
+	convert to dataCloudTruthParameterValue and dataCloudTruthParameterValues
+	update tests
+
+*/
+
 func dataCloudTruthParameter() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth parameter data source",

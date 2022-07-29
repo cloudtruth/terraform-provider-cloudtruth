@@ -1,5 +1,6 @@
 package cloudtruth
 
+/*
 import (
 	"context"
 	"fmt"
@@ -12,20 +13,20 @@ import (
 	"strings"
 )
 
-/* todo
-implement parameter read
-rip out all value functionality
-update tests
-*/
+ todo
+	implement value only functionality
+	determine how to tie parameter resource to this resource
+	add support for rules and constraints
+	update tests
 
-func resourceParameter() *schema.Resource {
+func resourceParameterValue() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth Parameter and environment specific value (defaulting to the 'default' environment)",
 
-		CreateContext: resourceParameterCreate,
-		ReadContext:   resourceParameterRead,
-		UpdateContext: resourceParameterUpdate,
-		DeleteContext: resourceParameterDelete,
+		CreateContext: resourceParameterValueCreate,
+		ReadContext:   resourceParameterValueRead,
+		UpdateContext: resourceParameterValueUpdate,
+		DeleteContext: resourceParameterValueDelete,
 
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -101,14 +102,17 @@ func resourceParameter() *schema.Resource {
 	}
 }
 
-func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+// In Terraform terms, a 'resource_parameter' represents a CloudTruth Parameter AND its environment specific value
+// Therefore, when this provider destroys a parameter resource, it only removes the per-environment value unless
+// the parameter is only defined in one environment, in which case it is destroyed entirely
+func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceParameterCreate")
+	tflog.Debug(ctx, "resourceParameterValueCreate")
 	environment := d.Get("environment").(string)
 	project := d.Get("project").(string)
 	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
+		return diag.FromErr(fmt.Errorf("resourceParameterValueCreate: %w", err))
 	}
 
 	// Check for the parameter
@@ -119,7 +123,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		var err error
 		paramListResp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(paramName).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterCreate: error looking up parameter %s: %w", paramName, err)
+			outErr := fmt.Errorf("resourceParameterValueCreate: error looking up parameter %s: %w", paramName, err)
 			if r.StatusCode >= http.StatusInternalServerError {
 				return resource.RetryableError(outErr)
 			} else {
@@ -145,7 +149,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 			paramCreateResp, _, err = c.openAPIClient.ProjectsApi.ProjectsParametersCreate(ctx,
 				*projID).ParameterCreate(*paramCreate).Execute()
 			if err != nil {
-				outErr := fmt.Errorf("resourceParameterCreate: error creating parameter %s: %w", paramName, err)
+				outErr := fmt.Errorf("resourceParameterValueCreate: error creating parameter %s: %w", paramName, err)
 				if r.StatusCode >= http.StatusInternalServerError {
 					return resource.RetryableError(outErr)
 				} else {
@@ -163,7 +167,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	// Create its per-environment value
 	valueCreate, err := valueCreateConfig(*envID, d)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterCreate: %w", err))
+		return diag.FromErr(fmt.Errorf("resourceParameterValueCreate: %w", err))
 	}
 	var value *cloudtruthapi.Value
 	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
@@ -171,7 +175,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		var err error
 		value, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx, paramID, *projID).ValueCreate(*valueCreate).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterCreate: error creating the value for parameter %s: %w", paramName, err)
+			outErr := fmt.Errorf("resourceParameterValueCreate: error creating the value for parameter %s: %w", paramName, err)
 			if r.StatusCode >= http.StatusInternalServerError {
 				return resource.RetryableError(outErr)
 			} else {
@@ -230,7 +234,7 @@ func valueCreateConfig(envID string, d *schema.ResourceData) (*cloudtruthapi.Val
 	return valueCreate, nil
 }
 
-func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+func resourceParameterValueRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterRead")
 	return dataCloudTruthParameterRead(ctx, d, meta)
 }
@@ -238,7 +242,7 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 func updateParameter(ctx context.Context, paramID, projID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
 	patchedParam := cloudtruthapi.PatchedParameter{}
 	hasParamChange := false
-	if d.HasChange("description") {
+	if d.HasChange(resourceParameter"description") {
 		paramDesc := d.Get("description").(string)
 		patchedParam.SetDescription(paramDesc)
 		hasParamChange = true
@@ -439,3 +443,4 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	}
 	return nil
 }
+*/
