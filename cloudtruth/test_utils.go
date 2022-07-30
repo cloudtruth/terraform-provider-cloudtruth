@@ -27,18 +27,18 @@ const (
 	paramDesc               = "Just a description of a parameter"
 	secretParamDesc         = "A secret parameter used for acceptance tests."
 	updateParamDesc         = "A new description of an parameter"
-	paramVal                = "A useful string"
+	/*paramVal                = "A useful string"
 	updateParamVal          = "A new useful string"
-	prodParamVal            = "A useful string only in production"
-	basicTemplate           = "BasicTemplate"
-	basicTemplateVal        = "Regular Parameter: notreallyasecret, Secret Parameter ultratopsecret"
-	defaultTemplateVal      = "notreallyasecret"
-	githubLocation          = "github://cloudtruth/terraform-provider-cloudtruth/main/terraform-registry-manifest.json"
-	githubFilter            = "metadata.protocol_versions[0]"
-	epochTimeTag            = "EpochTime"
-	epochTimeTagTimestamp   = "1970-01-01T05:00:00Z"
-	ciServiceAccountName    = "ACCEPTANCE_TEST_TOKEN" // used in tests and CI
-	ciServiceAccountRole    = "ADMIN"
+	prodParamVal            = "A useful string only in production"*/
+	basicTemplate      = "BasicTemplate"
+	basicTemplateVal   = "Regular Parameter: notreallyasecret, Secret Parameter ultratopsecret"
+	defaultTemplateVal = "notreallyasecret"
+	/*githubLocation          = "github://cloudtruth/terraform-provider-cloudtruth/main/terraform-registry-manifest.json"
+	githubFilter            = "metadata.protocol_versions[0]"*/
+	epochTimeTag          = "EpochTime"
+	epochTimeTagTimestamp = "1970-01-01T05:00:00Z"
+	ciServiceAccountName  = "ACCEPTANCE_TEST_TOKEN" // used in tests and CI
+	ciServiceAccountRole  = "ADMIN"
 )
 
 // Utility function to use with data sources and resources that are maps

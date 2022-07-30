@@ -80,7 +80,7 @@ func dataCloudTruthTagRead(ctx context.Context, d *schema.ResourceData, meta any
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTagRead: expected 1 value for tag %s, found %d instead",
 			name, resp.GetCount()))
 	}
-	// There should only ever be one tag per environment
+	// There should only be one tag with the specified per environment
 	results := resp.GetResults()
 	tag := results[0]
 	ts := tag.Timestamp.Format(time.RFC3339)
