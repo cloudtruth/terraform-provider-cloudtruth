@@ -22,14 +22,8 @@ A CloudTruth Parameter and environment specific value (defaulting to the 'defaul
 ### Optional
 
 - `description` (String) Description of the CloudTruth Parameter
-- `dynamic` (Boolean, Deprecated) Whether or not to evaluate/interpolate the Parameter's value (incompatible with secret parameters)
-- `environment` (String, Deprecated) The CloudTruth environment where the Parameter's value is defined. Defaults to the 'default' environment
-- `external` (Boolean, Deprecated) Whether or not the value is external, defaults to false
-- `filter` (String, Deprecated) An optional filter (path/query), optional and used only with external parameters
-- `location` (String, Deprecated) The location of the secret value, required for external parameters
-- `project` (String, Deprecated) The CloudTruth project where the Parameter is defined
+- `project` (String) The CloudTruth project where the Parameter is defined
 - `secret` (Boolean) Whether or not the Parameter is a secret, defaults to false (non-secret)
-- `value` (String, Deprecated) The value of the CloudTruth Parameter, specific to an environment (can be overridden/inherited relative to other environments)
 
 ### Read-Only
 

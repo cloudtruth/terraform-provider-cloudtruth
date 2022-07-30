@@ -48,7 +48,6 @@ func resourceProject() *schema.Resource {
 
 func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceProjectCreate")
-	var diags diag.Diagnostics
 	c := meta.(*cloudTruthClient)
 	projectName := d.Get("name").(string)
 	projectDesc := d.Get("description").(string)
@@ -79,12 +78,11 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 	projectID := resp.GetId()
 	d.SetId(projectID)
 	c.addNewProjectToCaches(projectName, projectID)
-	return diags
+	return nil
 }
 
 func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceProjectRead")
-	var diags diag.Diagnostics
 	c := meta.(*cloudTruthClient)
 	projectName := d.Get("name").(string)
 
@@ -113,7 +111,7 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 		return diag.FromErr(fmt.Errorf("resourceProjectRead: found %d projects, expcted to find 1", len(res)))
 	}
 	d.SetId(resp.GetResults()[0].GetId())
-	return diags
+	return nil
 }
 
 // A project's name and description can be updated
