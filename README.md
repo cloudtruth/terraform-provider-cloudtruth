@@ -62,3 +62,4 @@ $ make testacc
 
 ### Commit hooks
 To enable the commit hooks stored in `.githooks` in your local repo, run `git config --local core.hooksPath .githooks/`
+
