@@ -26,6 +26,8 @@ const (
 	regularExternalParamVal = "5.0"
 	paramDesc               = "Just a description of a parameter"
 	updateParamDesc         = "A new description of an parameter"
+	stagingParamVal         = "A useful string only in staging"
+	stagingParamValUpdate   = "An updated & useful string only in staging"
 	prodParamVal            = "A useful string only in production"
 	basicTemplate           = "BasicTemplate"
 	basicTemplateVal        = "Regular Parameter: notreallyasecret, Secret Parameter ultratopsecret"

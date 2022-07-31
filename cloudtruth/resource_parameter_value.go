@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
-	"strings"
 )
 
 func resourceParameterValue() *schema.Resource {
@@ -180,6 +179,7 @@ func resourceParameterValueRead(ctx context.Context, d *schema.ResourceData, met
 	return dataCloudTruthParameterValueRead(ctx, d, meta)
 }
 
+// todo: retry logic here
 func updateParameterValue(ctx context.Context, paramID, paramValueID, projID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
 	updateValue := cloudtruthapi.NewValueWithDefaults()
 	hasParamValueChange := false
@@ -225,35 +225,12 @@ func resourceParameterValueUpdate(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
 	}
 
-	paramCompositeID := d.Id()
-	ids := strings.Split(paramCompositeID, ":")
-	if len(ids) != 2 {
-		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: failed to extract the Parameter and Parameter Value IDs from %s",
-			paramCompositeID))
-	}
-	paramID, paramValueID := ids[0], ids[1]
+	paramID := d.Get("parameter_id").(string)
 	paramName := d.Get("parameter_name").(string)
 
-	// First update Parameter level changes, no-op if there are none
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-		r, err := updateParameter(ctx, paramID, *projID, d, c)
-		if err != nil {
-			outErr := fmt.Errorf("resourceParameterUpdate: error updating parameter level config for parameter %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
-		}
-		return nil
-	})
-	if retryError != nil {
-		return diag.FromErr(retryError)
-	}
-
 	// Then update Parameter Value level changes
-	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-		r, err := updateParameterValue(ctx, paramID, paramValueID, *projID, d, c)
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		r, err := updateParameterValue(ctx, paramID, d.Id(), *projID, d, c)
 		if err != nil {
 			outErr := fmt.Errorf("resourceParameterUpdate: error updating the parameter value config for parameter %s: %w", paramName, err)
 			if r.StatusCode >= http.StatusInternalServerError {
@@ -268,8 +245,8 @@ func resourceParameterValueUpdate(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(retryError)
 	}
 
-	d.SetId(paramCompositeID)
-	return resourceParameterRead(ctx, d, meta)
+	d.SetId(d.Id())
+	return resourceParameterValueRead(ctx, d, meta)
 }
 
 func resourceParameterValueDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -290,7 +267,7 @@ func resourceParameterValueDelete(ctx context.Context, d *schema.ResourceData, m
 		r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(ctx, paramValueID,
 			paramID, *projID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterDelete: error deleting parameter %s: %w", paramName, err)
+			outErr := fmt.Errorf("resourceParameterDelete: error deleting parameter value %s: %w", paramName, err)
 			if r.StatusCode >= http.StatusInternalServerError {
 				return resource.RetryableError(outErr)
 			} else {
