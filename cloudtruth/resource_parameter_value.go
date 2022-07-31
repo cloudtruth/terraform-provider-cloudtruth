@@ -22,16 +22,21 @@ func resourceParameterValue() *schema.Resource {
 		DeleteContext: resourceParameterValueDelete,
 
 		Schema: map[string]*schema.Schema{
-			"parameter_name": {
-				Description: "The name of the CloudTruth Parameter which will store this value, unique per project",
+			"project": {
+				Description: "The CloudTruth project where the Parameter Value is defined",
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 			},
 			"environment": {
 				Description: "The CloudTruth environment where the Parameter Value will be added. Defaults to the 'default' environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "default",
+			},
+			"parameter_name": {
+				Description: "The name of the CloudTruth Parameter which will store this value, unique per project",
+				Type:        schema.TypeString,
+				Required:    true,
 			},
 			"value": {
 				Description: "The value of the CloudTruth Parameter, specific to an environment (can be overridden/inherited relative to other environments)",
@@ -89,7 +94,7 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 	}
 
 	// Check for the parameter
-	paramName := d.Get("name").(string)
+	paramName := d.Get("parameter_name").(string)
 	var paramListResp *cloudtruthapi.PaginatedParameterList
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
@@ -144,13 +149,13 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 }
 
 func valueCreateConfig(envID string, d *schema.ResourceData) (*cloudtruthapi.ValueCreate, error) {
-	name := d.Get("name").(string)
+	name := d.Get("parameter_name").(string)
 	value := d.Get("value").(string)
 	dynamic := d.Get("dynamic").(bool)
 	valueCreate := cloudtruthapi.NewValueCreate(value)
 	external := d.Get("external").(bool)
 	if external && value != "" {
-		return nil, fmt.Errorf("you cannot specify a value (%s)with the external parameter %s", value, name)
+		return nil, fmt.Errorf("you cannot specify a value (%s) with the external parameter %s", value, name)
 	}
 	if value != "" {
 		valueCreate.SetInternalValue(value)
@@ -227,7 +232,7 @@ func resourceParameterValueUpdate(ctx context.Context, d *schema.ResourceData, m
 			paramCompositeID))
 	}
 	paramID, paramValueID := ids[0], ids[1]
-	paramName := d.Get("name").(string)
+	paramName := d.Get("parameter_name").(string)
 
 	// First update Parameter level changes, no-op if there are none
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {

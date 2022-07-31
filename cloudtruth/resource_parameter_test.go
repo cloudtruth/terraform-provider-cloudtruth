@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAccResourceParameterBasic(t *testing.T) {
+func TestAccResourceParameterValueBasic(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
@@ -23,7 +23,7 @@ func TestAccResourceParameterBasic(t *testing.T) {
 						strconv.FormatBool(true)),
 				),
 			},
-			{
+			{ // Update test, changing the description and the secret toggle
 				Config: testAccResourceParameterCreateBasic(accTestProject, createParamName, updateParamDesc, false),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "name", createParamName),
