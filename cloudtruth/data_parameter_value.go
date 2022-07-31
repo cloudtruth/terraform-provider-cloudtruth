@@ -13,17 +13,10 @@ import (
 	"time"
 )
 
-/*
-todo:
-	convert to dataCloudTruthParameterValue and dataCloudTruthParameterValues
-	update tests
-
-*/
-
-func dataCloudTruthParameter() *schema.Resource {
+func dataCloudTruthParameterValue() *schema.Resource {
 	return &schema.Resource{
-		Description: "A CloudTruth parameter data source",
-		ReadContext: dataCloudTruthParameterRead,
+		Description: "A CloudTruth parameter value data source",
+		ReadContext: dataCloudTruthParameterValueRead,
 		Schema: map[string]*schema.Schema{
 			"project": {
 				Description: "The CloudTruth project",
@@ -31,20 +24,15 @@ func dataCloudTruthParameter() *schema.Resource {
 				Optional:    true,
 			},
 			"environment": {
-				Description: "The CloudTruth environment",
+				Description: "The CloudTruth environment containing the Paramter Value",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "default",
 			},
-			"name": {
-				Description: "The name of the parameter",
+			"parameter_name": {
+				Description: "The name of the CloudTruth Parameter",
 				Type:        schema.TypeString,
 				Required:    true,
-			},
-			"description": {
-				Description: "The parameter's description",
-				Type:        schema.TypeString,
-				Computed:    true,
 			},
 			"external": {
 				Description: "Whether or not the value is external, defaults to false",
@@ -52,17 +40,22 @@ func dataCloudTruthParameter() *schema.Resource {
 				Computed:    true,
 			},
 			"value": {
-				Description: "The parameter's value",
+				Description: "The actual value of the Parameter Value",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
+			"parameter_id": {
+				Description: "The ID of the CloudTruth Parameter where this value is stored",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
 			"as_of": {
-				Description: "Retrieve the parameter's historical value 'as of' the specified RFC3333 date, mutually exclusive with 'tag'",
+				Description: "Retrieve the parameter value 'as of' the specified RFC3333 date, mutually exclusive with 'tag'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"tag": {
-				Description: "Retrieve the parameter's historical value that matches a specific tag, mutually exclusive with 'as_of'",
+				Description: "Retrieve the parameter value that matches a specific tag, mutually exclusive with 'as_of'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
@@ -70,16 +63,16 @@ func dataCloudTruthParameter() *schema.Resource {
 	}
 }
 
-func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "dataCloudTruthParameterRead")
+	tflog.Debug(ctx, "dataCloudTruthParameterValueRead")
 	environment := d.Get("environment").(string)
 	project := d.Get("project").(string)
 	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: %w", err))
 	}
-	name := d.Get("name").(string)
+	name := d.Get("parameter_name").(string)
 
 	// Handle as_of and tag filters
 	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(name)
@@ -93,7 +86,7 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 		var r *http.Response
 		resp, r, err = filteredParamListRequest.Execute()
 		if err != nil {
-			outErr := fmt.Errorf("dataCloudTruthParameterRead: error looking up parameter %s: %w", name, err)
+			outErr := fmt.Errorf("dataCloudTruthParameterValueRead: error looking up parameter %s: %w", name, err)
 			if r.StatusCode >= http.StatusInternalServerError {
 				return resource.RetryableError(outErr)
 			} else {
@@ -108,33 +101,33 @@ func dataCloudTruthParameterRead(ctx context.Context, d *schema.ResourceData, me
 	}
 
 	if resp.GetCount() != 1 {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: expected 1 value for parameter %s, found %d instead",
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: expected 1 value for parameter %s, found %d instead",
 			name, resp.GetCount()))
 	}
 	// We know there is only one parameter at this point
-	// There should only ever be one value per parameter per environment per project
+	// There should only be one value per parameter per environment per project
 	results := resp.GetResults()
 	param := results[0]
 	values := param.GetValues()
 	paramID := param.GetId()
 	if len(values) > 1 {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: unexpectedly found %d values for parameter %s",
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: unexpectedly found %d values for parameter %s",
 			len(values), name))
 	}
+	
+	// do we have to iterate here?
 	for _, v := range values {
-		tflog.Debug(ctx, fmt.Sprintf("dataCloudTruthParameterRead: found value for %s, lookup env %s, resolved env %s",
+		tflog.Debug(ctx, fmt.Sprintf("dataCloudTruthParameterValueRead: found value for %s, lookup env %s, resolved env %s",
 			name, environment, v.GetEnvironmentName()))
 		err := d.Set("value", v.GetValue())
 		if err != nil {
-			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
+			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: %w", err))
 		}
-		desc := param.GetDescription()
-		err = d.Set("description", desc)
+		err = d.Set("parameter_id", paramID)
 		if err != nil {
-			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterRead: %w", err))
+			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: %w", err))
 		}
-		// We use a composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
-		d.SetId(fmt.Sprintf("%s:%s", paramID, v.GetId()))
+		d.SetId(v.GetId())
 	}
 	return nil
 }

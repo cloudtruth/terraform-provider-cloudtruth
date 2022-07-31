@@ -1,6 +1,5 @@
 package cloudtruth
 
-/*
 import (
 	"context"
 	"fmt"
@@ -13,12 +12,6 @@ import (
 	"strings"
 )
 
- todo
-	implement value only functionality
-	determine how to tie parameter resource to this resource
-	add support for rules and constraints
-	update tests
-
 func resourceParameterValue() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth Parameter and environment specific value (defaulting to the 'default' environment)",
@@ -29,40 +22,22 @@ func resourceParameterValue() *schema.Resource {
 		DeleteContext: resourceParameterValueDelete,
 
 		Schema: map[string]*schema.Schema{
-			"name": {
-				Description: "The name of the CloudTruth Parameter, unique per project",
+			"parameter_name": {
+				Description: "The name of the CloudTruth Parameter which will store this value, unique per project",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			"description": {
-				Description: "Description of the CloudTruth Parameter",
-				Type:        schema.TypeString,
-				Optional:    true,
-			},
-			"project": {
-				Description: "The CloudTruth project where the Parameter is defined",
-				Type:        schema.TypeString,
-				Optional:    true,
-			},
 			"environment": {
-				Description: "The CloudTruth environment where the Parameter's value is defined. Defaults to the 'default' environment",
+				Description: "The CloudTruth environment where the Parameter Value will be added. Defaults to the 'default' environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "default",
-				Deprecated:  "The 'environment' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
-			},
-			"secret": {
-				Description: "Whether or not the Parameter is a secret, defaults to false (non-secret)",
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
 			},
 			"value": {
 				Description: "The value of the CloudTruth Parameter, specific to an environment (can be overridden/inherited relative to other environments)",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
-				Deprecated:  "The 'value' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 				// With external parameters, the value is computed but should not be used to diff/detect changes
 				// It is only useful in read operations. A change to the location and/or filter field would indicate a resource change
 				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
@@ -75,36 +50,34 @@ func resourceParameterValue() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Deprecated:  "The 'dynamic' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 			},
 			"external": {
 				Description: "Whether or not the value is external, defaults to false",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Deprecated:  "The 'external' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 			},
 			"location": {
 				Description: "The location of the secret value, required for external parameters",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
-				Deprecated:  "The 'location' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
 			},
 			"filter": {
 				Description: "An optional filter (path/query), optional and used only with external parameters",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
-				Deprecated:  "The 'filter' field will be removed from the 'cloudtruth_parameter' resource and used only with 'cloudtruth_parameter_value'",
+			},
+			"parameter_id": {
+				Description: "The ID of the CloudTruth Parameter which stores this value",
+				Type:        schema.TypeString,
+				Computed:    true,
 			},
 		},
 	}
 }
 
-// In Terraform terms, a 'resource_parameter' represents a CloudTruth Parameter AND its environment specific value
-// Therefore, when this provider destroys a parameter resource, it only removes the per-environment value unless
-// the parameter is only defined in one environment, in which case it is destroyed entirely
 func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceParameterValueCreate")
@@ -135,36 +108,12 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-
-	// Create the parameter if it doesn't exist
-	var paramID, valueID string
-	var paramCreateResp *cloudtruthapi.Parameter
-	if paramListResp.GetCount() == 1 { // Named parameter already exists, we reuse it and a new value
-		paramID = paramListResp.GetResults()[0].GetId()
-	} else {
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-			var r *http.Response
-			var err error
-			paramCreate := paramCreateConfig(d)
-			paramCreateResp, _, err = c.openAPIClient.ProjectsApi.ProjectsParametersCreate(ctx,
-				*projID).ParameterCreate(*paramCreate).Execute()
-			if err != nil {
-				outErr := fmt.Errorf("resourceParameterValueCreate: error creating parameter %s: %w", paramName, err)
-				if r.StatusCode >= http.StatusInternalServerError {
-					return resource.RetryableError(outErr)
-				} else {
-					return resource.NonRetryableError(outErr)
-				}
-			}
-			paramID = paramCreateResp.GetId()
-			return nil
-		})
-		if retryError != nil {
-			return diag.FromErr(retryError)
-		}
+	if paramListResp.GetCount() != 1 {
+		return diag.FromErr(fmt.Errorf("resourceParameterRead: expected 1 value for parameter %s, found %d instead",
+			paramName, paramListResp.GetCount()))
 	}
 
-	// Create its per-environment value
+	var valueID string
 	valueCreate, err := valueCreateConfig(*envID, d)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterValueCreate: %w", err))
@@ -173,7 +122,8 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		value, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx, paramID, *projID).ValueCreate(*valueCreate).Execute()
+		value, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx, paramListResp.GetResults()[0].GetId(),
+			*projID).ValueCreate(*valueCreate).Execute()
 		if err != nil {
 			outErr := fmt.Errorf("resourceParameterValueCreate: error creating the value for parameter %s: %w", paramName, err)
 			if r.StatusCode >= http.StatusInternalServerError {
@@ -189,22 +139,8 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(retryError)
 	}
 
-	// add its value in the specified environment with composite ID - <PARAMETER_ID>:<PARAMETER_VALUE_ID>
-	internalID := fmt.Sprintf("%s:%s", paramID, valueID)
-	d.SetId(internalID)
+	d.SetId(valueID)
 	return nil
-}
-
-func paramCreateConfig(d *schema.ResourceData) *cloudtruthapi.ParameterCreate {
-	paramName := d.Get("name").(string)
-	paramCreate := cloudtruthapi.NewParameterCreate(paramName)
-	paramDesc := d.Get("description").(string)
-	if paramDesc != "" {
-		paramCreate.SetDescription(paramDesc)
-	}
-	isSecret := d.Get("secret").(bool)
-	paramCreate.SetSecret(isSecret)
-	return paramCreate
 }
 
 func valueCreateConfig(envID string, d *schema.ResourceData) (*cloudtruthapi.ValueCreate, error) {
@@ -236,32 +172,7 @@ func valueCreateConfig(envID string, d *schema.ResourceData) (*cloudtruthapi.Val
 
 func resourceParameterValueRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterRead")
-	return dataCloudTruthParameterRead(ctx, d, meta)
-}
-
-func updateParameter(ctx context.Context, paramID, projID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
-	patchedParam := cloudtruthapi.PatchedParameter{}
-	hasParamChange := false
-	if d.HasChange(resourceParameter"description") {
-		paramDesc := d.Get("description").(string)
-		patchedParam.SetDescription(paramDesc)
-		hasParamChange = true
-	}
-	if d.HasChange("secret") {
-		paramIsSecret := d.Get("secret").(bool)
-		patchedParam.SetSecret(paramIsSecret)
-		hasParamChange = true
-	}
-	var r *http.Response
-	var err error
-	if hasParamChange {
-		_, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersPartialUpdate(ctx, paramID, projID).
-			PatchedParameter(patchedParam).Execute()
-		if err != nil {
-			return r, err
-		}
-	}
-	return r, nil
+	return dataCloudTruthParameterValueRead(ctx, d, meta)
 }
 
 func updateParameterValue(ctx context.Context, paramID, paramValueID, projID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
@@ -300,7 +211,7 @@ func updateParameterValue(ctx context.Context, paramID, paramValueID, projID str
 	return nil, nil
 }
 
-func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+func resourceParameterValueUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceParameterUpdate")
 	project := d.Get("project").(string)
@@ -356,78 +267,23 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	return resourceParameterRead(ctx, d, meta)
 }
 
-// If a parameter is defined in the target environment only, we destroy it
-// If it is defined in one or more other environments, we only destroy the value
-// defined in the target environment
-func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+func resourceParameterValueDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterDelete")
 	c := meta.(*cloudTruthClient)
-	environment := d.Get("environment").(string)
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
 	}
-	paramCompositeID := d.Id()
-	ids := strings.Split(paramCompositeID, ":")
-	if len(ids) != 2 {
-		return diag.FromErr(fmt.Errorf("resourceParameterDelete: failed to extract the Parameter and Parameter Value IDs from %s",
-			paramCompositeID))
-	}
-	paramID, paramValueID := ids[0], ids[1]
+	paramID := d.Get("parameter_id").(string)
+	paramValueID := d.Id()
+	paramName := d.Get("parameter_name").(string)
 
-	var paramResp *cloudtruthapi.Parameter
-	paramName := d.Get("name")
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		paramResp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(ctx, paramID, *projID).Execute()
-		if err != nil {
-			outErr := fmt.Errorf("resourceParameterDelete: error fetching parameter %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
-		}
-		return nil
-	})
-	if retryError != nil {
-		return diag.FromErr(retryError)
-	}
-
-	// We iterate over the values for the parameter across all environments
-	// If the values are all null, we delete the parameter.
-	// If the values are all null except for the target environment, we delete the parameter.
-	// Otherwise, we only delete the specific parameter value in the target environment i.e. the parameter
-	// exists in at least one other environment.
-	multiEnv := false
-	values := paramResp.GetValues()
-	count := 1 // the param value is defined in the target environment
-	// check to see if it's explicitly defined in any others
-	for envURL := range values {
-		value := values[envURL]
-		if (value.GetEnvironmentName() != environment) && value.HasInternalValue() {
-			count++
-			if count > 1 {
-				multiEnv = true
-				break
-			}
-		}
-	}
-
-	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-		var r *http.Response
-		var err error
-		if multiEnv {
-			// delete the specific env value only, because there are explicit definitions in one or more other envs
-			r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(ctx, paramValueID,
-				paramID, *projID).Execute()
-		} else {
-			// delete the parameter entirely
-			r, err = c.openAPIClient.ProjectsApi.ProjectsParametersDestroy(ctx, paramID,
-				*projID).Execute()
-		}
+		r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(ctx, paramValueID,
+			paramID, *projID).Execute()
 		if err != nil {
 			outErr := fmt.Errorf("resourceParameterDelete: error deleting parameter %s: %w", paramName, err)
 			if r.StatusCode >= http.StatusInternalServerError {
@@ -443,4 +299,3 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	}
 	return nil
 }
-*/

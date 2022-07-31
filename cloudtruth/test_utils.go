@@ -25,7 +25,6 @@ const (
 	regularExternalParam    = "DefaultRegularExternalParam"
 	regularExternalParamVal = "5.0"
 	paramDesc               = "Just a description of a parameter"
-	secretParamDesc         = "A secret parameter used for acceptance tests."
 	updateParamDesc         = "A new description of an parameter"
 	/*paramVal                = "A useful string"
 	updateParamVal          = "A new useful string"
