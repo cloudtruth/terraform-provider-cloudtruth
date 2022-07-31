@@ -104,8 +104,7 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: expected 1 value for parameter %s, found %d instead",
 			name, resp.GetCount()))
 	}
-	// We know there is only one parameter at this point
-	// There should only be one value per parameter per environment per project
+	// There should be one parameter and one parameter value at this point
 	results := resp.GetResults()
 	param := results[0]
 	values := param.GetValues()
@@ -114,8 +113,7 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: unexpectedly found %d values for parameter %s",
 			len(values), name))
 	}
-	
-	// do we have to iterate here?
+
 	for _, v := range values {
 		tflog.Debug(ctx, fmt.Sprintf("dataCloudTruthParameterValueRead: found value for %s, lookup env %s, resolved env %s",
 			name, environment, v.GetEnvironmentName()))
