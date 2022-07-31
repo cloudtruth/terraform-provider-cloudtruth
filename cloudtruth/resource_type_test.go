@@ -102,6 +102,7 @@ func testAccResourceTypeCreateWithRule(typeName, desc string) string {
 	`, typeName, desc)
 }
 
+// todo add an example illustrating how to declare multiple rule blocks
 func testAccResourceTypeCreateWithThreeRules(typeName, desc string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_type" "with_three_rules" {

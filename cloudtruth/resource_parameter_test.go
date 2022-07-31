@@ -8,14 +8,15 @@ import (
 	"testing"
 )
 
-func TestAccResourceParameterValueBasic(t *testing.T) {
+func TestAccResourceParameterBasic(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
+	resourceName := "basic"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceParameterCreateBasic(accTestProject, createParamName, paramDesc, true),
+				Config: testAccResourceParameterCreateBasic(accTestProject, resourceName, createParamName, paramDesc, true),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "name", createParamName),
 					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "description", paramDesc),
@@ -24,11 +25,11 @@ func TestAccResourceParameterValueBasic(t *testing.T) {
 				),
 			},
 			{ // Update test, changing the description and the secret toggle
-				Config: testAccResourceParameterCreateBasic(accTestProject, createParamName, updateParamDesc, false),
+				Config: testAccResourceParameterCreateBasic(accTestProject, resourceName, createParamName, updateParamDesc, false),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "name", createParamName),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "description", updateParamDesc),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "secret",
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "name", createParamName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "description", updateParamDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "secret",
 						strconv.FormatBool(false)),
 				),
 			},
@@ -36,13 +37,58 @@ func TestAccResourceParameterValueBasic(t *testing.T) {
 	})
 }
 
-func testAccResourceParameterCreateBasic(projName, paramName, desc string, isSecret bool) string {
+func TestAccResourceParameterWithRules(t *testing.T) {
+	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
+	resourceName := "with_rules"
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: testAccResourceParameterCreateWithRules(accTestProject, resourceName, createParamName, paramDesc, false),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "name", createParamName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "description", paramDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "secret",
+						strconv.FormatBool(false)),
+				),
+			},
+		},
+	})
+}
+
+func testAccResourceParameterCreateBasic(projName, resourceName, paramName, desc string, isSecret bool) string {
 	return fmt.Sprintf(`
-	resource "cloudtruth_parameter" "basic" {
+	resource "cloudtruth_parameter" "%s" {
 		project     = "%s"
   		name        = "%s"
   		description = "%s"
 		secret      = "%t"
 	}
-	`, projName, paramName, desc, isSecret)
+	`, resourceName, projName, paramName, desc, isSecret)
+}
+
+func testAccResourceParameterCreateWithRules(projName, resourceName, paramName, desc string, isSecret bool) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_parameter" "%s" {
+		project     = "%s"
+  		name        = "%s"
+  		description = "%s"
+		secret      = "%t"
+		type        = "string"
+		rule {
+			type       = "min_len"
+			constraint = "1"
+		}
+		rule {
+			type       = "max_len"
+			constraint = "10"
+		}
+		rule {
+			type       = "regex"
+			constraint = ".*"
+		}
+	}
+	}
+	`, resourceName, projName, paramName, desc, isSecret)
 }

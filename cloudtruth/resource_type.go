@@ -38,9 +38,12 @@ func resourceType() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
+			// The singular name is not ideal but a limitation for now, until we use the new (and still experimental)
+			// plugin framework, see https://stackoverflow.com/a/70023725/1354026
 			"rule": {
 				Description: `The rule(s) describing allowable values for a parameter of this type. Add separate blocks per rule. 
-Note that string types support max_len|min_len|regex rules, integets support min|max rules and booleans don't support any rules.'`,
+Note that string types support max_len|min_len|regex rules, integers support min|max rules and booleans don't support any rules.
+Also see the examples for how to define multiple rule blocks.`,
 				Type:     schema.TypeList,
 				Optional: true, // Optional and disallowed with boolean types
 				Elem: &schema.Resource{
@@ -162,6 +165,7 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 	return nil
 }
 
+// todo handle rule changes
 func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceTypeUpdate")
 	c := meta.(*cloudTruthClient)
