@@ -221,6 +221,7 @@ func updateParameter(ctx context.Context, paramID, projID string, d *schema.Reso
 	return r, nil
 }
 
+// todo handle rule changes
 func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceParameterUpdate")

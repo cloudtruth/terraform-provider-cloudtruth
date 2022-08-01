@@ -89,6 +89,5 @@ func testAccResourceParameterCreateWithRules(projName, resourceName, paramName, 
 			constraint = ".*"
 		}
 	}
-	}
 	`, resourceName, projName, paramName, desc, isSecret)
 }
