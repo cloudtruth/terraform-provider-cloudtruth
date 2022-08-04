@@ -27,6 +27,7 @@ website/node_modules
 terraform-provider-cloudtruth_*
 terraform-provider-cloudtruth
 website/vendor
+*.tfvars
 
 # Test exclusions
 !command/test-fixtures/**/*.tfstate
