@@ -5,9 +5,9 @@ provider "aws" {
 }
 
 module "grant_cloudtruth_access" {
-  source = "github.com/cloudtruth/terraform-cloudtruth-access"
-  role_name = var.role_name
-  external_id = var.external_id
-  services_enabled = var.services_enabled
+  source                 = "github.com/cloudtruth/terraform-cloudtruth-access"
+  role_name              = var.role_name
+  external_id            = var.external_id
+  services_enabled       = var.services_enabled
   services_write_enabled = var.services_write_enabled
 }
