@@ -24,13 +24,13 @@ func dataCloudTruthParameterValue() *schema.Resource {
 				Optional:    true,
 			},
 			"environment": {
-				Description: "The CloudTruth environment containing the Paramter Value",
+				Description: "The CloudTruth environment containing the Parameter Value",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "default",
 			},
 			"parameter_name": {
-				Description: "The name of the CloudTruth Parameter",
+				Description: "The name of the CloudTruth Parameter where this value is stored",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
@@ -130,11 +130,11 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 	return nil
 }
 
-// Return a map of parameter names -> parameter values
-func dataCloudTruthParameters() *schema.Resource {
+// Return a map of parameter names -> parameter values for a specific environment
+func dataCloudTruthParameterValues() *schema.Resource {
 	return &schema.Resource{
 		Description: "A CloudTruth Parameter data source",
-		ReadContext: dataCloudTruthParametersRead,
+		ReadContext: dataCloudTruthParameterValuesRead,
 		Schema: map[string]*schema.Schema{
 			"project": {
 				Description: "The CloudTruth Project",
@@ -165,14 +165,14 @@ func dataCloudTruthParameters() *schema.Resource {
 	}
 }
 
-func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "dataCloudTruthParametersRead")
+	tflog.Debug(ctx, "dataCloudTruthParameterValuesRead")
 	environment := d.Get("environment").(string)
 	project := d.Get("project").(string)
 	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValuesRead: %w", err))
 	}
 
 	var paramListRequest cloudtruthapi.ApiProjectsParametersListRequest
@@ -190,7 +190,7 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 			var r *http.Response
 			resp, r, err = filteredParamListRequest.Execute()
 			if err != nil {
-				outErr := fmt.Errorf("dataCloudTruthParametersRead: error looking up parameters in the %s environment: %w", environment, err)
+				outErr := fmt.Errorf("dataCloudTruthParameterValuesRead: error looking up parameters in the %s environment: %w", environment, err)
 				if r.StatusCode >= http.StatusInternalServerError {
 					return resource.RetryableError(outErr)
 				} else {
@@ -223,14 +223,14 @@ func dataCloudTruthParametersRead(ctx context.Context, d *schema.ResourceData, m
 
 	err = d.Set("parameter_values", paramsMap)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParametersRead: %w", err))
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValuesRead: %w", err))
 	}
 
 	/* We use a composite ID for a cloudtruth_parameters result - <PROJECT_ID>:<ENVIRONMENT_ID>
 	   The results represent a set of possibly filtered parameters in a given environment and project
 	   Ideally, these will be shared across all TF resources in a given state
 	   However, we do need to be mindful that a user could pull in the set of parameters more than once
-	   within the same state, with possible variations on filters, if that turns out to be an issue
+	   within the same state, with possible variations on filters, if thid turns out to be an issue
 	   then we may need to rethink the ID strategy here */
 	d.SetId(fmt.Sprintf("%s:%s", *projID, *envID))
 	return nil

@@ -44,7 +44,7 @@ func New(version string) func() *schema.Provider {
 			},
 			DataSourcesMap: map[string]*schema.Resource{
 				"cloudtruth_parameter_value":  dataCloudTruthParameterValue(),
-				"cloudtruth_parameter_values": dataCloudTruthParameters(),
+				"cloudtruth_parameter_values": dataCloudTruthParameterValues(),
 				"cloudtruth_tag":              dataCloudTruthTag(),
 				"cloudtruth_template":         dataCloudTruthTemplate(),
 				"cloudtruth_templates":        dataCloudTruthTemplates(),

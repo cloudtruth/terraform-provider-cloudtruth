@@ -118,7 +118,7 @@ func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, rule
 
 	for retryCount < addRuleRetries {
 		_, r, err := c.openAPIClient.TypesApi.TypesRulesCreate(ctx, typeID).ParameterTypeRuleCreate(createTypeRule).Execute()
-		if r.StatusCode >= 500 {
+		if r.StatusCode >= http.StatusInternalServerError {
 			tflog.Debug(ctx, fmt.Sprintf("addRuleToType: %s", err))
 			apiError = err
 			retryCount++

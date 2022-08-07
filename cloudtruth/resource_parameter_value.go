@@ -179,7 +179,7 @@ func resourceParameterValueRead(ctx context.Context, d *schema.ResourceData, met
 	return dataCloudTruthParameterValueRead(ctx, d, meta)
 }
 
-// todo: retry logic here
+// No retry logic here, the caller handles that
 func updateParameterValue(ctx context.Context, paramID, paramValueID, projID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
 	updateValue := cloudtruthapi.NewValueWithDefaults()
 	hasParamValueChange := false
