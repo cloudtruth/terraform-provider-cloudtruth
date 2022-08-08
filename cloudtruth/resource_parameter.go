@@ -59,6 +59,31 @@ Note that string types support max_len|min_len|regex rules, integets support min
 					Schema: ruleSchema,
 				},
 			},
+			"max": {
+				Description: "A CloudTruth rule constraint: the maximum value for an integer type, only valid with integer types",
+				Type:        schema.TypeInt,
+				Optional:    true,
+			},
+			"min": {
+				Description: "A CloudTruth rule constraint: the minimum value for an integer type, only valid with integer types",
+				Type:        schema.TypeInt,
+				Optional:    true,
+			},
+			"max_len": {
+				Description: "A CloudTruth rule constraint: the maximum length for a string type, only valid with string types",
+				Type:        schema.TypeInt,
+				Optional:    true,
+			},
+			"min_len": {
+				Description: "A CloudTruth rule constraint: the minimum length for a string type, only valid with string types",
+				Type:        schema.TypeInt,
+				Optional:    true,
+			},
+			"regex": {
+				Description: "A CloudTruth rule constraint: the regular expression a string type must match, only valid with string types",
+				Type:        schema.TypeInt,
+				Optional:    true,
+			},
 		},
 	}
 }
