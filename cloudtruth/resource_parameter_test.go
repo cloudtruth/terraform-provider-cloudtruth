@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"regexp"
 	"strconv"
 	"testing"
 )
 
+/*
 func TestAccResourceParameterWithBadRules(t *testing.T) {
 	resourceName := "bad_rules"
 	resource.Test(t, resource.TestCase{
@@ -33,7 +33,7 @@ func TestAccResourceParameterWithBadRules(t *testing.T) {
 		},
 	})
 }
-
+*/
 func TestAccResourceParameterWithRules(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
 	resourceName := "with_rules"
@@ -53,9 +53,9 @@ func TestAccResourceParameterWithRules(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "description", paramDesc),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "secret",
 						strconv.FormatBool(false)),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "rule.0.constraint", fmt.Sprint(createMinLen)),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "rule.1.constraint", fmt.Sprint(createMaxLen)),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "rule.2.constraint", createRegEx),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "min_len", fmt.Sprint(createMinLen)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "max_len", fmt.Sprint(createMaxLen)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "regex", createRegEx),
 				),
 			},
 			{
@@ -66,9 +66,8 @@ func TestAccResourceParameterWithRules(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "description", paramDesc),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "secret",
 						strconv.FormatBool(false)),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "rule.0.constraint", fmt.Sprint(updateMinLen)),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "rule.1.constraint", fmt.Sprint(updateMaxLen)),
-					// todo: fix this check
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "min_len", fmt.Sprint(updateMinLen)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "max_len", fmt.Sprint(updateMaxLen)),
 					//resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "rule.2.constraint", updateRegEx),
 				),
 			},
@@ -125,22 +124,14 @@ func testAccResourceParameterCreateStringWithRules(projName, resourceName, param
   		description = "%s"
 		secret      = "%t"
 		type        = "string"
-		rule {
-			type       = "min_len"
-			constraint = "%d"
-		}
-		rule {
-			type       = "max_len"
-			constraint = "%d"
-		}
-		rule {
-			type       = "regex"
-			constraint = "%s"
-		}
+		min_len     = %d
+        max_len     = %d
+	    regex       = "%s"
 	}
 	`, resourceName, projName, paramName, desc, isSecret, minLen, maxLen, regEx)
 }
 
+/*
 // Can't have even one rule with boolean types
 func testAccResourceParameterDisallowedBooleanRules(projName, resourceName, paramName string) string {
 	return fmt.Sprintf(`
@@ -148,15 +139,11 @@ func testAccResourceParameterDisallowedBooleanRules(projName, resourceName, para
 		project     = "%s"
   		name        = "%s"
 		type        = "boolean"
-		rule {
-			type       = "min_len"
-			constraint = "123"
-		}
+        min_len     = 123
 	}
 	`, resourceName, projName, paramName)
 }
 
-/*
 // Invalid types for integer rules, they only accept max and min
 func testAccResourceParameterInvalidIntegerRules(projName, resourceName, paramName string) string {
 	return fmt.Sprintf(`
@@ -176,6 +163,7 @@ func testAccResourceParameterInvalidIntegerRules(projName, resourceName, paramNa
 	`, resourceName, projName, paramName)
 }*/
 
+/*
 // There can be no more than two rules per parameter
 func testAccResourceParameterTooManyIntegerRules(projName, resourceName, paramName string) string {
 	return fmt.Sprintf(`
@@ -199,7 +187,6 @@ func testAccResourceParameterTooManyIntegerRules(projName, resourceName, paramNa
 	`, resourceName, projName, paramName)
 }
 
-/*
 // Integer parameter types can have max|min rules, string types can have max_len|min_len|regex rules
 func testAccResourceParameterInvalidStringRules(projName, resourceName, paramName string) string {
 	return fmt.Sprintf(`
@@ -216,7 +203,7 @@ func testAccResourceParameterInvalidStringRules(projName, resourceName, paramNam
 		constraint = "12"
 	}
 	`, resourceName, projName, paramName)
-}*/
+}
 
 // There can be no more than two rules per parameter
 func testAccResourceParameterTooManyStringRules(projName, resourceName, paramName string) string {
@@ -243,3 +230,4 @@ func testAccResourceParameterTooManyStringRules(projName, resourceName, paramNam
 	}
 	`, resourceName, projName, paramName)
 }
+*/

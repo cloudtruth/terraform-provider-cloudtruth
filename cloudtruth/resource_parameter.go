@@ -48,17 +48,6 @@ func resourceParameter() *schema.Resource {
 				Optional:    true, // Optional except when one or more rules are specified
 				Default:     "string",
 			},
-			// The singular name is not ideal but a limitation for now, until we use the new (and still experimental)
-			// plugin framework, see https://stackoverflow.com/a/70023725/1354026
-			"rule": {
-				Description: `The rule(s) describing allowable values for a parameter of this type. Add separate blocks per rule. 
-Note that string types support max_len|min_len|regex rules, integets support min|max rules and booleans don't support any rules.'`,
-				Type:     schema.TypeList,
-				Optional: true, // Optional and disallowed with boolean types
-				Elem: &schema.Resource{
-					Schema: ruleSchema,
-				},
-			},
 			"max": {
 				Description: "A CloudTruth rule constraint: the maximum value for an integer type, only valid with integer types",
 				Type:        schema.TypeInt,
@@ -81,7 +70,7 @@ Note that string types support max_len|min_len|regex rules, integets support min
 			},
 			"regex": {
 				Description: "A CloudTruth rule constraint: the regular expression a string type must match, only valid with string types",
-				Type:        schema.TypeInt,
+				Type:        schema.TypeString,
 				Optional:    true,
 			},
 		},
@@ -105,6 +94,10 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 			return diag.FromErr(fmt.Errorf("unknown parameter type %s", paramTypeName))
 		}
 	}
+	var rules map[string]any
+	if rules, err = validateAndFetchRules(ctx, c, d, paramType); err != nil {
+		return diag.FromErr(err)
+	}
 
 	var paramID string
 	var paramCreateResp *cloudtruthapi.Parameter
@@ -125,22 +118,15 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		paramID = paramCreateResp.GetId()
 		return nil
 	})
-	if err = validateRules(ctx, c, d, paramName, paramType); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if _, ok := d.GetOk("rule"); ok {
-		rules := d.Get("rule").([]any)
-		for _, r := range rules {
-			_, err := addRuleToParam(ctx, c, paramID, *projID, r.(map[string]any))
-			if err != nil {
-				return diag.FromErr(err)
-			}
-		}
-	}
 
 	if retryError != nil {
 		return diag.FromErr(retryError)
+	}
+	for k, v := range rules {
+		_, err := addRuleToParam(ctx, c, paramID, *projID, k, v)
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 	d.SetId(paramID)
 	return nil
@@ -149,8 +135,8 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 // boolean base types cannot have rules
 // integer base types can have up to two rules: min and max
 // string base types can have up to three rules: min_len, max_len and regex
-func validateRules(ctx context.Context, c *cloudTruthClient, d *schema.ResourceData,
-	paramName string, paramType *cloudtruthapi.ParameterType) error {
+func validateAndFetchRules(ctx context.Context, c *cloudTruthClient, d *schema.ResourceData,
+	paramType *cloudtruthapi.ParameterType) (map[string]any, error) {
 	var baseParamTypeName string
 	baseParamType := paramType
 	for {
@@ -161,33 +147,45 @@ func validateRules(ctx context.Context, c *cloudTruthClient, d *schema.ResourceD
 			break
 		}
 	}
-	rules := d.Get("rule").([]any)
-	switch baseParamTypeName {
-	case "boolean":
-		return fmt.Errorf("the base type of the %s parameter is boolean, it does not support rules", paramName)
-	case "integer":
-		if len(rules) > 2 {
-			return fmt.Errorf("the base type of the %s parameter is integer, it accepts no more than two rules", paramName)
-		}
-	case "string":
-		if len(rules) > 3 {
-			return fmt.Errorf("the base type of the %s parameter is string, it accepts no more than three rules", paramName)
+	outRules := map[string]any{}
+	intRules := []string{"max", "min"}
+	for _, r := range intRules {
+		if val, ok := d.GetOk(r); ok {
+			if baseParamTypeName != "int" {
+				return nil, fmt.Errorf("the base type %s does not support the %s rule type", baseParamTypeName, r)
+			}
+			outRules[r] = val
 		}
 	}
-	return nil
+	stringRules := []string{"max_len", "min_len", "regex"}
+	for _, r := range stringRules {
+		if val, ok := d.GetOk(r); ok {
+			if baseParamTypeName != "string" {
+				return nil, fmt.Errorf("the base type %s does not support the %s rule type", baseParamTypeName, r)
+			} else {
+				outRules[r] = val
+			}
+		}
+	}
+	return outRules, nil
 }
 
-func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID string, rule map[string]any) (*string, error) {
+func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID string, ruleName string, ruleVal any) (*string, error) {
 	tflog.Debug(ctx, "addRuleToType")
 	retryCount := 0
 	var apiError error
 	var createTypeRule cloudtruthapi.ParameterRuleCreate
-	typeEnum, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(rule["type"].(string))
+	typeEnum, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(ruleName)
 	if err != nil {
 		return nil, err
 	}
 	createTypeRule.SetType(*typeEnum)
-	createTypeRule.SetConstraint(rule["constraint"].(string))
+	if ruleName == "regex" {
+		createTypeRule.SetConstraint(ruleVal.(string))
+	} else {
+		createTypeRule.SetConstraint(fmt.Sprintf("%d", ruleVal))
+	}
+
 	var paramRule *cloudtruthapi.ParameterRule
 	var r *http.Response
 	for retryCount < addRuleRetries {
