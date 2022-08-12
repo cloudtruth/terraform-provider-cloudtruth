@@ -86,7 +86,7 @@ func TestAccResourceParameterWithRules(t *testing.T) {
 			},
 			{
 				Config: testAccResourceParameterCreateIntegerWithRules(accTestProject, intResourceName, createIntegerParamName, paramDesc,
-					false, min, max),
+					false, updateMin, updateMax),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "name", createIntegerParamName),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "description", paramDesc),
