@@ -88,7 +88,7 @@ jobs:
       timeout-minutes: 45
       env:
         TF_ACC: "1"
-        TF_LOG: debug
+        # TF_LOG: debug
         TF_VAR_cloudtruth_api_key: ${{ secrets.ACCEPTANCE_TEST_TOKEN }}
         CLOUDTRUTH_API_KEY: ${{ secrets.ACCEPTANCE_TEST_TOKEN }} # for tests without provider defs
         CLOUDTRUTH_PROJECT: AcceptanceTest
