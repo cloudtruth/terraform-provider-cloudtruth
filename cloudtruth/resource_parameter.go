@@ -8,10 +8,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"golang.org/x/exp/slices"
 	"net/http"
 )
 
-var ruleTypes = [5]string{"max", "min", "max_len", "min_len", "regex"}
+var intRuleTypes = []string{"min", "max"}
+var stringRuletypes = []string{"min_len", "max_len", "regex"}
 
 func resourceParameter() *schema.Resource {
 	return &schema.Resource{
@@ -50,30 +52,33 @@ func resourceParameter() *schema.Resource {
 				Optional:    true, // Optional except when one or more rules are specified
 				Default:     "string",
 			},
-			"max": {
-				Description: "A CloudTruth rule constraint: the maximum value for an integer type, only valid with integer types",
-				Type:        schema.TypeInt,
-				Optional:    true,
-			},
-			"max_id": {
-				Description: "The internal ID of the max rule",
-				Type:        schema.TypeString,
-				Computed:    true,
-			},
 			"min": {
-				Description: "A CloudTruth rule constraint: the minimum value for an integer type, only valid with integer types",
-				Type:        schema.TypeInt,
-				Optional:    true,
+				Description:   "A CloudTruth rule constraint: the minimum value for an integer type, only valid with integer types",
+				Type:          schema.TypeInt,
+				Optional:      true,
+				ConflictsWith: []string{"min_len", "max_len", "regex"},
 			},
 			"min_id": {
 				Description: "The internal ID of the min rule",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
+			"max": {
+				Description:   "A CloudTruth rule constraint: the maximum value for an integer type, only valid with integer types",
+				Type:          schema.TypeInt,
+				Optional:      true,
+				ConflictsWith: []string{"min_len", "max_len", "regex"},
+			},
+			"max_id": {
+				Description: "The internal ID of the max rule",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
 			"max_len": {
-				Description: "A CloudTruth rule constraint: the maximum length for a string type, only valid with string types",
-				Type:        schema.TypeInt,
-				Optional:    true,
+				Description:   "A CloudTruth rule constraint: the maximum length for a string type, only valid with string types",
+				Type:          schema.TypeInt,
+				Optional:      true,
+				ConflictsWith: []string{"min", "max"},
 			},
 			"max_len_id": {
 				Description: "The internal ID of the max_len rule",
@@ -81,9 +86,10 @@ func resourceParameter() *schema.Resource {
 				Computed:    true,
 			},
 			"min_len": {
-				Description: "A CloudTruth rule constraint: the minimum length for a string type, only valid with string types",
-				Type:        schema.TypeInt,
-				Optional:    true,
+				Description:   "A CloudTruth rule constraint: the minimum length for a string type, only valid with string types",
+				Type:          schema.TypeInt,
+				Optional:      true,
+				ConflictsWith: []string{"min", "max"},
 			},
 			"min_len_id": {
 				Description: "The internal ID of the min_len rule",
@@ -91,9 +97,10 @@ func resourceParameter() *schema.Resource {
 				Computed:    true,
 			},
 			"regex": {
-				Description: "A CloudTruth rule constraint: the regular expression a string type must match, only valid with string types",
-				Type:        schema.TypeString,
-				Optional:    true,
+				Description:   "A CloudTruth rule constraint: the regular expression a string type must match, only valid with string types",
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"min", "max"},
 			},
 			"regex_id": {
 				Description: "The internal ID of the regex rule",
@@ -131,7 +138,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		paramCreate := paramCreateConfig(d)
+		paramCreate := paramCreateConfig(d, paramTypeName)
 		paramCreateResp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersCreate(ctx,
 			*projID).ParameterCreate(*paramCreate).Execute()
 		if err != nil {
@@ -169,6 +176,29 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 // string base types can have up to three rules: min_len, max_len and regex
 func validateAndFetchRules(ctx context.Context, c *cloudTruthClient, d *schema.ResourceData,
 	paramType *cloudtruthapi.ParameterType) (map[string]any, error) {
+	baseParamTypeName := getBaseParamType(ctx, paramType, c)
+	outRules := map[string]any{}
+	var validRules []string
+	if baseParamTypeName == "integer" {
+		validRules = intRuleTypes
+	} else if baseParamTypeName == "string" {
+		validRules = stringRuletypes
+	} else {
+		return nil, fmt.Errorf("the base type 'boolean' does not support rules")
+	}
+	for _, r := range append(intRuleTypes, stringRuletypes...) {
+		if val, ok := d.GetOk(r); ok {
+			if !slices.Contains(validRules, r) {
+				return nil, fmt.Errorf("the base type '%s' does not support the %s rule type", baseParamTypeName, r)
+			}
+			outRules[r] = val
+		}
+
+	}
+	return outRules, nil
+}
+
+func getBaseParamType(ctx context.Context, paramType *cloudtruthapi.ParameterType, c *cloudTruthClient) string {
 	var baseParamTypeName string
 	baseParamType := paramType
 	for {
@@ -179,27 +209,7 @@ func validateAndFetchRules(ctx context.Context, c *cloudTruthClient, d *schema.R
 			break
 		}
 	}
-	outRules := map[string]any{}
-	intRules := []string{"max", "min"}
-	for _, r := range intRules {
-		if val, ok := d.GetOk(r); ok {
-			if baseParamTypeName != "integer" {
-				return nil, fmt.Errorf("the base type %s does not support the %s rule type", baseParamTypeName, r)
-			}
-			outRules[r] = val
-		}
-	}
-	stringRules := []string{"max_len", "min_len", "regex"}
-	for _, r := range stringRules {
-		if val, ok := d.GetOk(r); ok {
-			if baseParamTypeName != "string" {
-				return nil, fmt.Errorf("the base type %s does not support the %s rule type", baseParamTypeName, r)
-			} else {
-				outRules[r] = val
-			}
-		}
-	}
-	return outRules, nil
+	return baseParamTypeName
 }
 
 func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID string, ruleName string, ruleVal any) (*string, error) {
@@ -222,10 +232,13 @@ func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID
 	var r *http.Response
 	for retryCount < addRuleRetries {
 		paramRule, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRulesCreate(ctx, paramID, projectID).ParameterRuleCreate(createTypeRule).Execute()
-		if r.StatusCode >= 500 {
+		if r.StatusCode >= http.StatusInternalServerError {
 			tflog.Debug(ctx, fmt.Sprintf("addRuleToType: %s", err))
 			apiError = err
 			retryCount++
+		} else if r.StatusCode >= 400 {
+			clientErr := err.(*cloudtruthapi.GenericOpenAPIError)
+			return nil, fmt.Errorf("client %d error: %s", r.StatusCode, clientErr.Body())
 		} else {
 			apiError = nil
 			break
@@ -238,13 +251,14 @@ func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID
 	return &ruleID, nil
 }
 
-func paramCreateConfig(d *schema.ResourceData) *cloudtruthapi.ParameterCreate {
+func paramCreateConfig(d *schema.ResourceData, paramType string) *cloudtruthapi.ParameterCreate {
 	paramName := d.Get("name").(string)
 	paramCreate := cloudtruthapi.NewParameterCreate(paramName)
 	paramDesc := d.Get("description").(string)
 	if paramDesc != "" {
 		paramCreate.SetDescription(paramDesc)
 	}
+	paramCreate.SetType(paramType)
 	isSecret := d.Get("secret").(bool)
 	paramCreate.SetSecret(isSecret)
 	return paramCreate
@@ -286,19 +300,29 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 	return nil
 }
 
-func updateParameter(ctx context.Context, paramID, projID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
+func updateParameter(ctx context.Context, paramID, projID string, paramTypeName string, d *schema.ResourceData,
+	c *cloudTruthClient) (*http.Response, error) {
 	patchedParam := cloudtruthapi.PatchedParameter{}
 	hasParamChange := false
+	paramType := c.lookupType(ctx, paramTypeName)
+	baseParamType := getBaseParamType(ctx, paramType, c)
+	var rules []string
+	if baseParamType == "integer" {
+		rules = intRuleTypes
+	} else if baseParamType == "string" {
+		rules = stringRuletypes
+	}
 	var updatedRules []string
-	for _, rule := range ruleTypes {
+
+	for _, rule := range rules {
 		if d.HasChange(rule) {
 			updatedRules = append(updatedRules, rule)
 		}
 	}
+
 	if len(updatedRules) > 0 {
 		for _, updatedRule := range updatedRules {
 			ruleID := d.Get(fmt.Sprintf("%s_id", updatedRule)).(string)
-			//todo: return this?
 			_, err := updateRule(ctx, paramID, projID, updatedRule, ruleID, d, c)
 			if err != nil {
 				return nil, err
@@ -329,12 +353,9 @@ func updateParameter(ctx context.Context, paramID, projID string, d *schema.Reso
 	return r, nil
 }
 
-// todo:
-// handle the update constraint case first
-// then the delete constraint case
 func updateRule(ctx context.Context, paramID, projID, ruleName, ruleID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
 	_, newVal := d.GetChange(ruleName)
-	// regex rule values are strings, all other integers
+	// regex rule values are strings, all others are integers
 	var ruleVal string
 	if ruleName == "regex" {
 		ruleVal = newVal.(string)
@@ -344,8 +365,6 @@ func updateRule(ctx context.Context, paramID, projID, ruleName, ruleID string, d
 	retryCount := 0
 	var apiError error
 	var ruleUpdateRequest cloudtruthapi.ApiProjectsParametersRulesUpdateRequest
-
-	// NewParameterRule(url string, id string, parameter string, type_ ParameterRuleTypeEnum, constraint string, createdAt time.Time, modifiedAt time.Time)
 	ruleType, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(ruleName)
 	if err != nil {
 		return nil, err
@@ -385,9 +404,10 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
 	}
 	paramName := d.Get("name").(string)
+	paramType := d.Get("type").(string)
 
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-		r, err := updateParameter(ctx, d.Id(), *projID, d, c)
+		r, err := updateParameter(ctx, d.Id(), *projID, paramType, d, c)
 		if err != nil {
 			outErr := fmt.Errorf("resourceParameterUpdate: error updating parameter level config for parameter %s: %w", paramName, err)
 			if r.StatusCode >= http.StatusInternalServerError {

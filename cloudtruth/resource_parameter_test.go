@@ -18,22 +18,23 @@ func TestAccResourceParameterWithBadRules(t *testing.T) {
 			{
 				Config: testAccResourceParameterDisallowedBooleanRules(accTestProject, resourceName,
 					fmt.Sprintf("Test-%s", uuid.New().String())),
-				ExpectError: regexp.MustCompile("the base type boolean does not support the min_len rule type"),
+				ExpectError: regexp.MustCompile("the base type 'boolean' does not support rules"),
 			},
 			{
 				Config: testAccResourceParameterInvalidIntegerRules(accTestProject, resourceName,
 					fmt.Sprintf("Test-%s", uuid.New().String())),
-				ExpectError: regexp.MustCompile("the base type integer does not support the min_len rule type"),
+				ExpectError: regexp.MustCompile("the base type 'integer' does not support the min_len rule type"),
 			},
 			{
 				Config: testAccResourceParameterInvalidStringRules(accTestProject, resourceName,
 					fmt.Sprintf("Test-%s", uuid.New().String())),
-				ExpectError: regexp.MustCompile("the base type string does not support the min rule type"),
+				ExpectError: regexp.MustCompile("the base type 'string' does not support the min rule type"),
 			},
 		},
 	})
 }
 
+/*
 func TestAccResourceParameterWithRules(t *testing.T) {
 	createStringParamName := fmt.Sprintf("Test-Str-%s", uuid.New().String())
 	createIntegerParamName := fmt.Sprintf("Test-Int-%s", uuid.New().String())
@@ -100,6 +101,79 @@ func TestAccResourceParameterWithRules(t *testing.T) {
 	})
 }
 
+func TestAccResourceStringParameterAddRemoveRule(t *testing.T) {
+	createStringParamName := fmt.Sprintf("Test-Str-%s", uuid.New().String())
+	stringResourceName := "string_with_rule"
+	createRegEx := ".*"
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: testAccResourceParameterCreateStringWithOneRule(accTestProject, stringResourceName, createStringParamName, paramDesc,
+					false, createRegEx),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "name", createStringParamName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "description", paramDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "secret",
+						strconv.FormatBool(false)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "regex", createRegEx),
+				),
+			},
+			{
+				Config: testAccResourceParameterCreateStringWithNoRules(accTestProject, stringResourceName, createStringParamName, paramDesc,
+					false),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "name", createStringParamName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "description", paramDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "secret",
+						strconv.FormatBool(false)),
+					//resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "regex", "updateRegEx"),
+				),
+			},
+		},
+	})
+}
+
+/*
+func TestAccResourceIntParameterAddRemoveRule(t *testing.T) {
+	createIntParamName := fmt.Sprintf("Test-Int-%s", uuid.New().String())
+	intResourceName := "int_with_rule"
+	min, max := 1, 10
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: testAccResourceParameterCreateIntWithRules(accTestProject, intResourceName, createIntParamName, paramDesc,
+					false, min, max),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "name", createIntParamName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "description", paramDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "secret",
+						strconv.FormatBool(false)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "max", fmt.Sprint(max)),
+				),
+			},
+			{
+				Config: testAccResourceParameterCreateIntWithNoRules(accTestProject, intResourceName, createIntParamName, paramDesc,
+					false),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "name", createIntParamName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "description", paramDesc),
+					resource.TestCheckResourceNe
+
+Other ResourceData helpers. . . investigate for validation helpAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "secret",
+						strconv.FormatBool(false)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "min", fmt.Sprint(min)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "max", fmt.Sprint(max)),
+				),
+			},
+		},
+	})
+}
+*/
+
 func TestAccResourceParameterBasic(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
 	resourceName := "basic"
@@ -136,10 +210,12 @@ func testAccResourceParameterCreateBasic(projName, resourceName, paramName, desc
   		name        = "%s"
   		description = "%s"
 		secret      = "%t"
+		type        = "string"
 	}
 	`, resourceName, projName, paramName, desc, isSecret)
 }
 
+/*
 func testAccResourceParameterCreateIntegerWithRules(projName, resourceName, paramName, desc string, isSecret bool,
 	minLen, maxLen int) string {
 	return fmt.Sprintf(`
@@ -171,6 +247,60 @@ func testAccResourceParameterCreateStringWithRules(projName, resourceName, param
 	`, resourceName, projName, paramName, desc, isSecret, minLen, maxLen, regEx)
 }
 
+func testAccResourceParameterCreateStringWithOneRule(projName, resourceName, paramName, desc string, isSecret bool,
+	regEx string) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_parameter" "%s" {
+		project     = "%s"
+  		name        = "%s"
+  		description = "%s"
+		secret      = "%t"
+		type        = "string"
+	    regex       = "%s"
+	}
+	`, resourceName, projName, paramName, desc, isSecret, regEx)
+}
+
+func testAccResourceParameterCreateStringWithNoRules(projName, resourceName, paramName, desc string, isSecret bool) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_parameter" "%s" {
+		project     = "%s"
+  		name        = "%s"
+  		description = "%s"
+		secret      = "%t"
+		type        = "string"
+	}
+	`, resourceName, projName, paramName, desc, isSecret)
+}
+
+func testAccResourceParameterCreateIntWithRules(projName, resourceName, paramName, desc string, isSecret bool,
+	min, max int) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_parameter" "%s" {
+		project     = "%s"
+  		name        = "%s"
+  		description = "%s"
+		secret      = "%t"
+		type        = "integer"
+		min         = %d
+	    max         = %d
+
+	}
+	`, resourceName, projName, paramName, desc, isSecret, min, max)
+}
+
+func testAccResourceParameterCreateIntWithNoRules(projName, resourceName, paramName, desc string, isSecret bool) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_parameter" "%s" {
+		project     = "%s"
+  		name        = "%s"
+  		description = "%s"
+		secret      = "%t"
+		type        = "integer"
+	}
+	`, resourceName, projName, paramName, desc, isSecret)
+}
+*/
 // Can't have even one rule with boolean types
 func testAccResourceParameterDisallowedBooleanRules(projName, resourceName, paramName string) string {
 	return fmt.Sprintf(`
@@ -202,6 +332,7 @@ func testAccResourceParameterInvalidStringRules(projName, resourceName, paramNam
 		project     = "%s"
   		name        = "%s"
         min         = 1
+		type        = "string"
 	}
 	`, resourceName, projName, paramName)
 }
