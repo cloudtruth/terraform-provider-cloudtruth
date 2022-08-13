@@ -40,7 +40,7 @@ func TestAccResourceParameterWithRules(t *testing.T) {
 	createMinLen, createMaxLen := 1, 10
 	createRegEx := ".*"
 	updateMinLen, updateMaxLen := 0, 11
-	updateRegEx := `\\d+`
+	updateRegEx := `123.*`
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -68,8 +68,7 @@ func TestAccResourceParameterWithRules(t *testing.T) {
 						strconv.FormatBool(false)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "rule.0.constraint", fmt.Sprint(updateMinLen)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "rule.1.constraint", fmt.Sprint(updateMaxLen)),
-					// todo: fix this check
-					//resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "rule.2.constraint", updateRegEx),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "rule.2.constraint", updateRegEx),
 				),
 			},
 		},
