@@ -135,7 +135,7 @@ func TestAccResourceStringParameterAddRemoveRule(t *testing.T) {
 	})
 }
 
-/*
+*/
 func TestAccResourceIntParameterAddRemoveRule(t *testing.T) {
 	createIntParamName := fmt.Sprintf("Test-Int-%s", uuid.New().String())
 	intResourceName := "int_with_rule"
@@ -161,9 +161,7 @@ func TestAccResourceIntParameterAddRemoveRule(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "name", createIntParamName),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "description", paramDesc),
-					resource.TestCheckResourceNe
-
-Other ResourceData helpers. . . investigate for validation helpAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "secret",
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "secret",
 						strconv.FormatBool(false)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "min", fmt.Sprint(min)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "max", fmt.Sprint(max)),
@@ -172,7 +170,6 @@ Other ResourceData helpers. . . investigate for validation helpAttr(fmt.Sprintf(
 		},
 	})
 }
-*/
 
 func TestAccResourceParameterBasic(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
@@ -272,6 +269,7 @@ func testAccResourceParameterCreateStringWithNoRules(projName, resourceName, par
 	}
 	`, resourceName, projName, paramName, desc, isSecret)
 }
+*/
 
 func testAccResourceParameterCreateIntWithRules(projName, resourceName, paramName, desc string, isSecret bool,
 	min, max int) string {
@@ -300,7 +298,7 @@ func testAccResourceParameterCreateIntWithNoRules(projName, resourceName, paramN
 	}
 	`, resourceName, projName, paramName, desc, isSecret)
 }
-*/
+
 // Can't have even one rule with boolean types
 func testAccResourceParameterDisallowedBooleanRules(projName, resourceName, paramName string) string {
 	return fmt.Sprintf(`
