@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-const addRuleRetries = 5
+const ruleOperationRetries = 5
 
 func resourceType() *schema.Resource {
 	return &schema.Resource{
@@ -49,6 +49,7 @@ Also see the examples for how to define multiple rule blocks.`,
 				Elem: &schema.Resource{
 					Schema: ruleSchema,
 				},
+				Deprecated: "This property will be replaced with top level properties: max/min/regex, just like the 'cloudtruth_parameter' resource",
 			},
 		},
 	}
@@ -116,7 +117,7 @@ func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, rule
 	createTypeRule.SetType(*typeEnum)
 	createTypeRule.SetConstraint(rule["constraint"].(string))
 
-	for retryCount < addRuleRetries {
+	for retryCount < ruleOperationRetries {
 		_, r, err := c.openAPIClient.TypesApi.TypesRulesCreate(ctx, typeID).ParameterTypeRuleCreate(createTypeRule).Execute()
 		if r.StatusCode >= http.StatusInternalServerError {
 			tflog.Debug(ctx, fmt.Sprintf("addRuleToType: %s", err))

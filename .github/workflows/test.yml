@@ -85,7 +85,7 @@ jobs:
         go mod download
 
     - name: TF acceptance tests
-      timeout-minutes: 45
+      timeout-minutes: 60
       env:
         TF_ACC: "1"
         TF_LOG: debug
@@ -94,4 +94,4 @@ jobs:
         CLOUDTRUTH_PROJECT: AcceptanceTest
         CLOUDTRUTH_ENVIRONMENT: default
       run: |
-        go test -timeout 45m -v -cover ./cloudtruth
+        go test -timeout 60m -v -cover ./cloudtruth
