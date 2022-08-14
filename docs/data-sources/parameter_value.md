@@ -17,12 +17,12 @@ A CloudTruth parameter value data source
 
 ### Required
 
-- `parameter_name` (String) The name of the CloudTruth Parameter
+- `parameter_name` (String) The name of the CloudTruth Parameter where this value is stored
 
 ### Optional
 
 - `as_of` (String) Retrieve the parameter value 'as of' the specified RFC3333 date, mutually exclusive with 'tag'
-- `environment` (String) The CloudTruth environment containing the Paramter Value
+- `environment` (String) The CloudTruth environment containing the Parameter Value
 - `project` (String) The CloudTruth project
 - `tag` (String) Retrieve the parameter value that matches a specific tag, mutually exclusive with 'as_of'
 

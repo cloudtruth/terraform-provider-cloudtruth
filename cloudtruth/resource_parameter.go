@@ -60,7 +60,7 @@ the empty string value for that purpose.`,
 				Default:  "",
 			},
 			"min_id": {
-				Description: "The internal ID of the min  rule",
+				Description: "The internal ID of the min rule",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},

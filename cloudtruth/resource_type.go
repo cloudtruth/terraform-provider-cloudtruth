@@ -41,7 +41,7 @@ func resourceType() *schema.Resource {
 			// The singular name is not ideal but a limitation for now, until we use the new (and still experimental)
 			// plugin framework, see https://stackoverflow.com/a/70023725/1354026
 			"rule": {
-				Description: `The rule(s) describing allowable values for a parameter of this type. Add separate blocks per rule. 
+				Description: `The rule(s) describing allowable values for a parameter of this type. Add separate blocks per rule.
 Note that string types support max_len|min_len|regex rules, integers support min|max rules and booleans don't support any rules.
 Also see the examples for how to define multiple rule blocks.`,
 				Type:     schema.TypeList,

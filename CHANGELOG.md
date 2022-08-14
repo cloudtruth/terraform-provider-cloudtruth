@@ -1,66 +1,77 @@
+## 0.4.0 (August 14, 2022)
+
+**FEATURES**
+* The cloudtruth_parameter resource now supports max/min length and regex rules for string types and max/min rules for integer types.
+* The cloudtruth_parameter_value resource is a new resource which corresponds to an environment specific value for a parameter. The provider resources cloudtruth_parameter and
+cloudtruth_parameter_value correspond to their counterparts in the CloudTruth API. Until now, a cloudtruth_parameter resource represented both a parameter and all of its contained values.
+
+**ENHANCEMENTS**
+* Better error messages for client side errors e.g. when the TF provider is attempting to create a resource which already exists in the CloudTruth project (name collision).
+
+**DEPRECATIONS**
+* The cloudtruth_parameter and cloudtruth_parameters data sources have been renamed to 'cloudtruth_parameter_value' and 'cloudtruth_parameter_values' to reflect that they are environment
+specific. This change also maintains consistency with the recent change to break out the cloudtruth_parameter_value resource from the cloudtruth_parameter resource.
+
+* The rules property in the cloudtruth_type resource will be changing to match the flattened rule properties that the cloudtruth_parameter resource uses. Instead of being a nested
+list of objects, rules will be represented with max/min/regex fields where max/min are either string length limits for string based types or value limits for integer based types. Regex
+rules are only applicable for string based types. As with parameters, boolean types do not currently support rules.
+
 ## 0.3.6 (July 27, 2022)
 
-FEATURES:
+**FEATURES**
 * cloudtruth_type resource for managing custom parameter types
 
-BUG FIXES:
+**BUG FIXES**
 * fixed a panic when client initialization requests return 4xx errors e.g. 401 Unauthorized
 
-ENHANCEMENTS:
+**ENHANCEMENTS**
 * Parallelized cache loading during client initialization
 * Improved retry logic
 
-DEPRECATIONS:
+**DEPRECATIONS**
 * The environment, value, dynamic, external, location and filter fields will be removed from the cloudtruth_parameter resource in the next minor point release to allow for the provider to support a new cloudtruth_parameter_value resource which, together with cloudtruth_parameter, will map directly to the backing API constructs and allow for a cleaner/decoupled implementation of additional Parameter and Parameter Value support.
 
 ## 0.3.5 (July 22, 2022)
 
-FEATURES:
+**FEATURES**
 * cloudtruth_user and cloudtruth_users (all org users) data sources.
 * cloudtruth_access_grant resource for assigning owner/admin/contributor/viewer access to
 a user or group (of users) for a target environment or project
 
 ## 0.3.3 (July 15, 2022)
 
-FEATURES:
-
+**FEATURES**
 * as_of and tag support for the cloudtruth_parameter data source.
 * cloudtruth_group resource for users and service accounts
 
-ENHANCEMENTS:
-
+**ENHANCEMENTS**
 * Retry logic for all API operations
 
 ## 0.3.1 (July 3, 2022)
 
-FEATURES:
-
+**FEATURES**
 * Support for tags as data sources and resources
 
-ENHANCEMENTS:
-
+**ENHANCEMENTS**
 * Lint and format pre-commit hook
 * Various doc updates
 
 ## 0.3.0 (June 28, 2022)
 
-BUG FIXES:
-
+**BUG FIXES**
 * https://github.com/cloudtruth/terraform-provider-cloudtruth/issues/8 - the provider handles nested environments and projects correctly now, allowing multiple levels of nesting in an initial apply.
 
 
 ## 0.2.0 (June 24, 2022)
 
-BUG FIXES:
-
+**BUG FIXES**
 * The provider returns an error now with `cloudtruth_parameter` and `cloudtruth_template` data sources which don't exist instead of panicking.
 
-FEATURES:
-
+**FEATURES**
 * Support for external parameters
 
 
 ## 0.1.0 (June 21, 2022)
 
-Initial release
+**Initial release**
 

@@ -23,7 +23,7 @@ A CloudTruth Type, a user-defined type which can be used to create CloudTruth Pa
 ### Optional
 
 - `description` (String) A description of the CloudTruth Type
-- `rule` (Block List) The rule(s) describing allowable values for a parameter of this type. Add separate blocks per rule. 
+- `rule` (Block List, Deprecated) The rule(s) describing allowable values for a parameter of this type. Add separate blocks per rule.
 Note that string types support max_len|min_len|regex rules, integers support min|max rules and booleans don't support any rules.
 Also see the examples for how to define multiple rule blocks. (see [below for nested schema](#nestedblock--rule))
 

@@ -22,22 +22,22 @@ A CloudTruth Parameter and environment specific value (defaulting to the 'defaul
 ### Optional
 
 - `description` (String) Description of the CloudTruth Parameter
+- `max` (String) A rule constraint: the maximum value for integer types, the maximum length for string types.
+This value is specified as a string because we need a reliable way to distinguish between default/zero values and unset values.  We use
+the empty string value for that purpose.
+- `min` (String) A rule constraint: the minimum value for integer types, the minimum length for string types.
+This value is specified as a string because we need a reliable way to distinguish between default/zero values and unset values.  We use
+the empty string value for that purpose.
 - `project` (String) The CloudTruth project where the Parameter is defined
-- `rule` (Block List) The rule(s) describing allowable values for a parameter of this type. Add separate blocks per rule. 
-Note that string types support max_len|min_len|regex rules, integets support min|max rules and booleans don't support any rules.' (see [below for nested schema](#nestedblock--rule))
+- `regex` (String) A CloudTruth rule constraint: the regular expression a string type must match, only valid with string types
 - `secret` (Boolean) Whether or not the Parameter is a secret, defaults to false (non-secret)
 - `type` (String) The parameter type, can be a builtin (string|int|boolean) or another custom type
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
-
-<a id="nestedblock--rule"></a>
-### Nested Schema for `rule`
-
-Required:
-
-- `constraint` (String) The limiting value of the rule as a string e.g. '1' for max_len|min_len|max|min rule types or '.*' for a regex rule type
-- `type` (String) The type of rule, for strings: max_len|min_len|regex. For integers: max|min. Booleans do not support rules
+- `max_id` (String) The internal ID of the max rule
+- `min_id` (String) The internal ID of the min rule
+- `regex_id` (String) The internal ID of the regex rule
 
 
