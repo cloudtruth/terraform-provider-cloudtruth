@@ -49,7 +49,6 @@ func resourceEnvironment() *schema.Resource {
 
 func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceEnvironmentCreate")
-	var diags diag.Diagnostics
 	c := meta.(*cloudTruthClient)
 	envName := d.Get("name").(string)
 	envDesc := d.Get("description").(string)
@@ -86,7 +85,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	envID := resp.GetId()
 	d.SetId(envID)
 	c.addNewEnvToCaches(envName, envID)
-	return diags
+	return nil
 }
 
 func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {

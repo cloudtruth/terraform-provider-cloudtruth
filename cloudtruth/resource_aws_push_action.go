@@ -66,11 +66,13 @@ func resourceAWSPushAction() *schema.Resource {
 				Description: "The projects containing the parameters to pushed to the AWS destination",
 				Type:        schema.TypeList,
 				Required:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"tags": {
 				Description: "The environment tags specifying the sync point for parameters to be pushed (multiple allowed, but only one per environment)",
 				Type:        schema.TypeList,
 				Required:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"region": {
 				Description: "The target AWS region",
@@ -85,8 +87,7 @@ func resourceAWSPushAction() *schema.Resource {
 			"resource": {
 				Description: "The regex or mustache resource pattern specifying the environment, project, and parameter",
 				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     true,
+				Required:    true,
 			},
 		},
 	}
