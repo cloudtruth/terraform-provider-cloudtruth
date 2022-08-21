@@ -28,8 +28,6 @@ const (
 	paramDesc               = "Just a description of a parameter"
 	updateParamDesc         = "A new description of an parameter"
 	genericDesc             = "A generic description"
-	defaultAWSRegion        = "us-east-1"
-	defaultImportPath       = "/{{ environment }}/{{ project }}/{{ parameter }}"
 	stagingParamVal         = "A useful string only in staging"
 	stagingParamValUpdate   = "An updated & useful string only in staging"
 	prodParamVal            = "A useful string only in production"

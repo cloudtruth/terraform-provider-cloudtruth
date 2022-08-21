@@ -10,16 +10,33 @@ import (
 func TestAccResourceAWSImportActionBasic(t *testing.T) {
 	resourceName := "basic"
 	importActionName := fmt.Sprintf("TestAWSImport-%s", uuid.New().String())
-
+	createService := "secretsmanager"
+	createRegion := "us-east-1"
+	createImportPattern, updateImportPattern := "/{{ environment }}/{{ project }}/{{ parameter }}", "/some_prefix/{{ environment }}/{{ project }}/{{ parameter }}"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
 				Config: testAccResourceAWSImportActionBasic(resourceName, importActionName, accTestAWSIntegrationID, genericDesc, true, true,
-					defaultAWSRegion, "secretsmanager", defaultImportPath),
+					createRegion, createService, createImportPattern),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "name", importActionName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "create_environments", fmt.Sprint(true)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "create_projects", fmt.Sprint(true)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "region", createRegion),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "service", createService),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "resource_pattern", createImportPattern),
+				),
+			},
+			{
+				Config: testAccResourceAWSImportActionBasic(resourceName, importActionName, accTestAWSIntegrationID, genericDesc, false, false,
+					createRegion, createService, updateImportPattern),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "name", importActionName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "create_environments", fmt.Sprint(false)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "create_projects", fmt.Sprint(false)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "resource_pattern", updateImportPattern),
 				),
 			},
 		},

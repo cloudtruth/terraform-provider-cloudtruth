@@ -94,25 +94,21 @@ func resourceAWSPushAction() *schema.Resource {
 }
 
 func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	//c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceAWSPushActionCreate")
 	return nil
 }
 
 func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	//c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceAWSPushActionRead")
 	return nil
 }
 
 func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	//c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceAWSPushActionUpdate")
 	return resourceAWSPushActionRead(ctx, d, meta)
 }
 
 func resourceAWSPushActionDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	//c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceAWSPushActionDelete")
 	return nil
 }
