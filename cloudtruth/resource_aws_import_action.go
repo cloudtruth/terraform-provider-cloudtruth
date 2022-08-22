@@ -13,7 +13,7 @@ import (
 
 func resourceAWSImportAction() *schema.Resource {
 	return &schema.Resource{
-		Description: `A CloudTruth import action..`,
+		Description: `A CloudTruth import action.`,
 
 		CreateContext: resourceAWSImportActionCreate,
 		ReadContext:   resourceAWSImportActionRead,

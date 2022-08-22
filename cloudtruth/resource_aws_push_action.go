@@ -2,14 +2,18 @@ package cloudtruth
 
 import (
 	"context"
+	"fmt"
+	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"net/http"
 )
 
 func resourceAWSPushAction() *schema.Resource {
 	return &schema.Resource{
-		Description: `A CloudTruth import action..`,
+		Description: `A CloudTruth push action.`,
 
 		CreateContext: resourceAWSPushActionCreate,
 		ReadContext:   resourceAWSPushActionRead,
@@ -18,7 +22,7 @@ func resourceAWSPushAction() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Description: "The name of the import action",
+				Description: "The name of the push action",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
@@ -28,7 +32,7 @@ func resourceAWSPushAction() *schema.Resource {
 				Required:    true,
 			},
 			"description": {
-				Description: "A description of the import action",
+				Description: "A description of the push action",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
@@ -84,7 +88,7 @@ func resourceAWSPushAction() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			"resource": {
+			"resource_pattern": {
 				Description: "The regex or mustache resource pattern specifying the environment, project, and parameter",
 				Type:        schema.TypeString,
 				Required:    true,
@@ -95,6 +99,60 @@ func resourceAWSPushAction() *schema.Resource {
 
 func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceAWSPushActionCreate")
+	c := meta.(*cloudTruthClient)
+	pushActionCreate := cloudtruthapi.NewAwsPushWithDefaults()
+	pushActionName := d.Get("name").(string)
+	awsIntegrationID := d.Get("integration_id").(string)
+	pushActionDesc := d.Get("description").(string)
+	pushActionCreate.SetName(pushActionName)
+	pushActionCreate.SetDescription(pushActionDesc)
+	region, err := cloudtruthapi.NewAwsRegionEnumFromValue(d.Get("region").(string))
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	// todo:
+	// add the remaining push action properties and refactor
+	service, err := cloudtruthapi.NewAwsServiceEnumFromValue(d.Get("service").(string))
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	resourcePath := d.Get("resource_pattern").(string)
+	pushActionCreate.SetRegion(*region)
+	pushActionCreate.SetService(*service)
+	pushActionCreate.SetResource(resourcePath)
+	rawProjects := d.Get("projects").([]interface{})
+	projects := make([]string, len(rawProjects))
+	for i, v := range projects {
+		projects[i] = fmt.Sprint(v)
+	}
+	pushActionCreate.SetProjects(projects)
+	rawTags := d.Get("tags").([]interface{})
+	tags := make([]string, len(rawTags))
+	for i, v := range tags {
+		tags[i] = fmt.Sprint(v)
+	}
+	pushActionCreate.SetTags(tags)
+
+	var resp *cloudtruthapi.AwsPush
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesCreate(ctx, awsIntegrationID).AwsPush(*pushActionCreate).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceAWSPushActionCreate: error creating AWS push action %s: %w", pushActionName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
+
+	d.SetId(resp.GetId())
 	return nil
 }
 
@@ -110,5 +168,27 @@ func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, me
 
 func resourceAWSPushActionDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceAWSPushActionDelete")
+	c := meta.(*cloudTruthClient)
+	pushActionName := d.Get("name").(string)
+	pushActionID := d.Id()
+	awsIntegrationID := d.Get("integration_id").(string)
+
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesDestroy(ctx, awsIntegrationID, pushActionID).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceAWSPushActionDelete: error destroying AWS push action %s: %w", pushActionName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
 	return nil
 }

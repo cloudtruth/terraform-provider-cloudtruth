@@ -43,7 +43,7 @@ func TestAccResourceAWSImportActionBasic(t *testing.T) {
 	})
 }
 
-func testAccResourceAWSImportActionBasic(resource, name, intID, desc string, createEnvs, createProjs bool, region, service, resource_pattern string) string {
+func testAccResourceAWSImportActionBasic(resource, name, intID, desc string, createEnvs, createProjs bool, region, service, resourcePattern string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_aws_import_action" "%s" {
   		name                 = "%s"
@@ -55,5 +55,5 @@ func testAccResourceAWSImportActionBasic(resource, name, intID, desc string, cre
 		service              = "%s"
 		resource_pattern     = "%s"
 	}
-	`, resource, name, intID, desc, createEnvs, createProjs, region, service, resource_pattern)
+	`, resource, name, intID, desc, createEnvs, createProjs, region, service, resourcePattern)
 }
