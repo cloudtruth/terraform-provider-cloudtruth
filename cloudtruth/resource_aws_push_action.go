@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
+	"strings"
 )
 
 func resourceAWSPushAction() *schema.Resource {
@@ -36,36 +37,43 @@ func resourceAWSPushAction() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"coerce_parameters": {
-				Description: "Auto create environments",
+			"parameters": {
+				Description: "Include parameters (non-secrets) when pushing, defaults to true",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
 			},
-			"include_parameters": {
-				Description: "Include parameters (non-secrets) when pushing",
+			"secrets": {
+				Description: "Include secrets when pushing, defaults to true",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+			},
+			"templates": {
+				Description: "Include templates when pushing, defaults to true",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
 			},
 			"coerce": {
-				Description: "Include secrets/parameters even if the upstream destination doesn't allow them (e.g. non-secrets in AWS SecretsManager)",
+				Description: "Include secrets/parameters even if the upstream destination doesn't allow them (e.g. non-secrets in AWS SecretsManager), defaults to false",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
 			},
 			"force": {
-				Description: "Allow CloudTruth to take ownership and overwrite any pre-existing items",
+				Description: "Allow CloudTruth to take ownership and overwrite any pre-existing items, defaults to false",
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Default:     true,
+				Default:     false,
 			},
 			"local": {
-				Description: "Only send the parameters defined directly in the specified projects (not inherited)",
+				Description: "Only send the parameters defined directly in the specified projects (not inherited), defaults to false",
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Default:     true,
+				Default:     false,
 			},
+
 			"projects": {
 				Description: "The projects containing the parameters to pushed to the AWS destination",
 				Type:        schema.TypeList,
@@ -73,7 +81,7 @@ func resourceAWSPushAction() *schema.Resource {
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"tags": {
-				Description: "The environment tags specifying the sync point for parameters to be pushed (multiple allowed, but only one per environment)",
+				Description: "Tags specified in the form 'environment_name:tag_name' indicating the sync point for parameters to be pushed (multiple tags allowed but only one per environment)",
 				Type:        schema.TypeList,
 				Required:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
@@ -110,8 +118,6 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	// todo:
-	// add the remaining push action properties and refactor
 	service, err := cloudtruthapi.NewAwsServiceEnumFromValue(d.Get("service").(string))
 	if err != nil {
 		return diag.FromErr(err)
@@ -123,15 +129,29 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	rawProjects := d.Get("projects").([]interface{})
 	projects := make([]string, len(rawProjects))
 	for i, v := range projects {
-		projects[i] = fmt.Sprint(v)
+		projID, err := c.lookupProject(ctx, fmt.Sprint(v))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		projURL := fmt.Sprintf("https://api.cloudtruth.io/api/v1/projects/%s/", *projID)
+		projects[i] = projURL
 	}
 	pushActionCreate.SetProjects(projects)
 	rawTags := d.Get("tags").([]interface{})
 	tags := make([]string, len(rawTags))
-	for i, v := range tags {
-		tags[i] = fmt.Sprint(v)
+	for i, v := range rawTags {
+		tags[i], err = lookupEnvTag(ctx, d, c, fmt.Sprint(v))
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 	pushActionCreate.SetTags(tags)
+	pushActionCreate.SetIncludeParameters(d.Get("parameters").(bool))
+	pushActionCreate.SetIncludeSecrets(d.Get("secrets").(bool))
+	pushActionCreate.SetIncludeTemplates(d.Get("templates").(bool))
+	pushActionCreate.SetCoerceParameters(d.Get("coerce").(bool))
+	pushActionCreate.SetForce(d.Get("force").(bool))
+	pushActionCreate.SetLocal(d.Get("local").(bool))
 
 	var resp *cloudtruthapi.AwsPush
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
@@ -158,11 +178,140 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 
 func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceAWSPushActionRead")
+	c := meta.(*cloudTruthClient)
+	awsIntegrationID := d.Get("integration_id").(string)
+	importActionName := d.Get("name").(string)
+	importActionID := d.Id()
+
+	var resp *cloudtruthapi.AwsPush
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesRetrieve(ctx, awsIntegrationID, importActionID).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("resourceAWSPushActionRead: error reading AWS import action %s: %w", importActionName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
+
+	d.SetId(resp.GetId())
 	return nil
+}
+
+func lookupEnvTag(ctx context.Context, d *schema.ResourceData, c *cloudTruthClient, envTag string) (string, error) {
+	tflog.Debug(ctx, "lookupEnvTag")
+	if !strings.Contains(envTag, ":") {
+		return "", fmt.Errorf("the tag %s is invalid, it must be specified using the form 'environment_name:tag_name'", envTag)
+	}
+	et := strings.Split(envTag, ":")
+	env, tagName := et[0], et[1]
+	envID, err := c.lookupEnvironment(ctx, env)
+	if err != nil {
+		return "", fmt.Errorf("lookupEnvTag: %w", err)
+	}
+
+	var resp *cloudtruthapi.PaginatedTagList
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+		var r *http.Response
+		resp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsList(ctx, *envID).Name(tagName).Execute()
+		if err != nil {
+			outErr := fmt.Errorf("lookupEnvTag: error looking up tag %s: %w", tagName, err)
+			if r.StatusCode >= http.StatusInternalServerError {
+				return resource.RetryableError(outErr)
+			} else {
+				return resource.NonRetryableError(outErr)
+			}
+		}
+		return nil
+	})
+
+	if retryError != nil {
+		return "", retryError
+	}
+	// There should only be one tag with the specified per environment
+	results := resp.GetResults()
+	tag := results[0]
+	tagID := tag.GetId()
+	return tagID, nil
 }
 
 func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceAWSPushActionUpdate")
+	c := meta.(*cloudTruthClient)
+	pushActionName := d.Get("name").(string)
+	pushActionID := d.Id()
+	awsIntegrationID := d.Get("integration_id").(string)
+	patchedAWSPush := cloudtruthapi.PatchedAwsPushUpdate{}
+	hasChange := false
+	props := map[string]func(v string){
+		"name":             patchedAWSPush.SetName,
+		"description":      patchedAWSPush.SetDescription,
+		"resource_pattern": patchedAWSPush.SetResource,
+	}
+	for prop := range props {
+		if d.HasChange(prop) {
+			props[prop](d.Get(prop).(string))
+			hasChange = true
+		}
+	}
+	boolProps := map[string]func(v bool){
+		"parameters": patchedAWSPush.SetIncludeParameters,
+		"secrets":    patchedAWSPush.SetIncludeSecrets,
+		"templates":  patchedAWSPush.SetIncludeTemplates,
+		"coerce":     patchedAWSPush.SetCoerceParameters,
+		"force":      patchedAWSPush.SetForce,
+		"local":      patchedAWSPush.SetLocal,
+	}
+	for prop := range boolProps {
+		if d.HasChange(prop) {
+			boolProps[prop](d.Get(prop).(bool))
+			hasChange = true
+		}
+	}
+
+	if d.HasChange("tags") {
+		rawTags := d.Get("tags").([]interface{})
+		tags := make([]string, len(rawTags))
+		var err error
+		for i, v := range rawTags {
+			tags[i], err = lookupEnvTag(ctx, d, c, fmt.Sprint(v))
+			if err != nil {
+				return diag.FromErr(err)
+			}
+		}
+		patchedAWSPush.SetTags(tags)
+		hasChange = true
+	}
+
+	if hasChange {
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+			var r *http.Response
+			var err error
+			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesPartialUpdate(ctx, awsIntegrationID,
+				pushActionID).PatchedAwsPushUpdate(patchedAWSPush).Execute()
+			if err != nil {
+				outErr := fmt.Errorf("resourceAWSPushActionUpdate: error updating environment %s: %w", pushActionName, err)
+				if r.StatusCode >= http.StatusInternalServerError {
+					return resource.RetryableError(outErr)
+				} else {
+					return resource.NonRetryableError(outErr)
+				}
+			}
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
+		}
+	}
+	d.SetId(pushActionID)
 	return resourceAWSPushActionRead(ctx, d, meta)
 }
 

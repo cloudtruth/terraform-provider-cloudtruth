@@ -3,12 +3,12 @@
 page_title: "cloudtruth_aws_import_action Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A CloudTruth import action..
+  A CloudTruth import action.
 ---
 
 # cloudtruth_aws_import_action (Resource)
 
-A CloudTruth import action..
+A CloudTruth import action.
 
 
 

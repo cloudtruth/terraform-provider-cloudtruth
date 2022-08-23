@@ -127,7 +127,7 @@ func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, me
 		var err error
 		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsRetrieve(ctx, awsIntegrationID, importActionID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceAccessGrantRead: error reading AWS import action %s: %w", importActionName, err)
+			outErr := fmt.Errorf("resourceAWSImportActionRead: error reading AWS import action %s: %w", importActionName, err)
 			if r.StatusCode >= http.StatusInternalServerError {
 				return resource.RetryableError(outErr)
 			} else {
@@ -179,7 +179,7 @@ func resourceAWSImportActionUpdate(ctx context.Context, d *schema.ResourceData, 
 			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsPartialUpdate(ctx, awsIntegrationID,
 				importActionID).PatchedAwsPull(patchedAWSPull).Execute()
 			if err != nil {
-				outErr := fmt.Errorf("resourceEnvironmentUpdate: error updating environment %s: %w", importActionName, err)
+				outErr := fmt.Errorf("resourceAWSImportActionUpdate: error updating environment %s: %w", importActionName, err)
 				if r.StatusCode >= http.StatusInternalServerError {
 					return resource.RetryableError(outErr)
 				} else {
