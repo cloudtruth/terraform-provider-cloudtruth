@@ -73,7 +73,12 @@ func resourceAWSPushAction() *schema.Resource {
 				Optional:    true,
 				Default:     false,
 			},
-
+			"dry_run": {
+				Description: "When true, the action only reports what it would push without actually pushing changes, defaults to true",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+			},
 			"projects": {
 				Description: "The projects containing the parameters to pushed to the AWS destination",
 				Type:        schema.TypeList,
@@ -269,6 +274,7 @@ func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, me
 		"coerce":     patchedAWSPush.SetCoerceParameters,
 		"force":      patchedAWSPush.SetForce,
 		"local":      patchedAWSPush.SetLocal,
+		"dry_run":    patchedAWSPush.SetDryRun,
 	}
 	for prop := range boolProps {
 		if d.HasChange(prop) {

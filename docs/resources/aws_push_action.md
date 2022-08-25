@@ -29,6 +29,7 @@ A CloudTruth push action.
 
 - `coerce` (Boolean) Include secrets/parameters even if the upstream destination doesn't allow them (e.g. non-secrets in AWS SecretsManager), defaults to false
 - `description` (String) A description of the push action
+- `dry_run` (Boolean) When true, the action only reports what it would push without actually pushing changes, defaults to true
 - `force` (Boolean) Allow CloudTruth to take ownership and overwrite any pre-existing items, defaults to false
 - `local` (Boolean) Only send the parameters defined directly in the specified projects (not inherited), defaults to false
 - `parameters` (Boolean) Include parameters (non-secrets) when pushing, defaults to true
