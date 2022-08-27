@@ -76,12 +76,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 		var r *http.Response
 		resp, r, err = filteredTemplateListRequest.Execute()
 		if err != nil {
-			outErr := fmt.Errorf("dataCloudTruthTemplatesRead: error looking up parameters in the %s environment: %w", environment, err)
-			if r.StatusCode >= http.StatusInternalServerError { // A 5xx error
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("dataCloudTruthTemplatesRead: error reading template template %s", name), r, err)
 		}
 		return nil
 	})
@@ -204,12 +199,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 			var r *http.Response
 			resp, r, err = filteredTemplateListRequest.Execute()
 			if err != nil {
-				outErr := fmt.Errorf("dataCloudTruthTemplatesRead: error looking up parameters in the %s environment: %w", environment, err)
-				if r.StatusCode >= http.StatusInternalServerError { // A 5xx error
-					return resource.RetryableError(outErr)
-				} else {
-					return resource.NonRetryableError(outErr)
-				}
+				return handleAPIError(fmt.Sprintf("dataCloudTruthTemplatesRead: error reading templates in the %s environment", environment), r, err)
 			}
 			return nil
 		})

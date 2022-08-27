@@ -86,12 +86,7 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 		var r *http.Response
 		resp, r, err = filteredParamListRequest.Execute()
 		if err != nil {
-			outErr := fmt.Errorf("dataCloudTruthParameterValueRead: error looking up parameter %s: %w", name, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("dataCloudTruthParameterValueRead: error looking up parameter %s", name), r, err)
 		}
 		return nil
 	})
@@ -101,10 +96,9 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 	}
 
 	if resp.GetCount() != 1 {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: expected 1 value for parameter %s, found %d instead",
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: expected 1 parameter %s, found %d instead",
 			name, resp.GetCount()))
 	}
-	// There should be one parameter and one parameter value at this point
 	results := resp.GetResults()
 	param := results[0]
 	values := param.GetValues()
@@ -190,12 +184,7 @@ func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceDa
 			var r *http.Response
 			resp, r, err = filteredParamListRequest.Execute()
 			if err != nil {
-				outErr := fmt.Errorf("dataCloudTruthParameterValuesRead: error looking up parameters in the %s environment: %w", environment, err)
-				if r.StatusCode >= http.StatusInternalServerError {
-					return resource.RetryableError(outErr)
-				} else {
-					return resource.NonRetryableError(outErr)
-				}
+				return handleAPIError(fmt.Sprintf("dataCloudTruthParameterValuesRead: error looking up parameters in the %s environment", environment), r, err)
 			}
 			return nil
 		})
@@ -230,7 +219,7 @@ func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceDa
 	   The results represent a set of possibly filtered parameters in a given environment and project
 	   Ideally, these will be shared across all TF resources in a given state
 	   However, we do need to be mindful that a user could pull in the set of parameters more than once
-	   within the same state, with possible variations on filters, if thid turns out to be an issue
+	   within the same state, with possible variations on filters, if this turns out to be an issue
 	   then we may need to rethink the ID strategy here */
 	d.SetId(fmt.Sprintf("%s:%s", *projID, *envID))
 	return nil

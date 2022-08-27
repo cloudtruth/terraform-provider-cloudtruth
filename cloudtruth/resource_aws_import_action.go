@@ -97,12 +97,7 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 		var err error
 		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsCreate(ctx, awsIntegrationID).AwsPull(*importActionCreate).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceAWSImportActionCreate: error creating AWS import action %s: %w", importActionName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceAWSImportActionCreate: error creating AWS import action %s", importActionName), r, err)
 		}
 		return nil
 	})
@@ -127,12 +122,7 @@ func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, me
 		var err error
 		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsRetrieve(ctx, awsIntegrationID, importActionID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceAWSImportActionRead: error reading AWS import action %s: %w", importActionName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceAWSImportActionRead: error reading AWS import action %s", importActionName), r, err)
 		}
 		return nil
 	})
@@ -179,12 +169,7 @@ func resourceAWSImportActionUpdate(ctx context.Context, d *schema.ResourceData, 
 			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsPartialUpdate(ctx, awsIntegrationID,
 				importActionID).PatchedAwsPull(patchedAWSPull).Execute()
 			if err != nil {
-				outErr := fmt.Errorf("resourceAWSImportActionUpdate: error updating environment %s: %w", importActionName, err)
-				if r.StatusCode >= http.StatusInternalServerError {
-					return resource.RetryableError(outErr)
-				} else {
-					return resource.NonRetryableError(outErr)
-				}
+				return handleAPIError(fmt.Sprintf("resourceAWSImportActionUpdate: error updating AWS import action %s", importActionName), r, err)
 			}
 			return nil
 		})
@@ -208,12 +193,7 @@ func resourceAWSImportActionDelete(ctx context.Context, d *schema.ResourceData, 
 		var err error
 		r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsDestroy(ctx, awsIntegrationID, importActionID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceAWSImportActionDelete: error destroying AWS import action %s: %w", importActionName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceAWSImportActionDelete: error destroying AWS import action %s", importActionName), r, err)
 		}
 		return nil
 	})

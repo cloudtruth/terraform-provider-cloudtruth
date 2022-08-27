@@ -62,12 +62,7 @@ func dataCloudTruthTagRead(ctx context.Context, d *schema.ResourceData, meta any
 		var r *http.Response
 		resp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsList(ctx, *envID).Name(name).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("dataCloudTruthTagRead: error looking up tag %s: %w", name, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("dataCloudTruthTagRead: error reading tag %s", name), r, err)
 		}
 		return nil
 	})

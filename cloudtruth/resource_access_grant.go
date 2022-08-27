@@ -140,13 +140,7 @@ func resourceAccessGrantCreate(ctx context.Context, d *schema.ResourceData, meta
 		var err error
 		grant, r, err = c.openAPIClient.GrantsApi.GrantsCreate(ctx).Grant(*grantCreate).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceAccessGrantCreate: error creating grant for principal %s and scope %s: %w",
-				*principalURL, *scopeURL, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceAccessGrantCreate: error creating grant for principal %s and scope %s", *principalURL, *scopeURL), r, err)
 		}
 		return nil
 	})
@@ -169,12 +163,7 @@ func resourceAccessGrantRead(ctx context.Context, d *schema.ResourceData, meta a
 		var err error
 		resp, r, err = c.openAPIClient.GrantsApi.GrantsRetrieve(ctx, grantID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceAccessGrantRead: error reading grant %s: %w", grantID, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceAccessGrantRead: error reading grant %s", grantID), r, err)
 		}
 		return nil
 	})
@@ -222,12 +211,7 @@ func resourceAccessGrantUpdate(ctx context.Context, d *schema.ResourceData, meta
 			var err error
 			_, r, err = c.openAPIClient.GrantsApi.GrantsPartialUpdate(ctx, d.Id()).PatchedGrant(patchedGrant).Execute()
 			if err != nil {
-				outErr := fmt.Errorf("resourceAccessGrantCreate: error creating grant for principal")
-				if r.StatusCode >= http.StatusInternalServerError {
-					return resource.RetryableError(outErr)
-				} else {
-					return resource.NonRetryableError(outErr)
-				}
+				return handleAPIError(fmt.Sprintf("resourceAccessGrantUpdate: error updating grant with ID %s", d.Id()), r, err)
 			}
 			return nil
 		})
@@ -248,12 +232,7 @@ func resourceAccessGrantDelete(ctx context.Context, d *schema.ResourceData, meta
 		var err error
 		r, err = c.openAPIClient.GrantsApi.GrantsDestroy(ctx, grantID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceAccessGrantDelete: error destroying grant %s: %w", grantID, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceAccessGrantDelete: error destroying grant %s", d.Id()), r, err)
 		}
 		return nil
 	})
