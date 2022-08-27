@@ -7,6 +7,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"net/http"
 	"sync"
 	"time"
@@ -458,4 +459,21 @@ func (c *cloudTruthClient) lookupType(ctx context.Context, typeName string) *clo
 		return &paramType
 	}
 	return nil
+}
+
+/* Helper function for making API errors more useful
+   API/server side errors are generally retryable
+   client side errors are not retryable, but we want to extract the underlying API error
+   so that the end user can see what's wrong
+*/
+func handleAPIError(msg string, r *http.Response, err error) *resource.RetryError {
+	outErr := fmt.Errorf(msg, err)
+	if r == nil { // Can be nil when the context has been cancelled
+		return resource.NonRetryableError(outErr)
+	} else if r.StatusCode >= 500 { //
+		return resource.RetryableError(outErr)
+	} else {
+		outErr = fmt.Errorf("%d client error: %s", r.StatusCode, r.Body)
+		return resource.NonRetryableError(outErr)
+	}
 }

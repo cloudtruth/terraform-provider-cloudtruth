@@ -417,16 +417,12 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	}
 	paramName, paramType := d.Get("name").(string), d.Get("type").(string)
 
-	// Top level property changes except for rule changes
+	// Top level property changes except for rules
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		r, err := updateParameter(ctx, d.Id(), *projID, paramType, d, c)
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterUpdate: error updating parameter level config for parameter %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			msg := fmt.Sprintf("resourceParameterUpdate: error updating parameter level config for parameter %s", paramName)
+			return handleAPIError(msg, r, err)
 		}
 		return nil
 	})
