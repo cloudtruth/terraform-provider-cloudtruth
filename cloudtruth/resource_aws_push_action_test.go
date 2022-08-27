@@ -4,8 +4,29 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"regexp"
 	"testing"
 )
+
+func TestAccResourceAWSPushActionInvalid(t *testing.T) {
+	resourceName := "basic"
+	pushActionName := fmt.Sprintf("TestAWSPush-%s", uuid.New().String())
+	createService := "secretsmanager"
+	createRegion := "us-east-1"
+	createPushPattern := "/{{ environment }}/{{ project }}/{{ parameter }}"
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationID, genericDesc,
+					false, false, true, true, true, true, true,
+					createRegion, createService, createPushPattern),
+				ExpectError: regexp.MustCompile("one of `include_parameters` or `include_secrets` must be true"),
+			},
+		},
+	})
+}
 
 func TestAccResourceAWSPushActionBasic(t *testing.T) {
 	resourceName := "basic"

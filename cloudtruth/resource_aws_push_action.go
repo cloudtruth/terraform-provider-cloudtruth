@@ -164,12 +164,8 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 		var err error
 		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesCreate(ctx, awsIntegrationID).AwsPush(*pushActionCreate).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceAWSPushActionCreate: error creating AWS push action %s: %w", pushActionName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			msg := fmt.Sprintf("resourceAWSPushActionCreate: error creating AWS push action %s", pushActionName)
+			return handleAPIError(msg, r, err)
 		}
 		return nil
 	})
