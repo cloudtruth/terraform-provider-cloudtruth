@@ -2,13 +2,10 @@ package cloudtruth
 
 import (
 	"fmt"
-	"time"
-
-	//"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"regexp"
 	"testing"
-	//"time"
+	"time"
 )
 
 const testAccParameter = `
@@ -75,7 +72,7 @@ func TestMissingDataSourceParameter(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccMissingParameter,
-				ExpectError: regexp.MustCompile("expected 1 value for parameter"),
+				ExpectError: regexp.MustCompile("expected 1 parameter"),
 			},
 		},
 	})
@@ -149,7 +146,7 @@ func TestAccAsOfDataSourceParameterValues(t *testing.T) {
 			{
 				// Use a date when the parameters did not exist
 				Config:      fmt.Sprintf(testAccParametersAsOf, accTestProject, "default", "2000-01-01T00:00:00"),
-				ExpectError: regexp.MustCompile("404 Not Found"),
+				ExpectError: regexp.MustCompile("404 client error.*No HistoricalProject matches the given query"),
 			},
 			{
 				// And a date when the parameters definitely do exist, for simplicity we use time.Now

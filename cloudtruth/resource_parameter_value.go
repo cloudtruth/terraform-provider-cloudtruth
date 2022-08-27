@@ -100,12 +100,7 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 		var err error
 		paramListResp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(paramName).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterValueCreate: error looking up parameter %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceParameterValueCreate: error looking up parameter %s", paramName), r, err)
 		}
 		return nil
 	})
@@ -113,7 +108,7 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(retryError)
 	}
 	if paramListResp.GetCount() != 1 {
-		return diag.FromErr(fmt.Errorf("resourceParameterRead: expected 1 value for parameter %s, found %d instead",
+		return diag.FromErr(fmt.Errorf("resourceParameterValueCreate: expected 1 value for parameter %s, found %d instead",
 			paramName, paramListResp.GetCount()))
 	}
 
@@ -129,12 +124,8 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 		value, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx, paramListResp.GetResults()[0].GetId(),
 			*projID).ValueCreate(*valueCreate).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterValueCreate: error creating the value for parameter %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceParameterValueCreate: error creating the value for parameter %s in the %s environment",
+				paramName, environment), r, err)
 		}
 		valueID = value.GetId()
 		return nil
@@ -179,7 +170,6 @@ func resourceParameterValueRead(ctx context.Context, d *schema.ResourceData, met
 	return dataCloudTruthParameterValueRead(ctx, d, meta)
 }
 
-// No retry logic here, the caller handles that
 func updateParameterValue(ctx context.Context, paramID, paramValueID, projID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
 	updateValue := cloudtruthapi.NewValueWithDefaults()
 	hasParamValueChange := false
@@ -207,6 +197,7 @@ func updateParameterValue(ctx context.Context, paramID, paramValueID, projID str
 	var r *http.Response
 	var err error
 	if hasParamValueChange {
+		// No retry logic here, the caller handles that
 		_, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
 			projID).Value(*updateValue).Execute()
 		if err != nil {
@@ -218,12 +209,13 @@ func updateParameterValue(ctx context.Context, paramID, paramValueID, projID str
 
 func resourceParameterValueUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceParameterUpdate")
+	tflog.Debug(ctx, "resourceParameterValueUpdate")
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterUpdate: %w", err))
+		return diag.FromErr(fmt.Errorf("resourceParameterValueUpdate: %w", err))
 	}
+	environment := d.Get("environment").(string)
 
 	paramID := d.Get("parameter_id").(string)
 	paramName := d.Get("parameter_name").(string)
@@ -232,12 +224,8 @@ func resourceParameterValueUpdate(ctx context.Context, d *schema.ResourceData, m
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		r, err := updateParameterValue(ctx, paramID, d.Id(), *projID, d, c)
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterUpdate: error updating the parameter value config for parameter %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceParameterValueUpdate: error updating the parameter value config for parameter %s in the %s environment",
+				paramName, environment), r, err)
 		}
 		return nil
 	})
@@ -250,16 +238,17 @@ func resourceParameterValueUpdate(ctx context.Context, d *schema.ResourceData, m
 }
 
 func resourceParameterValueDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceParameterDelete")
+	tflog.Debug(ctx, "resourceParameterValueDelete")
 	c := meta.(*cloudTruthClient)
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceParameterDelete: %w", err))
+		return diag.FromErr(fmt.Errorf("resourceParameterValueDelete: %w", err))
 	}
 	paramID := d.Get("parameter_id").(string)
 	paramValueID := d.Id()
 	paramName := d.Get("parameter_name").(string)
+	environment := d.Get("environment").(string)
 
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
@@ -267,12 +256,8 @@ func resourceParameterValueDelete(ctx context.Context, d *schema.ResourceData, m
 		r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(ctx, paramValueID,
 			paramID, *projID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterDelete: error deleting parameter value %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceParameterValueDelete: error deleting the value from parameter %s in the %s environment",
+				paramName, environment), r, err)
 		}
 		return nil
 	})

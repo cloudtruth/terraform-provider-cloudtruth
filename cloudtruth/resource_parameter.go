@@ -123,12 +123,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		paramCreateResp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersCreate(ctx,
 			*projID).ParameterCreate(*paramCreate).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterCreate: error creating parameter %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceParameterCreate: error creating parameter %s", paramName), r, err)
 		}
 		paramID = paramCreateResp.GetId()
 		return nil
@@ -257,12 +252,7 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 		var r *http.Response
 		resp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Name(paramName).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterRead: error looking up parameter %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceParameterRead: error looking up parameter %s", paramName), r, err)
 		}
 		return nil
 	})
@@ -336,6 +326,7 @@ func updateParameter(ctx context.Context, paramID, projID string, paramTypeName 
 	var r *http.Response
 	var err error
 	if hasParamChange {
+		// The caller handles retries
 		_, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersPartialUpdate(ctx, paramID, projID).
 			PatchedParameter(patchedParam).Execute()
 		if err != nil {
@@ -364,6 +355,7 @@ func updateRule(ctx context.Context, paramID, projID, ruleName, ruleID string, d
 	paramRule.SetType(*ruleType)
 
 	var r *http.Response
+	// todo: (non)retryable errors here?
 	for retryCount < ruleOperationRetries {
 		ruleUpdateRequest = c.openAPIClient.ProjectsApi.ProjectsParametersRulesUpdate(ctx, ruleID, paramID, projID).ParameterRule(*paramRule)
 		_, r, err = ruleUpdateRequest.Execute()
@@ -389,6 +381,7 @@ func deleteRule(ctx context.Context, paramID, projID, ruleName, ruleID string, c
 	var r *http.Response
 	var apiError, err error
 
+	// todo: (non)retryable errors here?
 	for retryCount < ruleOperationRetries {
 		ruleDestroyRequest = c.openAPIClient.ProjectsApi.ProjectsParametersRulesDestroy(ctx, ruleID, paramID, projID)
 		r, err = ruleDestroyRequest.Execute()
@@ -421,8 +414,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		r, err := updateParameter(ctx, d.Id(), *projID, paramType, d, c)
 		if err != nil {
-			msg := fmt.Sprintf("resourceParameterUpdate: error updating parameter level config for parameter %s", paramName)
-			return handleAPIError(msg, r, err)
+			return handleAPIError(fmt.Sprintf("resourceParameterUpdate: error updating parameter level config for parameter %s", paramName), r, err)
 		}
 		return nil
 	})
@@ -434,12 +426,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		r, err := updateParameterRules(ctx, d.Id(), *projID, paramType, d, c)
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterUpdate: error updating rulesfor parameter %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceParameterUpdate: error updating rules for parameter %s", paramName), r, err)
 		}
 		return nil
 	})
@@ -464,12 +451,7 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 		var err error
 		r, err = c.openAPIClient.ProjectsApi.ProjectsParametersDestroy(ctx, d.Id(), *projID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceParameterDelete: error deleting parameter %s: %w", paramName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceParameterDelete: error deleting parameter %s", paramName), r, err)
 		}
 		return nil
 	})

@@ -72,10 +72,10 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: %w", err))
 	}
-	name := d.Get("parameter_name").(string)
+	paramName := d.Get("parameter_name").(string)
 
 	// Handle as_of and tag filters
-	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(name)
+	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(paramName)
 	filteredParamListRequest, err := parseParamListFilters(paramListRequest, d)
 	if err != nil {
 		return diag.FromErr(err)
@@ -86,7 +86,7 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 		var r *http.Response
 		resp, r, err = filteredParamListRequest.Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("dataCloudTruthParameterValueRead: error looking up parameter %s", name), r, err)
+			return handleAPIError(fmt.Sprintf("dataCloudTruthParameterValueRead: error looking up parameter %s", paramName), r, err)
 		}
 		return nil
 	})
@@ -97,7 +97,7 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 
 	if resp.GetCount() != 1 {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: expected 1 parameter %s, found %d instead",
-			name, resp.GetCount()))
+			paramName, resp.GetCount()))
 	}
 	results := resp.GetResults()
 	param := results[0]
@@ -105,12 +105,12 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 	paramID := param.GetId()
 	if len(values) > 1 {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: unexpectedly found %d values for parameter %s",
-			len(values), name))
+			len(values), paramName))
 	}
 
 	for _, v := range values {
 		tflog.Debug(ctx, fmt.Sprintf("dataCloudTruthParameterValueRead: found value for %s, lookup env %s, resolved env %s",
-			name, environment, v.GetEnvironmentName()))
+			paramName, environment, v.GetEnvironmentName()))
 		err := d.Set("value", v.GetValue())
 		if err != nil {
 			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: %w", err))

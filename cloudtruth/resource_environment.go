@@ -69,12 +69,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 		var err error
 		resp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceEnvironmentCreate: error creating environment %s: %w", envName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceEnvironmentCreate: error creating environment %s", envName), r, err)
 		}
 		return nil
 	})
@@ -99,12 +94,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 		var err error
 		resp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Name(envName).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceEnvironmentRead: error reading environment %s: %w", envName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceEnvironmentRead: error reading environment %s", envName), r, err)
 		}
 		return nil
 	})
@@ -143,12 +133,7 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta
 			_, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsPartialUpdate(ctx,
 				envID).PatchedEnvironment(patchedEnv).Execute()
 			if err != nil {
-				outErr := fmt.Errorf("resourceEnvironmentUpdate: error updating environment %s: %w", envName, err)
-				if r.StatusCode >= http.StatusInternalServerError {
-					return resource.RetryableError(outErr)
-				} else {
-					return resource.NonRetryableError(outErr)
-				}
+				return handleAPIError(fmt.Sprintf("resourceEnvironmentUpdate: error updating environment %s", envName), r, err)
 			}
 			return nil
 		})
@@ -176,12 +161,7 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 		var err error
 		r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsDestroy(ctx, envID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceEnvironmentDelete: error destroying environment %s: %w", envName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceEnvironmentDelete: error destroying environment %s", envName), r, err)
 		}
 		return nil
 	})

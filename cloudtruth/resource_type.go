@@ -77,12 +77,7 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 		var err error
 		typeCreateResp, r, err = c.openAPIClient.TypesApi.TypesCreate(ctx).ParameterTypeCreate(*typeCreate).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceTypeCreate: error creating type %s: %w", typeName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceTypeCreate: error creating type %s", typeName), r, err)
 		}
 		typeID = typeCreateResp.GetId()
 		return nil
@@ -145,12 +140,7 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 		var err error
 		resp, r, err = c.openAPIClient.TypesApi.TypesList(ctx).NameIexact(typeName).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceTypeRead: error reading type %s: %w", typeName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceTypeRead: error reading type %s", typeName), r, err)
 		}
 		return nil
 	})
@@ -186,12 +176,7 @@ func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) d
 			var err error
 			_, r, err = c.openAPIClient.TypesApi.TypesPartialUpdate(ctx, typeID).PatchedParameterType(*patchedTypeUpdate).Execute()
 			if err != nil {
-				outErr := fmt.Errorf("resourceTypeUpdate: error updating type %s: %w", typeName, err)
-				if r.StatusCode >= http.StatusInternalServerError {
-					return resource.RetryableError(outErr)
-				} else {
-					return resource.NonRetryableError(outErr)
-				}
+				return handleAPIError(fmt.Sprintf("resourceTypeUpdate: error updating type %s", typeName), r, err)
 			}
 			return nil
 		})
@@ -214,12 +199,7 @@ func resourceTypeDelete(ctx context.Context, d *schema.ResourceData, meta any) d
 		var err error
 		r, err = c.openAPIClient.TypesApi.TypesDestroy(ctx, typeID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceTypeDelete: error deleting type %s: %w", typeName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceTypeDelete: error deleting type %s", typeName), r, err)
 		}
 		return nil
 	})

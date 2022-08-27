@@ -77,12 +77,7 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 		var err error
 		group, r, err = c.openAPIClient.GroupsApi.GroupsCreate(ctx).Group(*groupCreate).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceGroupCreate: error creating group %s: %w", groupName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceGroupCreate: error creating group %s", groupName), r, err)
 		}
 		return nil
 	})
@@ -105,12 +100,7 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 		var err error
 		resp, r, err = c.openAPIClient.GroupsApi.GroupsList(ctx).Name(groupName).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceGroupRead: error reading group %s: %w", groupName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceGroupRead: error reading group %s", groupName), r, err)
 		}
 		return nil
 	})
@@ -160,12 +150,7 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 			var err error
 			_, r, err = c.openAPIClient.GroupsApi.GroupsPartialUpdate(ctx, groupID).PatchedGroup(patchedGroup).Execute()
 			if err != nil {
-				outErr := fmt.Errorf("resourceGroupUpdate: error updating group %s: %w", groupName, err)
-				if r.StatusCode >= http.StatusInternalServerError {
-					return resource.RetryableError(outErr)
-				} else {
-					return resource.NonRetryableError(outErr)
-				}
+				return handleAPIError(fmt.Sprintf("resourceGroupUpdate: error updating group %s", groupName), r, err)
 			}
 			return nil
 		})
@@ -187,12 +172,7 @@ func resourceGroupDelete(ctx context.Context, d *schema.ResourceData, meta any) 
 		var err error
 		r, err = c.openAPIClient.GroupsApi.GroupsDestroy(ctx, groupID).Execute()
 		if err != nil {
-			outErr := fmt.Errorf("resourceGroupDelete: error destroying group %s: %w", groupName, err)
-			if r.StatusCode >= http.StatusInternalServerError {
-				return resource.RetryableError(outErr)
-			} else {
-				return resource.NonRetryableError(outErr)
-			}
+			return handleAPIError(fmt.Sprintf("resourceGroupDelete: error destroying group %s", groupName), r, err)
 		}
 		return nil
 	})
