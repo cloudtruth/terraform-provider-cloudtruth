@@ -218,8 +218,8 @@ func testAccResourceParameterCreateIntegerWithRules(projName, resourceName, para
   		description = "%s"
 		secret      = "%t"
 		type        = "integer"
-		min         = %d
-        max         = %d
+		min         = "%d""
+        max         = "%d"
 	}
 	`, resourceName, projName, paramName, desc, isSecret, minLen, maxLen)
 }

@@ -12,102 +12,106 @@ const updateTypeDesc = "A new description of an type"
 
 func TestAccResourceTypeBasic(t *testing.T) {
 	createTypeName := fmt.Sprintf("Test-%s", uuid.New().String())
+	resourceName := "basic"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceTypeCreateBasic(createTypeName, typeDesc),
+				Config: testAccResourceTypeCreateBasic(resourceName, createTypeName, typeDesc),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_type.basic", "name", createTypeName),
-					resource.TestCheckResourceAttr("cloudtruth_type.basic", "description", typeDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "name", createTypeName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "description", typeDesc),
 				),
 			},
 			{
-				Config: testAccResourceTypeUpdateBasic(createTypeName, updateTypeDesc),
+				Config: testAccResourceTypeCreateBasic(resourceName, createTypeName, updateTypeDesc),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_type.basic", "name", createTypeName),
-					resource.TestCheckResourceAttr("cloudtruth_type.basic", "description", updateTypeDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "name", createTypeName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "description", updateTypeDesc),
 				),
 			},
 		},
 	})
 }
 
-func TestAccResourceTypeWithRule(t *testing.T) {
+func TestAccResourceIntTypeWithTwoRules(t *testing.T) {
 	createTypeName := fmt.Sprintf("Test-%s", uuid.New().String())
+	resourceName := "int_two_rules"
+	min, max := 0, 1000
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceTypeCreateIntWithOneRule(createTypeName, typeDesc),
+				Config: testAccResourceTypeCreateIntWithTwoRules(resourceName, createTypeName, typeDesc, min, max),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_type.with_rule", "name", createTypeName),
-					resource.TestCheckResourceAttr("cloudtruth_type.with_rule", "description", typeDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "name", createTypeName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "description", typeDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "type", "integer"),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "min", fmt.Sprint(min)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "max", fmt.Sprint(max)),
 				),
 			},
 		},
 	})
 }
 
-func TestAccResourceTypeWithThreeRules(t *testing.T) {
+func TestAccResourceStringTypeWithThreeRules(t *testing.T) {
 	createTypeName := fmt.Sprintf("Test-%s", uuid.New().String())
+	resourceName := "string_three_rules"
+	min, max := 0, 1000
+	regex := "*."
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceTypeCreateWithThreeRules(createTypeName, typeDesc),
+				Config: testAccResourceTypeCreateWithThreeRules(resourceName, createTypeName, typeDesc, min, max, regex),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_type.with_three_rules", "name", createTypeName),
-					resource.TestCheckResourceAttr("cloudtruth_type.with_three_rules", "description", typeDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "name", createTypeName),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "description", typeDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "type", "string"),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "min", fmt.Sprint(min)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "max", fmt.Sprint(max)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_type.%s", resourceName), "regex", regex),
 				),
 			},
 		},
 	})
 }
 
-func testAccResourceTypeCreateBasic(typeName, desc string) string {
+func testAccResourceTypeCreateBasic(resourceName, typeName, desc string) string {
 	return fmt.Sprintf(`
-	resource "cloudtruth_type" "basic" {
+	resource "cloudtruth_type" "%s" {
   		name        = "%s"
   		description = "%s"
 		type   = "string"
 	}
-	`, typeName, desc)
+	`, resourceName, typeName, desc)
 }
 
-func testAccResourceTypeUpdateBasic(tagName, desc string) string {
+func testAccResourceTypeCreateIntWithTwoRules(resourceName, typeName, desc string, max, min int) string {
 	return fmt.Sprintf(`
-	resource "cloudtruth_type" "basic" {
+	resource "cloudtruth_type" "%s" {
   		name        = "%s"
   		description = "%s"
-		type   = "string"
+		type        = "integer"
+		min         = "%d"
+		max         = "%d"
 	}
-	`, tagName, desc)
+	`, resourceName, typeName, desc, max, min)
 }
 
-func testAccResourceTypeCreateIntWithOneRule(typeName, desc string) string {
+func testAccResourceTypeCreateWithThreeRules(resourceName, typeName, desc string, max, min int, regex string) string {
 	return fmt.Sprintf(`
-	resource "cloudtruth_type" "with_rule" {
-  		name        = "%s"
-  		description = "%s"
-		type        = "int"
-		min         = "10"
-	}
-	`, typeName, desc)
-}
-
-func testAccResourceTypeCreateWithThreeRules(typeName, desc string) string {
-	return fmt.Sprintf(`
-	resource "cloudtruth_type" "with_three_rules" {
+	resource "cloudtruth_type" "%s" {
   		name        = "%s"
   		description = "%s"
 		type        = "string"
-		min         = "1"
-        max         = "10"
-    	regex       = ".*"
+		min         = "%d"
+        max         = "%d"
+    	regex       = "%s"
 	}
-	`, typeName, desc)
+	`, resourceName, typeName, desc, max, min, regex)
 }
