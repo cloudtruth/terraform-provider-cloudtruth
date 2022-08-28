@@ -127,6 +127,7 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 			return diag.FromErr(err)
 		}
 	}
+	c.types[typeName] = *typeCreateResp
 	d.SetId(typeID)
 	return nil
 }
@@ -200,6 +201,114 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 	return nil
 }
 
+func updateTypeRules(ctx context.Context, paramID, typeName string, d *schema.ResourceData,
+	c *cloudTruthClient) (*http.Response, error) {
+	tflog.Debug(ctx, "entering updateTypeRules")
+	defer tflog.Debug(ctx, "exiting updateTypeRules")
+	paramType := c.lookupType(ctx, typeName)
+	baseParamType := getBaseParamType(ctx, paramType, c)
+	rules := intAndStringRuleTypes
+	if baseParamType == "string" { // regex types are valid with string types but not int types
+		rules = append(rules, stringRuletypes...)
+	}
+	var updatedRules []string
+	for _, rule := range rules {
+		if d.HasChange(rule) {
+			updatedRules = append(updatedRules, rule)
+		}
+	}
+
+	// We return the last response (and stop if we receive an error) however, we could consider returning all of the http responses
+	var r *http.Response
+	var err error
+	if len(updatedRules) > 0 {
+		for _, updatedRule := range updatedRules {
+			ruleIDProperty := fmt.Sprintf("%s_id", updatedRule)
+			ruleID := d.Get(ruleIDProperty).(string)
+			newRuleVal := d.Get(updatedRule).(string)
+			if newRuleVal == "" { // A value of "" == time for deletion
+				r, err = deleteTypeRule(ctx, paramID, updatedRule, ruleID, c)
+				if err == nil { // Don't set the property to "" unless the delete succeeds
+					err = d.Set(ruleIDProperty, "")
+				}
+			} else {
+				r, err = updateTypeRule(ctx, paramID, updatedRule, ruleID, d, c)
+			}
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	return r, nil
+}
+
+// Type rules are NOT associated with a CloudTruth project, unlike parameter rules which are project specific
+func updateTypeRule(ctx context.Context, paramID, ruleName, ruleID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
+	tflog.Debug(ctx, "entering updateTypeRule")
+	defer tflog.Debug(ctx, "exiting updateTypeRule")
+	_, newVal := d.GetChange(ruleName)
+	ruleVal := newVal.(string)
+	retryCount := 0
+	var apiError error
+	var ruleUpdateRequest cloudtruthapi.ApiTypesRulesUpdateRequest
+
+	ruleType, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(ruleName)
+	if err != nil {
+		return nil, err
+	}
+	paramTypeRule := cloudtruthapi.NewParameterTypeRuleWithDefaults()
+	paramTypeRule.SetId(ruleID)
+	paramTypeRule.SetConstraint(ruleVal)
+	paramTypeRule.SetType(*ruleType)
+	paramTypeRule.SetType(*ruleType)
+
+	var r *http.Response
+	// todo: (non)retryable errors here?
+	for retryCount < ruleOperationRetries {
+		ruleUpdateRequest = c.openAPIClient.TypesApi.TypesRulesUpdate(ctx, ruleID, paramID).ParameterTypeRule(*paramTypeRule)
+		_, r, err = ruleUpdateRequest.Execute()
+		if r.StatusCode >= 500 {
+			tflog.Debug(ctx, fmt.Sprintf("updateTypeRule: error updating rule %s: %+v", ruleName, err))
+			apiError = err
+			retryCount++
+		} else {
+			apiError = nil
+			break
+		}
+	}
+	if apiError != nil {
+		return nil, apiError
+	}
+	return r, nil
+}
+
+func deleteTypeRule(ctx context.Context, paramID, ruleName, ruleID string, c *cloudTruthClient) (*http.Response, error) {
+	tflog.Debug(ctx, "entering deleteTypeRule")
+	defer tflog.Debug(ctx, "exiting deleteTypeRule")
+	retryCount := 0
+	var ruleDestroyRequest cloudtruthapi.ApiTypesRulesDestroyRequest
+	var r *http.Response
+	var apiError, err error
+
+	// todo: (non)retryable errors here?
+	for retryCount < ruleOperationRetries {
+		ruleDestroyRequest = c.openAPIClient.TypesApi.TypesRulesDestroy(ctx, ruleID, paramID)
+		r, err = ruleDestroyRequest.Execute()
+		if r.StatusCode >= 500 {
+			tflog.Debug(ctx, fmt.Sprintf("deleteTypeRule: error deleting rule %s: %+v", ruleName, err))
+			apiError = err
+			retryCount++
+		} else {
+			apiError = nil
+			break
+		}
+	}
+	if apiError != nil {
+		return nil, apiError
+	}
+	return r, nil
+}
+
 func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceTypeUpdate")
 	defer tflog.Debug(ctx, "exiting resourceTypeUpdate")
@@ -228,7 +337,18 @@ func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) d
 			return diag.FromErr(retryError)
 		}
 	}
-	d.SetId(typeID)
+
+	// Rule changes
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		r, err := updateTypeRules(ctx, typeID, typeName, d, c)
+		if err != nil {
+			return handleAPIError(fmt.Sprintf("resourceParameterUpdate: error updating rules for parameter %s", typeName), r, err)
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
 	return resourceTypeRead(ctx, d, meta)
 }
 
@@ -253,5 +373,6 @@ func resourceTypeDelete(ctx context.Context, d *schema.ResourceData, meta any) d
 	}
 
 	d.SetId(typeID)
+	delete(c.types, typeName)
 	return nil
 }

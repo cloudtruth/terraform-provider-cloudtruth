@@ -149,42 +149,6 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	return nil
 }
 
-// boolean base types cannot have rules
-// integer base types can have up to two rules: min and max
-// string base types can have up to three rules: min_len, max_len and regex but the cloudtruth_parameter resource
-// specifies max_len and min_len as 'max' and 'min' to minimize the number of fields
-func validateAndFetchRules(ctx context.Context, c *cloudTruthClient, d *schema.ResourceData,
-	paramType *cloudtruthapi.ParameterType) (map[string]any, error) {
-	baseParamTypeName := getBaseParamType(ctx, paramType, c)
-	outRules := map[string]any{}
-	if baseParamTypeName == "boolean" {
-		return nil, fmt.Errorf("the base type 'boolean' does not support rules")
-	}
-	for _, r := range append(intAndStringRuleTypes, stringRuletypes...) {
-		if val, ok := d.GetOk(r); ok {
-			if baseParamTypeName == "integer" && r == "regex" {
-				return nil, fmt.Errorf("the base type '%s' does not support the %s rule type", baseParamTypeName, r)
-			}
-			outRules[r] = val
-		}
-	}
-	return outRules, nil
-}
-
-func getBaseParamType(ctx context.Context, paramType *cloudtruthapi.ParameterType, c *cloudTruthClient) string {
-	var baseParamTypeName string
-	baseParamType := paramType
-	for {
-		if baseParamType.ParentName.IsSet() && baseParamType.Parent.Get() != nil {
-			baseParamType = c.lookupType(ctx, baseParamType.GetParent())
-		} else {
-			baseParamTypeName = baseParamType.GetName()
-			break
-		}
-	}
-	return baseParamTypeName
-}
-
 func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID, baseParamType, ruleName string, ruleVal any) (*string, error) {
 	tflog.Debug(ctx, "entering addRuleToType")
 	defer tflog.Debug(ctx, "exiting addRuleToType")
@@ -297,12 +261,12 @@ func updateParameterRules(ctx context.Context, paramID, projID string, paramType
 			ruleID := d.Get(ruleIDProperty).(string)
 			newRuleVal := d.Get(updatedRule).(string)
 			if newRuleVal == "" { // A value of "" == time for deletion
-				r, err = deleteRule(ctx, paramID, projID, updatedRule, ruleID, c)
+				r, err = deleteParameterRule(ctx, paramID, projID, updatedRule, ruleID, c)
 				if err == nil { // Don't set the property to "" unless the delete succeeds
 					err = d.Set(ruleIDProperty, "")
 				}
 			} else {
-				r, err = updateRule(ctx, paramID, projID, updatedRule, ruleID, d, c)
+				r, err = updateParameterRule(ctx, paramID, projID, updatedRule, ruleID, d, c)
 			}
 			if err != nil {
 				return nil, err
@@ -341,14 +305,15 @@ func updateParameter(ctx context.Context, paramID, projID string, paramTypeName 
 	return r, nil
 }
 
-func updateRule(ctx context.Context, paramID, projID, ruleName, ruleID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
-	tflog.Debug(ctx, "entering updateRule")
-	defer tflog.Debug(ctx, "exiting updateRule")
+func updateParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
+	tflog.Debug(ctx, "entering updateParameterRule")
+	defer tflog.Debug(ctx, "exiting updateParameterRule")
 	_, newVal := d.GetChange(ruleName)
 	ruleVal := newVal.(string)
 	retryCount := 0
 	var apiError error
 	var ruleUpdateRequest cloudtruthapi.ApiProjectsParametersRulesUpdateRequest
+
 	ruleType, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(ruleName)
 	if err != nil {
 		return nil, err
@@ -366,7 +331,7 @@ func updateRule(ctx context.Context, paramID, projID, ruleName, ruleID string, d
 		ruleUpdateRequest = c.openAPIClient.ProjectsApi.ProjectsParametersRulesUpdate(ctx, ruleID, paramID, projID).ParameterRule(*paramRule)
 		_, r, err = ruleUpdateRequest.Execute()
 		if r.StatusCode >= 500 {
-			tflog.Debug(ctx, fmt.Sprintf("updateRule: error updating rule %s: %+v", ruleName, err))
+			tflog.Debug(ctx, fmt.Sprintf("updateParameterRule: error updating rule %s: %+v", ruleName, err))
 			apiError = err
 			retryCount++
 		} else {
@@ -380,9 +345,9 @@ func updateRule(ctx context.Context, paramID, projID, ruleName, ruleID string, d
 	return r, nil
 }
 
-func deleteRule(ctx context.Context, paramID, projID, ruleName, ruleID string, c *cloudTruthClient) (*http.Response, error) {
-	tflog.Debug(ctx, "entering deleteRule")
-	defer tflog.Debug(ctx, "exiting updateRule")
+func deleteParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID string, c *cloudTruthClient) (*http.Response, error) {
+	tflog.Debug(ctx, "entering deleteParameterRule")
+	defer tflog.Debug(ctx, "exiting updateParameterRule")
 	retryCount := 0
 	var ruleDestroyRequest cloudtruthapi.ApiProjectsParametersRulesDestroyRequest
 	var r *http.Response
@@ -393,7 +358,7 @@ func deleteRule(ctx context.Context, paramID, projID, ruleName, ruleID string, c
 		ruleDestroyRequest = c.openAPIClient.ProjectsApi.ProjectsParametersRulesDestroy(ctx, ruleID, paramID, projID)
 		r, err = ruleDestroyRequest.Execute()
 		if r.StatusCode >= 500 {
-			tflog.Debug(ctx, fmt.Sprintf("deleteRule: error deleting rule %s: %+v", ruleName, err))
+			tflog.Debug(ctx, fmt.Sprintf("deleteParameterRule: error deleting rule %s: %+v", ruleName, err))
 			apiError = err
 			retryCount++
 		} else {
