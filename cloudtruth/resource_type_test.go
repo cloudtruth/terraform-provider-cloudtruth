@@ -41,7 +41,7 @@ func TestAccResourceTypeWithRule(t *testing.T) {
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceTypeCreateWithRule(createTypeName, typeDesc),
+				Config: testAccResourceTypeCreateIntWithOneRule(createTypeName, typeDesc),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_type.with_rule", "name", createTypeName),
 					resource.TestCheckResourceAttr("cloudtruth_type.with_rule", "description", typeDesc),
@@ -73,7 +73,7 @@ func testAccResourceTypeCreateBasic(typeName, desc string) string {
 	resource "cloudtruth_type" "basic" {
   		name        = "%s"
   		description = "%s"
-		base_type   = "string"
+		type   = "string"
 	}
 	`, typeName, desc)
 }
@@ -83,44 +83,31 @@ func testAccResourceTypeUpdateBasic(tagName, desc string) string {
 	resource "cloudtruth_type" "basic" {
   		name        = "%s"
   		description = "%s"
-		base_type   = "string"
+		type   = "string"
 	}
 	`, tagName, desc)
 }
 
-func testAccResourceTypeCreateWithRule(typeName, desc string) string {
+func testAccResourceTypeCreateIntWithOneRule(typeName, desc string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_type" "with_rule" {
   		name        = "%s"
   		description = "%s"
-		base_type   = "string"
-		rule {
-			type       = "min_len"
-			constraint = "10"
-		}
+		type        = "int"
+		min         = "10"
 	}
 	`, typeName, desc)
 }
 
-// todo add an example illustrating how to declare multiple rule blocks
 func testAccResourceTypeCreateWithThreeRules(typeName, desc string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_type" "with_three_rules" {
   		name        = "%s"
   		description = "%s"
-		base_type   = "string"
-		rule {
-			type       = "min_len"
-			constraint = "1"
-		}
-		rule {
-			type       = "max_len"
-			constraint = "10"
-		}
-		rule {
-			type       = "regex"
-			constraint = ".*"
-		}
+		type        = "string"
+		min         = "1"
+        max         = "10"
+    	regex       = ".*"
 	}
 	`, typeName, desc)
 }

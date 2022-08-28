@@ -33,30 +33,55 @@ func resourceType() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
-			"base_type": {
-				Description: "The name of the base type, can be a builtin (string|int|boolean) or another custom type",
+			"type": {
+				Description: "The base type of this custom type, can be a builtin (string|int|boolean) or another custom type",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			// The singular name is not ideal but a limitation for now, until we use the new (and still experimental)
-			// plugin framework, see https://stackoverflow.com/a/70023725/1354026
-			"rule": {
-				Description: `The rule(s) describing allowable values for a parameter of this type. Add separate blocks per rule.
-Note that string types support max_len|min_len|regex rules, integers support min|max rules and booleans don't support any rules.
-Also see the examples for how to define multiple rule blocks.`,
-				Type:     schema.TypeList,
-				Optional: true, // Optional and disallowed with boolean types
-				Elem: &schema.Resource{
-					Schema: ruleSchema,
-				},
-				Deprecated: "This property will be replaced with top level properties: max/min/regex, just like the 'cloudtruth_parameter' resource",
+			"min": {
+				Description: `A rule constraint: the minimum value for integer types, the minimum length for string types.
+This value is specified as a string because we need a reliable way to distinguish between default/zero values and unset values.  We use
+the empty string value for that purpose.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "",
+			},
+			"min_id": {
+				Description: "The internal ID of the min rule",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
+			"max": {
+				Description: `A rule constraint: the maximum value for integer types, the maximum length for string types.
+This value is specified as a string because we need a reliable way to distinguish between default/zero values and unset values.  We use
+the empty string value for that purpose.`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "",
+			},
+			"max_id": {
+				Description: "The internal ID of the max rule",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
+			"regex": {
+				Description: "A CloudTruth rule constraint: the regular expression a string type must match, only valid with string types",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "",
+			},
+			"regex_id": {
+				Description: "The internal ID of the regex rule",
+				Type:        schema.TypeString,
+				Computed:    true,
 			},
 		},
 	}
 }
 
 func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceTypeCreate")
+	tflog.Debug(ctx, "entering resourceTypeCreate")
+	defer tflog.Debug(ctx, "exiting resourceTypeCreate")
 	c := meta.(*cloudTruthClient)
 	typeName := d.Get("name").(string)
 	typeCreate := cloudtruthapi.NewParameterTypeCreate(typeName)
@@ -64,11 +89,25 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 	if typeDesc != "" {
 		typeCreate.SetDescription(typeDesc)
 	}
-	baseTypeName := d.Get("base_type").(string)
+	baseTypeName := d.Get("type").(string)
 	baseType := c.lookupType(ctx, baseTypeName)
 	if baseType == nil {
-		return diag.FromErr(fmt.Errorf("unknown base parameter type %s", baseTypeName))
+		return diag.FromErr(fmt.Errorf("resourceTypeCreate: unknown base type %s", baseTypeName))
 	}
+	var baseParamType *cloudtruthapi.ParameterType
+	if baseTypeName != "" {
+		baseParamType = c.lookupType(ctx, baseTypeName)
+		if baseParamType == nil {
+			return diag.FromErr(fmt.Errorf("unknown parameter type %s", baseTypeName))
+		}
+	}
+	var rules map[string]any
+	var err error
+	if rules, err = validateAndFetchRules(ctx, c, d, baseParamType); err != nil {
+		return diag.FromErr(err)
+	}
+	fmt.Printf("+%v", rules)
+
 	typeCreate.SetParent(baseType.GetUrl())
 	var typeID string
 	var typeCreateResp *cloudtruthapi.ParameterType
@@ -101,7 +140,8 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 }
 
 func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, rule map[string]any) error {
-	tflog.Debug(ctx, "addRuleToType")
+	tflog.Debug(ctx, "entering addRuleToType")
+	defer tflog.Debug(ctx, "exiting resourceTypeCreate")
 	retryCount := 0
 	var apiError error
 	var createTypeRule cloudtruthapi.ParameterTypeRuleCreate
@@ -130,7 +170,8 @@ func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, rule
 }
 
 func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceTypeRead")
+	tflog.Debug(ctx, "entering resourceTypeRead")
+	defer tflog.Debug(ctx, "exiting resourceTypeCreate")
 	c := meta.(*cloudTruthClient)
 	typeName := d.Get("name").(string)
 
@@ -156,9 +197,9 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 	return nil
 }
 
-// todo handle rule changes
 func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceTypeUpdate")
+	tflog.Debug(ctx, "entering resourceTypeUpdate")
+	defer tflog.Debug(ctx, "exiting resourceTypeUpdate")
 	c := meta.(*cloudTruthClient)
 	typeName := d.Get("name").(string)
 	hasChange := false
@@ -189,7 +230,8 @@ func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) d
 }
 
 func resourceTypeDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceTypeDelete")
+	tflog.Debug(ctx, "entering resourceTypeDelete")
+	defer tflog.Debug(ctx, "exiting resourceTypeDelete")
 	c := meta.(*cloudTruthClient)
 	typeName := d.Get("name").(string)
 	typeID := d.Id()

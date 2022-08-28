@@ -94,7 +94,8 @@ the empty string value for that purpose.`,
 
 func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceParameterCreate")
+	tflog.Debug(ctx, "entering resourceParameterCreate")
+	defer tflog.Debug(ctx, "exiting resourceParameterCreate")
 	paramName := d.Get("name").(string)
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
@@ -185,7 +186,8 @@ func getBaseParamType(ctx context.Context, paramType *cloudtruthapi.ParameterTyp
 }
 
 func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID, baseParamType, ruleName string, ruleVal any) (*string, error) {
-	tflog.Debug(ctx, "addRuleToType")
+	tflog.Debug(ctx, "entering addRuleToType")
+	defer tflog.Debug(ctx, "exiting addRuleToType")
 	retryCount := 0
 	var apiError error
 	var createTypeRule cloudtruthapi.ParameterRuleCreate
@@ -238,8 +240,9 @@ func paramCreateConfig(d *schema.ResourceData, paramType string) *cloudtruthapi.
 }
 
 func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceParameterRead")
+	defer tflog.Debug(ctx, "exiting resourceParameterRead")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceParameterRead")
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
@@ -270,7 +273,8 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 
 func updateParameterRules(ctx context.Context, paramID, projID string, paramTypeName string, d *schema.ResourceData,
 	c *cloudTruthClient) (*http.Response, error) {
-	tflog.Debug(ctx, "updateParameterRules")
+	tflog.Debug(ctx, "entering updateParameterRules")
+	defer tflog.Debug(ctx, "exiting updateParameterRules")
 	paramType := c.lookupType(ctx, paramTypeName)
 	baseParamType := getBaseParamType(ctx, paramType, c)
 	rules := intAndStringRuleTypes
@@ -310,7 +314,8 @@ func updateParameterRules(ctx context.Context, paramID, projID string, paramType
 
 func updateParameter(ctx context.Context, paramID, projID string, paramTypeName string, d *schema.ResourceData,
 	c *cloudTruthClient) (*http.Response, error) {
-	tflog.Debug(ctx, "updateParameter")
+	tflog.Debug(ctx, "entering updateParameter")
+	defer tflog.Debug(ctx, "exiting updateParameter")
 	patchedParam := cloudtruthapi.PatchedParameter{}
 	hasParamChange := false
 	if d.HasChange("description") {
@@ -337,7 +342,8 @@ func updateParameter(ctx context.Context, paramID, projID string, paramTypeName 
 }
 
 func updateRule(ctx context.Context, paramID, projID, ruleName, ruleID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
-	tflog.Debug(ctx, "updateRule")
+	tflog.Debug(ctx, "entering updateRule")
+	defer tflog.Debug(ctx, "exiting updateRule")
 	_, newVal := d.GetChange(ruleName)
 	ruleVal := newVal.(string)
 	retryCount := 0
@@ -375,7 +381,8 @@ func updateRule(ctx context.Context, paramID, projID, ruleName, ruleID string, d
 }
 
 func deleteRule(ctx context.Context, paramID, projID, ruleName, ruleID string, c *cloudTruthClient) (*http.Response, error) {
-	tflog.Debug(ctx, "deleteRule")
+	tflog.Debug(ctx, "entering deleteRule")
+	defer tflog.Debug(ctx, "exiting updateRule")
 	retryCount := 0
 	var ruleDestroyRequest cloudtruthapi.ApiProjectsParametersRulesDestroyRequest
 	var r *http.Response
@@ -401,8 +408,9 @@ func deleteRule(ctx context.Context, paramID, projID, ruleName, ruleID string, c
 }
 
 func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceParameterUpdate")
+	defer tflog.Debug(ctx, "exiting resourceParameterUpdate")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceParameterUpdate")
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
@@ -437,7 +445,8 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 }
 
 func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceParameterDelete")
+	tflog.Debug(ctx, "entering resourceParameterDelete")
+	defer tflog.Debug(ctx, "exiting resourceParameterDelete")
 	c := meta.(*cloudTruthClient)
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
