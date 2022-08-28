@@ -13,7 +13,7 @@ import (
 
 func resourceAWSImportAction() *schema.Resource {
 	return &schema.Resource{
-		Description: `A CloudTruth import action.`,
+		Description: `A CloudTruth AWS import action.`,
 
 		CreateContext: resourceAWSImportActionCreate,
 		ReadContext:   resourceAWSImportActionRead,
@@ -70,7 +70,8 @@ func resourceAWSImportAction() *schema.Resource {
 }
 
 func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAWSImportActionCreate")
+	tflog.Debug(ctx, "entering resourceAWSImportActionCreate")
+	defer tflog.Debug(ctx, "exiting resourceAWSImportActionCreate")
 	c := meta.(*cloudTruthClient)
 	importActionCreate := cloudtruthapi.NewAwsPullWithDefaults()
 	importActionName := d.Get("name").(string)
@@ -110,7 +111,8 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 }
 
 func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAWSImportActionRead")
+	tflog.Debug(ctx, "entering resourceAWSImportActionRead")
+	defer tflog.Debug(ctx, "exiting resourceAWSImportActionRead")
 	c := meta.(*cloudTruthClient)
 	awsIntegrationID := d.Get("integration_id").(string)
 	importActionName := d.Get("name").(string)
@@ -135,7 +137,8 @@ func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, me
 }
 
 func resourceAWSImportActionUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAWSImportActionUpdate")
+	tflog.Debug(ctx, "entering resourceAWSImportActionUpdate")
+	defer tflog.Debug(ctx, "exiting resourceAWSImportActionUpdate")
 	c := meta.(*cloudTruthClient)
 	importActionName := d.Get("name").(string)
 	importActionID := d.Id()
@@ -182,7 +185,8 @@ func resourceAWSImportActionUpdate(ctx context.Context, d *schema.ResourceData, 
 }
 
 func resourceAWSImportActionDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAWSImportActionDelete")
+	tflog.Debug(ctx, "entering resourceAWSImportActionDelete")
+	defer tflog.Debug(ctx, "exiting resourceAWSImportActionDelete")
 	c := meta.(*cloudTruthClient)
 	importActionName := d.Get("name").(string)
 	importActionID := d.Id()

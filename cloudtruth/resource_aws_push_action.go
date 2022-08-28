@@ -110,7 +110,8 @@ func resourceAWSPushAction() *schema.Resource {
 }
 
 func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAWSPushActionCreate")
+	tflog.Debug(ctx, "entering resourceAWSPushActionCreate")
+	defer tflog.Debug(ctx, "exiting resourceAWSPushActionCreate")
 	c := meta.(*cloudTruthClient)
 	pushActionCreate := cloudtruthapi.NewAwsPushWithDefaults()
 	pushActionName := d.Get("name").(string)
@@ -176,7 +177,8 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 }
 
 func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAWSPushActionRead")
+	tflog.Debug(ctx, "entering resourceAWSPushActionRead")
+	defer tflog.Debug(ctx, "exiting resourceAWSPushActionRead")
 	c := meta.(*cloudTruthClient)
 	awsIntegrationID := d.Get("integration_id").(string)
 	pushActionName := d.Get("name").(string)
@@ -201,7 +203,8 @@ func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta
 }
 
 func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAWSPushActionUpdate")
+	tflog.Debug(ctx, "entering resourceAWSPushActionUpdate")
+	defer tflog.Debug(ctx, "exiting resourceAWSPushActionUpdate")
 	c := meta.(*cloudTruthClient)
 	pushActionName := d.Get("name").(string)
 	pushActionID := d.Id()
@@ -269,7 +272,8 @@ func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, me
 }
 
 func resourceAWSPushActionDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAWSPushActionDelete")
+	tflog.Debug(ctx, "entering resourceAWSPushActionDelete")
+	defer tflog.Debug(ctx, "exiting resourceAWSPushActionDelete")
 	c := meta.(*cloudTruthClient)
 	pushActionName := d.Get("name").(string)
 	pushActionID := d.Id()
