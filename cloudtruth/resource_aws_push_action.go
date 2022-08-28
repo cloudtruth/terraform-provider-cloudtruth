@@ -100,8 +100,8 @@ func resourceAWSPushAction() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			"resource_pattern": {
-				Description: "The regex or mustache resource pattern specifying the environment, project, and parameter",
+			"resource": {
+				Description: "The mustache style resource string specifying the environment, project, and parameter",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
@@ -127,7 +127,7 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	resourcePath := d.Get("resource_pattern").(string)
+	resourcePath := d.Get("resource").(string)
 	pushActionCreate.SetRegion(*region)
 	pushActionCreate.SetService(*service)
 	pushActionCreate.SetResource(resourcePath)
@@ -212,9 +212,9 @@ func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, me
 	patchedAWSPush := cloudtruthapi.PatchedAwsPushUpdate{}
 	hasChange := false
 	props := map[string]func(v string){
-		"name":             patchedAWSPush.SetName,
-		"description":      patchedAWSPush.SetDescription,
-		"resource_pattern": patchedAWSPush.SetResource,
+		"name":        patchedAWSPush.SetName,
+		"description": patchedAWSPush.SetDescription,
+		"resource":    patchedAWSPush.SetResource,
 	}
 	for prop := range props {
 		if d.HasChange(prop) {

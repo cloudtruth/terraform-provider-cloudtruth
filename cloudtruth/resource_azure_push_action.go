@@ -32,6 +32,65 @@ func resourceAzurePushAction() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
+			"parameters": {
+				Description: "Include parameters (non-secrets) when pushing, defaults to true",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+			},
+			"secrets": {
+				Description: "Include secrets when pushing, defaults to true",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+			},
+			"templates": {
+				Description: "Include templates when pushing, defaults to true",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+			},
+			"coerce": {
+				Description: "Include secrets/parameters even if the upstream destination doesn't allow them (e.g. non-secrets in AWS SecretsManager), defaults to false",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+			},
+			"force": {
+				Description: "Allow CloudTruth to take ownership and overwrite any pre-existing items, defaults to false",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+			},
+			"local": {
+				Description: "Only send the parameters defined directly in the specified projects (not inherited), defaults to false",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+			},
+			"dry_run": {
+				Description: "When true, the action only reports what it would push without actually pushing changes, defaults to true",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+			},
+			"projects": {
+				Description: "The projects containing the parameters to pushed to the AWS destination",
+				Type:        schema.TypeList,
+				Required:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+			},
+			"tags": {
+				Description: "Tags specified in the form 'environment_name:tag_name' indicating the sync point for parameters to be pushed (multiple tags allowed but only one per environment)",
+				Type:        schema.TypeList,
+				Required:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+			},
+			"resource": {
+				Description: "The mustache style resource string specifying the environment, project, and parameter",
+				Type:        schema.TypeString,
+				Required:    true,
+			},
 		},
 	}
 }

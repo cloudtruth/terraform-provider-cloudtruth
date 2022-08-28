@@ -46,7 +46,7 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "name", pushActionName),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "region", createRegion),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "service", createService),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "resource_pattern", createPushPattern),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "resource", createPushPattern),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "parameters", fmt.Sprint(true)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "secrets", fmt.Sprint(false)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "templates", fmt.Sprint(true)),
@@ -62,7 +62,7 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "name", pushActionName),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "region", createRegion),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "service", createService),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "resource_pattern", updatePushPattern),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "resource", updatePushPattern),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "parameters", fmt.Sprint(false)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "secrets", fmt.Sprint(true)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "templates", fmt.Sprint(false)),
@@ -90,7 +90,7 @@ func testAccResourceAWSPushActionBasic(resource, name, intID, desc string, param
 		dry_run              = "%t"
 		region               = "%s"
 		service              = "%s"
-		resource_pattern     = "%s"
+		resource		     = "%s"
 		projects             = ["AcceptanceTest"]
 		tags                 = ["default:EpochTime"]
 	}

@@ -33,6 +33,28 @@ func resourceAzureImportAction() *schema.Resource {
 				Optional:    true,
 				Default:     "",
 			},
+			"create_environments": {
+				Description: "Auto create environments",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+			},
+			"create_projects": {
+				Description: "Auto create projects",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+			},
+			"resource": {
+				Description: "The regex or mustache resource string specifying the environment, project, and parameter",
+				Type:        schema.TypeString,
+				Required:    true,
+			},
+			"mode": {
+				Description: "The resource type: 'pattern' for mustache-style regexes and 'mapped' for JMESpath expression",
+				Type:        schema.TypeString,
+				Required:    true,
+			},
 		},
 	}
 }

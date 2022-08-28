@@ -26,7 +26,8 @@ func TestAccResourceAWSImportActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "create_projects", fmt.Sprint(true)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "region", createRegion),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "service", createService),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "resource_pattern", createImportPattern),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "resource", createImportPattern),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "mode", "pattern"),
 				),
 			},
 			{
@@ -36,7 +37,7 @@ func TestAccResourceAWSImportActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "name", importActionName),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "create_environments", fmt.Sprint(false)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "create_projects", fmt.Sprint(false)),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "resource_pattern", updateImportPattern),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "resource", updateImportPattern),
 				),
 			},
 		},
@@ -53,7 +54,8 @@ func testAccResourceAWSImportActionBasic(resource, name, intID, desc string, cre
 		create_projects      = "%t"
 		region               = "%s"
 		service              = "%s"
-		resource_pattern     = "%s"
+		resource             = "%s"
+		mode                 = "pattern"
 	}
 	`, resource, name, intID, desc, createEnvs, createProjs, region, service, resourcePattern)
 }

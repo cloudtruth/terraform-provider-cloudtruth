@@ -59,11 +59,15 @@ func resourceAWSImportAction() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			"resource_pattern": {
-				Description: "The regex or mustache resource pattern specifying the environment, project, and parameter",
+			"resource": {
+				Description: "The mustache style or JMESPath resource string specifying the environment, project, and parameter",
 				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     true,
+				Required:    true,
+			},
+			"mode": {
+				Description: "The resource type: 'pattern' for mustache-style regexes and 'mapped' for JMESpath expression",
+				Type:        schema.TypeString,
+				Required:    true,
 			},
 		},
 	}
@@ -76,9 +80,13 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 	importActionCreate := cloudtruthapi.NewAwsPullWithDefaults()
 	importActionName := d.Get("name").(string)
 	awsIntegrationID := d.Get("integration_id").(string)
-	importActionDesc := d.Get("description").(string)
 	importActionCreate.SetName(importActionName)
-	importActionCreate.SetDescription(importActionDesc)
+	importActionCreate.SetDescription(d.Get("description").(string))
+	importActionMode, err := cloudtruthapi.NewModeEnumFromValue(d.Get("mode").(string))
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	importActionCreate.SetMode(*importActionMode)
 	region, err := cloudtruthapi.NewAwsRegionEnumFromValue(d.Get("region").(string))
 	if err != nil {
 		return diag.FromErr(err)
@@ -87,7 +95,7 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	resourcePath := d.Get("resource_pattern").(string)
+	resourcePath := d.Get("resource").(string)
 	importActionCreate.SetRegion(*region)
 	importActionCreate.SetService(*service)
 	importActionCreate.SetResource(resourcePath)
@@ -146,15 +154,22 @@ func resourceAWSImportActionUpdate(ctx context.Context, d *schema.ResourceData, 
 	patchedAWSPull := cloudtruthapi.PatchedAwsPull{}
 	hasChange := false
 	props := map[string]func(v string){
-		"name":             patchedAWSPull.SetName,
-		"description":      patchedAWSPull.SetDescription,
-		"resource_pattern": patchedAWSPull.SetResource,
+		"name":        patchedAWSPull.SetName,
+		"description": patchedAWSPull.SetDescription,
+		"resource":    patchedAWSPull.SetResource,
 	}
 	for prop := range props {
 		if d.HasChange(prop) {
 			props[prop](d.Get(prop).(string))
 			hasChange = true
 		}
+	}
+	if d.HasChange("mode") {
+		importActionMode, err := cloudtruthapi.NewModeEnumFromValue(d.Get("mode").(string))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		patchedAWSPull.SetMode(*importActionMode)
 	}
 	if d.HasChange("create_environments") {
 		patchedAWSPull.SetCreateEnvironments(d.Get("create_environments").(bool))
