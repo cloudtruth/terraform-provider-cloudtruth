@@ -89,26 +89,17 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 	if typeDesc != "" {
 		typeCreate.SetDescription(typeDesc)
 	}
-	baseTypeName := d.Get("type").(string)
-	baseType := c.lookupType(ctx, baseTypeName)
-	if baseType == nil {
-		return diag.FromErr(fmt.Errorf("resourceTypeCreate: unknown base type %s", baseTypeName))
-	}
-	var baseParamType *cloudtruthapi.ParameterType
-	if baseTypeName != "" {
-		baseParamType = c.lookupType(ctx, baseTypeName)
-		if baseParamType == nil {
-			return diag.FromErr(fmt.Errorf("unknown parameter type %s", baseTypeName))
-		}
-	}
+	// concreteType is the underlying type (builtin or custom) of the cloudtruth_type resource
+	concreteType := c.lookupType(ctx, d.Get("type").(string))
+	baseParamType := getBaseParamType(ctx, concreteType, c)
+
 	var rules map[string]any
 	var err error
-	if rules, err = validateAndFetchRules(ctx, c, d, baseParamType); err != nil {
+	if rules, err = validateAndFetchRules(ctx, c, d, concreteType); err != nil {
 		return diag.FromErr(err)
 	}
-	fmt.Printf("+%v", rules)
 
-	typeCreate.SetParent(baseType.GetUrl())
+	typeCreate.SetParent(concreteType.GetUrl())
 	var typeID string
 	var typeCreateResp *cloudtruthapi.ParameterType
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
@@ -125,48 +116,60 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 		return diag.FromErr(retryError)
 	}
 
-	if _, ok := d.GetOk("rule"); ok {
-		rules := d.Get("rule").([]any)
-		for _, r := range rules {
-			err := addRuleToType(ctx, c, typeID, r.(map[string]any))
-			if err != nil {
-				return diag.FromErr(err)
-			}
+	for ruleName, ruleVal := range rules {
+		ruleID, err := addRuleToType(ctx, c, typeID, baseParamType, ruleName, ruleVal.(string))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		// Compute the rule ID
+		err = d.Set(fmt.Sprintf("%s_id", ruleName), ruleID)
+		if err != nil {
+			return diag.FromErr(err)
 		}
 	}
-
 	d.SetId(typeID)
 	return nil
 }
 
-func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, rule map[string]any) error {
+func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, baseParamType, ruleName, ruleVal string) (*string, error) {
 	tflog.Debug(ctx, "entering addRuleToType")
-	defer tflog.Debug(ctx, "exiting resourceTypeCreate")
+	defer tflog.Debug(ctx, "exiting addRuleToType")
 	retryCount := 0
 	var apiError error
-	var createTypeRule cloudtruthapi.ParameterTypeRuleCreate
-	typeEnum, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(rule["type"].(string))
-	if err != nil {
-		return err
+	if baseParamType == "string" {
+		if ruleName == "max" || ruleName == "min" {
+			ruleName = fmt.Sprintf("%s_len", ruleName) // the API string rule names are min_len and max_len not max/min
+		}
 	}
-	createTypeRule.SetType(*typeEnum)
-	createTypeRule.SetConstraint(rule["constraint"].(string))
+	var createTypeRule cloudtruthapi.ParameterTypeRuleCreate
+	typeEnum, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(ruleName)
+	if err != nil {
+		return nil, err
+	}
 
+	createTypeRule.SetType(*typeEnum)
+	createTypeRule.SetConstraint(ruleVal)
+
+	var typeRule *cloudtruthapi.ParameterTypeRule
+	var r *http.Response
 	for retryCount < ruleOperationRetries {
-		_, r, err := c.openAPIClient.TypesApi.TypesRulesCreate(ctx, typeID).ParameterTypeRuleCreate(createTypeRule).Execute()
-		if r.StatusCode >= http.StatusInternalServerError {
-			tflog.Debug(ctx, fmt.Sprintf("addRuleToType: %s", err))
+		typeRule, r, err = c.openAPIClient.TypesApi.TypesRulesCreate(ctx, typeID).ParameterTypeRuleCreate(createTypeRule).Execute()
+		if r.StatusCode >= 500 {
 			apiError = err
 			retryCount++
+		} else if r.StatusCode >= 400 {
+			clientErr := err.(*cloudtruthapi.GenericOpenAPIError)
+			return nil, fmt.Errorf("client %d error: %s", r.StatusCode, clientErr.Body())
 		} else {
 			apiError = nil
 			break
 		}
 	}
 	if apiError != nil {
-		return apiError
+		return nil, apiError
 	}
-	return nil
+	typeRuleID := typeRule.GetId()
+	return &typeRuleID, nil
 }
 
 func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {

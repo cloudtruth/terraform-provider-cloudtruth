@@ -207,7 +207,7 @@ func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID
 	var r *http.Response
 	for retryCount < ruleOperationRetries {
 		paramRule, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRulesCreate(ctx, paramID, projectID).ParameterRuleCreate(createTypeRule).Execute()
-		if r.StatusCode >= http.StatusInternalServerError {
+		if r.StatusCode >= 500 {
 			tflog.Debug(ctx, fmt.Sprintf("addRuleToType: %s", err))
 			apiError = err
 			retryCount++
