@@ -148,6 +148,17 @@ func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID strin
 	return nil, fmt.Errorf("lookupProject: project with name/ID %s not found", projNameOrID)
 }
 
+// Look up a project identifier first as a name, then as an ID
+func (c *cloudTruthClient) getProjectURL(ctx context.Context, projNameOrID string) (*string, error) {
+	tflog.Debug(ctx, fmt.Sprintf("lookupProject: looking up project with name/ID %s", projNameOrID))
+	projID, err := c.lookupProject(ctx, projNameOrID)
+	if err != nil {
+		return nil, err
+	}
+	projURL := fmt.Sprintf("%s/projects/%s/", c.config.BaseURL, *projID)
+	return &projURL, nil
+}
+
 // Map of CloudTruth project names -> project IDs
 func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 	if c.projectNames == nil {

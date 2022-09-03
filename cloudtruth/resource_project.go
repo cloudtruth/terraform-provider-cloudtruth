@@ -35,6 +35,7 @@ func resourceProject() *schema.Resource {
 				Description: "The Parent CloudTruth project",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Default:     "",
 			},
 			"force_delete": {
 				Description: "Whether to allow Terraform to delete the project or not",
@@ -54,6 +55,14 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 	projectCreate := cloudtruthapi.NewProjectCreate(projectName)
 	if projectDesc != "" {
 		projectCreate.SetDescription(projectDesc)
+	}
+	projectParent := d.Get("parent").(string)
+	if projectParent != "" {
+		parent, err := c.getProjectURL(ctx, projectParent)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		projectCreate.SetDependsOn(*parent)
 	}
 
 	var resp *cloudtruthapi.Project
@@ -100,7 +109,13 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	if len(res) != 1 {
 		return diag.FromErr(fmt.Errorf("resourceProjectRead: found %d projects, expcted to find 1", len(res)))
 	}
-	d.SetId(resp.GetResults()[0].GetId())
+	project := resp.GetResults()[0]
+	d.SetId(project.GetId())
+	// todo: determine if reading the project parent is useful/needed, the parent project field is not settable in the UI
+	err := d.Set("description", project.GetDescription())
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	return nil
 }
 
@@ -115,6 +130,8 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 	// force_delete is not a property in the API, it is only a guard rail used by this provider
 	patchedProject := cloudtruthapi.PatchedProject{}
 	hasChange := false
+
+	// todo: determine if updating the project parent is useful/needed, the parent project field is not settable in the UI
 	if d.HasChange("name") {
 		patchedProject.SetName(projectName)
 		hasChange = true
@@ -123,6 +140,7 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 		patchedProject.SetDescription(projectDesc)
 		hasChange = true
 	}
+
 	if hasChange {
 		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
 			var r *http.Response
