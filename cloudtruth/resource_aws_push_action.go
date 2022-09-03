@@ -26,10 +26,15 @@ func resourceAWSPushAction() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
+			"integration": {
+				Description: "The name of the CloudTruth integration corresponding to this pull action",
+				Type:        schema.TypeString,
+				Required:    true,
+			},
 			"integration_id": {
 				Description: "The ID of the CloudTruth integration corresponding to this pull action",
 				Type:        schema.TypeString,
-				Required:    true,
+				Computed:    true,
 			},
 			"description": {
 				Description: "A description of the push action",
@@ -115,7 +120,7 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	c := meta.(*cloudTruthClient)
 	pushActionCreate := cloudtruthapi.NewAwsPushWithDefaults()
 	pushActionName := d.Get("name").(string)
-	awsIntegrationID := d.Get("integration_id").(string)
+	awsIntegrationID := d.Get("integration").(string)
 	pushActionDesc := d.Get("description").(string)
 	pushActionCreate.SetName(pushActionName)
 	pushActionCreate.SetDescription(pushActionDesc)
@@ -157,6 +162,7 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	pushActionCreate.SetCoerceParameters(d.Get("coerce").(bool))
 	pushActionCreate.SetForce(d.Get("force").(bool))
 	pushActionCreate.SetLocal(d.Get("local").(bool))
+	pushActionCreate.SetDryRun(d.Get("dry_run").(bool))
 
 	var resp *cloudtruthapi.AwsPush
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
@@ -184,11 +190,11 @@ func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta
 	pushActionName := d.Get("name").(string)
 	pushActionID := d.Id()
 
-	var resp *cloudtruthapi.AwsPush
+	var awsPush *cloudtruthapi.AwsPush
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesRetrieve(ctx, awsIntegrationID, pushActionID).Execute()
+		awsPush, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesRetrieve(ctx, awsIntegrationID, pushActionID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSPushActionRead: error reading AWS push action %s", pushActionName), r, err)
 		}
@@ -198,7 +204,36 @@ func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta
 		return diag.FromErr(retryError)
 	}
 
-	d.SetId(resp.GetId())
+	props := map[string]func() string{
+		"name":        awsPush.GetName,
+		"description": awsPush.GetDescription,
+		"resource":    awsPush.GetResource,
+	}
+	var err error
+	for prop := range props {
+		err = d.Set(prop, props[prop]())
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
+	boolProps := map[string]func() bool{
+		"parameters": awsPush.GetIncludeParameters,
+		"secrets":    awsPush.GetIncludeSecrets,
+		"templates":  awsPush.GetIncludeTemplates,
+		"coerce":     awsPush.GetCoerceParameters,
+		"force":      awsPush.GetForce,
+		"local":      awsPush.GetLocal,
+		"dry_run":    awsPush.GetDryRun,
+	}
+	for prop := range boolProps {
+		val := boolProps[prop]()
+		err = d.Set(prop, val)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	d.SetId(awsPush.GetId())
 	return nil
 }
 

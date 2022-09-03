@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
+	"strings"
 )
 
 func resourceAWSImportAction() *schema.Resource {
@@ -26,10 +27,16 @@ func resourceAWSImportAction() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
+			"integration": {
+				Description:  "The name (using the format AWS_ROLE@AWS_ACCOUNT_ID) of the CloudTruth integration corresponding to this pull action",
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validAWSIntegrationName,
+			},
 			"integration_id": {
 				Description: "The ID of the CloudTruth integration corresponding to this pull action",
 				Type:        schema.TypeString,
-				Required:    true,
+				Computed:    true,
 			},
 			"description": {
 				Description: "A description of the import action",
@@ -73,13 +80,43 @@ func resourceAWSImportAction() *schema.Resource {
 	}
 }
 
+func validAWSIntegrationName(v interface{}, attributeName string) (warns []string, errs []error) {
+	intName := v.(string)
+	nameSegments := strings.Split(intName, "@")
+	if len(nameSegments) != 2 {
+		errs = append(errs, fmt.Errorf("the %s property %s must use this formate: AWS_ROLE@AWS_ACCOUNT_ID", attributeName, intName))
+	}
+	return
+}
+
 func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAWSImportActionCreate")
 	defer tflog.Debug(ctx, "exiting resourceAWSImportActionCreate")
 	c := meta.(*cloudTruthClient)
 	importActionCreate := cloudtruthapi.NewAwsPullWithDefaults()
 	importActionName := d.Get("name").(string)
-	awsIntegrationID := d.Get("integration_id").(string)
+	awsIntegrationName := d.Get("integration").(string)
+
+	nameSegments := strings.Split(awsIntegrationName, "@")
+	role, awsAccountID := nameSegments[0], nameSegments[1]
+	var integrations *cloudtruthapi.PaginatedAwsIntegrationList
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		integrations, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsList(ctx).AwsAccountId(awsAccountID).AwsRoleName(role).Execute()
+		if err != nil {
+			return handleAPIError(fmt.Sprintf("lookupAWSIntegrationID: error looking up AWS import action %s", awsIntegrationName), r, err)
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
+	if *integrations.Count != 1 {
+		return diag.FromErr(fmt.Errorf("resourceAWSImportActionCreate: unexpected number of AWS integrations found for %s", awsIntegrationName))
+	}
+	awsIntegrationID := integrations.GetResults()[0].GetId()
+
 	importActionCreate.SetName(importActionName)
 	importActionCreate.SetDescription(d.Get("description").(string))
 	importActionMode, err := cloudtruthapi.NewModeEnumFromValue(d.Get("mode").(string))
@@ -100,11 +137,11 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 	importActionCreate.SetService(*service)
 	importActionCreate.SetResource(resourcePath)
 
-	var resp *cloudtruthapi.AwsPull
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	var awsPull *cloudtruthapi.AwsPull
+	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsCreate(ctx, awsIntegrationID).AwsPull(*importActionCreate).Execute()
+		awsPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsCreate(ctx, awsIntegrationID).AwsPull(*importActionCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSImportActionCreate: error creating AWS import action %s", importActionName), r, err)
 		}
@@ -113,8 +150,11 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-
-	d.SetId(resp.GetId())
+	err = d.Set("integration_id", awsIntegrationID)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	d.SetId(awsPull.GetId())
 	return nil
 }
 
@@ -126,11 +166,11 @@ func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, me
 	importActionName := d.Get("name").(string)
 	importActionID := d.Id()
 
-	var resp *cloudtruthapi.AwsPull
+	var awsPull *cloudtruthapi.AwsPull
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsRetrieve(ctx, awsIntegrationID, importActionID).Execute()
+		awsPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsRetrieve(ctx, awsIntegrationID, importActionID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSImportActionRead: error reading AWS import action %s", importActionName), r, err)
 		}
@@ -140,10 +180,49 @@ func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, me
 		return diag.FromErr(retryError)
 	}
 
-	d.SetId(resp.GetId())
+	err := setAWSImportReadProps(awsPull, d)
+	if retryError != nil {
+		return diag.FromErr(err)
+	}
+	d.SetId(awsPull.GetId())
 	return nil
 }
 
+// todo: figure how and if we should read integration_id, it's not a top level property on Pull objects
+// omitting region and service for now since they are not settable in the UI
+func setAWSImportReadProps(pull *cloudtruthapi.AwsPull, d *schema.ResourceData) error {
+	err := d.Set("name", pull.GetName())
+	if err != nil {
+		return err
+	}
+	err = d.Set("description", pull.GetDescription())
+	if err != nil {
+		return err
+	}
+	err = d.Set("resource", pull.GetResource())
+	if err != nil {
+		return err
+	}
+	err = d.Set("mode", pull.GetMode())
+	if err != nil {
+		return err
+	}
+	err = d.Set("create_projects", pull.GetCreateProjects())
+	if err != nil {
+		return err
+	}
+	err = d.Set("mode", pull.GetMode())
+	if err != nil {
+		return err
+	}
+	err = d.Set("create_environments", pull.GetCreateEnvironments())
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Some fields (e.g. integration id/name) are not settable in the UI, we are skipping them for now
 func resourceAWSImportActionUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAWSImportActionUpdate")
 	defer tflog.Debug(ctx, "exiting resourceAWSImportActionUpdate")

@@ -19,7 +19,7 @@ func TestAccResourceAWSPushActionInvalid(t *testing.T) {
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationID, genericDesc,
+				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationName, genericDesc,
 					false, false, true, true, true, true, true,
 					createRegion, createService, createPushPattern),
 				ExpectError: regexp.MustCompile("one of `include_parameters` or `include_secrets` must be true"),
@@ -39,7 +39,7 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationID, genericDesc,
+				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationName, genericDesc,
 					true, false, true, true, true, true, true,
 					createRegion, createService, createPushPattern),
 				Check: resource.ComposeTestCheckFunc(
@@ -55,7 +55,7 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "local", fmt.Sprint(true)),
 				),
 			}, {
-				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationID, genericDesc,
+				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationName, genericDesc,
 					false, true, false, false, false, false, false,
 					createRegion, createService, updatePushPattern),
 				Check: resource.ComposeTestCheckFunc(
@@ -75,11 +75,11 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 	})
 }
 
-func testAccResourceAWSPushActionBasic(resource, name, intID, desc string, params, secrets, templates, coerce, force, local, dryRun bool, region, service, resourcePattern string) string {
+func testAccResourceAWSPushActionBasic(resource, name, intName, desc string, params, secrets, templates, coerce, force, local, dryRun bool, region, service, resourcePattern string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_aws_push_action" "%s" {
   		name                 = "%s"
-		integration_id       = "%s"
+		integration          = "%s"
   		description          = "%s"
 		parameters           = "%t"
 		secrets              = "%t"
@@ -94,5 +94,5 @@ func testAccResourceAWSPushActionBasic(resource, name, intID, desc string, param
 		projects             = ["AcceptanceTest"]
 		tags                 = ["default:EpochTime"]
 	}
-	`, resource, name, intID, desc, params, secrets, templates, coerce, force, local, dryRun, region, service, resourcePattern)
+	`, resource, name, intName, desc, params, secrets, templates, coerce, force, local, dryRun, region, service, resourcePattern)
 }
