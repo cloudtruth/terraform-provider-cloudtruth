@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
+	"strings"
 )
 
 func resourceAccessGrant() *schema.Resource {
@@ -42,12 +43,12 @@ non-owner grant(s) the owner grant is created before the non-owner grant(s) is c
 				Optional:    true,
 			},
 			"project": {
-				Description: "The target environment to which the role will provide access, mutually exclusive with 'environment'",
+				Description: "The target project to which the role will provide access, mutually exclusive with 'environment'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"user": {
-				Description: "The user which will be granted the role, mutually exclusive with 'group'",
+				Description: "The display name or email of the user who will be granted the role, mutually exclusive with 'group'.",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
@@ -55,6 +56,11 @@ non-owner grant(s) the owner grant is created before the non-owner grant(s) is c
 				Description: "The group which will be granted the role, mutually exclusive with 'user'",
 				Type:        schema.TypeString,
 				Optional:    true,
+			},
+			"principal_id": {
+				Description: "The internal ID of the user or group granted the role",
+				Type:        schema.TypeString,
+				Computed:    true,
 			},
 		},
 	}
@@ -74,7 +80,7 @@ func parsePrincipalInput(ctx context.Context, d *schema.ResourceData, meta any) 
 	}
 	if _, ok := d.GetOk("group"); ok {
 		if principalName != "" {
-			return nil, fmt.Errorf("parsePrincipalInput: cannot specity both user and group names with an access grant")
+			return nil, fmt.Errorf("parsePrincipalInput: cannot specity both users and groups with an access grant")
 		}
 		principalName = d.Get("group").(string)
 		group, err := c.lookupGroup(ctx, principalName)
@@ -148,6 +154,19 @@ func resourceAccessGrantCreate(ctx context.Context, d *schema.ResourceData, meta
 		return diag.FromErr(retryError)
 	}
 
+	err = d.Set("role", grant.GetRole())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	principalID, err := getPrincipalID(ctx, grant.GetPrincipal())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("principal_id", principalID)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	d.SetId(grant.GetId())
 	return nil
 }
@@ -170,6 +189,18 @@ func resourceAccessGrantRead(ctx context.Context, d *schema.ResourceData, meta a
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
+	err := d.Set("role", resp.GetRole())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	principalID, err := getPrincipalID(ctx, resp.GetPrincipal())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("principal_id", principalID)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
 	d.SetId(resp.GetId())
 	return nil
@@ -185,8 +216,15 @@ func resourceAccessGrantUpdate(ctx context.Context, d *schema.ResourceData, meta
 		if err != nil {
 			return diag.FromErr(err)
 		}
-		patchedGrant.SetPrincipal(*principalURL)
-		hasChange = true
+		principalID, err := getPrincipalID(ctx, *principalURL)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		curPrincipalID := d.Get("principal_id")
+		if curPrincipalID != principalID {
+			patchedGrant.SetPrincipal(*principalURL)
+			hasChange = true
+		}
 	}
 	if d.HasChanges("environment", "project") {
 		scopeURL, err := parseScopeInput(ctx, d, meta)
@@ -240,4 +278,18 @@ func resourceAccessGrantDelete(ctx context.Context, d *schema.ResourceData, meta
 		return diag.FromErr(retryError)
 	}
 	return nil
+}
+
+func getPrincipalID(ctx context.Context, principalURL string) (*string, error) {
+	tflog.Debug(ctx, "getUserName")
+	// Sample principal URLs
+	// https://api.cloudtruth.io/api/v1/users/USER_ID/
+	// https://api.cloudtruth.io/api/v1/groups/GROUP_ID/
+	urlSegments := strings.Split(principalURL, "/")
+	if len(urlSegments) < 7 {
+		return nil, fmt.Errorf("did not find the principal ID in the URL %s", principalURL)
+	} else {
+		id := urlSegments[6]
+		return &id, nil
+	}
 }
