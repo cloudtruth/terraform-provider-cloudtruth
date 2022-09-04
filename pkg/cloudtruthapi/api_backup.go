@@ -34,8 +34,8 @@ func (r ApiBackupSnapshotCreateRequest) Execute() (*BackupDataSnapshot, *http.Re
 /*
 BackupSnapshotCreate Get a snapshot of all Projects with parameters
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiBackupSnapshotCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiBackupSnapshotCreateRequest
 */
 func (a *BackupApiService) BackupSnapshotCreate(ctx context.Context) ApiBackupSnapshotCreateRequest {
 	return ApiBackupSnapshotCreateRequest{
@@ -45,7 +45,8 @@ func (a *BackupApiService) BackupSnapshotCreate(ctx context.Context) ApiBackupSn
 }
 
 // Execute executes the request
-//  @return BackupDataSnapshot
+//
+//	@return BackupDataSnapshot
 func (a *BackupApiService) BackupSnapshotCreateExecute(r ApiBackupSnapshotCreateRequest) (*BackupDataSnapshot, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost

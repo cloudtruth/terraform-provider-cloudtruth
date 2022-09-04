@@ -42,8 +42,8 @@ func (r ApiProjectsCreateRequest) Execute() (*Project, *http.Response, error) {
 /*
 ProjectsCreate Method for ProjectsCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiProjectsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiProjectsCreateRequest
 */
 func (a *ProjectsApiService) ProjectsCreate(ctx context.Context) ApiProjectsCreateRequest {
 	return ApiProjectsCreateRequest{
@@ -53,7 +53,8 @@ func (a *ProjectsApiService) ProjectsCreate(ctx context.Context) ApiProjectsCrea
 }
 
 // Execute executes the request
-//  @return Project
+//
+//	@return Project
 func (a *ProjectsApiService) ProjectsCreateExecute(r ApiProjectsCreateRequest) (*Project, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -173,9 +174,9 @@ func (r ApiProjectsDestroyRequest) Execute() (*http.Response, error) {
 /*
 ProjectsDestroy Method for ProjectsDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiProjectsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiProjectsDestroyRequest
 */
 func (a *ProjectsApiService) ProjectsDestroy(ctx context.Context, id string) ApiProjectsDestroyRequest {
 	return ApiProjectsDestroyRequest{
@@ -329,8 +330,8 @@ func (r ApiProjectsListRequest) Execute() (*PaginatedProjectList, *http.Response
 /*
 ProjectsList Method for ProjectsList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiProjectsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiProjectsListRequest
 */
 func (a *ProjectsApiService) ProjectsList(ctx context.Context) ApiProjectsListRequest {
 	return ApiProjectsListRequest{
@@ -340,7 +341,8 @@ func (a *ProjectsApiService) ProjectsList(ctx context.Context) ApiProjectsListRe
 }
 
 // Execute executes the request
-//  @return PaginatedProjectList
+//
+//	@return PaginatedProjectList
 func (a *ProjectsApiService) ProjectsListExecute(r ApiProjectsListRequest) (*PaginatedProjectList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -558,9 +560,9 @@ will be in a quoted string).  Note that capitalization is the only name coercion
 that will be performed on parameter names, names that are invalid for a given
 format will be omitted.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsParameterExportListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsParameterExportListRequest
 */
 func (a *ProjectsApiService) ProjectsParameterExportList(ctx context.Context, projectPk string) ApiProjectsParameterExportListRequest {
 	return ApiProjectsParameterExportListRequest{
@@ -571,7 +573,8 @@ func (a *ProjectsApiService) ProjectsParameterExportList(ctx context.Context, pr
 }
 
 // Execute executes the request
-//  @return ParameterExport
+//
+//	@return ParameterExport
 func (a *ProjectsApiService) ProjectsParameterExportListExecute(r ApiProjectsParameterExportListRequest) (*ParameterExport, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -735,9 +738,9 @@ func (r ApiProjectsParametersCreateRequest) Execute() (*Parameter, *http.Respons
 /*
 ProjectsParametersCreate Method for ProjectsParametersCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsParametersCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsParametersCreateRequest
 */
 func (a *ProjectsApiService) ProjectsParametersCreate(ctx context.Context, projectPk string) ApiProjectsParametersCreateRequest {
 	return ApiProjectsParametersCreateRequest{
@@ -748,7 +751,8 @@ func (a *ProjectsApiService) ProjectsParametersCreate(ctx context.Context, proje
 }
 
 // Execute executes the request
-//  @return Parameter
+//
+//	@return Parameter
 func (a *ProjectsApiService) ProjectsParametersCreateExecute(r ApiProjectsParametersCreateRequest) (*Parameter, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -870,10 +874,10 @@ func (r ApiProjectsParametersDestroyRequest) Execute() (*http.Response, error) {
 /*
 ProjectsParametersDestroy Method for ProjectsParametersDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsParametersDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsParametersDestroyRequest
 */
 func (a *ProjectsApiService) ProjectsParametersDestroy(ctx context.Context, id string, projectPk string) ApiProjectsParametersDestroyRequest {
 	return ApiProjectsParametersDestroyRequest{
@@ -1134,9 +1138,9 @@ entry.
 If t1 is not specified then it will point to a time in the past where
 nothing existed.  If t2 is not specified then it is assumed to be "now".
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsParametersDualityListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsParametersDualityListRequest
 */
 func (a *ProjectsApiService) ProjectsParametersDualityList(ctx context.Context, projectPk string) ApiProjectsParametersDualityListRequest {
 	return ApiProjectsParametersDualityListRequest{
@@ -1147,7 +1151,8 @@ func (a *ProjectsApiService) ProjectsParametersDualityList(ctx context.Context, 
 }
 
 // Execute executes the request
-//  @return PaginatedParameterDualityList
+//
+//	@return PaginatedParameterDualityList
 func (a *ProjectsApiService) ProjectsParametersDualityListExecute(r ApiProjectsParametersDualityListRequest) (*PaginatedParameterDualityList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -1491,9 +1496,9 @@ func (r ApiProjectsParametersListRequest) Execute() (*PaginatedParameterList, *h
 /*
 ProjectsParametersList Method for ProjectsParametersList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsParametersListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsParametersListRequest
 */
 func (a *ProjectsApiService) ProjectsParametersList(ctx context.Context, projectPk string) ApiProjectsParametersListRequest {
 	return ApiProjectsParametersListRequest{
@@ -1504,7 +1509,8 @@ func (a *ProjectsApiService) ProjectsParametersList(ctx context.Context, project
 }
 
 // Execute executes the request
-//  @return PaginatedParameterList
+//
+//	@return PaginatedParameterList
 func (a *ProjectsApiService) ProjectsParametersListExecute(r ApiProjectsParametersListRequest) (*PaginatedParameterList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -1705,10 +1711,10 @@ func (r ApiProjectsParametersPartialUpdateRequest) Execute() (*Parameter, *http.
 /*
 ProjectsParametersPartialUpdate Method for ProjectsParametersPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsParametersPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsParametersPartialUpdateRequest
 */
 func (a *ProjectsApiService) ProjectsParametersPartialUpdate(ctx context.Context, id string, projectPk string) ApiProjectsParametersPartialUpdateRequest {
 	return ApiProjectsParametersPartialUpdateRequest{
@@ -1720,7 +1726,8 @@ func (a *ProjectsApiService) ProjectsParametersPartialUpdate(ctx context.Context
 }
 
 // Execute executes the request
-//  @return Parameter
+//
+//	@return Parameter
 func (a *ProjectsApiService) ProjectsParametersPartialUpdateExecute(r ApiProjectsParametersPartialUpdateRequest) (*Parameter, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -1877,10 +1884,10 @@ ProjectsParametersPushesList List push operations.
 
 The push operations that this parameter was involved in.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parameterPk
- @param projectPk
- @return ApiProjectsParametersPushesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parameterPk
+	@param projectPk
+	@return ApiProjectsParametersPushesListRequest
 */
 func (a *ProjectsApiService) ProjectsParametersPushesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersPushesListRequest {
 	return ApiProjectsParametersPushesListRequest{
@@ -1892,7 +1899,8 @@ func (a *ProjectsApiService) ProjectsParametersPushesList(ctx context.Context, p
 }
 
 // Execute executes the request
-//  @return PaginatedTaskStepList
+//
+//	@return PaginatedTaskStepList
 func (a *ProjectsApiService) ProjectsParametersPushesListExecute(r ApiProjectsParametersPushesListRequest) (*PaginatedTaskStepList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -2074,10 +2082,10 @@ func (r ApiProjectsParametersRetrieveRequest) Execute() (*Parameter, *http.Respo
 /*
 ProjectsParametersRetrieve Method for ProjectsParametersRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsParametersRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsParametersRetrieveRequest
 */
 func (a *ProjectsApiService) ProjectsParametersRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsParametersRetrieveRequest {
 	return ApiProjectsParametersRetrieveRequest{
@@ -2089,7 +2097,8 @@ func (a *ProjectsApiService) ProjectsParametersRetrieve(ctx context.Context, id 
 }
 
 // Execute executes the request
-//  @return Parameter
+//
+//	@return Parameter
 func (a *ProjectsApiService) ProjectsParametersRetrieveExecute(r ApiProjectsParametersRetrieveRequest) (*Parameter, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -2234,10 +2243,10 @@ func (r ApiProjectsParametersRulesCreateRequest) Execute() (*ParameterRule, *htt
 /*
 ProjectsParametersRulesCreate Method for ProjectsParametersRulesCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesCreateRequest
 */
 func (a *ProjectsApiService) ProjectsParametersRulesCreate(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersRulesCreateRequest {
 	return ApiProjectsParametersRulesCreateRequest{
@@ -2249,7 +2258,8 @@ func (a *ProjectsApiService) ProjectsParametersRulesCreate(ctx context.Context, 
 }
 
 // Execute executes the request
-//  @return ParameterRule
+//
+//	@return ParameterRule
 func (a *ProjectsApiService) ProjectsParametersRulesCreateExecute(r ApiProjectsParametersRulesCreateRequest) (*ParameterRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -2373,11 +2383,11 @@ func (r ApiProjectsParametersRulesDestroyRequest) Execute() (*http.Response, err
 /*
 ProjectsParametersRulesDestroy Method for ProjectsParametersRulesDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter rule.
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter rule.
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesDestroyRequest
 */
 func (a *ProjectsApiService) ProjectsParametersRulesDestroy(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesDestroyRequest {
 	return ApiProjectsParametersRulesDestroyRequest{
@@ -2525,10 +2535,10 @@ func (r ApiProjectsParametersRulesListRequest) Execute() (*PaginatedParameterRul
 /*
 ProjectsParametersRulesList Method for ProjectsParametersRulesList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesListRequest
 */
 func (a *ProjectsApiService) ProjectsParametersRulesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersRulesListRequest {
 	return ApiProjectsParametersRulesListRequest{
@@ -2540,7 +2550,8 @@ func (a *ProjectsApiService) ProjectsParametersRulesList(ctx context.Context, pa
 }
 
 // Execute executes the request
-//  @return PaginatedParameterRuleList
+//
+//	@return PaginatedParameterRuleList
 func (a *ProjectsApiService) ProjectsParametersRulesListExecute(r ApiProjectsParametersRulesListRequest) (*PaginatedParameterRuleList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -2677,11 +2688,11 @@ func (r ApiProjectsParametersRulesPartialUpdateRequest) Execute() (*ParameterRul
 /*
 ProjectsParametersRulesPartialUpdate Method for ProjectsParametersRulesPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter rule.
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter rule.
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesPartialUpdateRequest
 */
 func (a *ProjectsApiService) ProjectsParametersRulesPartialUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesPartialUpdateRequest {
 	return ApiProjectsParametersRulesPartialUpdateRequest{
@@ -2694,7 +2705,8 @@ func (a *ProjectsApiService) ProjectsParametersRulesPartialUpdate(ctx context.Co
 }
 
 // Execute executes the request
-//  @return ParameterRule
+//
+//	@return ParameterRule
 func (a *ProjectsApiService) ProjectsParametersRulesPartialUpdateExecute(r ApiProjectsParametersRulesPartialUpdateRequest) (*ParameterRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -2816,11 +2828,11 @@ func (r ApiProjectsParametersRulesRetrieveRequest) Execute() (*ParameterRule, *h
 /*
 ProjectsParametersRulesRetrieve Method for ProjectsParametersRulesRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter rule.
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter rule.
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesRetrieveRequest
 */
 func (a *ProjectsApiService) ProjectsParametersRulesRetrieve(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesRetrieveRequest {
 	return ApiProjectsParametersRulesRetrieveRequest{
@@ -2833,7 +2845,8 @@ func (a *ProjectsApiService) ProjectsParametersRulesRetrieve(ctx context.Context
 }
 
 // Execute executes the request
-//  @return ParameterRule
+//
+//	@return ParameterRule
 func (a *ProjectsApiService) ProjectsParametersRulesRetrieveExecute(r ApiProjectsParametersRulesRetrieveRequest) (*ParameterRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -2959,11 +2972,11 @@ func (r ApiProjectsParametersRulesUpdateRequest) Execute() (*ParameterRule, *htt
 /*
 ProjectsParametersRulesUpdate Method for ProjectsParametersRulesUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter rule.
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter rule.
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesUpdateRequest
 */
 func (a *ProjectsApiService) ProjectsParametersRulesUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesUpdateRequest {
 	return ApiProjectsParametersRulesUpdateRequest{
@@ -2976,7 +2989,8 @@ func (a *ProjectsApiService) ProjectsParametersRulesUpdate(ctx context.Context, 
 }
 
 // Execute executes the request
-//  @return ParameterRule
+//
+//	@return ParameterRule
 func (a *ProjectsApiService) ProjectsParametersRulesUpdateExecute(r ApiProjectsParametersRulesUpdateRequest) (*ParameterRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut
@@ -3119,10 +3133,10 @@ Summary information about how a parameter has changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the parameter itself, including rules and values, is included.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsParametersTimelineRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsParametersTimelineRetrieveRequest
 */
 func (a *ProjectsApiService) ProjectsParametersTimelineRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsParametersTimelineRetrieveRequest {
 	return ApiProjectsParametersTimelineRetrieveRequest{
@@ -3134,7 +3148,8 @@ func (a *ProjectsApiService) ProjectsParametersTimelineRetrieve(ctx context.Cont
 }
 
 // Execute executes the request
-//  @return ParameterTimeline
+//
+//	@return ParameterTimeline
 func (a *ProjectsApiService) ProjectsParametersTimelineRetrieveExecute(r ApiProjectsParametersTimelineRetrieveRequest) (*ParameterTimeline, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -3276,9 +3291,9 @@ Information about how the parameters of a project have changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the project's parameters, including rules and values, is included.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsParametersTimelinesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsParametersTimelinesRetrieveRequest
 */
 func (a *ProjectsApiService) ProjectsParametersTimelinesRetrieve(ctx context.Context, projectPk string) ApiProjectsParametersTimelinesRetrieveRequest {
 	return ApiProjectsParametersTimelinesRetrieveRequest{
@@ -3289,7 +3304,8 @@ func (a *ProjectsApiService) ProjectsParametersTimelinesRetrieve(ctx context.Con
 }
 
 // Execute executes the request
-//  @return ParameterTimeline
+//
+//	@return ParameterTimeline
 func (a *ProjectsApiService) ProjectsParametersTimelinesRetrieveExecute(r ApiProjectsParametersTimelinesRetrieveRequest) (*ParameterTimeline, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -3418,10 +3434,10 @@ func (r ApiProjectsParametersUpdateRequest) Execute() (*Parameter, *http.Respons
 /*
 ProjectsParametersUpdate Method for ProjectsParametersUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsParametersUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsParametersUpdateRequest
 */
 func (a *ProjectsApiService) ProjectsParametersUpdate(ctx context.Context, id string, projectPk string) ApiProjectsParametersUpdateRequest {
 	return ApiProjectsParametersUpdateRequest{
@@ -3433,7 +3449,8 @@ func (a *ProjectsApiService) ProjectsParametersUpdate(ctx context.Context, id st
 }
 
 // Execute executes the request
-//  @return Parameter
+//
+//	@return Parameter
 func (a *ProjectsApiService) ProjectsParametersUpdateExecute(r ApiProjectsParametersUpdateRequest) (*Parameter, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut
@@ -3578,10 +3595,10 @@ ProjectsParametersValuesCreate Set a value.
 
 Set the value of a parameter in an environment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesCreateRequest
 */
 func (a *ProjectsApiService) ProjectsParametersValuesCreate(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersValuesCreateRequest {
 	return ApiProjectsParametersValuesCreateRequest{
@@ -3593,7 +3610,8 @@ func (a *ProjectsApiService) ProjectsParametersValuesCreate(ctx context.Context,
 }
 
 // Execute executes the request
-//  @return Value
+//
+//	@return Value
 func (a *ProjectsApiService) ProjectsParametersValuesCreateExecute(r ApiProjectsParametersValuesCreateRequest) (*Value, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -3732,11 +3750,11 @@ ProjectsParametersValuesDestroy Destroy a value.
 
 Destroy the value of a parameter in an environment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesDestroyRequest
 */
 func (a *ProjectsApiService) ProjectsParametersValuesDestroy(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesDestroyRequest {
 	return ApiProjectsParametersValuesDestroyRequest{
@@ -3930,16 +3948,15 @@ func (r ApiProjectsParametersValuesListRequest) Execute() (*PaginatedValueList, 
 /*
 ProjectsParametersValuesList Retrieve values.
 
+	       Retrieve previously set values of a parameter in one or all environments.
+	       To see all the _effective_ values for a parameter across every environment,
+	       use the Parameters API (see the `values` field).
 
-        Retrieve previously set values of a parameter in one or all environments.
-        To see all the _effective_ values for a parameter across every environment,
-        use the Parameters API (see the `values` field).
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesListRequest
 */
 func (a *ProjectsApiService) ProjectsParametersValuesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersValuesListRequest {
 	return ApiProjectsParametersValuesListRequest{
@@ -3951,7 +3968,8 @@ func (a *ProjectsApiService) ProjectsParametersValuesList(ctx context.Context, p
 }
 
 // Execute executes the request
-//  @return PaginatedValueList
+//
+//	@return PaginatedValueList
 func (a *ProjectsApiService) ProjectsParametersValuesListExecute(r ApiProjectsParametersValuesListRequest) (*PaginatedValueList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -4122,11 +4140,11 @@ ProjectsParametersValuesPartialUpdate Update a value.
 
 Update the value of a parameter in an environment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesPartialUpdateRequest
 */
 func (a *ProjectsApiService) ProjectsParametersValuesPartialUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesPartialUpdateRequest {
 	return ApiProjectsParametersValuesPartialUpdateRequest{
@@ -4139,7 +4157,8 @@ func (a *ProjectsApiService) ProjectsParametersValuesPartialUpdate(ctx context.C
 }
 
 // Execute executes the request
-//  @return Value
+//
+//	@return Value
 func (a *ProjectsApiService) ProjectsParametersValuesPartialUpdateExecute(r ApiProjectsParametersValuesPartialUpdateRequest) (*Value, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -4318,11 +4337,11 @@ ProjectsParametersValuesRetrieve Retrieve a value.
 
 Retrieve the value of a parameter in an environment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesRetrieveRequest
 */
 func (a *ProjectsApiService) ProjectsParametersValuesRetrieve(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesRetrieveRequest {
 	return ApiProjectsParametersValuesRetrieveRequest{
@@ -4335,7 +4354,8 @@ func (a *ProjectsApiService) ProjectsParametersValuesRetrieve(ctx context.Contex
 }
 
 // Execute executes the request
-//  @return Value
+//
+//	@return Value
 func (a *ProjectsApiService) ProjectsParametersValuesRetrieveExecute(r ApiProjectsParametersValuesRetrieveRequest) (*Value, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -4498,11 +4518,11 @@ ProjectsParametersValuesUpdate Update a value.
 
 Update the value of a parameter in an environment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesUpdateRequest
 */
 func (a *ProjectsApiService) ProjectsParametersValuesUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesUpdateRequest {
 	return ApiProjectsParametersValuesUpdateRequest{
@@ -4515,7 +4535,8 @@ func (a *ProjectsApiService) ProjectsParametersValuesUpdate(ctx context.Context,
 }
 
 // Execute executes the request
-//  @return Value
+//
+//	@return Value
 func (a *ProjectsApiService) ProjectsParametersValuesUpdateExecute(r ApiProjectsParametersValuesUpdateRequest) (*Value, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut
@@ -4647,9 +4668,9 @@ func (r ApiProjectsPartialUpdateRequest) Execute() (*Project, *http.Response, er
 /*
 ProjectsPartialUpdate Method for ProjectsPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiProjectsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiProjectsPartialUpdateRequest
 */
 func (a *ProjectsApiService) ProjectsPartialUpdate(ctx context.Context, id string) ApiProjectsPartialUpdateRequest {
 	return ApiProjectsPartialUpdateRequest{
@@ -4660,7 +4681,8 @@ func (a *ProjectsApiService) ProjectsPartialUpdate(ctx context.Context, id strin
 }
 
 // Execute executes the request
-//  @return Project
+//
+//	@return Project
 func (a *ProjectsApiService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUpdateRequest) (*Project, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -4778,9 +4800,9 @@ func (r ApiProjectsRetrieveRequest) Execute() (*Project, *http.Response, error) 
 /*
 ProjectsRetrieve Method for ProjectsRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiProjectsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiProjectsRetrieveRequest
 */
 func (a *ProjectsApiService) ProjectsRetrieve(ctx context.Context, id string) ApiProjectsRetrieveRequest {
 	return ApiProjectsRetrieveRequest{
@@ -4791,7 +4813,8 @@ func (a *ProjectsApiService) ProjectsRetrieve(ctx context.Context, id string) Ap
 }
 
 // Execute executes the request
-//  @return Project
+//
+//	@return Project
 func (a *ProjectsApiService) ProjectsRetrieveExecute(r ApiProjectsRetrieveRequest) (*Project, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -4950,9 +4973,9 @@ ProjectsTemplatePreviewCreate Method for ProjectsTemplatePreviewCreate
 
 Endpoint for previewing a template.  Post the template content in the request body.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsTemplatePreviewCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsTemplatePreviewCreateRequest
 */
 func (a *ProjectsApiService) ProjectsTemplatePreviewCreate(ctx context.Context, projectPk string) ApiProjectsTemplatePreviewCreateRequest {
 	return ApiProjectsTemplatePreviewCreateRequest{
@@ -4963,7 +4986,8 @@ func (a *ProjectsApiService) ProjectsTemplatePreviewCreate(ctx context.Context, 
 }
 
 // Execute executes the request
-//  @return TemplatePreview
+//
+//	@return TemplatePreview
 func (a *ProjectsApiService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsTemplatePreviewCreateRequest) (*TemplatePreview, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -5114,9 +5138,9 @@ func (r ApiProjectsTemplatesCreateRequest) Execute() (*Template, *http.Response,
 /*
 ProjectsTemplatesCreate Method for ProjectsTemplatesCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsTemplatesCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsTemplatesCreateRequest
 */
 func (a *ProjectsApiService) ProjectsTemplatesCreate(ctx context.Context, projectPk string) ApiProjectsTemplatesCreateRequest {
 	return ApiProjectsTemplatesCreateRequest{
@@ -5127,7 +5151,8 @@ func (a *ProjectsApiService) ProjectsTemplatesCreate(ctx context.Context, projec
 }
 
 // Execute executes the request
-//  @return Template
+//
+//	@return Template
 func (a *ProjectsApiService) ProjectsTemplatesCreateExecute(r ApiProjectsTemplatesCreateRequest) (*Template, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -5258,10 +5283,10 @@ func (r ApiProjectsTemplatesDestroyRequest) Execute() (*http.Response, error) {
 /*
 ProjectsTemplatesDestroy Method for ProjectsTemplatesDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsTemplatesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsTemplatesDestroyRequest
 */
 func (a *ProjectsApiService) ProjectsTemplatesDestroy(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesDestroyRequest {
 	return ApiProjectsTemplatesDestroyRequest{
@@ -5441,9 +5466,9 @@ func (r ApiProjectsTemplatesListRequest) Execute() (*PaginatedTemplateList, *htt
 /*
 ProjectsTemplatesList Method for ProjectsTemplatesList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsTemplatesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsTemplatesListRequest
 */
 func (a *ProjectsApiService) ProjectsTemplatesList(ctx context.Context, projectPk string) ApiProjectsTemplatesListRequest {
 	return ApiProjectsTemplatesListRequest{
@@ -5454,7 +5479,8 @@ func (a *ProjectsApiService) ProjectsTemplatesList(ctx context.Context, projectP
 }
 
 // Execute executes the request
-//  @return PaginatedTemplateList
+//
+//	@return PaginatedTemplateList
 func (a *ProjectsApiService) ProjectsTemplatesListExecute(r ApiProjectsTemplatesListRequest) (*PaginatedTemplateList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -5613,10 +5639,10 @@ func (r ApiProjectsTemplatesPartialUpdateRequest) Execute() (*Template, *http.Re
 /*
 ProjectsTemplatesPartialUpdate Method for ProjectsTemplatesPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsTemplatesPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsTemplatesPartialUpdateRequest
 */
 func (a *ProjectsApiService) ProjectsTemplatesPartialUpdate(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesPartialUpdateRequest {
 	return ApiProjectsTemplatesPartialUpdateRequest{
@@ -5628,7 +5654,8 @@ func (a *ProjectsApiService) ProjectsTemplatesPartialUpdate(ctx context.Context,
 }
 
 // Execute executes the request
-//  @return Template
+//
+//	@return Template
 func (a *ProjectsApiService) ProjectsTemplatesPartialUpdateExecute(r ApiProjectsTemplatesPartialUpdateRequest) (*Template, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -5792,10 +5819,10 @@ func (r ApiProjectsTemplatesRetrieveRequest) Execute() (*Template, *http.Respons
 /*
 ProjectsTemplatesRetrieve Method for ProjectsTemplatesRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsTemplatesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsTemplatesRetrieveRequest
 */
 func (a *ProjectsApiService) ProjectsTemplatesRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesRetrieveRequest {
 	return ApiProjectsTemplatesRetrieveRequest{
@@ -5807,7 +5834,8 @@ func (a *ProjectsApiService) ProjectsTemplatesRetrieve(ctx context.Context, id s
 }
 
 // Execute executes the request
-//  @return Template
+//
+//	@return Template
 func (a *ProjectsApiService) ProjectsTemplatesRetrieveExecute(r ApiProjectsTemplatesRetrieveRequest) (*Template, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -5975,10 +6003,10 @@ Information about how a template has changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the template itself is included.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsTemplatesTimelineRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsTemplatesTimelineRetrieveRequest
 */
 func (a *ProjectsApiService) ProjectsTemplatesTimelineRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesTimelineRetrieveRequest {
 	return ApiProjectsTemplatesTimelineRetrieveRequest{
@@ -5990,7 +6018,8 @@ func (a *ProjectsApiService) ProjectsTemplatesTimelineRetrieve(ctx context.Conte
 }
 
 // Execute executes the request
-//  @return TemplateTimeline
+//
+//	@return TemplateTimeline
 func (a *ProjectsApiService) ProjectsTemplatesTimelineRetrieveExecute(r ApiProjectsTemplatesTimelineRetrieveRequest) (*TemplateTimeline, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -6142,9 +6171,9 @@ Information about how the templates of a project have changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the project's templates is included.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsTemplatesTimelinesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsTemplatesTimelinesRetrieveRequest
 */
 func (a *ProjectsApiService) ProjectsTemplatesTimelinesRetrieve(ctx context.Context, projectPk string) ApiProjectsTemplatesTimelinesRetrieveRequest {
 	return ApiProjectsTemplatesTimelinesRetrieveRequest{
@@ -6155,7 +6184,8 @@ func (a *ProjectsApiService) ProjectsTemplatesTimelinesRetrieve(ctx context.Cont
 }
 
 // Execute executes the request
-//  @return TemplateTimeline
+//
+//	@return TemplateTimeline
 func (a *ProjectsApiService) ProjectsTemplatesTimelinesRetrieveExecute(r ApiProjectsTemplatesTimelinesRetrieveRequest) (*TemplateTimeline, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -6287,10 +6317,10 @@ func (r ApiProjectsTemplatesUpdateRequest) Execute() (*Template, *http.Response,
 /*
 ProjectsTemplatesUpdate Method for ProjectsTemplatesUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsTemplatesUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsTemplatesUpdateRequest
 */
 func (a *ProjectsApiService) ProjectsTemplatesUpdate(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesUpdateRequest {
 	return ApiProjectsTemplatesUpdateRequest{
@@ -6302,7 +6332,8 @@ func (a *ProjectsApiService) ProjectsTemplatesUpdate(ctx context.Context, id str
 }
 
 // Execute executes the request
-//  @return Template
+//
+//	@return Template
 func (a *ProjectsApiService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplatesUpdateRequest) (*Template, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut
@@ -6439,9 +6470,9 @@ func (r ApiProjectsUpdateRequest) Execute() (*Project, *http.Response, error) {
 /*
 ProjectsUpdate Method for ProjectsUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiProjectsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiProjectsUpdateRequest
 */
 func (a *ProjectsApiService) ProjectsUpdate(ctx context.Context, id string) ApiProjectsUpdateRequest {
 	return ApiProjectsUpdateRequest{
@@ -6452,7 +6483,8 @@ func (a *ProjectsApiService) ProjectsUpdate(ctx context.Context, id string) ApiP
 }
 
 // Execute executes the request
-//  @return Project
+//
+//	@return Project
 func (a *ProjectsApiService) ProjectsUpdateExecute(r ApiProjectsUpdateRequest) (*Project, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut

@@ -41,8 +41,8 @@ func (r ApiTypesCreateRequest) Execute() (*ParameterType, *http.Response, error)
 /*
 TypesCreate Method for TypesCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTypesCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiTypesCreateRequest
 */
 func (a *TypesApiService) TypesCreate(ctx context.Context) ApiTypesCreateRequest {
 	return ApiTypesCreateRequest{
@@ -52,7 +52,8 @@ func (a *TypesApiService) TypesCreate(ctx context.Context) ApiTypesCreateRequest
 }
 
 // Execute executes the request
-//  @return ParameterType
+//
+//	@return ParameterType
 func (a *TypesApiService) TypesCreateExecute(r ApiTypesCreateRequest) (*ParameterType, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -172,9 +173,9 @@ func (r ApiTypesDestroyRequest) Execute() (*http.Response, error) {
 /*
 TypesDestroy Method for TypesDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiTypesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiTypesDestroyRequest
 */
 func (a *TypesApiService) TypesDestroy(ctx context.Context, id string) ApiTypesDestroyRequest {
 	return ApiTypesDestroyRequest{
@@ -340,8 +341,8 @@ func (r ApiTypesListRequest) Execute() (*PaginatedParameterTypeList, *http.Respo
 /*
 TypesList Method for TypesList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTypesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiTypesListRequest
 */
 func (a *TypesApiService) TypesList(ctx context.Context) ApiTypesListRequest {
 	return ApiTypesListRequest{
@@ -351,7 +352,8 @@ func (a *TypesApiService) TypesList(ctx context.Context) ApiTypesListRequest {
 }
 
 // Execute executes the request
-//  @return PaginatedParameterTypeList
+//
+//	@return PaginatedParameterTypeList
 func (a *TypesApiService) TypesListExecute(r ApiTypesListRequest) (*PaginatedParameterTypeList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -496,9 +498,9 @@ func (r ApiTypesPartialUpdateRequest) Execute() (*ParameterType, *http.Response,
 /*
 TypesPartialUpdate Method for TypesPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiTypesPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiTypesPartialUpdateRequest
 */
 func (a *TypesApiService) TypesPartialUpdate(ctx context.Context, id string) ApiTypesPartialUpdateRequest {
 	return ApiTypesPartialUpdateRequest{
@@ -509,7 +511,8 @@ func (a *TypesApiService) TypesPartialUpdate(ctx context.Context, id string) Api
 }
 
 // Execute executes the request
-//  @return ParameterType
+//
+//	@return ParameterType
 func (a *TypesApiService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateRequest) (*ParameterType, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -627,9 +630,9 @@ func (r ApiTypesRetrieveRequest) Execute() (*ParameterType, *http.Response, erro
 /*
 TypesRetrieve Method for TypesRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiTypesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiTypesRetrieveRequest
 */
 func (a *TypesApiService) TypesRetrieve(ctx context.Context, id string) ApiTypesRetrieveRequest {
 	return ApiTypesRetrieveRequest{
@@ -640,7 +643,8 @@ func (a *TypesApiService) TypesRetrieve(ctx context.Context, id string) ApiTypes
 }
 
 // Execute executes the request
-//  @return ParameterType
+//
+//	@return ParameterType
 func (a *TypesApiService) TypesRetrieveExecute(r ApiTypesRetrieveRequest) (*ParameterType, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -762,9 +766,9 @@ func (r ApiTypesRulesCreateRequest) Execute() (*ParameterTypeRule, *http.Respons
 /*
 TypesRulesCreate Method for TypesRulesCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesCreateRequest
 */
 func (a *TypesApiService) TypesRulesCreate(ctx context.Context, parametertypePk string) ApiTypesRulesCreateRequest {
 	return ApiTypesRulesCreateRequest{
@@ -775,7 +779,8 @@ func (a *TypesApiService) TypesRulesCreate(ctx context.Context, parametertypePk 
 }
 
 // Execute executes the request
-//  @return ParameterTypeRule
+//
+//	@return ParameterTypeRule
 func (a *TypesApiService) TypesRulesCreateExecute(r ApiTypesRulesCreateRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -897,10 +902,10 @@ func (r ApiTypesRulesDestroyRequest) Execute() (*http.Response, error) {
 /*
 TypesRulesDestroy Method for TypesRulesDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter type rule.
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter type rule.
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesDestroyRequest
 */
 func (a *TypesApiService) TypesRulesDestroy(ctx context.Context, id string, parametertypePk string) ApiTypesRulesDestroyRequest {
 	return ApiTypesRulesDestroyRequest{
@@ -1045,9 +1050,9 @@ func (r ApiTypesRulesListRequest) Execute() (*PaginatedParameterTypeRuleList, *h
 /*
 TypesRulesList Method for TypesRulesList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesListRequest
 */
 func (a *TypesApiService) TypesRulesList(ctx context.Context, parametertypePk string) ApiTypesRulesListRequest {
 	return ApiTypesRulesListRequest{
@@ -1058,7 +1063,8 @@ func (a *TypesApiService) TypesRulesList(ctx context.Context, parametertypePk st
 }
 
 // Execute executes the request
-//  @return PaginatedParameterTypeRuleList
+//
+//	@return PaginatedParameterTypeRuleList
 func (a *TypesApiService) TypesRulesListExecute(r ApiTypesRulesListRequest) (*PaginatedParameterTypeRuleList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -1193,10 +1199,10 @@ func (r ApiTypesRulesPartialUpdateRequest) Execute() (*ParameterTypeRule, *http.
 /*
 TypesRulesPartialUpdate Method for TypesRulesPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter type rule.
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter type rule.
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesPartialUpdateRequest
 */
 func (a *TypesApiService) TypesRulesPartialUpdate(ctx context.Context, id string, parametertypePk string) ApiTypesRulesPartialUpdateRequest {
 	return ApiTypesRulesPartialUpdateRequest{
@@ -1208,7 +1214,8 @@ func (a *TypesApiService) TypesRulesPartialUpdate(ctx context.Context, id string
 }
 
 // Execute executes the request
-//  @return ParameterTypeRule
+//
+//	@return ParameterTypeRule
 func (a *TypesApiService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialUpdateRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -1328,10 +1335,10 @@ func (r ApiTypesRulesRetrieveRequest) Execute() (*ParameterTypeRule, *http.Respo
 /*
 TypesRulesRetrieve Method for TypesRulesRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter type rule.
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter type rule.
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesRetrieveRequest
 */
 func (a *TypesApiService) TypesRulesRetrieve(ctx context.Context, id string, parametertypePk string) ApiTypesRulesRetrieveRequest {
 	return ApiTypesRulesRetrieveRequest{
@@ -1343,7 +1350,8 @@ func (a *TypesApiService) TypesRulesRetrieve(ctx context.Context, id string, par
 }
 
 // Execute executes the request
-//  @return ParameterTypeRule
+//
+//	@return ParameterTypeRule
 func (a *TypesApiService) TypesRulesRetrieveExecute(r ApiTypesRulesRetrieveRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -1467,10 +1475,10 @@ func (r ApiTypesRulesUpdateRequest) Execute() (*ParameterTypeRule, *http.Respons
 /*
 TypesRulesUpdate Method for TypesRulesUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter type rule.
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter type rule.
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesUpdateRequest
 */
 func (a *TypesApiService) TypesRulesUpdate(ctx context.Context, id string, parametertypePk string) ApiTypesRulesUpdateRequest {
 	return ApiTypesRulesUpdateRequest{
@@ -1482,7 +1490,8 @@ func (a *TypesApiService) TypesRulesUpdate(ctx context.Context, id string, param
 }
 
 // Execute executes the request
-//  @return ParameterTypeRule
+//
+//	@return ParameterTypeRule
 func (a *TypesApiService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut
@@ -1610,9 +1619,9 @@ func (r ApiTypesUpdateRequest) Execute() (*ParameterType, *http.Response, error)
 /*
 TypesUpdate Method for TypesUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiTypesUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiTypesUpdateRequest
 */
 func (a *TypesApiService) TypesUpdate(ctx context.Context, id string) ApiTypesUpdateRequest {
 	return ApiTypesUpdateRequest{
@@ -1623,7 +1632,8 @@ func (a *TypesApiService) TypesUpdate(ctx context.Context, id string) ApiTypesUp
 }
 
 // Execute executes the request
-//  @return ParameterType
+//
+//	@return ParameterType
 func (a *TypesApiService) TypesUpdateExecute(r ApiTypesUpdateRequest) (*ParameterType, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut

@@ -23,7 +23,7 @@ A CloudTruth push action.
 - `region` (String) The target AWS region
 - `resource` (String) The mustache style resource string specifying the environment, project, and parameter
 - `service` (String) The AWS service to pull from: s3|ssm|secretsmanager
-- `tags` (List of String) Tags specified in the form 'environment_name:tag_name' indicating the sync point for parameters to be pushed (multiple tags allowed but only one per environment)
+- `tags` (List of String) Tags specified in the form 'ENVIRONMENT_NAME:TAG_NAME' indicating the sync point for parameters to be pushed. At least one tag is required but multiple tags are allowed (only one per environment)
 
 ### Optional
 

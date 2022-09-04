@@ -41,8 +41,8 @@ func (r ApiMembershipsCreateRequest) Execute() (*Membership, *http.Response, err
 /*
 MembershipsCreate Method for MembershipsCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMembershipsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMembershipsCreateRequest
 */
 func (a *MembershipsApiService) MembershipsCreate(ctx context.Context) ApiMembershipsCreateRequest {
 	return ApiMembershipsCreateRequest{
@@ -52,7 +52,8 @@ func (a *MembershipsApiService) MembershipsCreate(ctx context.Context) ApiMember
 }
 
 // Execute executes the request
-//  @return Membership
+//
+//	@return Membership
 func (a *MembershipsApiService) MembershipsCreateExecute(r ApiMembershipsCreateRequest) (*Membership, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -172,9 +173,9 @@ func (r ApiMembershipsDestroyRequest) Execute() (*http.Response, error) {
 /*
 MembershipsDestroy Method for MembershipsDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiMembershipsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiMembershipsDestroyRequest
 */
 func (a *MembershipsApiService) MembershipsDestroy(ctx context.Context, id string) ApiMembershipsDestroyRequest {
 	return ApiMembershipsDestroyRequest{
@@ -324,8 +325,8 @@ func (r ApiMembershipsListRequest) Execute() (*PaginatedMembershipList, *http.Re
 /*
 MembershipsList Method for MembershipsList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMembershipsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMembershipsListRequest
 */
 func (a *MembershipsApiService) MembershipsList(ctx context.Context) ApiMembershipsListRequest {
 	return ApiMembershipsListRequest{
@@ -335,7 +336,8 @@ func (a *MembershipsApiService) MembershipsList(ctx context.Context) ApiMembersh
 }
 
 // Execute executes the request
-//  @return PaginatedMembershipList
+//
+//	@return PaginatedMembershipList
 func (a *MembershipsApiService) MembershipsListExecute(r ApiMembershipsListRequest) (*PaginatedMembershipList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -471,9 +473,9 @@ func (r ApiMembershipsPartialUpdateRequest) Execute() (*Membership, *http.Respon
 /*
 MembershipsPartialUpdate Method for MembershipsPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiMembershipsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiMembershipsPartialUpdateRequest
 */
 func (a *MembershipsApiService) MembershipsPartialUpdate(ctx context.Context, id string) ApiMembershipsPartialUpdateRequest {
 	return ApiMembershipsPartialUpdateRequest{
@@ -484,7 +486,8 @@ func (a *MembershipsApiService) MembershipsPartialUpdate(ctx context.Context, id
 }
 
 // Execute executes the request
-//  @return Membership
+//
+//	@return Membership
 func (a *MembershipsApiService) MembershipsPartialUpdateExecute(r ApiMembershipsPartialUpdateRequest) (*Membership, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -602,9 +605,9 @@ func (r ApiMembershipsRetrieveRequest) Execute() (*Membership, *http.Response, e
 /*
 MembershipsRetrieve Method for MembershipsRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiMembershipsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiMembershipsRetrieveRequest
 */
 func (a *MembershipsApiService) MembershipsRetrieve(ctx context.Context, id string) ApiMembershipsRetrieveRequest {
 	return ApiMembershipsRetrieveRequest{
@@ -615,7 +618,8 @@ func (a *MembershipsApiService) MembershipsRetrieve(ctx context.Context, id stri
 }
 
 // Execute executes the request
-//  @return Membership
+//
+//	@return Membership
 func (a *MembershipsApiService) MembershipsRetrieveExecute(r ApiMembershipsRetrieveRequest) (*Membership, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -737,9 +741,9 @@ func (r ApiMembershipsUpdateRequest) Execute() (*Membership, *http.Response, err
 /*
 MembershipsUpdate Method for MembershipsUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiMembershipsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiMembershipsUpdateRequest
 */
 func (a *MembershipsApiService) MembershipsUpdate(ctx context.Context, id string) ApiMembershipsUpdateRequest {
 	return ApiMembershipsUpdateRequest{
@@ -750,7 +754,8 @@ func (a *MembershipsApiService) MembershipsUpdate(ctx context.Context, id string
 }
 
 // Execute executes the request
-//  @return Membership
+//
+//	@return Membership
 func (a *MembershipsApiService) MembershipsUpdateExecute(r ApiMembershipsUpdateRequest) (*Membership, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut

@@ -17,15 +17,15 @@ A CloudTruth push action.
 
 ### Required
 
-- `integration_id` (String) The ID of the CloudTruth integration corresponding to this pull action
+- `integration` (String) The name (using the format VAULT_NAME@TENANT_ID) of the CloudTruth integration corresponding to this import action
 - `name` (String) The name of the push action
-- `projects` (List of String) The projects containing the parameters to pushed to the AWS destination
+- `projects` (List of String) The projects containing the parameters to pushed to the Azure destination
 - `resource` (String) The mustache style resource string specifying the environment, project, and parameter
 - `tags` (List of String) Tags specified in the form 'environment_name:tag_name' indicating the sync point for parameters to be pushed (multiple tags allowed but only one per environment)
 
 ### Optional
 
-- `coerce` (Boolean) Include secrets/parameters even if the upstream destination doesn't allow them (e.g. non-secrets in AWS SecretsManager), defaults to false
+- `coerce` (Boolean) Include secrets/parameters even if the upstream destination doesn't allow them, defaults to false
 - `description` (String) A description of the push action
 - `dry_run` (Boolean) When true, the action only reports what it would push without actually pushing changes, defaults to true
 - `force` (Boolean) Allow CloudTruth to take ownership and overwrite any pre-existing items, defaults to false
@@ -37,5 +37,6 @@ A CloudTruth push action.
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `integration_id` (String) The ID of the CloudTruth integration corresponding to this import action
 
 

@@ -116,7 +116,7 @@ func resourceAWSPushAction() *schema.Resource {
 	}
 }
 
-// todo: use generics and make one function for both AWS and Azure typee
+// todo: use generics and make one function for both AWS and Azure types
 func setAWSPushActionBoolProps(pushAction *cloudtruthapi.AwsPush, d *schema.ResourceData) {
 	pushAction.SetIncludeParameters(d.Get("parameters").(bool))
 	pushAction.SetIncludeSecrets(d.Get("secrets").(bool))
@@ -190,7 +190,7 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	return nil
 }
 
-// todo: read tags and envs, implement a tag cache
+// todo: read tags and projects, possibly for both Azure and AWS pushes + implement a tag cache
 func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAWSPushActionRead")
 	defer tflog.Debug(ctx, "exiting resourceAWSPushActionRead")
@@ -247,6 +247,7 @@ func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta
 	return nil
 }
 
+// todo: update tags and projects, possibly for both Azure and AWS pushes
 func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAWSPushActionUpdate")
 	defer tflog.Debug(ctx, "exiting resourceAWSPushActionUpdate")

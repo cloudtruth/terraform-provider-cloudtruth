@@ -41,8 +41,8 @@ func (r ApiOrganizationsCreateRequest) Execute() (*Organization, *http.Response,
 /*
 OrganizationsCreate Method for OrganizationsCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiOrganizationsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiOrganizationsCreateRequest
 */
 func (a *OrganizationsApiService) OrganizationsCreate(ctx context.Context) ApiOrganizationsCreateRequest {
 	return ApiOrganizationsCreateRequest{
@@ -52,7 +52,8 @@ func (a *OrganizationsApiService) OrganizationsCreate(ctx context.Context) ApiOr
 }
 
 // Execute executes the request
-//  @return Organization
+//
+//	@return Organization
 func (a *OrganizationsApiService) OrganizationsCreateExecute(r ApiOrganizationsCreateRequest) (*Organization, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -172,9 +173,9 @@ func (r ApiOrganizationsDestroyRequest) Execute() (*http.Response, error) {
 /*
 OrganizationsDestroy Method for OrganizationsDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiOrganizationsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiOrganizationsDestroyRequest
 */
 func (a *OrganizationsApiService) OrganizationsDestroy(ctx context.Context, id string) ApiOrganizationsDestroyRequest {
 	return ApiOrganizationsDestroyRequest{
@@ -316,8 +317,8 @@ func (r ApiOrganizationsListRequest) Execute() (*PaginatedOrganizationList, *htt
 /*
 OrganizationsList Method for OrganizationsList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiOrganizationsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiOrganizationsListRequest
 */
 func (a *OrganizationsApiService) OrganizationsList(ctx context.Context) ApiOrganizationsListRequest {
 	return ApiOrganizationsListRequest{
@@ -327,7 +328,8 @@ func (a *OrganizationsApiService) OrganizationsList(ctx context.Context) ApiOrga
 }
 
 // Execute executes the request
-//  @return PaginatedOrganizationList
+//
+//	@return PaginatedOrganizationList
 func (a *OrganizationsApiService) OrganizationsListExecute(r ApiOrganizationsListRequest) (*PaginatedOrganizationList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -460,9 +462,9 @@ func (r ApiOrganizationsPartialUpdateRequest) Execute() (*Organization, *http.Re
 /*
 OrganizationsPartialUpdate Method for OrganizationsPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiOrganizationsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiOrganizationsPartialUpdateRequest
 */
 func (a *OrganizationsApiService) OrganizationsPartialUpdate(ctx context.Context, id string) ApiOrganizationsPartialUpdateRequest {
 	return ApiOrganizationsPartialUpdateRequest{
@@ -473,7 +475,8 @@ func (a *OrganizationsApiService) OrganizationsPartialUpdate(ctx context.Context
 }
 
 // Execute executes the request
-//  @return Organization
+//
+//	@return Organization
 func (a *OrganizationsApiService) OrganizationsPartialUpdateExecute(r ApiOrganizationsPartialUpdateRequest) (*Organization, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -591,9 +594,9 @@ func (r ApiOrganizationsRetrieveRequest) Execute() (*Organization, *http.Respons
 /*
 OrganizationsRetrieve Method for OrganizationsRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiOrganizationsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiOrganizationsRetrieveRequest
 */
 func (a *OrganizationsApiService) OrganizationsRetrieve(ctx context.Context, id string) ApiOrganizationsRetrieveRequest {
 	return ApiOrganizationsRetrieveRequest{
@@ -604,7 +607,8 @@ func (a *OrganizationsApiService) OrganizationsRetrieve(ctx context.Context, id 
 }
 
 // Execute executes the request
-//  @return Organization
+//
+//	@return Organization
 func (a *OrganizationsApiService) OrganizationsRetrieveExecute(r ApiOrganizationsRetrieveRequest) (*Organization, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -726,9 +730,9 @@ func (r ApiOrganizationsUpdateRequest) Execute() (*Organization, *http.Response,
 /*
 OrganizationsUpdate Method for OrganizationsUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiOrganizationsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiOrganizationsUpdateRequest
 */
 func (a *OrganizationsApiService) OrganizationsUpdate(ctx context.Context, id string) ApiOrganizationsUpdateRequest {
 	return ApiOrganizationsUpdateRequest{
@@ -739,7 +743,8 @@ func (a *OrganizationsApiService) OrganizationsUpdate(ctx context.Context, id st
 }
 
 // Execute executes the request
-//  @return Organization
+//
+//	@return Organization
 func (a *OrganizationsApiService) OrganizationsUpdateExecute(r ApiOrganizationsUpdateRequest) (*Organization, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut

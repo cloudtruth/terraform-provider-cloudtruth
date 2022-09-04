@@ -45,9 +45,9 @@ On success the client receives the invitation record as it was updated.
 The client should then regenerate the JWT with the organization scope and
 proceed to the default landing page.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id The invitation ID.
- @return ApiInvitationsAcceptCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id The invitation ID.
+	@return ApiInvitationsAcceptCreateRequest
 */
 func (a *InvitationsApiService) InvitationsAcceptCreate(ctx context.Context, id string) ApiInvitationsAcceptCreateRequest {
 	return ApiInvitationsAcceptCreateRequest{
@@ -58,7 +58,8 @@ func (a *InvitationsApiService) InvitationsAcceptCreate(ctx context.Context, id 
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsApiService) InvitationsAcceptCreateExecute(r ApiInvitationsAcceptCreateRequest) (*Invitation, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -181,8 +182,8 @@ InvitationsCreate Create an invitation.
 
 Extend an invitation for someone else to join your organization.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvitationsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiInvitationsCreateRequest
 */
 func (a *InvitationsApiService) InvitationsCreate(ctx context.Context) ApiInvitationsCreateRequest {
 	return ApiInvitationsCreateRequest{
@@ -192,7 +193,8 @@ func (a *InvitationsApiService) InvitationsCreate(ctx context.Context) ApiInvita
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsApiService) InvitationsCreateExecute(r ApiInvitationsCreateRequest) (*Invitation, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -312,9 +314,9 @@ func (r ApiInvitationsDestroyRequest) Execute() (*http.Response, error) {
 /*
 InvitationsDestroy Method for InvitationsDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiInvitationsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiInvitationsDestroyRequest
 */
 func (a *InvitationsApiService) InvitationsDestroy(ctx context.Context, id string) ApiInvitationsDestroyRequest {
 	return ApiInvitationsDestroyRequest{
@@ -470,8 +472,8 @@ func (r ApiInvitationsListRequest) Execute() (*PaginatedInvitationList, *http.Re
 /*
 InvitationsList Method for InvitationsList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvitationsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiInvitationsListRequest
 */
 func (a *InvitationsApiService) InvitationsList(ctx context.Context) ApiInvitationsListRequest {
 	return ApiInvitationsListRequest{
@@ -481,7 +483,8 @@ func (a *InvitationsApiService) InvitationsList(ctx context.Context) ApiInvitati
 }
 
 // Execute executes the request
-//  @return PaginatedInvitationList
+//
+//	@return PaginatedInvitationList
 func (a *InvitationsApiService) InvitationsListExecute(r ApiInvitationsListRequest) (*PaginatedInvitationList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -620,9 +623,9 @@ func (r ApiInvitationsPartialUpdateRequest) Execute() (*Invitation, *http.Respon
 /*
 InvitationsPartialUpdate Method for InvitationsPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiInvitationsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiInvitationsPartialUpdateRequest
 */
 func (a *InvitationsApiService) InvitationsPartialUpdate(ctx context.Context, id string) ApiInvitationsPartialUpdateRequest {
 	return ApiInvitationsPartialUpdateRequest{
@@ -633,7 +636,8 @@ func (a *InvitationsApiService) InvitationsPartialUpdate(ctx context.Context, id
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsApiService) InvitationsPartialUpdateExecute(r ApiInvitationsPartialUpdateRequest) (*Invitation, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -753,9 +757,9 @@ InvitationsResendCreate Resend an invitation.
 
 Re-send an invitation to the recipient.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id The invitation ID.
- @return ApiInvitationsResendCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id The invitation ID.
+	@return ApiInvitationsResendCreateRequest
 */
 func (a *InvitationsApiService) InvitationsResendCreate(ctx context.Context, id string) ApiInvitationsResendCreateRequest {
 	return ApiInvitationsResendCreateRequest{
@@ -766,7 +770,8 @@ func (a *InvitationsApiService) InvitationsResendCreate(ctx context.Context, id 
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsApiService) InvitationsResendCreateExecute(r ApiInvitationsResendCreateRequest) (*Invitation, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -882,9 +887,9 @@ func (r ApiInvitationsRetrieveRequest) Execute() (*Invitation, *http.Response, e
 /*
 InvitationsRetrieve Method for InvitationsRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiInvitationsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiInvitationsRetrieveRequest
 */
 func (a *InvitationsApiService) InvitationsRetrieve(ctx context.Context, id string) ApiInvitationsRetrieveRequest {
 	return ApiInvitationsRetrieveRequest{
@@ -895,7 +900,8 @@ func (a *InvitationsApiService) InvitationsRetrieve(ctx context.Context, id stri
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsApiService) InvitationsRetrieveExecute(r ApiInvitationsRetrieveRequest) (*Invitation, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -1017,9 +1023,9 @@ func (r ApiInvitationsUpdateRequest) Execute() (*Invitation, *http.Response, err
 /*
 InvitationsUpdate Method for InvitationsUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiInvitationsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiInvitationsUpdateRequest
 */
 func (a *InvitationsApiService) InvitationsUpdate(ctx context.Context, id string) ApiInvitationsUpdateRequest {
 	return ApiInvitationsUpdateRequest{
@@ -1030,7 +1036,8 @@ func (a *InvitationsApiService) InvitationsUpdate(ctx context.Context, id string
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsApiService) InvitationsUpdateExecute(r ApiInvitationsUpdateRequest) (*Invitation, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut

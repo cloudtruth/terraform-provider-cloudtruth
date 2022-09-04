@@ -37,8 +37,8 @@ UsersCurrentRetrieve Current user information
 
 Get user information about the current user.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUsersCurrentRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUsersCurrentRetrieveRequest
 */
 func (a *UsersApiService) UsersCurrentRetrieve(ctx context.Context) ApiUsersCurrentRetrieveRequest {
 	return ApiUsersCurrentRetrieveRequest{
@@ -48,7 +48,8 @@ func (a *UsersApiService) UsersCurrentRetrieve(ctx context.Context) ApiUsersCurr
 }
 
 // Execute executes the request
-//  @return User
+//
+//	@return User
 func (a *UsersApiService) UsersCurrentRetrieveExecute(r ApiUsersCurrentRetrieveRequest) (*User, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -173,10 +174,9 @@ Delete the specified user.  This removes all access the User may have to any Org
 - The bearer token must belong to the user being deleted.
 - All of the memberships related to the User will be deleted, so all the membership deletion pre-conditions must also be met.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiUsersDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiUsersDestroyRequest
 */
 func (a *UsersApiService) UsersDestroy(ctx context.Context, id string) ApiUsersDestroyRequest {
 	return ApiUsersDestroyRequest{
@@ -318,8 +318,8 @@ func (r ApiUsersListRequest) Execute() (*PaginatedUserList, *http.Response, erro
 /*
 UsersList Method for UsersList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUsersListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUsersListRequest
 */
 func (a *UsersApiService) UsersList(ctx context.Context) ApiUsersListRequest {
 	return ApiUsersListRequest{
@@ -329,7 +329,8 @@ func (a *UsersApiService) UsersList(ctx context.Context) ApiUsersListRequest {
 }
 
 // Execute executes the request
-//  @return PaginatedUserList
+//
+//	@return PaginatedUserList
 func (a *UsersApiService) UsersListExecute(r ApiUsersListRequest) (*PaginatedUserList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -456,9 +457,9 @@ func (r ApiUsersRetrieveRequest) Execute() (*User, *http.Response, error) {
 /*
 UsersRetrieve Method for UsersRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiUsersRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiUsersRetrieveRequest
 */
 func (a *UsersApiService) UsersRetrieve(ctx context.Context, id string) ApiUsersRetrieveRequest {
 	return ApiUsersRetrieveRequest{
@@ -469,7 +470,8 @@ func (a *UsersApiService) UsersRetrieve(ctx context.Context, id string) ApiUsers
 }
 
 // Execute executes the request
-//  @return User
+//
+//	@return User
 func (a *UsersApiService) UsersRetrieveExecute(r ApiUsersRetrieveRequest) (*User, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet

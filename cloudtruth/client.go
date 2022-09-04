@@ -472,10 +472,12 @@ func (c *cloudTruthClient) lookupType(ctx context.Context, typeName string) *clo
 	return nil
 }
 
-/* Helper function for making API errors more useful
-   API/server side errors are generally retryable
-   client side errors are not retryable, and we extract the underlying API error
-   so that the end user can see what's wrong
+/*
+Helper function for making API errors more useful
+
+	API/server side errors are generally retryable
+	client side errors are not retryable, and we extract the underlying API error
+	so that the end user can see what's wrong
 */
 func handleAPIError(msg string, r *http.Response, err error) *resource.RetryError {
 	outErr := fmt.Errorf(msg, err)

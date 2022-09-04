@@ -117,8 +117,8 @@ AuditList Method for AuditList
 
 A searchable log of all the actions taken by users and service accounts within the organization.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAuditListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiAuditListRequest
 */
 func (a *AuditApiService) AuditList(ctx context.Context) ApiAuditListRequest {
 	return ApiAuditListRequest{
@@ -128,7 +128,8 @@ func (a *AuditApiService) AuditList(ctx context.Context) ApiAuditListRequest {
 }
 
 // Execute executes the request
-//  @return PaginatedAuditTrailList
+//
+//	@return PaginatedAuditTrailList
 func (a *AuditApiService) AuditListExecute(r ApiAuditListRequest) (*PaginatedAuditTrailList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -281,9 +282,9 @@ AuditRetrieve Method for AuditRetrieve
 
 Retrieve one record from the audit log.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiAuditRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiAuditRetrieveRequest
 */
 func (a *AuditApiService) AuditRetrieve(ctx context.Context, id string) ApiAuditRetrieveRequest {
 	return ApiAuditRetrieveRequest{
@@ -294,7 +295,8 @@ func (a *AuditApiService) AuditRetrieve(ctx context.Context, id string) ApiAudit
 }
 
 // Execute executes the request
-//  @return AuditTrail
+//
+//	@return AuditTrail
 func (a *AuditApiService) AuditRetrieveExecute(r ApiAuditRetrieveRequest) (*AuditTrail, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -411,8 +413,8 @@ AuditSummaryRetrieve Method for AuditSummaryRetrieve
 
 Summary information about the organization's audit trail.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAuditSummaryRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiAuditSummaryRetrieveRequest
 */
 func (a *AuditApiService) AuditSummaryRetrieve(ctx context.Context) ApiAuditSummaryRetrieveRequest {
 	return ApiAuditSummaryRetrieveRequest{
@@ -422,7 +424,8 @@ func (a *AuditApiService) AuditSummaryRetrieve(ctx context.Context) ApiAuditSumm
 }
 
 // Execute executes the request
-//  @return AuditTrailSummary
+//
+//	@return AuditTrailSummary
 func (a *AuditApiService) AuditSummaryRetrieveExecute(r ApiAuditSummaryRetrieveRequest) (*AuditTrailSummary, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet

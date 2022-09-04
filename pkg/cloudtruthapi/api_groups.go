@@ -50,9 +50,9 @@ GroupsAddCreate Method for GroupsAddCreate
 
 Add a user to the group.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiGroupsAddCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiGroupsAddCreateRequest
 */
 func (a *GroupsApiService) GroupsAddCreate(ctx context.Context, id string) ApiGroupsAddCreateRequest {
 	return ApiGroupsAddCreateRequest{
@@ -63,7 +63,8 @@ func (a *GroupsApiService) GroupsAddCreate(ctx context.Context, id string) ApiGr
 }
 
 // Execute executes the request
-//  @return Group
+//
+//	@return Group
 func (a *GroupsApiService) GroupsAddCreateExecute(r ApiGroupsAddCreateRequest) (*Group, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -199,8 +200,8 @@ GroupsCreate Method for GroupsCreate
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGroupsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiGroupsCreateRequest
 */
 func (a *GroupsApiService) GroupsCreate(ctx context.Context) ApiGroupsCreateRequest {
 	return ApiGroupsCreateRequest{
@@ -210,7 +211,8 @@ func (a *GroupsApiService) GroupsCreate(ctx context.Context) ApiGroupsCreateRequ
 }
 
 // Execute executes the request
-//  @return Group
+//
+//	@return Group
 func (a *GroupsApiService) GroupsCreateExecute(r ApiGroupsCreateRequest) (*Group, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -333,9 +335,9 @@ GroupsDestroy Method for GroupsDestroy
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiGroupsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiGroupsDestroyRequest
 */
 func (a *GroupsApiService) GroupsDestroy(ctx context.Context, id string) ApiGroupsDestroyRequest {
 	return ApiGroupsDestroyRequest{
@@ -487,8 +489,8 @@ GroupsList Method for GroupsList
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGroupsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiGroupsListRequest
 */
 func (a *GroupsApiService) GroupsList(ctx context.Context) ApiGroupsListRequest {
 	return ApiGroupsListRequest{
@@ -498,7 +500,8 @@ func (a *GroupsApiService) GroupsList(ctx context.Context) ApiGroupsListRequest 
 }
 
 // Execute executes the request
-//  @return PaginatedGroupList
+//
+//	@return PaginatedGroupList
 func (a *GroupsApiService) GroupsListExecute(r ApiGroupsListRequest) (*PaginatedGroupList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -637,9 +640,9 @@ GroupsPartialUpdate Method for GroupsPartialUpdate
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiGroupsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiGroupsPartialUpdateRequest
 */
 func (a *GroupsApiService) GroupsPartialUpdate(ctx context.Context, id string) ApiGroupsPartialUpdateRequest {
 	return ApiGroupsPartialUpdateRequest{
@@ -650,7 +653,8 @@ func (a *GroupsApiService) GroupsPartialUpdate(ctx context.Context, id string) A
 }
 
 // Execute executes the request
-//  @return Group
+//
+//	@return Group
 func (a *GroupsApiService) GroupsPartialUpdateExecute(r ApiGroupsPartialUpdateRequest) (*Group, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -782,9 +786,9 @@ GroupsRemoveCreate Method for GroupsRemoveCreate
 
 Remove a user from the group.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiGroupsRemoveCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiGroupsRemoveCreateRequest
 */
 func (a *GroupsApiService) GroupsRemoveCreate(ctx context.Context, id string) ApiGroupsRemoveCreateRequest {
 	return ApiGroupsRemoveCreateRequest{
@@ -795,7 +799,8 @@ func (a *GroupsApiService) GroupsRemoveCreate(ctx context.Context, id string) Ap
 }
 
 // Execute executes the request
-//  @return Group
+//
+//	@return Group
 func (a *GroupsApiService) GroupsRemoveCreateExecute(r ApiGroupsRemoveCreateRequest) (*Group, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -926,9 +931,9 @@ GroupsRetrieve Method for GroupsRetrieve
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiGroupsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiGroupsRetrieveRequest
 */
 func (a *GroupsApiService) GroupsRetrieve(ctx context.Context, id string) ApiGroupsRetrieveRequest {
 	return ApiGroupsRetrieveRequest{
@@ -939,7 +944,8 @@ func (a *GroupsApiService) GroupsRetrieve(ctx context.Context, id string) ApiGro
 }
 
 // Execute executes the request
-//  @return Group
+//
+//	@return Group
 func (a *GroupsApiService) GroupsRetrieveExecute(r ApiGroupsRetrieveRequest) (*Group, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -1064,9 +1070,9 @@ GroupsUpdate Method for GroupsUpdate
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiGroupsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiGroupsUpdateRequest
 */
 func (a *GroupsApiService) GroupsUpdate(ctx context.Context, id string) ApiGroupsUpdateRequest {
 	return ApiGroupsUpdateRequest{
@@ -1077,7 +1083,8 @@ func (a *GroupsApiService) GroupsUpdate(ctx context.Context, id string) ApiGroup
 }
 
 // Execute executes the request
-//  @return Group
+//
+//	@return Group
 func (a *GroupsApiService) GroupsUpdateExecute(r ApiGroupsUpdateRequest) (*Group, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut

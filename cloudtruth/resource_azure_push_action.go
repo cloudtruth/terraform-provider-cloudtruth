@@ -61,7 +61,7 @@ func resourceAzurePushAction() *schema.Resource {
 				Default:     true,
 			},
 			"coerce": {
-				Description: "Include secrets/parameters even if the upstream destination doesn't allow them (e.g. non-secrets in AWS SecretsManager), defaults to false",
+				Description: "Include secrets/parameters even if the upstream destination doesn't allow them, defaults to false",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
@@ -85,7 +85,7 @@ func resourceAzurePushAction() *schema.Resource {
 				Default:     true,
 			},
 			"projects": {
-				Description: "The projects containing the parameters to pushed to the AWS destination",
+				Description: "The projects containing the parameters to pushed to the Azure destination",
 				Type:        schema.TypeList,
 				Required:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
@@ -105,6 +105,7 @@ func resourceAzurePushAction() *schema.Resource {
 	}
 }
 
+// todo: use generics and make one function for both AWS and Azure types
 func setAzurePushActionBoolProps(pushAction *cloudtruthapi.AzureKeyVaultPush, d *schema.ResourceData) {
 	pushAction.SetIncludeParameters(d.Get("parameters").(bool))
 	pushAction.SetIncludeSecrets(d.Get("secrets").(bool))
@@ -169,7 +170,7 @@ func resourceAzurePushActionCreate(ctx context.Context, d *schema.ResourceData, 
 	return nil
 }
 
-// todo: read tags and envs, implement a tag cache
+// todo: read tags and projects, possibly for both Azure and AWS pushes + implement a tag cache
 func resourceAzurePushActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAzurePushActionRead")
 	defer tflog.Debug(ctx, "exiting resourceAzurePushActionRead")
@@ -226,16 +227,92 @@ func resourceAzurePushActionRead(ctx context.Context, d *schema.ResourceData, me
 	return nil
 }
 
+// todo: update tags and projects, possibly for both Azure and AWS pushes
 func resourceAzurePushActionUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAzurePushActionUpdate")
 	defer tflog.Debug(ctx, "exiting resourceAzurePushActionUpdate")
+	c := meta.(*cloudTruthClient)
+	pushActionName := d.Get("name").(string)
+	pushActionID := d.Id()
+	azureIntegrationID := d.Get("integration_id").(string)
+	patchedAzurePush := cloudtruthapi.PatchedAzureKeyVaultPushUpdate{}
+	hasChange := false
+	props := map[string]func(v string){
+		"name":        patchedAzurePush.SetName,
+		"description": patchedAzurePush.SetDescription,
+		"resource":    patchedAzurePush.SetResource,
+	}
+	for prop := range props {
+		if d.HasChange(prop) {
+			props[prop](d.Get(prop).(string))
+			hasChange = true
+		}
+	}
+	boolProps := map[string]func(v bool){
+		"parameters": patchedAzurePush.SetIncludeParameters,
+		"secrets":    patchedAzurePush.SetIncludeSecrets,
+		// todo: determine if this a backend bug or if we need to update the Go API bindings
+		//"templates":  patchedAzurePush.SetIncludeTemplates,
+		"coerce":  patchedAzurePush.SetCoerceParameters,
+		"force":   patchedAzurePush.SetForce,
+		"local":   patchedAzurePush.SetLocal,
+		"dry_run": patchedAzurePush.SetDryRun,
+	}
+	for prop := range boolProps {
+		if d.HasChange(prop) {
+			boolProps[prop](d.Get(prop).(bool))
+			hasChange = true
+		}
+	}
 
+	if d.HasChange("tags") {
+		rawTags := d.Get("tags").([]interface{})
+		tags, err := getEnvTags(ctx, d, c, rawTags)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		patchedAzurePush.SetTags(tags)
+		hasChange = true
+	}
+
+	if hasChange {
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+			var r *http.Response
+			var err error
+			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPushesPartialUpdate(ctx, azureIntegrationID,
+				pushActionID).PatchedAzureKeyVaultPushUpdate(patchedAzurePush).Execute()
+			if err != nil {
+				return handleAPIError(fmt.Sprintf("resourceAzurePushActionUpdate: error updating Azure push action %s", pushActionName), r, err)
+			}
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
+		}
+	}
+	d.SetId(pushActionID)
 	return resourceAzurePushActionRead(ctx, d, meta)
 }
 
 func resourceAzurePushActionDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAzurePushActionDelete")
 	defer tflog.Debug(ctx, "exiting resourceAzurePushActionDelete")
+	c := meta.(*cloudTruthClient)
+	pushActionName := d.Get("name").(string)
+	pushActionID := d.Id()
+	azureIntegrationID := d.Get("integration_id").(string)
 
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPushesDestroy(ctx, azureIntegrationID, pushActionID).Execute()
+		if err != nil {
+			return handleAPIError(fmt.Sprintf("resourceAzurePushActionDelete: error destroying Azure push action %s", pushActionName), r, err)
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
 	return nil
 }

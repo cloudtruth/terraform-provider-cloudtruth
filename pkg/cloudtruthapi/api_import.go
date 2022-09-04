@@ -56,8 +56,8 @@ ImportCreate Method for ImportCreate
 
 Import parameters from the provided data.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiImportCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiImportCreateRequest
 */
 func (a *ImportApiService) ImportCreate(ctx context.Context) ApiImportCreateRequest {
 	return ApiImportCreateRequest{
@@ -67,7 +67,8 @@ func (a *ImportApiService) ImportCreate(ctx context.Context) ApiImportCreateRequ
 }
 
 // Execute executes the request
-//  @return ImportCreateResponse
+//
+//	@return ImportCreateResponse
 func (a *ImportApiService) ImportCreateExecute(r ApiImportCreateRequest) (*ImportCreateResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost

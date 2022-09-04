@@ -21,12 +21,12 @@ A CloudTruth tag data source
 
 ### Optional
 
+- `description` (String) The tag's description
 - `environment` (String) The CloudTruth environment
 - `project` (String) The CloudTruth project
 
 ### Read-Only
 
-- `description` (String) The tag's description
 - `id` (String) The ID of this resource.
 - `timestamp` (String) The tag's RFC 3339 timestamp
 

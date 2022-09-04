@@ -85,8 +85,8 @@ UtilsGeneratePasswordCreate Get a randomly generated password using AWS Secrets 
 
 Endpoint for accessing utility functions
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUtilsGeneratePasswordCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUtilsGeneratePasswordCreateRequest
 */
 func (a *UtilsApiService) UtilsGeneratePasswordCreate(ctx context.Context) ApiUtilsGeneratePasswordCreateRequest {
 	return ApiUtilsGeneratePasswordCreateRequest{
@@ -96,7 +96,8 @@ func (a *UtilsApiService) UtilsGeneratePasswordCreate(ctx context.Context) ApiUt
 }
 
 // Execute executes the request
-//  @return GeneratedPasswordResponse
+//
+//	@return GeneratedPasswordResponse
 func (a *UtilsApiService) UtilsGeneratePasswordCreateExecute(r ApiUtilsGeneratePasswordCreateRequest) (*GeneratedPasswordResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost

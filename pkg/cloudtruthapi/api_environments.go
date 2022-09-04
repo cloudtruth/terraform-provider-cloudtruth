@@ -42,8 +42,8 @@ func (r ApiEnvironmentsCreateRequest) Execute() (*Environment, *http.Response, e
 /*
 EnvironmentsCreate Method for EnvironmentsCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiEnvironmentsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiEnvironmentsCreateRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsCreate(ctx context.Context) ApiEnvironmentsCreateRequest {
 	return ApiEnvironmentsCreateRequest{
@@ -53,7 +53,8 @@ func (a *EnvironmentsApiService) EnvironmentsCreate(ctx context.Context) ApiEnvi
 }
 
 // Execute executes the request
-//  @return Environment
+//
+//	@return Environment
 func (a *EnvironmentsApiService) EnvironmentsCreateExecute(r ApiEnvironmentsCreateRequest) (*Environment, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -173,9 +174,9 @@ func (r ApiEnvironmentsDestroyRequest) Execute() (*http.Response, error) {
 /*
 EnvironmentsDestroy Method for EnvironmentsDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiEnvironmentsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiEnvironmentsDestroyRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsDestroy(ctx context.Context, id string) ApiEnvironmentsDestroyRequest {
 	return ApiEnvironmentsDestroyRequest{
@@ -341,8 +342,8 @@ func (r ApiEnvironmentsListRequest) Execute() (*PaginatedEnvironmentList, *http.
 /*
 EnvironmentsList Method for EnvironmentsList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiEnvironmentsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiEnvironmentsListRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsList(ctx context.Context) ApiEnvironmentsListRequest {
 	return ApiEnvironmentsListRequest{
@@ -352,7 +353,8 @@ func (a *EnvironmentsApiService) EnvironmentsList(ctx context.Context) ApiEnviro
 }
 
 // Execute executes the request
-//  @return PaginatedEnvironmentList
+//
+//	@return PaginatedEnvironmentList
 func (a *EnvironmentsApiService) EnvironmentsListExecute(r ApiEnvironmentsListRequest) (*PaginatedEnvironmentList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -497,9 +499,9 @@ func (r ApiEnvironmentsPartialUpdateRequest) Execute() (*Environment, *http.Resp
 /*
 EnvironmentsPartialUpdate Method for EnvironmentsPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiEnvironmentsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiEnvironmentsPartialUpdateRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsPartialUpdate(ctx context.Context, id string) ApiEnvironmentsPartialUpdateRequest {
 	return ApiEnvironmentsPartialUpdateRequest{
@@ -510,7 +512,8 @@ func (a *EnvironmentsApiService) EnvironmentsPartialUpdate(ctx context.Context, 
 }
 
 // Execute executes the request
-//  @return Environment
+//
+//	@return Environment
 func (a *EnvironmentsApiService) EnvironmentsPartialUpdateExecute(r ApiEnvironmentsPartialUpdateRequest) (*Environment, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -651,9 +654,9 @@ EnvironmentsPushesList List push operations.
 
 The push operations that this environment was involved in.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @return ApiEnvironmentsPushesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@return ApiEnvironmentsPushesListRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsPushesList(ctx context.Context, environmentPk string) ApiEnvironmentsPushesListRequest {
 	return ApiEnvironmentsPushesListRequest{
@@ -664,7 +667,8 @@ func (a *EnvironmentsApiService) EnvironmentsPushesList(ctx context.Context, env
 }
 
 // Execute executes the request
-//  @return PaginatedTaskStepList
+//
+//	@return PaginatedTaskStepList
 func (a *EnvironmentsApiService) EnvironmentsPushesListExecute(r ApiEnvironmentsPushesListRequest) (*PaginatedTaskStepList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -789,9 +793,9 @@ func (r ApiEnvironmentsRetrieveRequest) Execute() (*Environment, *http.Response,
 /*
 EnvironmentsRetrieve Method for EnvironmentsRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiEnvironmentsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiEnvironmentsRetrieveRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsRetrieve(ctx context.Context, id string) ApiEnvironmentsRetrieveRequest {
 	return ApiEnvironmentsRetrieveRequest{
@@ -802,7 +806,8 @@ func (a *EnvironmentsApiService) EnvironmentsRetrieve(ctx context.Context, id st
 }
 
 // Execute executes the request
-//  @return Environment
+//
+//	@return Environment
 func (a *EnvironmentsApiService) EnvironmentsRetrieveExecute(r ApiEnvironmentsRetrieveRequest) (*Environment, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -929,9 +934,9 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @return ApiEnvironmentsTagsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@return ApiEnvironmentsTagsCreateRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsCreate(ctx context.Context, environmentPk string) ApiEnvironmentsTagsCreateRequest {
 	return ApiEnvironmentsTagsCreateRequest{
@@ -942,7 +947,8 @@ func (a *EnvironmentsApiService) EnvironmentsTagsCreate(ctx context.Context, env
 }
 
 // Execute executes the request
-//  @return Tag
+//
+//	@return Tag
 func (a *EnvironmentsApiService) EnvironmentsTagsCreateExecute(r ApiEnvironmentsTagsCreateRequest) (*Tag, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -1069,10 +1075,10 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @param id
- @return ApiEnvironmentsTagsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@param id
+	@return ApiEnvironmentsTagsDestroyRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsDestroy(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsDestroyRequest {
 	return ApiEnvironmentsTagsDestroyRequest{
@@ -1252,9 +1258,9 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @return ApiEnvironmentsTagsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@return ApiEnvironmentsTagsListRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsList(ctx context.Context, environmentPk string) ApiEnvironmentsTagsListRequest {
 	return ApiEnvironmentsTagsListRequest{
@@ -1265,7 +1271,8 @@ func (a *EnvironmentsApiService) EnvironmentsTagsList(ctx context.Context, envir
 }
 
 // Execute executes the request
-//  @return PaginatedTagList
+//
+//	@return PaginatedTagList
 func (a *EnvironmentsApiService) EnvironmentsTagsListExecute(r ApiEnvironmentsTagsListRequest) (*PaginatedTagList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -1420,10 +1427,10 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @param id
- @return ApiEnvironmentsTagsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@param id
+	@return ApiEnvironmentsTagsPartialUpdateRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdate(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsPartialUpdateRequest {
 	return ApiEnvironmentsTagsPartialUpdateRequest{
@@ -1435,7 +1442,8 @@ func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdate(ctx context.Conte
 }
 
 // Execute executes the request
-//  @return TagUpdate
+//
+//	@return TagUpdate
 func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdateExecute(r ApiEnvironmentsTagsPartialUpdateRequest) (*TagUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -1560,10 +1568,10 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @param id
- @return ApiEnvironmentsTagsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@param id
+	@return ApiEnvironmentsTagsRetrieveRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsRetrieve(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsRetrieveRequest {
 	return ApiEnvironmentsTagsRetrieveRequest{
@@ -1575,7 +1583,8 @@ func (a *EnvironmentsApiService) EnvironmentsTagsRetrieve(ctx context.Context, e
 }
 
 // Execute executes the request
-//  @return Tag
+//
+//	@return Tag
 func (a *EnvironmentsApiService) EnvironmentsTagsRetrieveExecute(r ApiEnvironmentsTagsRetrieveRequest) (*Tag, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -1704,10 +1713,10 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @param id
- @return ApiEnvironmentsTagsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@param id
+	@return ApiEnvironmentsTagsUpdateRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsTagsUpdate(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsUpdateRequest {
 	return ApiEnvironmentsTagsUpdateRequest{
@@ -1719,7 +1728,8 @@ func (a *EnvironmentsApiService) EnvironmentsTagsUpdate(ctx context.Context, env
 }
 
 // Execute executes the request
-//  @return TagUpdate
+//
+//	@return TagUpdate
 func (a *EnvironmentsApiService) EnvironmentsTagsUpdateExecute(r ApiEnvironmentsTagsUpdateRequest) (*TagUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut
@@ -1847,9 +1857,9 @@ func (r ApiEnvironmentsUpdateRequest) Execute() (*Environment, *http.Response, e
 /*
 EnvironmentsUpdate Method for EnvironmentsUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiEnvironmentsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiEnvironmentsUpdateRequest
 */
 func (a *EnvironmentsApiService) EnvironmentsUpdate(ctx context.Context, id string) ApiEnvironmentsUpdateRequest {
 	return ApiEnvironmentsUpdateRequest{
@@ -1860,7 +1870,8 @@ func (a *EnvironmentsApiService) EnvironmentsUpdate(ctx context.Context, id stri
 }
 
 // Execute executes the request
-//  @return Environment
+//
+//	@return Environment
 func (a *EnvironmentsApiService) EnvironmentsUpdateExecute(r ApiEnvironmentsUpdateRequest) (*Environment, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut

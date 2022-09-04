@@ -41,19 +41,18 @@ func (r ApiServiceaccountsCreateRequest) Execute() (*ServiceAccountCreateRespons
 /*
 ServiceaccountsCreate Create a ServiceAccount user.
 
+	           Creates a new ServiceAccount.  A ServiceAccount is a user record intended
+	           for machine use (such as a build system).  It does not have a username/password
+	           but is instead accessed using an API key.
 
-            Creates a new ServiceAccount.  A ServiceAccount is a user record intended
-            for machine use (such as a build system).  It does not have a username/password
-            but is instead accessed using an API key.
-
-            On creation, the API key will be returned.  This key will only be shown once,
-            is not stored on any CloudTruth system, and should be treated as a secret.  Should
-            the key be lost, you will need to delete and recreate the ServiceAccount in order
-            to generate a new API key.
+	           On creation, the API key will be returned.  This key will only be shown once,
+	           is not stored on any CloudTruth system, and should be treated as a secret.  Should
+	           the key be lost, you will need to delete and recreate the ServiceAccount in order
+	           to generate a new API key.
 
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiServiceaccountsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiServiceaccountsCreateRequest
 */
 func (a *ServiceaccountsApiService) ServiceaccountsCreate(ctx context.Context) ApiServiceaccountsCreateRequest {
 	return ApiServiceaccountsCreateRequest{
@@ -63,7 +62,8 @@ func (a *ServiceaccountsApiService) ServiceaccountsCreate(ctx context.Context) A
 }
 
 // Execute executes the request
-//  @return ServiceAccountCreateResponse
+//
+//	@return ServiceAccountCreateResponse
 func (a *ServiceaccountsApiService) ServiceaccountsCreateExecute(r ApiServiceaccountsCreateRequest) (*ServiceAccountCreateResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPost
@@ -183,9 +183,9 @@ func (r ApiServiceaccountsDestroyRequest) Execute() (*http.Response, error) {
 /*
 ServiceaccountsDestroy Method for ServiceaccountsDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A unique value identifying this service account.
- @return ApiServiceaccountsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A unique value identifying this service account.
+	@return ApiServiceaccountsDestroyRequest
 */
 func (a *ServiceaccountsApiService) ServiceaccountsDestroy(ctx context.Context, id string) ApiServiceaccountsDestroyRequest {
 	return ApiServiceaccountsDestroyRequest{
@@ -321,8 +321,8 @@ func (r ApiServiceaccountsListRequest) Execute() (*PaginatedServiceAccountList, 
 /*
 ServiceaccountsList Method for ServiceaccountsList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiServiceaccountsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiServiceaccountsListRequest
 */
 func (a *ServiceaccountsApiService) ServiceaccountsList(ctx context.Context) ApiServiceaccountsListRequest {
 	return ApiServiceaccountsListRequest{
@@ -332,7 +332,8 @@ func (a *ServiceaccountsApiService) ServiceaccountsList(ctx context.Context) Api
 }
 
 // Execute executes the request
-//  @return PaginatedServiceAccountList
+//
+//	@return PaginatedServiceAccountList
 func (a *ServiceaccountsApiService) ServiceaccountsListExecute(r ApiServiceaccountsListRequest) (*PaginatedServiceAccountList, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -462,9 +463,9 @@ func (r ApiServiceaccountsPartialUpdateRequest) Execute() (*ServiceAccount, *htt
 /*
 ServiceaccountsPartialUpdate Method for ServiceaccountsPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A unique value identifying this service account.
- @return ApiServiceaccountsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A unique value identifying this service account.
+	@return ApiServiceaccountsPartialUpdateRequest
 */
 func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdate(ctx context.Context, id string) ApiServiceaccountsPartialUpdateRequest {
 	return ApiServiceaccountsPartialUpdateRequest{
@@ -475,7 +476,8 @@ func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdate(ctx context.Con
 }
 
 // Execute executes the request
-//  @return ServiceAccount
+//
+//	@return ServiceAccount
 func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdateExecute(r ApiServiceaccountsPartialUpdateRequest) (*ServiceAccount, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPatch
@@ -593,9 +595,9 @@ func (r ApiServiceaccountsRetrieveRequest) Execute() (*ServiceAccount, *http.Res
 /*
 ServiceaccountsRetrieve Method for ServiceaccountsRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A unique value identifying this service account.
- @return ApiServiceaccountsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A unique value identifying this service account.
+	@return ApiServiceaccountsRetrieveRequest
 */
 func (a *ServiceaccountsApiService) ServiceaccountsRetrieve(ctx context.Context, id string) ApiServiceaccountsRetrieveRequest {
 	return ApiServiceaccountsRetrieveRequest{
@@ -606,7 +608,8 @@ func (a *ServiceaccountsApiService) ServiceaccountsRetrieve(ctx context.Context,
 }
 
 // Execute executes the request
-//  @return ServiceAccount
+//
+//	@return ServiceAccount
 func (a *ServiceaccountsApiService) ServiceaccountsRetrieveExecute(r ApiServiceaccountsRetrieveRequest) (*ServiceAccount, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodGet
@@ -728,9 +731,9 @@ func (r ApiServiceaccountsUpdateRequest) Execute() (*ServiceAccount, *http.Respo
 /*
 ServiceaccountsUpdate Method for ServiceaccountsUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A unique value identifying this service account.
- @return ApiServiceaccountsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A unique value identifying this service account.
+	@return ApiServiceaccountsUpdateRequest
 */
 func (a *ServiceaccountsApiService) ServiceaccountsUpdate(ctx context.Context, id string) ApiServiceaccountsUpdateRequest {
 	return ApiServiceaccountsUpdateRequest{
@@ -741,7 +744,8 @@ func (a *ServiceaccountsApiService) ServiceaccountsUpdate(ctx context.Context, i
 }
 
 // Execute executes the request
-//  @return ServiceAccount
+//
+//	@return ServiceAccount
 func (a *ServiceaccountsApiService) ServiceaccountsUpdateExecute(r ApiServiceaccountsUpdateRequest) (*ServiceAccount, *http.Response, error) {
 	var (
 		localVarHTTPMethod  = http.MethodPut
