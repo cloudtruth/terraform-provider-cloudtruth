@@ -71,10 +71,10 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	var resp *cloudtruthapi.PaginatedTemplateList
+	var templateList *cloudtruthapi.PaginatedTemplateList
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
-		resp, r, err = filteredTemplateListRequest.Execute()
+		templateList, r, err = filteredTemplateListRequest.Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("dataCloudTruthTemplatesRead: error reading template template %s", name), r, err)
 		}
@@ -83,13 +83,13 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-	if resp.GetCount() != 1 {
+	if templateList.GetCount() != 1 {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: expected 1 value for template %s, found %d instead",
-			name, resp.GetCount()))
+			name, templateList.GetCount()))
 	}
 
 	// There should only be one template with the specified name per environment per project
-	template := resp.GetResults()[0]
+	template := templateList.GetResults()[0]
 	templateID := template.GetId()
 
 	// We extract its body and request that its referenced parameters/templates be interpolated
@@ -194,10 +194,10 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 		}
 		filteredTemplateListRequest, err := parseTemplateListFilters(templateListRequest, d)
 
-		var resp *cloudtruthapi.PaginatedTemplateList
+		var templateList *cloudtruthapi.PaginatedTemplateList
 		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 			var r *http.Response
-			resp, r, err = filteredTemplateListRequest.Execute()
+			templateList, r, err = filteredTemplateListRequest.Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("dataCloudTruthTemplatesRead: error reading templates in the %s environment", environment), r, err)
 			}
@@ -206,7 +206,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 		if retryError != nil {
 			return diag.FromErr(retryError)
 		}
-		results := resp.GetResults()
+		results := templateList.GetResults()
 		pageNum++
 
 		for _, res := range results {
@@ -219,7 +219,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 				templateMap[templateName] = previewBody
 			}
 		}
-		if resp.GetNext() == "" {
+		if templateList.GetNext() == "" {
 			break
 		}
 	}

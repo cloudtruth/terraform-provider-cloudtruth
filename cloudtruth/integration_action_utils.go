@@ -129,10 +129,10 @@ func lookupEnvTag(ctx context.Context, d *schema.ResourceData, c *cloudTruthClie
 		return "", err
 	}
 
-	var resp *cloudtruthapi.PaginatedTagList
+	var tagList *cloudtruthapi.PaginatedTagList
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
-		resp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsList(ctx, *envID).Name(tagName).Execute()
+		tagList, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsList(ctx, *envID).Name(tagName).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("lookupEnvTag: error looking up tag %s", tagName), r, err)
 		}
@@ -143,7 +143,7 @@ func lookupEnvTag(ctx context.Context, d *schema.ResourceData, c *cloudTruthClie
 	}
 
 	// There should only be one tag with the specified per environment
-	results := resp.GetResults()
+	results := tagList.GetResults()
 	tag := results[0]
 	tagID := tag.GetId()
 	return tagID, nil

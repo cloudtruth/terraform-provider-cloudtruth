@@ -65,11 +65,11 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 		templateCreate.SetBody(templateValue) // This will fail when we attempt to create the template if invalid
 	}
 
-	var resp *cloudtruthapi.Template
+	var template *cloudtruthapi.Template
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(ctx,
+		template, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(ctx,
 			*projID).TemplateCreate(*templateCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTemplateCreate: error creating template %s", templateName), r, err)
@@ -80,11 +80,10 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 		return diag.FromErr(retryError)
 	}
 
-	d.SetId(resp.GetId())
+	d.SetId(template.GetId())
 	return nil
 }
 
-// todo: handle pagination
 func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTemplateRead")
@@ -95,11 +94,11 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 	}
 	templateName := d.Get("name").(string)
 
-	var resp *cloudtruthapi.PaginatedTemplateList
+	var templateList *cloudtruthapi.PaginatedTemplateList
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx, *projID).Name(templateName).Execute()
+		templateList, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx, *projID).Name(templateName).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTemplateRead: error reading template %s", templateName), r, err)
 		}
@@ -109,11 +108,11 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 		return diag.FromErr(retryError)
 	}
 
-	res := resp.GetResults()
+	res := templateList.GetResults()
 	if len(res) != 1 {
 		return diag.FromErr(fmt.Errorf("resourceTemplateRead: found %d templates, expcted to find 1", len(res)))
 	}
-	d.SetId(resp.GetResults()[0].GetId())
+	d.SetId(templateList.GetResults()[0].GetId())
 	return nil
 }
 

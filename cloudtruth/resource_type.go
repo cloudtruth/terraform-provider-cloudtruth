@@ -101,15 +101,15 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 
 	typeCreate.SetParent(concreteType.GetUrl())
 	var typeID string
-	var typeCreateResp *cloudtruthapi.ParameterType
+	var parameterType *cloudtruthapi.ParameterType
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		typeCreateResp, r, err = c.openAPIClient.TypesApi.TypesCreate(ctx).ParameterTypeCreate(*typeCreate).Execute()
+		parameterType, r, err = c.openAPIClient.TypesApi.TypesCreate(ctx).ParameterTypeCreate(*typeCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTypeCreate: error creating type %s", typeName), r, err)
 		}
-		typeID = typeCreateResp.GetId()
+		typeID = parameterType.GetId()
 		return nil
 	})
 	if retryError != nil {
@@ -127,7 +127,7 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 			return diag.FromErr(err)
 		}
 	}
-	c.types[typeName] = *typeCreateResp
+	c.types[typeName] = *parameterType
 	d.SetId(typeID)
 	return nil
 }
@@ -179,11 +179,11 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 	c := meta.(*cloudTruthClient)
 	typeName := d.Get("name").(string)
 
-	var resp *cloudtruthapi.PaginatedParameterTypeList
+	var parameterTypeList *cloudtruthapi.PaginatedParameterTypeList
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.TypesApi.TypesList(ctx).NameIexact(typeName).Execute()
+		parameterTypeList, r, err = c.openAPIClient.TypesApi.TypesList(ctx).NameIexact(typeName).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTypeRead: error reading type %s", typeName), r, err)
 		}
@@ -193,11 +193,11 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 		return diag.FromErr(retryError)
 	}
 
-	res := resp.GetResults()
+	res := parameterTypeList.GetResults()
 	if len(res) != 1 {
 		return diag.FromErr(fmt.Errorf("resourceTypeRead: found %d types, expcted to find 1", len(res)))
 	}
-	d.SetId(resp.GetResults()[0].GetId())
+	d.SetId(parameterTypeList.GetResults()[0].GetId())
 	return nil
 }
 

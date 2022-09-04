@@ -166,7 +166,7 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
 		// not client initialization so we employ a simple retry loop instead
 		for retryCount < loadCacheRetries {
-			resp, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Execute()
+			projectList, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Execute()
 			if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
 				apiError = err
 				break
@@ -177,7 +177,7 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 				retryCount++
 			} else {
 				c.projectNames = make(map[string]string)
-				for _, p := range resp.Results {
+				for _, p := range projectList.Results {
 					c.projectNames[p.Name] = p.Id
 				}
 				apiError = nil
@@ -239,7 +239,7 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
 		// not client initialization so we employ a simple retryCount loop instead
 		for retryCount < loadCacheRetries {
-			resp, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Execute()
+			envList, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Execute()
 			if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
 				apiError = err
 				break
@@ -248,9 +248,9 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 				tflog.Debug(ctx, fmt.Sprintf("loadEnvNameCache: %s", err))
 				apiError = err
 				retryCount++
-			} else if resp != nil {
+			} else if envList != nil {
 				c.envNames = make(map[string]string)
-				for _, p := range resp.Results {
+				for _, p := range envList.Results {
 					c.envNames[p.Name] = p.Id
 				}
 				apiError = nil
@@ -474,7 +474,7 @@ func (c *cloudTruthClient) lookupType(ctx context.Context, typeName string) *clo
 
 /* Helper function for making API errors more useful
    API/server side errors are generally retryable
-   client side errors are not retryable, but we want to extract the underlying API error
+   client side errors are not retryable, and we extract the underlying API error
    so that the end user can see what's wrong
 */
 func handleAPIError(msg string, r *http.Response, err error) *resource.RetryError {

@@ -92,11 +92,11 @@ func resourceAzureImportActionCreate(ctx context.Context, d *schema.ResourceData
 	resourcePath := d.Get("resource").(string)
 	importActionCreate.SetResource(resourcePath)
 
-	var resp *cloudtruthapi.AzureKeyVaultPull
+	var azureImport *cloudtruthapi.AzureKeyVaultPull
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPullsCreate(ctx, *azureIntegrationID).AzureKeyVaultPull(*importActionCreate).Execute()
+		azureImport, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPullsCreate(ctx, *azureIntegrationID).AzureKeyVaultPull(*importActionCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAzureImportActionCreate: error creating Azure import action %s", importActionName), r, err)
 		}
@@ -109,7 +109,7 @@ func resourceAzureImportActionCreate(ctx context.Context, d *schema.ResourceData
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	d.SetId(resp.GetId())
+	d.SetId(azureImport.GetId())
 	return nil
 }
 

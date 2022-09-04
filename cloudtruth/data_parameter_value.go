@@ -81,10 +81,10 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 		return diag.FromErr(err)
 	}
 
-	var resp *cloudtruthapi.PaginatedParameterList
+	var parameterList *cloudtruthapi.PaginatedParameterList
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
-		resp, r, err = filteredParamListRequest.Execute()
+		parameterList, r, err = filteredParamListRequest.Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("dataCloudTruthParameterValueRead: error looking up parameter %s", paramName), r, err)
 		}
@@ -95,11 +95,11 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 		return diag.FromErr(retryError)
 	}
 
-	if resp.GetCount() != 1 {
+	if parameterList.GetCount() != 1 {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: expected 1 parameter %s, found %d instead",
-			paramName, resp.GetCount()))
+			paramName, parameterList.GetCount()))
 	}
-	results := resp.GetResults()
+	results := parameterList.GetResults()
 	param := results[0]
 	values := param.GetValues()
 	paramID := param.GetId()
@@ -179,10 +179,10 @@ func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceDa
 		}
 		filteredParamListRequest, err := parseParamListFilters(paramListRequest, d)
 
-		var resp *cloudtruthapi.PaginatedParameterList
+		var parameterList *cloudtruthapi.PaginatedParameterList
 		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 			var r *http.Response
-			resp, r, err = filteredParamListRequest.Execute()
+			parameterList, r, err = filteredParamListRequest.Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("dataCloudTruthParameterValuesRead: error looking up parameters in the %s environment", environment), r, err)
 			}
@@ -191,7 +191,7 @@ func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceDa
 		if retryError != nil {
 			return diag.FromErr(retryError)
 		}
-		results := resp.GetResults()
+		results := parameterList.GetResults()
 		pageNum++
 
 		for _, res := range results {
@@ -205,7 +205,7 @@ func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceDa
 				}
 			}
 		}
-		if resp.GetNext() == "" {
+		if parameterList.GetNext() == "" {
 			break
 		}
 	}

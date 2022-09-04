@@ -176,11 +176,11 @@ func resourceAccessGrantRead(ctx context.Context, d *schema.ResourceData, meta a
 	c := meta.(*cloudTruthClient)
 	grantID := d.Id()
 
-	var resp *cloudtruthapi.Grant
+	var grant *cloudtruthapi.Grant
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.GrantsApi.GrantsRetrieve(ctx, grantID).Execute()
+		grant, r, err = c.openAPIClient.GrantsApi.GrantsRetrieve(ctx, grantID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAccessGrantRead: error reading grant %s", grantID), r, err)
 		}
@@ -189,11 +189,11 @@ func resourceAccessGrantRead(ctx context.Context, d *schema.ResourceData, meta a
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-	err := d.Set("role", resp.GetRole())
+	err := d.Set("role", grant.GetRole())
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	principalID, err := getPrincipalID(ctx, resp.GetPrincipal())
+	principalID, err := getPrincipalID(ctx, grant.GetPrincipal())
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -202,7 +202,7 @@ func resourceAccessGrantRead(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(err)
 	}
 
-	d.SetId(resp.GetId())
+	d.SetId(grant.GetId())
 	return nil
 }
 

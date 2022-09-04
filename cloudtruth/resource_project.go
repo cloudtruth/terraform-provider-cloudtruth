@@ -65,11 +65,11 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 		projectCreate.SetDependsOn(*parent)
 	}
 
-	var resp *cloudtruthapi.Project
+	var project *cloudtruthapi.Project
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.ProjectsApi.ProjectsCreate(ctx).ProjectCreate(*projectCreate).Execute()
+		project, r, err = c.openAPIClient.ProjectsApi.ProjectsCreate(ctx).ProjectCreate(*projectCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceProjectCreate: error creating project %s", projectName), r, err)
 		}
@@ -79,7 +79,7 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 		return diag.FromErr(retryError)
 	}
 
-	projectID := resp.GetId()
+	projectID := project.GetId()
 	d.SetId(projectID)
 	c.addNewProjectToCaches(projectName, projectID)
 	return nil
@@ -90,11 +90,11 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	c := meta.(*cloudTruthClient)
 	projectName := d.Get("name").(string)
 
-	var resp *cloudtruthapi.PaginatedProjectList
+	var projectList *cloudtruthapi.PaginatedProjectList
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
+		projectList, r, err = c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceProjectRead: error reading project %s", projectName), r, err)
 		}
@@ -105,11 +105,11 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	}
 
 	// There should be only one project found
-	res := resp.GetResults()
+	res := projectList.GetResults()
 	if len(res) != 1 {
 		return diag.FromErr(fmt.Errorf("resourceProjectRead: found %d projects, expcted to find 1", len(res)))
 	}
-	project := resp.GetResults()[0]
+	project := projectList.GetResults()[0]
 	d.SetId(project.GetId())
 	// todo: determine if reading the project parent is useful/needed, the parent project field is not settable in the UI
 	err := d.Set("description", project.GetDescription())

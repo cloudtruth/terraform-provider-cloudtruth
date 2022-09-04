@@ -94,11 +94,11 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	c := meta.(*cloudTruthClient)
 	groupName := d.Get("name").(string)
 
-	var resp *cloudtruthapi.PaginatedGroupList
+	var groupList *cloudtruthapi.PaginatedGroupList
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.GroupsApi.GroupsList(ctx).Name(groupName).Execute()
+		groupList, r, err = c.openAPIClient.GroupsApi.GroupsList(ctx).Name(groupName).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceGroupRead: error reading group %s", groupName), r, err)
 		}
@@ -108,11 +108,11 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 		return diag.FromErr(retryError)
 	}
 
-	res := resp.GetResults()
+	res := groupList.GetResults()
 	if len(res) != 1 {
 		return diag.FromErr(fmt.Errorf("resourceGroupRead: found %d groups, expcted to find 1", len(res)))
 	}
-	group := resp.GetResults()[0]
+	group := groupList.GetResults()[0]
 	d.SetId(group.GetId())
 	return nil
 }

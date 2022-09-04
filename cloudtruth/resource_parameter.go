@@ -116,17 +116,17 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 	}
 
 	var paramID string
-	var paramCreateResp *cloudtruthapi.Parameter
+	var parameter *cloudtruthapi.Parameter
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
 		paramCreate := paramCreateConfig(d, paramTypeName)
-		paramCreateResp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersCreate(ctx,
+		parameter, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersCreate(ctx,
 			*projID).ParameterCreate(*paramCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterCreate: error creating parameter %s", paramName), r, err)
 		}
-		paramID = paramCreateResp.GetId()
+		paramID = parameter.GetId()
 		return nil
 	})
 
@@ -214,10 +214,10 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 	}
 	paramName := d.Get("name").(string)
 
-	var resp *cloudtruthapi.PaginatedParameterList
+	var parameterList *cloudtruthapi.PaginatedParameterList
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
-		resp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Name(paramName).Execute()
+		parameterList, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Name(paramName).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterRead: error looking up parameter %s", paramName), r, err)
 		}
@@ -227,11 +227,11 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 		return diag.FromErr(retryError)
 	}
 
-	if resp.GetCount() != 1 {
+	if parameterList.GetCount() != 1 {
 		return diag.FromErr(fmt.Errorf("resourceParameterRead: expected 1 value for parameter %s, found %d instead",
-			paramName, resp.GetCount()))
+			paramName, parameterList.GetCount()))
 	}
-	d.SetId(resp.GetResults()[0].GetId())
+	d.SetId(parameterList.GetResults()[0].GetId())
 	return nil
 }
 

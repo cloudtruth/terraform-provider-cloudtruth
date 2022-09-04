@@ -116,6 +116,7 @@ func resourceAWSPushAction() *schema.Resource {
 	}
 }
 
+// todo: use generics and make one function for both AWS and Azure typee
 func setAWSPushActionBoolProps(pushAction *cloudtruthapi.AwsPush, d *schema.ResourceData) {
 	pushAction.SetIncludeParameters(d.Get("parameters").(bool))
 	pushAction.SetIncludeSecrets(d.Get("secrets").(bool))
@@ -162,16 +163,16 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	pushActionCreate.SetProjects(projects)
 	rawTags := d.Get("tags").([]interface{})
 	tags, err := getEnvTags(ctx, d, c, rawTags)
-	pushActionCreate.SetTags(tags)
 	if err != nil {
 		return diag.FromErr(err)
 	}
+	pushActionCreate.SetTags(tags)
 
-	var resp *cloudtruthapi.AwsPush
+	var awsPush *cloudtruthapi.AwsPush
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesCreate(ctx, *awsIntegrationID).AwsPush(*pushActionCreate).Execute()
+		awsPush, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesCreate(ctx, *awsIntegrationID).AwsPush(*pushActionCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSPushActionCreate: error creating AWS push action %s", pushActionName), r, err)
 		}
@@ -185,10 +186,11 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	d.SetId(resp.GetId())
+	d.SetId(awsPush.GetId())
 	return nil
 }
 
+// todo: read tags and envs, implement a tag cache
 func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAWSPushActionRead")
 	defer tflog.Debug(ctx, "exiting resourceAWSPushActionRead")
@@ -283,13 +285,9 @@ func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, me
 
 	if d.HasChange("tags") {
 		rawTags := d.Get("tags").([]interface{})
-		tags := make([]string, len(rawTags))
-		var err error
-		for i, v := range rawTags {
-			tags[i], err = lookupEnvTag(ctx, d, c, fmt.Sprint(v))
-			if err != nil {
-				return diag.FromErr(err)
-			}
+		tags, err := getEnvTags(ctx, d, c, rawTags)
+		if err != nil {
+			return diag.FromErr(err)
 		}
 		patchedAWSPush.SetTags(tags)
 		hasChange = true

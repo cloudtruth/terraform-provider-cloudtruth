@@ -63,13 +63,13 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 		envCreate.SetDescription(envDesc)
 	}
 
-	var resp *cloudtruthapi.Environment
+	var env *cloudtruthapi.Environment
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
+		env, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceEnvironmentCreate: error creating environment %s", envName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceEnvironmentCreate: error creating env %s", envName), r, err)
 		}
 		return nil
 	})
@@ -77,7 +77,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 		return diag.FromErr(retryError)
 	}
 
-	envID := resp.GetId()
+	envID := env.GetId()
 	d.SetId(envID)
 	c.addNewEnvToCaches(envName, envID)
 	return nil
@@ -88,11 +88,11 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	c := meta.(*cloudTruthClient)
 	envName := d.Get("name").(string)
 
-	var resp *cloudtruthapi.PaginatedEnvironmentList
+	var envList *cloudtruthapi.PaginatedEnvironmentList
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Name(envName).Execute()
+		envList, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Name(envName).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceEnvironmentRead: error reading environment %s", envName), r, err)
 		}
@@ -102,11 +102,11 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 		return diag.FromErr(retryError)
 	}
 
-	res := resp.GetResults()
+	res := envList.GetResults()
 	if len(res) != 1 {
 		return diag.FromErr(fmt.Errorf("resourceEnvironmentRead: found %d environments, expcted to find 1", len(res)))
 	}
-	d.SetId(resp.GetResults()[0].GetId())
+	d.SetId(envList.GetResults()[0].GetId())
 	return nil
 }
 
