@@ -3,12 +3,12 @@
 page_title: "cloudtruth_aws_import_action Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A CloudTruth import action.
+  A CloudTruth AWS import action.
 ---
 
 # cloudtruth_aws_import_action (Resource)
 
-A CloudTruth import action.
+A CloudTruth AWS import action.
 
 
 
@@ -17,9 +17,11 @@ A CloudTruth import action.
 
 ### Required
 
-- `integration_id` (String) The ID of the CloudTruth integration corresponding to this pull action
+- `integration` (String) The name (using the format AWS_ROLE@AWS_ACCOUNT_ID) of the CloudTruth integration corresponding to this pull action
+- `mode` (String) The resource type: 'pattern' for mustache-style regexes and 'mapped' for JMESpath expression
 - `name` (String) The name of the import action
 - `region` (String) The target AWS region
+- `resource` (String) The mustache style or JMESPath resource string specifying the environment, project, and parameter
 - `service` (String) The AWS service to pull from: s3|ssm|secretsmanager
 
 ### Optional
@@ -27,10 +29,10 @@ A CloudTruth import action.
 - `create_environments` (Boolean) Auto create environments
 - `create_projects` (Boolean) Auto create projects
 - `description` (String) A description of the import action
-- `resource_pattern` (String) The regex or mustache resource pattern specifying the environment, project, and parameter
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `integration_id` (String) The ID of the CloudTruth integration corresponding to this pull action
 
 

@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
-	"strings"
 )
 
 func resourceAWSImportAction() *schema.Resource {
@@ -80,15 +79,6 @@ func resourceAWSImportAction() *schema.Resource {
 	}
 }
 
-func validAWSIntegrationName(v interface{}, attributeName string) (warns []string, errs []error) {
-	intName := v.(string)
-	nameSegments := strings.Split(intName, "@")
-	if len(nameSegments) != 2 {
-		errs = append(errs, fmt.Errorf("the %s property %s must use this formate: AWS_ROLE@AWS_ACCOUNT_ID", attributeName, intName))
-	}
-	return
-}
-
 func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAWSImportActionCreate")
 	defer tflog.Debug(ctx, "exiting resourceAWSImportActionCreate")
@@ -96,26 +86,10 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 	importActionCreate := cloudtruthapi.NewAwsPullWithDefaults()
 	importActionName := d.Get("name").(string)
 	awsIntegrationName := d.Get("integration").(string)
-
-	nameSegments := strings.Split(awsIntegrationName, "@")
-	role, awsAccountID := nameSegments[0], nameSegments[1]
-	var integrations *cloudtruthapi.PaginatedAwsIntegrationList
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-		var r *http.Response
-		var err error
-		integrations, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsList(ctx).AwsAccountId(awsAccountID).AwsRoleName(role).Execute()
-		if err != nil {
-			return handleAPIError(fmt.Sprintf("lookupAWSIntegrationID: error looking up AWS import action %s", awsIntegrationName), r, err)
-		}
-		return nil
-	})
-	if retryError != nil {
-		return diag.FromErr(retryError)
+	awsIntegrationID, err := lookupAWSIntegration(ctx, awsIntegrationName, c, d)
+	if err != nil {
+		return diag.FromErr(err)
 	}
-	if *integrations.Count != 1 {
-		return diag.FromErr(fmt.Errorf("resourceAWSImportActionCreate: unexpected number of AWS integrations found for %s", awsIntegrationName))
-	}
-	awsIntegrationID := integrations.GetResults()[0].GetId()
 
 	importActionCreate.SetName(importActionName)
 	importActionCreate.SetDescription(d.Get("description").(string))
@@ -138,10 +112,10 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 	importActionCreate.SetResource(resourcePath)
 
 	var awsPull *cloudtruthapi.AwsPull
-	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		awsPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsCreate(ctx, awsIntegrationID).AwsPull(*importActionCreate).Execute()
+		awsPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsCreate(ctx, *awsIntegrationID).AwsPull(*importActionCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSImportActionCreate: error creating AWS import action %s", importActionName), r, err)
 		}
@@ -180,6 +154,7 @@ func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, me
 		return diag.FromErr(retryError)
 	}
 
+	// Read & set all properties from the deployed resource
 	err := setAWSImportReadProps(awsPull, d)
 	if retryError != nil {
 		return diag.FromErr(err)

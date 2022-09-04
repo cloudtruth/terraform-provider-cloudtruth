@@ -37,11 +37,12 @@ non-owner grant(s) the owner grant is created before the non-owner grant(s) is c
 
 - `environment` (String) The target environment to which the role will provide access, mutually exclusive with 'project'
 - `group` (String) The group which will be granted the role, mutually exclusive with 'user'
-- `project` (String) The target environment to which the role will provide access, mutually exclusive with 'environment'
-- `user` (String) The user which will be granted the role, mutually exclusive with 'group'
+- `project` (String) The target project to which the role will provide access, mutually exclusive with 'environment'
+- `user` (String) The display name or email of the user who will be granted the role, mutually exclusive with 'group'.
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `principal_id` (String) The internal ID of the user or group granted the role
 
 

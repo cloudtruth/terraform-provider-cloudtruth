@@ -27,12 +27,13 @@ func resourceAWSPushAction() *schema.Resource {
 				Required:    true,
 			},
 			"integration": {
-				Description: "The name of the CloudTruth integration corresponding to this pull action",
-				Type:        schema.TypeString,
-				Required:    true,
+				Description:  "The name (using the format AWS_ROLE@AWS_ACCOUNT_ID) of the CloudTruth integration corresponding to this push action",
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validAWSIntegrationName,
 			},
 			"integration_id": {
-				Description: "The ID of the CloudTruth integration corresponding to this pull action",
+				Description: "The ID of the CloudTruth integration corresponding to this push action",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
@@ -120,7 +121,12 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	c := meta.(*cloudTruthClient)
 	pushActionCreate := cloudtruthapi.NewAwsPushWithDefaults()
 	pushActionName := d.Get("name").(string)
-	awsIntegrationID := d.Get("integration").(string)
+	awsIntegrationName := d.Get("integration").(string)
+	awsIntegrationID, err := lookupAWSIntegration(ctx, awsIntegrationName, c, d)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	pushActionDesc := d.Get("description").(string)
 	pushActionCreate.SetName(pushActionName)
 	pushActionCreate.SetDescription(pushActionDesc)
@@ -168,7 +174,7 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesCreate(ctx, awsIntegrationID).AwsPush(*pushActionCreate).Execute()
+		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesCreate(ctx, *awsIntegrationID).AwsPush(*pushActionCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSPushActionCreate: error creating AWS push action %s", pushActionName), r, err)
 		}
@@ -178,6 +184,10 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 		return diag.FromErr(retryError)
 	}
 
+	err = d.Set("integration_id", awsIntegrationID)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	d.SetId(resp.GetId())
 	return nil
 }
@@ -204,6 +214,7 @@ func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta
 		return diag.FromErr(retryError)
 	}
 
+	// Read & set all properties from the deployed resource
 	props := map[string]func() string{
 		"name":        awsPush.GetName,
 		"description": awsPush.GetDescription,

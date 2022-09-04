@@ -26,10 +26,16 @@ func resourceAzureImportAction() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
+			"integration": {
+				Description:  "The name (using the format VAULT_NAME@TENANT_ID) of the CloudTruth integration corresponding to this import action",
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validAzureIntegrationName,
+			},
 			"integration_id": {
-				Description: "The ID of the CloudTruth integration corresponding to this pull action",
+				Description: "The ID of the CloudTruth integration corresponding to this import action",
 				Type:        schema.TypeString,
-				Required:    true,
+				Computed:    true,
 			},
 			"description": {
 				Description: "A description of the import action",
@@ -69,7 +75,13 @@ func resourceAzureImportActionCreate(ctx context.Context, d *schema.ResourceData
 	c := meta.(*cloudTruthClient)
 	importActionCreate := cloudtruthapi.NewAzureKeyVaultPullWithDefaults()
 	importActionName := d.Get("name").(string)
-	azureIntegrationID := d.Get("integration_id").(string)
+	azureIntegrationName := d.Get("integration").(string)
+
+	azureIntegrationID, err := lookupAzureIntegration(ctx, azureIntegrationName, c, d)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	importActionCreate.SetName(importActionName)
 	importActionCreate.SetDescription(d.Get("description").(string))
 	importActionMode, err := cloudtruthapi.NewModeEnumFromValue(d.Get("mode").(string))
@@ -84,7 +96,7 @@ func resourceAzureImportActionCreate(ctx context.Context, d *schema.ResourceData
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPullsCreate(ctx, azureIntegrationID).AzureKeyVaultPull(*importActionCreate).Execute()
+		resp, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPullsCreate(ctx, *azureIntegrationID).AzureKeyVaultPull(*importActionCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAzureImportActionCreate: error creating Azure import action %s", importActionName), r, err)
 		}
@@ -92,6 +104,10 @@ func resourceAzureImportActionCreate(ctx context.Context, d *schema.ResourceData
 	})
 	if retryError != nil {
 		return diag.FromErr(retryError)
+	}
+	err = d.Set("integration_id", azureIntegrationID)
+	if err != nil {
+		return diag.FromErr(err)
 	}
 	d.SetId(resp.GetId())
 	return nil
@@ -192,7 +208,7 @@ func resourceAzureImportActionUpdate(ctx context.Context, d *schema.ResourceData
 		hasChange = true
 	}
 	if d.HasChange("create_projects") {
-		patchedAzureKeyVaultPull.SetCreateEnvironments(d.Get("create_projects").(bool))
+		patchedAzureKeyVaultPull.SetCreateProjects(d.Get("create_projects").(bool))
 		hasChange = true
 	}
 

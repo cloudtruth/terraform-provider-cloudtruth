@@ -17,26 +17,25 @@ A CloudTruth Type, a user-defined type which can be used to create CloudTruth Pa
 
 ### Required
 
-- `base_type` (String) The name of the base type, can be a builtin (string|int|boolean) or another custom type
 - `name` (String) The name of the CloudTruth Type, unique per project
+- `type` (String) The base type of this custom type, can be a builtin (string|int|boolean) or another custom type
 
 ### Optional
 
 - `description` (String) A description of the CloudTruth Type
-- `rule` (Block List, Deprecated) The rule(s) describing allowable values for a parameter of this type. Add separate blocks per rule.
-Note that string types support max_len|min_len|regex rules, integers support min|max rules and booleans don't support any rules.
-Also see the examples for how to define multiple rule blocks. (see [below for nested schema](#nestedblock--rule))
+- `max` (String) A rule constraint: the maximum value for integer types, the maximum length for string types.
+This value is specified as a string because we need a reliable way to distinguish between default/zero values and unset values.  We use
+the empty string value for that purpose.
+- `min` (String) A rule constraint: the minimum value for integer types, the minimum length for string types.
+This value is specified as a string because we need a reliable way to distinguish between default/zero values and unset values.  We use
+the empty string value for that purpose.
+- `regex` (String) A CloudTruth rule constraint: the regular expression a string type must match, only valid with string types
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
-
-<a id="nestedblock--rule"></a>
-### Nested Schema for `rule`
-
-Required:
-
-- `constraint` (String) The limiting value of the rule as a string e.g. '1' for max_len|min_len|max|min rule types or '.*' for a regex rule type
-- `type` (String) The type of rule, for strings: max_len|min_len|regex. For integers: max|min. Booleans do not support rules
+- `max_id` (String) The internal ID of the max rule
+- `min_id` (String) The internal ID of the min rule
+- `regex_id` (String) The internal ID of the regex rule
 
 

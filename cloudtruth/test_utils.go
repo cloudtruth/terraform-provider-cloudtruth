@@ -17,7 +17,7 @@ import (
 // corresponding *_test.go files
 const (
 	accTestAWSIntegrationName   = "my_cloudtruth_role@426203803362"
-	accTestAzureIntegrationName = "cttesting - cfafeccc-5946-4cb3-a2bc-b6a3961c2ffa"
+	accTestAzureIntegrationName = "cttesting@cfafeccc-5946-4cb3-a2bc-b6a3961c2ffa"
 	defaultEnv                  = "default"
 	accTestProject              = "AcceptanceTest"
 	regularParam                = "DefaultRegularParam"
