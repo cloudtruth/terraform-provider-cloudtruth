@@ -93,10 +93,9 @@ func resourceAWSPushAction() *schema.Resource {
 			"tags": {
 				Description: "Tags specified in the form 'ENVIRONMENT_NAME:TAG_NAME' indicating the sync point for parameters to be pushed. At least one tag is required but " +
 					"multiple tags are allowed (only one per environment)",
-				Type:         schema.TypeList,
-				Required:     true,
-				Elem:         &schema.Schema{Type: schema.TypeString},
-				ValidateFunc: isValidEnvTagSet,
+				Type:     schema.TypeList,
+				Required: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"region": {
 				Description: "The target AWS region",

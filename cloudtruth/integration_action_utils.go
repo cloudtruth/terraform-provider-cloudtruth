@@ -80,22 +80,6 @@ func lookupAzureIntegration(ctx context.Context, intName string, c *cloudTruthCl
 	return &azureIntegrationID, nil
 }
 
-func isValidEnvTagSet(v interface{}, attributeName string) (warns []string, errs []error) {
-	envTags := v.([]string)
-	seenTags := make(map[string]bool)
-	for _, envTag := range envTags {
-		nameSegments := strings.Split(envTag, "@")
-		if len(nameSegments) != 2 {
-			errs = append(errs, fmt.Errorf("the %s env tag must use this format: ENVIRONMENT_NAME:TAG_NAME", envTag))
-		}
-		if _, ok := seenTags[envTag]; ok {
-			errs = append(errs, fmt.Errorf("duplicate env tag %s, duplicate tags are not allowed", envTag))
-		}
-		seenTags[envTag] = true
-	}
-	return
-}
-
 func getProjectURLs(ctx context.Context, c *cloudTruthClient, rawProjects []interface{}) ([]string, error) {
 	projects := make([]string, len(rawProjects))
 	for i, v := range projects {
@@ -111,9 +95,19 @@ func getProjectURLs(ctx context.Context, c *cloudTruthClient, rawProjects []inte
 
 func getEnvTags(ctx context.Context, d *schema.ResourceData, c *cloudTruthClient, rawTags []interface{}) ([]string, error) {
 	tags := make([]string, len(rawTags))
+	seenTags := make(map[string]bool)
 	var err error
 	for i, v := range rawTags {
-		tags[i], err = lookupEnvTag(ctx, d, c, fmt.Sprint(v))
+		envTag := fmt.Sprint(v)
+		nameSegments := strings.Split(envTag, ":")
+		if len(nameSegments) != 2 {
+			return nil, fmt.Errorf("the %s env tag must use this format: ENVIRONMENT_NAME:TAG_NAME", envTag)
+		}
+		if _, ok := seenTags[envTag]; ok {
+			return nil, fmt.Errorf("duplicate env tag %s, duplicate tags are not allowed", envTag)
+		}
+		seenTags[envTag] = true
+		tags[i], err = lookupEnvTag(ctx, d, c, envTag)
 		if err != nil {
 			return nil, err
 		}
