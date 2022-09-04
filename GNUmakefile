@@ -15,14 +15,6 @@ default: build
 build: fmtcheck
 	go install
 
-# Install for local testing on linux, todo: parameterize
-install: fmtcheck
-	mkdir -p ./dist; \
-	go build -o ./dist/terraform-provider-cloudtruth_$(VERSION); \
-	INSTALL_DIR="$(HOME)/.terraform.d/plugins/registry.terraform.io/cloudtruth/cloudtruth/$(VERSION)/linux_amd64"; \
-	mkdir -p $$INSTALL_DIR; \
-	cp ./dist/terraform-provider-cloudtruth_$(VERSION) $$INSTALL_DIR
-
 sweep:
 	@echo "WARNING: This will destroy infrastructure. Use only in development accounts."
 	go test $(TEST) -v -sweep=$(SWEEP) $(SWEEPARGS)

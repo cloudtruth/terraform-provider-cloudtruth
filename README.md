@@ -30,12 +30,6 @@ go mod tidy
 
 Then commit the changes to `go.mod` and `go.sum`.
 
-## Using the provider
-
-To run the provider locally, run `make install` from the repository root. Note that this currently only works on Linux.
-See the `.tf` files in the examples directory. Note that you may need to modify the path and version fields in your provider block
-to target your locally installed instance.
-
 ## Developing the Provider
 
 If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (see [Requirements](#requirements) above).
@@ -62,4 +56,3 @@ $ make testacc
 
 ### Commit hooks
 To enable the commit hooks stored in `.githooks` in your local repo, run `git config --local core.hooksPath .githooks/`
-
