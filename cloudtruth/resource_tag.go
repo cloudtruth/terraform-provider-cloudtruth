@@ -50,6 +50,7 @@ func resourceTag() *schema.Resource {
 	}
 }
 
+// todo: consider implementing a tag cache
 func resourceTagCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "resourceTagCreate")

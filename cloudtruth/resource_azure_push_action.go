@@ -22,10 +22,16 @@ func resourceAzurePushAction() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
+			"integration": {
+				Description:  "The name (using the format VAULT_NAME@TENANT_ID) of the CloudTruth integration corresponding to this import action",
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: isValidAzureIntegrationName,
+			},
 			"integration_id": {
-				Description: "The ID of the CloudTruth integration corresponding to this pull action",
+				Description: "The ID of the CloudTruth integration corresponding to this import action",
 				Type:        schema.TypeString,
-				Required:    true,
+				Computed:    true,
 			},
 			"description": {
 				Description: "A description of the push action",
@@ -98,23 +104,27 @@ func resourceAzurePushAction() *schema.Resource {
 func resourceAzurePushActionCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAzurePushActionCreate")
 	defer tflog.Debug(ctx, "exiting resourceAzurePushActionCreate")
+
 	return nil
 }
 
 func resourceAzurePushActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAzurePushActionRead")
 	defer tflog.Debug(ctx, "exiting resourceAzurePushActionRead")
+
 	return nil
 }
 
 func resourceAzurePushActionUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAzurePushActionUpdate")
 	defer tflog.Debug(ctx, "exiting resourceAzurePushActionUpdate")
+
 	return resourceAzurePushActionRead(ctx, d, meta)
 }
 
 func resourceAzurePushActionDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAzurePushActionDelete")
 	defer tflog.Debug(ctx, "exiting resourceAzurePushActionDelete")
+
 	return nil
 }

@@ -30,7 +30,7 @@ func resourceAzureImportAction() *schema.Resource {
 				Description:  "The name (using the format VAULT_NAME@TENANT_ID) of the CloudTruth integration corresponding to this import action",
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: validAzureIntegrationName,
+				ValidateFunc: isValidAzureIntegrationName,
 			},
 			"integration_id": {
 				Description: "The ID of the CloudTruth integration corresponding to this import action",

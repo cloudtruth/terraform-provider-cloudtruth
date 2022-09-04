@@ -8,9 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
-	"strings"
 	"sync"
 	"time"
 )
@@ -489,37 +487,4 @@ func handleAPIError(msg string, r *http.Response, err error) *resource.RetryErro
 		outErr = fmt.Errorf("%s - %d client error: %s", msg, r.StatusCode, r.Body)
 		return resource.NonRetryableError(outErr)
 	}
-}
-
-func lookupEnvTag(ctx context.Context, d *schema.ResourceData, c *cloudTruthClient, envTag string) (string, error) {
-	tflog.Debug(ctx, "lookupEnvTag")
-	if !strings.Contains(envTag, ":") {
-		return "", fmt.Errorf("the tag %s is invalid, it must be specified using the form 'environment_name:tag_name'", envTag)
-	}
-	et := strings.Split(envTag, ":")
-	env, tagName := et[0], et[1]
-	envID, err := c.lookupEnvironment(ctx, env)
-	if err != nil {
-		return "", fmt.Errorf("lookupEnvTag: %w", err)
-	}
-
-	// todo: possibly put this in a basic retry loop instead of returning (non)retryable errors
-	var resp *cloudtruthapi.PaginatedTagList
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
-		var r *http.Response
-		resp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsList(ctx, *envID).Name(tagName).Execute()
-		if err != nil {
-			return handleAPIError(fmt.Sprintf("lookupEnvTag: error looking up tag %s", tagName), r, err)
-		}
-		return nil
-	})
-
-	if retryError != nil {
-		return "", retryError
-	}
-	// There should only be one tag with the specified per environment
-	results := resp.GetResults()
-	tag := results[0]
-	tagID := tag.GetId()
-	return tagID, nil
 }

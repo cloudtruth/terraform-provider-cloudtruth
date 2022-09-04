@@ -36,7 +36,8 @@ func dataCloudTruthTag() *schema.Resource {
 			"description": {
 				Description: "The tag's description",
 				Type:        schema.TypeString,
-				Computed:    true,
+				Optional:    true,
+				Default:     "",
 			},
 			"timestamp": {
 				Description: "The tag's RFC 3339 timestamp ",
@@ -66,23 +67,29 @@ func dataCloudTruthTagRead(ctx context.Context, d *schema.ResourceData, meta any
 		}
 		return nil
 	})
-
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
 
+	// There should only be one tag per environment
 	if resp.GetCount() != 1 {
 		return diag.FromErr(fmt.Errorf("dataCloudTruthTagRead: expected 1 value for tag %s, found %d instead",
 			name, resp.GetCount()))
 	}
-	// There should only be one tag with the specified per environment
-	results := resp.GetResults()
-	tag := results[0]
+	tag := resp.GetResults()[0]
 	ts := tag.Timestamp.Format(time.RFC3339)
 	tagID := tag.GetId()
 	err = d.Set("timestamp", ts)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthTagRead: %w", err))
+		return diag.FromErr(err)
+	}
+	err = d.Set("name", name)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("description", d.Get("description").(string))
+	if err != nil {
+		return diag.FromErr(err)
 	}
 	d.SetId(tagID)
 	return nil

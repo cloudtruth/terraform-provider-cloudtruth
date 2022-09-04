@@ -30,7 +30,7 @@ func resourceAWSImportAction() *schema.Resource {
 				Description:  "The name (using the format AWS_ROLE@AWS_ACCOUNT_ID) of the CloudTruth integration corresponding to this pull action",
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: validAWSIntegrationName,
+				ValidateFunc: isValidAWSIntegrationName,
 			},
 			"integration_id": {
 				Description: "The ID of the CloudTruth integration corresponding to this pull action",
@@ -165,6 +165,7 @@ func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, me
 
 // todo: figure how and if we should read integration_id, it's not a top level property on Pull objects
 // omitting region and service for now since they are not settable in the UI
+// Also, the disparate return types make it less appealing to handle all of these Set() calls in a loop or two
 func setAWSImportReadProps(pull *cloudtruthapi.AwsPull, d *schema.ResourceData) error {
 	err := d.Set("name", pull.GetName())
 	if err != nil {

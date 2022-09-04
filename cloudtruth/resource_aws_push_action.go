@@ -30,7 +30,7 @@ func resourceAWSPushAction() *schema.Resource {
 				Description:  "The name (using the format AWS_ROLE@AWS_ACCOUNT_ID) of the CloudTruth integration corresponding to this push action",
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: validAWSIntegrationName,
+				ValidateFunc: isValidAWSIntegrationName,
 			},
 			"integration_id": {
 				Description: "The ID of the CloudTruth integration corresponding to this push action",
@@ -91,10 +91,12 @@ func resourceAWSPushAction() *schema.Resource {
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"tags": {
-				Description: "Tags specified in the form 'environment_name:tag_name' indicating the sync point for parameters to be pushed (multiple tags allowed but only one per environment)",
-				Type:        schema.TypeList,
-				Required:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
+				Description: "Tags specified in the form 'ENVIRONMENT_NAME:TAG_NAME' indicating the sync point for parameters to be pushed. At least one tag is required but " +
+					"multiple tags are allowed (only one per environment)",
+				Type:         schema.TypeList,
+				Required:     true,
+				Elem:         &schema.Schema{Type: schema.TypeString},
+				ValidateFunc: isValidEnvTagSet,
 			},
 			"region": {
 				Description: "The target AWS region",
@@ -113,6 +115,16 @@ func resourceAWSPushAction() *schema.Resource {
 			},
 		},
 	}
+}
+
+func setAWSPushActionBoolProps(pushAction *cloudtruthapi.AwsPush, d *schema.ResourceData) {
+	pushAction.SetIncludeParameters(d.Get("parameters").(bool))
+	pushAction.SetIncludeSecrets(d.Get("secrets").(bool))
+	pushAction.SetIncludeTemplates(d.Get("templates").(bool))
+	pushAction.SetCoerceParameters(d.Get("coerce").(bool))
+	pushAction.SetForce(d.Get("force").(bool))
+	pushAction.SetLocal(d.Get("local").(bool))
+	pushAction.SetDryRun(d.Get("dry_run").(bool))
 }
 
 func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
@@ -142,33 +154,19 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	pushActionCreate.SetRegion(*region)
 	pushActionCreate.SetService(*service)
 	pushActionCreate.SetResource(resourcePath)
+	setAWSPushActionBoolProps(pushActionCreate, d)
 	rawProjects := d.Get("projects").([]interface{})
-	projects := make([]string, len(rawProjects))
-	for i, v := range projects {
-		projID, err := c.lookupProject(ctx, fmt.Sprint(v))
-		if err != nil {
-			return diag.FromErr(err)
-		}
-		projURL := fmt.Sprintf("https://api.cloudtruth.io/api/v1/projects/%s/", *projID)
-		projects[i] = projURL
+	projects, err := getProjectURLs(ctx, c, rawProjects)
+	if err != nil {
+		return diag.FromErr(err)
 	}
 	pushActionCreate.SetProjects(projects)
 	rawTags := d.Get("tags").([]interface{})
-	tags := make([]string, len(rawTags))
-	for i, v := range rawTags {
-		tags[i], err = lookupEnvTag(ctx, d, c, fmt.Sprint(v))
-		if err != nil {
-			return diag.FromErr(err)
-		}
-	}
+	tags, err := getEnvTags(ctx, d, c, rawTags)
 	pushActionCreate.SetTags(tags)
-	pushActionCreate.SetIncludeParameters(d.Get("parameters").(bool))
-	pushActionCreate.SetIncludeSecrets(d.Get("secrets").(bool))
-	pushActionCreate.SetIncludeTemplates(d.Get("templates").(bool))
-	pushActionCreate.SetCoerceParameters(d.Get("coerce").(bool))
-	pushActionCreate.SetForce(d.Get("force").(bool))
-	pushActionCreate.SetLocal(d.Get("local").(bool))
-	pushActionCreate.SetDryRun(d.Get("dry_run").(bool))
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
 	var resp *cloudtruthapi.AwsPush
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
