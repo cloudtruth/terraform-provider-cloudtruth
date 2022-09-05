@@ -98,9 +98,12 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 
 	previewBody, err := renderTemplateBody(ctx, name, body, *projID, meta)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthTemplateRead: %w", err))
+		return diag.FromErr(err)
 	}
-	_ = d.Set("value", previewBody)
+	err = d.Set("value", previewBody)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	// We use a composite ID - <ENV_ID>:<TEMPLATE_ID>
 	d.SetId(fmt.Sprintf("%s:%s", *envID, templateID))
 	return nil

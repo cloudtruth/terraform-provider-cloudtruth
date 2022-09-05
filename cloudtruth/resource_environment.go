@@ -30,6 +30,7 @@ func resourceEnvironment() *schema.Resource {
 				Description: "Description of the CloudTruth Environment",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Default:     "",
 			},
 			"parent": {
 				Description: "The parent CloudTruth Environment",
@@ -87,12 +88,13 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	tflog.Debug(ctx, "resourceEnvironmentRead")
 	c := meta.(*cloudTruthClient)
 	envName := d.Get("name").(string)
+	envID := d.Id()
 
-	var envList *cloudtruthapi.PaginatedEnvironmentList
+	var env *cloudtruthapi.Environment
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		envList, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Name(envName).Execute()
+		env, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsRetrieve(ctx, envID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceEnvironmentRead: error reading environment %s", envName), r, err)
 		}
@@ -101,12 +103,11 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-
-	res := envList.GetResults()
-	if len(res) != 1 {
-		return diag.FromErr(fmt.Errorf("resourceEnvironmentRead: found %d environments, expcted to find 1", len(res)))
+	err := d.Set("description", env.GetDescription())
+	if err != nil {
+		return diag.FromErr(err)
 	}
-	d.SetId(envList.GetResults()[0].GetId())
+	d.SetId(env.GetId())
 	return nil
 }
 

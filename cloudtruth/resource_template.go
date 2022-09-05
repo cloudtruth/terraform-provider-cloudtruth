@@ -29,6 +29,7 @@ func resourceTemplate() *schema.Resource {
 				Description: "Description of the CloudTruth Template",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Default:     "",
 			},
 			"value": {
 				Description: "The non-evaluated value of the CloudTruth Template, use a Template data source to access the evaluated output in a specific environment",
@@ -93,12 +94,13 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 		return diag.FromErr(fmt.Errorf("resourceTemplateRead: %w", err))
 	}
 	templateName := d.Get("name").(string)
+	templateID := d.Id()
 
-	var templateList *cloudtruthapi.PaginatedTemplateList
+	var template *cloudtruthapi.Template
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		templateList, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx, *projID).Name(templateName).Execute()
+		template, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesRetrieve(ctx, templateID, *projID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTemplateRead: error reading template %s", templateName), r, err)
 		}
@@ -107,12 +109,16 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-
-	res := templateList.GetResults()
-	if len(res) != 1 {
-		return diag.FromErr(fmt.Errorf("resourceTemplateRead: found %d templates, expcted to find 1", len(res)))
+	err = d.Set("description", template.GetDescription())
+	if err != nil {
+		return diag.FromErr(err)
 	}
-	d.SetId(templateList.GetResults()[0].GetId())
+	err = d.Set("value", template.GetBody())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	d.SetId(template.GetId())
 	return nil
 }
 

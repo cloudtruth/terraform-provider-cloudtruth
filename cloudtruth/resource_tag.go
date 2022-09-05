@@ -33,6 +33,7 @@ func resourceTag() *schema.Resource {
 				Description: "Description of the CloudTruth Tag",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Default:     "",
 			},
 			"environment": {
 				Description: "The CloudTruth environment where the Tag's value is defined. Defaults to the 'default' environment",

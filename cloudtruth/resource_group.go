@@ -33,6 +33,7 @@ Your provider API key must have organization OWNER or ADMIN access to create, up
 				Description: "A description of the group",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Default:     "",
 			},
 			"users": {
 				Description: "The CloudTruth users who are members of the group",
@@ -93,12 +94,13 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	tflog.Debug(ctx, "resourceGroupRead")
 	c := meta.(*cloudTruthClient)
 	groupName := d.Get("name").(string)
+	groupID := d.Id()
 
-	var groupList *cloudtruthapi.PaginatedGroupList
+	var group *cloudtruthapi.Group
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		groupList, r, err = c.openAPIClient.GroupsApi.GroupsList(ctx).Name(groupName).Execute()
+		group, r, err = c.openAPIClient.GroupsApi.GroupsRetrieve(ctx, groupID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceGroupRead: error reading group %s", groupName), r, err)
 		}
@@ -107,12 +109,11 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-
-	res := groupList.GetResults()
-	if len(res) != 1 {
-		return diag.FromErr(fmt.Errorf("resourceGroupRead: found %d groups, expcted to find 1", len(res)))
+	err := d.Set("description", group.GetDescription())
+	if err != nil {
+		return diag.FromErr(err)
 	}
-	group := groupList.GetResults()[0]
+
 	d.SetId(group.GetId())
 	return nil
 }

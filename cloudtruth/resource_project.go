@@ -30,6 +30,7 @@ func resourceProject() *schema.Resource {
 				Description: "Description of the project",
 				Type:        schema.TypeString,
 				Optional:    true,
+				Default:     "",
 			},
 			"parent": {
 				Description: "The Parent CloudTruth project",
@@ -89,12 +90,13 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	tflog.Debug(ctx, "resourceProjectRead")
 	c := meta.(*cloudTruthClient)
 	projectName := d.Get("name").(string)
+	projectID := d.Id()
 
-	var projectList *cloudtruthapi.PaginatedProjectList
+	var project *cloudtruthapi.Project
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		projectList, r, err = c.openAPIClient.ProjectsApi.ProjectsList(ctx).Name(projectName).Execute()
+		project, r, err = c.openAPIClient.ProjectsApi.ProjectsRetrieve(ctx, projectID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceProjectRead: error reading project %s", projectName), r, err)
 		}
@@ -104,12 +106,6 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 		return diag.FromErr(retryError)
 	}
 
-	// There should be only one project found
-	res := projectList.GetResults()
-	if len(res) != 1 {
-		return diag.FromErr(fmt.Errorf("resourceProjectRead: found %d projects, expcted to find 1", len(res)))
-	}
-	project := projectList.GetResults()[0]
 	d.SetId(project.GetId())
 	// todo: determine if reading the project parent is useful/needed, the parent project field is not settable in the UI
 	err := d.Set("description", project.GetDescription())
