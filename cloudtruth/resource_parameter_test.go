@@ -9,26 +9,6 @@ import (
 	"testing"
 )
 
-func TestAccResourceParameterWithBadRules(t *testing.T) {
-	resourceName := "bad_rules"
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
-		PreCheck:          func() { testAccPreCheck(t) },
-		Steps: []resource.TestStep{
-			{
-				Config: testAccResourceParameterDisallowedBooleanRules(accTestProject, resourceName,
-					fmt.Sprintf("Test-%s", uuid.New().String())),
-				ExpectError: regexp.MustCompile("the base type 'boolean' does not support rules"),
-			},
-			{
-				Config: testAccResourceParameterInvalidIntegerRules(accTestProject, resourceName,
-					fmt.Sprintf("Test-%s", uuid.New().String())),
-				ExpectError: regexp.MustCompile("the base type 'integer' does not support the regex rule type"),
-			},
-		},
-	})
-}
-
 func TestAccResourceParameterWithRules(t *testing.T) {
 	createStringParamName := fmt.Sprintf("Test-Str-%s", uuid.New().String())
 	createIntegerParamName := fmt.Sprintf("Test-Int-%s", uuid.New().String())
@@ -55,13 +35,12 @@ func TestAccResourceParameterWithRules(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccResourceParameterCreateStringWithRules(accTestProject, stringResourceName, createStringParamName, paramDesc,
-					false, updateMin, updateMax, updateRegEx),
+				Config: testAccResourceParameterCreateStringWithRules(accTestProject, stringResourceName, createStringParamName, updateParamDesc,
+					true, updateMin, updateMax, updateRegEx),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "name", createStringParamName),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "description", paramDesc),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "secret",
-						strconv.FormatBool(false)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "description", updateParamDesc),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "secret", fmt.Sprint(true)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "min", fmt.Sprint(updateMin)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "max", fmt.Sprint(updateMax)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", stringResourceName), "regex", updateRegEx),
@@ -192,6 +171,26 @@ func TestAccResourceParameterBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "secret",
 						strconv.FormatBool(false)),
 				),
+			},
+		},
+	})
+}
+
+func TestAccResourceParameterWithBadRules(t *testing.T) {
+	resourceName := "bad_rules"
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: testAccResourceParameterDisallowedBooleanRules(accTestProject, resourceName,
+					fmt.Sprintf("Test-%s", uuid.New().String())),
+				ExpectError: regexp.MustCompile("the base type 'boolean' does not support rules"),
+			},
+			{
+				Config: testAccResourceParameterInvalidIntegerRules(accTestProject, resourceName,
+					fmt.Sprintf("Test-%s", uuid.New().String())),
+				ExpectError: regexp.MustCompile("the base type 'integer' does not support the regex rule type"),
 			},
 		},
 	})

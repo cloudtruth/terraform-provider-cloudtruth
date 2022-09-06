@@ -132,40 +132,9 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 	return nil
 }
 
-func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "entering resourceAWSImportActionRead")
-	defer tflog.Debug(ctx, "exiting resourceAWSImportActionRead")
-	c := meta.(*cloudTruthClient)
-	awsIntegrationID := d.Get("integration_id").(string)
-	importActionName := d.Get("name").(string)
-	importActionID := d.Id()
-
-	var awsPull *cloudtruthapi.AwsPull
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
-		var r *http.Response
-		var err error
-		awsPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsRetrieve(ctx, awsIntegrationID, importActionID).Execute()
-		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceAWSImportActionRead: error reading AWS import action %s", importActionName), r, err)
-		}
-		return nil
-	})
-	if retryError != nil {
-		return diag.FromErr(retryError)
-	}
-
-	// Read & set all properties from the deployed resource
-	err := setAWSImportReadProps(awsPull, d)
-	if retryError != nil {
-		return diag.FromErr(err)
-	}
-	d.SetId(awsPull.GetId())
-	return nil
-}
-
-// todo: figure how and if we should read integration_id, it's not a top level property on Pull objects
-// omitting region and service for now since they are not settable in the UI
-// Also, the disparate return types make it less appealing to handle all of these Set() calls in a loop or two
+// todo: figure how/if we should read integration_id, it's not a top level property on Pull objects
+// We ar omitting region and service for now since they are not settable in the UI
+// Also, the disparate return types make it less appealing to handle all of these Set() calls in a loop, thus this function
 func setAWSImportReadProps(pull *cloudtruthapi.AwsPull, d *schema.ResourceData) error {
 	err := d.Set("name", pull.GetName())
 	if err != nil {
@@ -195,6 +164,37 @@ func setAWSImportReadProps(pull *cloudtruthapi.AwsPull, d *schema.ResourceData) 
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceAWSImportActionRead")
+	defer tflog.Debug(ctx, "exiting resourceAWSImportActionRead")
+	c := meta.(*cloudTruthClient)
+	awsIntegrationID := d.Get("integration_id").(string)
+	importActionName := d.Get("name").(string)
+	importActionID := d.Id()
+
+	var awsPull *cloudtruthapi.AwsPull
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		awsPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsRetrieve(ctx, awsIntegrationID, importActionID).Execute()
+		if err != nil {
+			return handleAPIError(fmt.Sprintf("resourceAWSImportActionRead: error reading AWS import action %s", importActionName), r, err)
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
+
+	// Read & set all properties from the deployed resource
+	err := setAWSImportReadProps(awsPull, d)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	d.SetId(awsPull.GetId())
 	return nil
 }
 

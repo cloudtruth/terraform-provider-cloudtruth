@@ -203,6 +203,40 @@ func paramCreateConfig(d *schema.ResourceData, paramType string) *cloudtruthapi.
 	return paramCreate
 }
 
+func setParameterReadProps(param *cloudtruthapi.Parameter, d *schema.ResourceData) error {
+	err := d.Set("name", param.GetName())
+	if err != nil {
+		return err
+	}
+	err = d.Set("description", param.GetDescription())
+	if err != nil {
+		return err
+	}
+	err = d.Set("type", param.GetType())
+	if err != nil {
+		return err
+	}
+	err = d.Set("secret", param.GetSecret())
+	if err != nil {
+		return err
+	}
+
+	for _, rule := range param.GetRules() {
+		switch rule.GetType() {
+		case cloudtruthapi.PARAMETERRULETYPEENUM_MIN, cloudtruthapi.PARAMETERRULETYPEENUM_MIN_LEN:
+			err = d.Set("min", rule.GetConstraint())
+		case cloudtruthapi.PARAMETERRULETYPEENUM_MAX, cloudtruthapi.PARAMETERRULETYPEENUM_MAX_LEN:
+			err = d.Set("max", rule.GetConstraint())
+		case cloudtruthapi.PARAMETERRULETYPEENUM_REGEX:
+			err = d.Set("regex", rule.GetConstraint())
+		}
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceParameterRead")
 	defer tflog.Debug(ctx, "exiting resourceParameterRead")
@@ -213,11 +247,12 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 		return diag.FromErr(err)
 	}
 	paramName := d.Get("name").(string)
+	paramID := d.Id()
 
-	var parameterList *cloudtruthapi.PaginatedParameterList
+	var param *cloudtruthapi.Parameter
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
-		parameterList, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Name(paramName).Execute()
+		param, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(ctx, paramID, *projID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterRead: error looking up parameter %s", paramName), r, err)
 		}
@@ -227,11 +262,12 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 		return diag.FromErr(retryError)
 	}
 
-	if parameterList.GetCount() != 1 {
-		return diag.FromErr(fmt.Errorf("resourceParameterRead: expected 1 value for parameter %s, found %d instead",
-			paramName, parameterList.GetCount()))
+	// Read & set all properties from the deployed resource
+	err = setParameterReadProps(param, d)
+	if err != nil {
+		return diag.FromErr(err)
 	}
-	d.SetId(parameterList.GetResults()[0].GetId())
+	d.SetId(param.GetId())
 	return nil
 }
 
@@ -266,7 +302,7 @@ func updateParameterRules(ctx context.Context, paramID, projID string, paramType
 					err = d.Set(ruleIDProperty, "")
 				}
 			} else {
-				r, err = updateParameterRule(ctx, paramID, projID, updatedRule, ruleID, d, c)
+				r, err = updateParameterRule(ctx, paramID, projID, updatedRule, ruleID, baseParamType, d, c)
 			}
 			if err != nil {
 				return nil, err
@@ -305,7 +341,7 @@ func updateParameter(ctx context.Context, paramID, projID string, paramTypeName 
 	return r, nil
 }
 
-func updateParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
+func updateParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID, baseParamType string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
 	tflog.Debug(ctx, "entering updateParameterRule")
 	defer tflog.Debug(ctx, "exiting updateParameterRule")
 	_, newVal := d.GetChange(ruleName)
@@ -314,6 +350,11 @@ func updateParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID 
 	var apiError error
 	var ruleUpdateRequest cloudtruthapi.ApiProjectsParametersRulesUpdateRequest
 
+	if baseParamType == "string" {
+		if ruleName == "max" || ruleName == "min" {
+			ruleName = fmt.Sprintf("%s_len", ruleName) // the API string rule names are min_len and max_len not max/min
+		}
+	}
 	ruleType, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(ruleName)
 	if err != nil {
 		return nil, err

@@ -113,37 +113,7 @@ func resourceAzureImportActionCreate(ctx context.Context, d *schema.ResourceData
 	return nil
 }
 
-func resourceAzureImportActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "entering resourceAzureImportActionRead")
-	defer tflog.Debug(ctx, "exiting resourceAzureImportActionRead")
-	c := meta.(*cloudTruthClient)
-	azureIntegrationID := d.Get("integration_id").(string)
-	importActionName := d.Get("name").(string)
-	importActionID := d.Id()
-
-	var azureKeyVaultPull *cloudtruthapi.AzureKeyVaultPull
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
-		var r *http.Response
-		var err error
-		azureKeyVaultPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPullsRetrieve(ctx, azureIntegrationID, importActionID).Execute()
-		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceAzureImportActionRead: error reading Azure import action %s", importActionName), r, err)
-		}
-		return nil
-	})
-	if retryError != nil {
-		return diag.FromErr(retryError)
-	}
-
-	err := setAzureKeyVaultImportReadProps(azureKeyVaultPull, d)
-	if retryError != nil {
-		return diag.FromErr(err)
-	}
-	d.SetId(azureKeyVaultPull.GetId())
-	return nil
-}
-
-// todo: figure how and if we should read integration_id, it's not a top level property on Pull objects
+// todo: figure how/if we should read integration_id, it's not a top level property on Pull objects
 func setAzureKeyVaultImportReadProps(pull *cloudtruthapi.AzureKeyVaultPull, d *schema.ResourceData) error {
 	err := d.Set("name", pull.GetName())
 	if err != nil {
@@ -173,6 +143,36 @@ func setAzureKeyVaultImportReadProps(pull *cloudtruthapi.AzureKeyVaultPull, d *s
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func resourceAzureImportActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceAzureImportActionRead")
+	defer tflog.Debug(ctx, "exiting resourceAzureImportActionRead")
+	c := meta.(*cloudTruthClient)
+	azureIntegrationID := d.Get("integration_id").(string)
+	importActionName := d.Get("name").(string)
+	importActionID := d.Id()
+
+	var azureKeyVaultPull *cloudtruthapi.AzureKeyVaultPull
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		azureKeyVaultPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPullsRetrieve(ctx, azureIntegrationID, importActionID).Execute()
+		if err != nil {
+			return handleAPIError(fmt.Sprintf("resourceAzureImportActionRead: error reading Azure import action %s", importActionName), r, err)
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
+
+	err := setAzureKeyVaultImportReadProps(azureKeyVaultPull, d)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	d.SetId(azureKeyVaultPull.GetId())
 	return nil
 }
 
