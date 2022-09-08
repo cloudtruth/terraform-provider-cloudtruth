@@ -60,6 +60,30 @@ at least one service must be specified`,
 	}
 }
 
+func getIntegrationRegions(rawRegions []interface{}) ([]cloudtruthapi.AwsRegionEnum, error) {
+	regions := make([]cloudtruthapi.AwsRegionEnum, len(rawRegions))
+	for i, v := range rawRegions {
+		region, err := cloudtruthapi.NewAwsRegionEnumFromValue(v.(string))
+		if err != nil {
+			return nil, err
+		}
+		regions[i] = *region
+	}
+	return regions, nil
+}
+
+func getIntegrationServices(rawServices []interface{}) ([]cloudtruthapi.AwsServiceEnum, error) {
+	services := make([]cloudtruthapi.AwsServiceEnum, len(rawServices))
+	for i, v := range rawServices {
+		service, err := cloudtruthapi.NewAwsServiceEnumFromValue(v.(string))
+		if err != nil {
+			return nil, err
+		}
+		services[i] = *service
+	}
+	return services, nil
+}
+
 func resourceAWSIntegrationCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAWSIntegrationCreate")
 	defer tflog.Debug(ctx, "exiting resourceAWSIntegrationCreate")
@@ -70,13 +94,9 @@ func resourceAWSIntegrationCreate(ctx context.Context, d *schema.ResourceData, m
 	role := d.Get("role").(string)
 	intCreate.SetAwsRoleName(role)
 	rawRegions := d.Get("aws_enabled_regions").([]interface{})
-	regions := make([]cloudtruthapi.AwsRegionEnum, len(rawRegions))
-	for i, v := range rawRegions {
-		region, err := cloudtruthapi.NewAwsRegionEnumFromValue(v.(string))
-		if err != nil {
-			return diag.FromErr(err)
-		}
-		regions[i] = *region
+	regions, err := getIntegrationRegions(rawRegions)
+	if err != nil {
+		return diag.FromErr(err)
 	}
 	intCreate.SetAwsEnabledRegions(regions)
 	rawServices := d.Get("aws_enabled_services").([]interface{})
@@ -118,14 +138,112 @@ func resourceAWSIntegrationCreate(ctx context.Context, d *schema.ResourceData, m
 func resourceAWSIntegrationRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAWSIntegrationRead")
 	defer tflog.Debug(ctx, "exiting resourceAWSIntegrationRead")
-	// todo
+	c := meta.(*cloudTruthClient)
+	accountID := d.Get("account_id").(string)
+	role := d.Get("role").(string)
+	integrationID := d.Id()
+
+	var integration *cloudtruthapi.AwsIntegration
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+		var r *http.Response
+		var err error
+		integration, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsRetrieve(ctx, integrationID).Execute()
+		if err != nil {
+			return handleAPIError(fmt.Sprintf("resourceAWSIntegrationRead: error reading AWS integration %s@%s",
+				role, accountID), r, err)
+		}
+		return nil
+	})
+	if retryError != nil {
+		return diag.FromErr(retryError)
+	}
+
+	// Read & set all properties from the deployed resource
+	err := d.Set("writable", integration.GetWritable())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("kms_key_id", integration.GetAwsKmsKeyId())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("aws_enabled_regions", integration.GetAwsEnabledRegions())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("aws_enabled_services", integration.GetAwsEnabledServices())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	d.SetId(integrationID)
 	return nil
 }
 
 func resourceAWSIntegrationUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAWSIntegrationUpdate")
 	defer tflog.Debug(ctx, "exiting resourceAWSIntegrationUpdate")
-	// todo
+	c := meta.(*cloudTruthClient)
+	integrationID := d.Id()
+	accountID := d.Get("account_id").(string)
+	role := d.Get("role").(string)
+	patchedAwsIntegration := cloudtruthapi.PatchedAwsIntegration{}
+	hasChange := false
+	props := map[string]func(v string){
+		"account_id": patchedAwsIntegration.SetAwsAccountId,
+		"role":       patchedAwsIntegration.SetAwsRoleName,
+		"kms_key_id": patchedAwsIntegration.SetAwsKmsKeyId,
+	}
+	for prop := range props {
+		if d.HasChange(prop) {
+			props[prop](d.Get(prop).(string))
+			hasChange = true
+		}
+	}
+	if d.HasChange("writable") {
+		patchedAwsIntegration.SetWritable(d.Get("writable").(bool))
+		hasChange = true
+	}
+
+	if d.HasChange("writable") {
+		patchedAwsIntegration.SetWritable(d.Get("writable").(bool))
+		hasChange = true
+	}
+
+	if d.HasChange("aws_enabled_regions") {
+		rawRegions := d.Get("aws_enabled_regions").([]interface{})
+		regions, err := getIntegrationRegions(rawRegions)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		patchedAwsIntegration.SetAwsEnabledRegions(regions)
+		hasChange = true
+	}
+	if d.HasChange("aws_enabled_service") {
+		rawServices := d.Get("aws_enabled_service").([]interface{})
+		services, err := getIntegrationServices(rawServices)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		patchedAwsIntegration.SetAwsEnabledServices(services)
+		hasChange = true
+	}
+
+	if hasChange {
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+			var r *http.Response
+			var err error
+			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPartialUpdate(ctx, integrationID).PatchedAwsIntegration(patchedAwsIntegration).Execute()
+			if err != nil {
+				return handleAPIError(fmt.Sprintf("resourceAWSIntegrationUpdate: error updating AWS integration %s@%s",
+					role, accountID), r, err)
+			}
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
+		}
+	}
+	d.SetId(integrationID)
 	return resourceAWSIntegrationRead(ctx, d, meta)
 }
 
