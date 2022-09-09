@@ -25,7 +25,7 @@ Your provider API key must have organization OWNER or ADMIN access to create, up
 ### Optional
 
 - `description` (String) A description of the group
-- `users` (List of String) The CloudTruth users who are members of the group
+- `users` (Set of String) The CloudTruth users who are members of the group
 
 ### Read-Only
 

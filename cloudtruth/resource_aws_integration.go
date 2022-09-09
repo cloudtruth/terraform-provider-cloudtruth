@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
+	"sort"
 )
 
 func resourceAWSIntegration() *schema.Resource {
@@ -45,14 +46,14 @@ func resourceAWSIntegration() *schema.Resource {
 			},
 			"aws_enabled_regions": {
 				Description: "The AWS regions where the integration will be used, at lease one region must be specified",
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"aws_enabled_services": {
 				Description: `The AWS services which the integration will use, one or more of ssm|secretsmanager|s3, 
 at least one service must be specified`,
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				Required: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
@@ -93,20 +94,16 @@ func resourceAWSIntegrationCreate(ctx context.Context, d *schema.ResourceData, m
 	intCreate.SetAwsAccountId(accountID)
 	role := d.Get("role").(string)
 	intCreate.SetAwsRoleName(role)
-	rawRegions := d.Get("aws_enabled_regions").([]interface{})
-	regions, err := getIntegrationRegions(rawRegions)
+	rawRegions := d.Get("aws_enabled_regions").(*schema.Set)
+	regions, err := getIntegrationRegions(rawRegions.List())
 	if err != nil {
 		return diag.FromErr(err)
 	}
 	intCreate.SetAwsEnabledRegions(regions)
-	rawServices := d.Get("aws_enabled_services").([]interface{})
-	services := make([]cloudtruthapi.AwsServiceEnum, len(rawServices))
-	for i, v := range rawServices {
-		service, err := cloudtruthapi.NewAwsServiceEnumFromValue(v.(string))
-		if err != nil {
-			return diag.FromErr(err)
-		}
-		services[i] = *service
+	rawServices := d.Get("aws_enabled_services").(*schema.Set)
+	services, err := getIntegrationServices(rawServices.List())
+	if err != nil {
+		return diag.FromErr(err)
 	}
 	intCreate.SetAwsEnabledServices(services)
 
@@ -167,11 +164,19 @@ func resourceAWSIntegrationRead(ctx context.Context, d *schema.ResourceData, met
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	err = d.Set("aws_enabled_regions", integration.GetAwsEnabledRegions())
+	regions := integration.GetAwsEnabledRegions()
+	sort.Slice(regions, func(i, j int) bool {
+		return regions[i] < regions[j]
+	})
+	err = d.Set("aws_enabled_regions", regions)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	err = d.Set("aws_enabled_services", integration.GetAwsEnabledServices())
+	services := integration.GetAwsEnabledServices()
+	sort.Slice(services, func(i, j int) bool {
+		return services[i] < services[j]
+	})
+	err = d.Set("aws_enabled_services", services)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -210,6 +215,10 @@ func resourceAWSIntegrationUpdate(ctx context.Context, d *schema.ResourceData, m
 	}
 
 	if d.HasChange("aws_enabled_regions") {
+		x, y := d.GetChange("aws_enabled_regions")
+		fmt.Print(x)
+		fmt.Print(y)
+
 		rawRegions := d.Get("aws_enabled_regions").([]interface{})
 		regions, err := getIntegrationRegions(rawRegions)
 		if err != nil {

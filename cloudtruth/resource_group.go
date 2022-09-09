@@ -37,7 +37,7 @@ Your provider API key must have organization OWNER or ADMIN access to create, up
 			},
 			"users": {
 				Description: "The CloudTruth users who are members of the group",
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Optional:    true,
 			},
@@ -127,8 +127,8 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 	hasChange := false
 	if d.HasChange("users") {
 		userURIs := []string{}
-		users := d.Get("users").([]interface{})
-		for _, v := range users {
+		users := d.Get("users").(*schema.Set)
+		for _, v := range users.List() {
 			userName := fmt.Sprint(v)
 			user, err := c.lookupUser(ctx, userName)
 			userURIs = append(userURIs, user.GetUrl())

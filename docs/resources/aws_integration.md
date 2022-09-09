@@ -18,8 +18,8 @@ A CloudTruth AWS integration.
 ### Required
 
 - `account_id` (String) The ID of the source AWS account
-- `aws_enabled_regions` (List of String) The AWS regions where the integration will be used, at lease one region must be specified
-- `aws_enabled_services` (List of String) The AWS services which the integration will use, one or more of ssm|secretsmanager|s3, 
+- `aws_enabled_regions` (Set of String) The AWS regions where the integration will be used, at lease one region must be specified
+- `aws_enabled_services` (Set of String) The AWS services which the integration will use, one or more of ssm|secretsmanager|s3, 
 at least one service must be specified
 - `role` (String) The name of the role which CloudTruth will assume in the AWS account
 

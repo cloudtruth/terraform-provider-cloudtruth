@@ -178,12 +178,13 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 	defer tflog.Debug(ctx, "exiting resourceTypeCreate")
 	c := meta.(*cloudTruthClient)
 	typeName := d.Get("name").(string)
+	typeID := d.Id()
 
-	var parameterTypeList *cloudtruthapi.PaginatedParameterTypeList
+	var parameterType *cloudtruthapi.ParameterType
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		var r *http.Response
 		var err error
-		parameterTypeList, r, err = c.openAPIClient.TypesApi.TypesList(ctx).NameIexact(typeName).Execute()
+		parameterType, r, err = c.openAPIClient.TypesApi.TypesRetrieve(ctx, typeID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTypeRead: error reading type %s", typeName), r, err)
 		}
@@ -193,11 +194,7 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 		return diag.FromErr(retryError)
 	}
 
-	res := parameterTypeList.GetResults()
-	if len(res) != 1 {
-		return diag.FromErr(fmt.Errorf("resourceTypeRead: found %d types, expcted to find 1", len(res)))
-	}
-	d.SetId(parameterTypeList.GetResults()[0].GetId())
+	d.SetId(parameterType.GetId())
 	return nil
 }
 

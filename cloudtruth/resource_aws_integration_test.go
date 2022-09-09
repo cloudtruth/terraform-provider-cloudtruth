@@ -47,8 +47,8 @@ func testAccResourceAWSIntegrationBasic(resource, accountID, role, kmsKeyID stri
 		role                 = "%s"
   		kms_key_id           = "%s"
         writable             = "%t"
-		aws_enabled_regions  = ["us-east-1", "us-east-2"]
-		aws_enabled_services = ["ssm", "secretsmanager"]
+		aws_enabled_regions  = ["us-east-2", "us-east-1"]
+		aws_enabled_services = ["secretsmanager", "ssm"]
 	}
 	`, resource, accountID, role, kmsKeyID, writable)
 }

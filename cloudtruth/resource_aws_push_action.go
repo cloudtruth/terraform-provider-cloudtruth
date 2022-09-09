@@ -86,14 +86,14 @@ func resourceAWSPushAction() *schema.Resource {
 			},
 			"projects": {
 				Description: "The projects containing the parameters to pushed to the AWS destination",
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"tags": {
 				Description: "Tags specified in the form 'ENVIRONMENT_NAME:TAG_NAME' indicating the sync point for parameters to be pushed. At least one tag is required but " +
 					"multiple tags are allowed (only one per environment)",
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				Required: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
@@ -155,14 +155,14 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	pushActionCreate.SetService(*service)
 	pushActionCreate.SetResource(resourcePath)
 	setAWSPushActionBoolProps(pushActionCreate, d)
-	rawProjects := d.Get("projects").([]interface{})
-	projects, err := getProjectURLs(ctx, c, rawProjects)
+	rawProjects := d.Get("projects").(*schema.Set)
+	projects, err := getProjectURLs(ctx, c, rawProjects.List())
 	if err != nil {
 		return diag.FromErr(err)
 	}
 	pushActionCreate.SetProjects(projects)
-	rawTags := d.Get("tags").([]interface{})
-	tags, err := getEnvTags(ctx, d, c, rawTags)
+	rawTags := d.Get("tags").(*schema.Set)
+	tags, err := getEnvTags(ctx, d, c, rawTags.List())
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -247,7 +247,7 @@ func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta
 	return nil
 }
 
-// todo: update tags and projects, possibly for both Azure and AWS pushes
+// todo: support for project changes
 func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAWSPushActionUpdate")
 	defer tflog.Debug(ctx, "exiting resourceAWSPushActionUpdate")
@@ -285,8 +285,8 @@ func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, me
 	}
 
 	if d.HasChange("tags") {
-		rawTags := d.Get("tags").([]interface{})
-		tags, err := getEnvTags(ctx, d, c, rawTags)
+		rawTags := d.Get("tags").(*schema.Set)
+		tags, err := getEnvTags(ctx, d, c, rawTags.List())
 		if err != nil {
 			return diag.FromErr(err)
 		}

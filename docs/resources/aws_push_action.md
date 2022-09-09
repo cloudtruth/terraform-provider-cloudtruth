@@ -19,11 +19,11 @@ A CloudTruth push action.
 
 - `integration` (String) The name (using the format AWS_ROLE@AWS_ACCOUNT_ID) of the CloudTruth integration corresponding to this push action
 - `name` (String) The name of the push action
-- `projects` (List of String) The projects containing the parameters to pushed to the AWS destination
+- `projects` (Set of String) The projects containing the parameters to pushed to the AWS destination
 - `region` (String) The target AWS region
 - `resource` (String) The mustache style resource string specifying the environment, project, and parameter
 - `service` (String) The AWS service to pull from: s3|ssm|secretsmanager
-- `tags` (List of String) Tags specified in the form 'ENVIRONMENT_NAME:TAG_NAME' indicating the sync point for parameters to be pushed. At least one tag is required but multiple tags are allowed (only one per environment)
+- `tags` (Set of String) Tags specified in the form 'ENVIRONMENT_NAME:TAG_NAME' indicating the sync point for parameters to be pushed. At least one tag is required but multiple tags are allowed (only one per environment)
 
 ### Optional
 

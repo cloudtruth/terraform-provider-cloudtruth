@@ -86,13 +86,13 @@ func resourceAzurePushAction() *schema.Resource {
 			},
 			"projects": {
 				Description: "The projects containing the parameters to pushed to the Azure destination",
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
 			"tags": {
 				Description: "Tags specified in the form 'environment_name:tag_name' indicating the sync point for parameters to be pushed (multiple tags allowed but only one per environment)",
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Required:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
@@ -135,14 +135,14 @@ func resourceAzurePushActionCreate(ctx context.Context, d *schema.ResourceData, 
 
 	pushActionCreate.SetResource(resourcePath)
 	setAzurePushActionBoolProps(pushActionCreate, d)
-	rawProjects := d.Get("projects").([]interface{})
-	projects, err := getProjectURLs(ctx, c, rawProjects)
+	rawProjects := d.Get("projects").(*schema.Set)
+	projects, err := getProjectURLs(ctx, c, rawProjects.List())
 	if err != nil {
 		return diag.FromErr(err)
 	}
 	pushActionCreate.SetProjects(projects)
-	rawTags := d.Get("tags").([]interface{})
-	tags, err := getEnvTags(ctx, d, c, rawTags)
+	rawTags := d.Get("tags").(*schema.Set)
+	tags, err := getEnvTags(ctx, d, c, rawTags.List())
 	pushActionCreate.SetTags(tags)
 	if err != nil {
 		return diag.FromErr(err)

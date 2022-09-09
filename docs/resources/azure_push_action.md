@@ -19,9 +19,9 @@ A CloudTruth push action.
 
 - `integration` (String) The name (using the format VAULT_NAME@TENANT_ID) of the CloudTruth integration corresponding to this import action
 - `name` (String) The name of the push action
-- `projects` (List of String) The projects containing the parameters to pushed to the Azure destination
+- `projects` (Set of String) The projects containing the parameters to pushed to the Azure destination
 - `resource` (String) The mustache style resource string specifying the environment, project, and parameter
-- `tags` (List of String) Tags specified in the form 'environment_name:tag_name' indicating the sync point for parameters to be pushed (multiple tags allowed but only one per environment)
+- `tags` (Set of String) Tags specified in the form 'environment_name:tag_name' indicating the sync point for parameters to be pushed (multiple tags allowed but only one per environment)
 
 ### Optional
 
