@@ -113,7 +113,11 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
+	/* todo: fix user reads
+	err = d.Set("users", group.GetUsers())
+	if err != nil {
+		return diag.FromErr(err)
+	}*/
 	d.SetId(group.GetId())
 	return nil
 }
