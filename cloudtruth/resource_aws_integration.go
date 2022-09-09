@@ -219,8 +219,8 @@ func resourceAWSIntegrationUpdate(ctx context.Context, d *schema.ResourceData, m
 		fmt.Print(x)
 		fmt.Print(y)
 
-		rawRegions := d.Get("aws_enabled_regions").([]interface{})
-		regions, err := getIntegrationRegions(rawRegions)
+		rawRegions := d.Get("aws_enabled_regions").(*schema.Set)
+		regions, err := getIntegrationRegions(rawRegions.List())
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -228,8 +228,8 @@ func resourceAWSIntegrationUpdate(ctx context.Context, d *schema.ResourceData, m
 		hasChange = true
 	}
 	if d.HasChange("aws_enabled_service") {
-		rawServices := d.Get("aws_enabled_service").([]interface{})
-		services, err := getIntegrationServices(rawServices)
+		rawServices := d.Get("aws_enabled_service").(*schema.Set)
+		services, err := getIntegrationServices(rawServices.List())
 		if err != nil {
 			return diag.FromErr(err)
 		}

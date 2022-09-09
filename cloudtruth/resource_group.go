@@ -58,8 +58,8 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 		groupCreate.SetDescription(desc)
 	}
 	if _, ok := d.GetOk("users"); ok {
-		users := d.Get("users").([]interface{})
-		for _, v := range users {
+		users := d.Get("users").(*schema.Set)
+		for _, v := range users.List() {
 			userName := fmt.Sprint(v)
 			user, err := c.lookupUser(ctx, userName)
 			userURIs = append(userURIs, user.GetUrl())
