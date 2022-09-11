@@ -1,6 +1,6 @@
 module terraform-provider-cloudtruth
 
-go 1.18
+go 1.19
 
 require (
 	github.com/cloudtruth/terraform-provider-cloudtruth v0.0.0
