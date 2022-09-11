@@ -50,7 +50,8 @@ func resourceEnvironment() *schema.Resource {
 }
 
 func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceEnvironmentCreate")
+	tflog.Debug(ctx, "entering resourceEnvironmentCreate")
+	defer tflog.Debug(ctx, "exiting resourceEnvironmentCreate")
 	c := meta.(*cloudTruthClient)
 	envName := d.Get("name").(string)
 	envDesc := d.Get("description").(string)
@@ -86,7 +87,8 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 }
 
 func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceEnvironmentRead")
+	tflog.Debug(ctx, "entering resourceEnvironmentRead")
+	defer tflog.Debug(ctx, "exiting resourceEnvironmentRead")
 	c := meta.(*cloudTruthClient)
 	envName := d.Get("name").(string)
 	envID := d.Id()
@@ -128,7 +130,8 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 
 // resourceEnvironmentUpdate matches the UI and does not support reparenting an environment
 func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceEnvironmentUpdate")
+	tflog.Debug(ctx, "entering resourceEnvironmentUpdate")
+	defer tflog.Debug(ctx, "exiting resourceEnvironmentUpdate")
 	c := meta.(*cloudTruthClient)
 	envID := d.Id()
 	envName := d.Get("name").(string)
@@ -143,13 +146,7 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta
 		patchedEnv.SetDescription(envDesc)
 		hasChange = true
 	}
-	if d.HasChange("force_delete") {
-		err := d.Set("force_delete", d.Get("force_delete").(bool))
-		if err != nil {
-			return diag.FromErr(err)
-		}
-		// This field is specific to the provider, there is no corresponding API change, thus no need to set hasChange
-	}
+
 	if hasChange {
 		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
 			var r *http.Response
@@ -170,7 +167,8 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta
 }
 
 func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceEnvironmentDelete")
+	tflog.Debug(ctx, "entering resourceEnvironmentDelete")
+	defer tflog.Debug(ctx, "exiting resourceEnvironmentDelete")
 	c := meta.(*cloudTruthClient)
 	envID := d.Id()
 	envName := d.Get("name").(string)

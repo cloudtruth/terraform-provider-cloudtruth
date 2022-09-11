@@ -201,7 +201,7 @@ func resourceAccessGrantRead(ctx context.Context, d *schema.ResourceData, meta a
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
+	// intentionally omitting environment and project, they are not settable in the UI
 	d.SetId(grant.GetId())
 	return nil
 }
@@ -225,14 +225,6 @@ func resourceAccessGrantUpdate(ctx context.Context, d *schema.ResourceData, meta
 			patchedGrant.SetPrincipal(*principalURL)
 			hasChange = true
 		}
-	}
-	if d.HasChanges("environment", "project") {
-		scopeURL, err := parseScopeInput(ctx, d, meta)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-		patchedGrant.SetScope(*scopeURL)
-		hasChange = true
 	}
 	if d.HasChange("role") {
 		role, err := cloudtruthapi.NewRoleEnumFromValue(d.Get("role").(string))

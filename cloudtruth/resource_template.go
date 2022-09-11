@@ -109,6 +109,10 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
+	err = d.Set("name", template.GetName())
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	err = d.Set("description", template.GetDescription())
 	if err != nil {
 		return diag.FromErr(err)
@@ -137,6 +141,10 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 
 	patchedTemplate := cloudtruthapi.PatchedTemplate{}
 	hasChange := false
+	if d.HasChange("name") {
+		patchedTemplate.SetName(templateName)
+		hasChange = true
+	}
 	if d.HasChange("value") {
 		patchedTemplate.SetBody(templateValue)
 		hasChange = true

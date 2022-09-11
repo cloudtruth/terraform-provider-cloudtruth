@@ -93,9 +93,9 @@ the empty string value for that purpose.`,
 }
 
 func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "entering resourceParameterCreate")
 	defer tflog.Debug(ctx, "exiting resourceParameterCreate")
+	c := meta.(*cloudTruthClient)
 	paramName := d.Get("name").(string)
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
@@ -318,6 +318,11 @@ func updateParameter(ctx context.Context, paramID, projID string, paramTypeName 
 	defer tflog.Debug(ctx, "exiting updateParameter")
 	patchedParam := cloudtruthapi.PatchedParameter{}
 	hasParamChange := false
+	if d.HasChange("name") {
+		paramName := d.Get("name").(string)
+		patchedParam.SetName(paramName)
+		hasParamChange = true
+	}
 	if d.HasChange("description") {
 		paramDesc := d.Get("description").(string)
 		patchedParam.SetDescription(paramDesc)

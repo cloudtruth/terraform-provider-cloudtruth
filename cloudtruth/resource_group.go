@@ -46,8 +46,9 @@ Your provider API key must have organization OWNER or ADMIN access to create, up
 }
 
 func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceGroupCreate")
+	defer tflog.Debug(ctx, "exiting resourceGroupCreate")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceGroupCreate")
 	groupName := d.Get("name").(string)
 	desc := d.Get("description").(string)
 
@@ -91,7 +92,8 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 }
 
 func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceGroupRead")
+	tflog.Debug(ctx, "entering resourceGroupRead")
+	defer tflog.Debug(ctx, "exiting resourceGroupRead")
 	c := meta.(*cloudTruthClient)
 	groupName := d.Get("name").(string)
 	groupID := d.Id()
@@ -109,7 +111,11 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-	err := d.Set("description", group.GetDescription())
+	err := d.Set("name", group.GetName())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("description", group.GetDescription())
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -123,7 +129,8 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 }
 
 func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceGroupUpdate")
+	tflog.Debug(ctx, "entering resourceGroupUpdate")
+	defer tflog.Debug(ctx, "exiting resourceGroupUpdate")
 	c := meta.(*cloudTruthClient)
 	groupName := d.Get("name")
 	groupID := d.Id()
@@ -167,7 +174,8 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 }
 
 func resourceGroupDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceGroupDelete")
+	tflog.Debug(ctx, "entering resourceGroupDelete")
+	defer tflog.Debug(ctx, "exiting resourceGroupDelete")
 	c := meta.(*cloudTruthClient)
 	groupName := d.Get("name").(string)
 	groupID := d.Id()

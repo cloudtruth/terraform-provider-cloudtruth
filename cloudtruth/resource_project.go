@@ -49,7 +49,8 @@ func resourceProject() *schema.Resource {
 }
 
 func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceProjectCreate")
+	tflog.Debug(ctx, "entering resourceProjectCreate")
+	defer tflog.Debug(ctx, "exiting resourceProjectCreate")
 	c := meta.(*cloudTruthClient)
 	projectName := d.Get("name").(string)
 	projectDesc := d.Get("description").(string)
@@ -87,7 +88,8 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 }
 
 func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceProjectRead")
+	tflog.Debug(ctx, "entering resourceProjectRead")
+	defer tflog.Debug(ctx, "exiting resourceProjectRead")
 	c := meta.(*cloudTruthClient)
 	projectName := d.Get("name").(string)
 	projectID := d.Id()
@@ -107,8 +109,12 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	}
 
 	d.SetId(project.GetId())
-	// todo: determine if reading the project parent is useful/needed, the parent project field is not settable in the UI
-	err := d.Set("description", project.GetDescription())
+	// explicitly not checking for/allowing reparenting from the provider because the UI does not allow it
+	err := d.Set("name", project.GetName())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("description", project.GetDescription())
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -117,7 +123,8 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 
 // A project's name and description can be updated
 func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceProjectUpdate")
+	tflog.Debug(ctx, "entering resourceProjectUpdate")
+	defer tflog.Debug(ctx, "exiting resourceProjectUpdate")
 	c := meta.(*cloudTruthClient)
 	projectID := d.Id()
 	projectName := d.Get("name").(string)
@@ -127,7 +134,7 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 	patchedProject := cloudtruthapi.PatchedProject{}
 	hasChange := false
 
-	// todo: determine if updating the project parent is useful/needed, the parent project field is not settable in the UI
+	// explicitly not checking for/allowing reparenting from the provider because the UI does not allow it
 	if d.HasChange("name") {
 		patchedProject.SetName(projectName)
 		hasChange = true
@@ -157,7 +164,8 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 }
 
 func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceProjectDelete")
+	tflog.Debug(ctx, "entering resourceProjectDelete")
+	defer tflog.Debug(ctx, "exiting resourceProjectDelete")
 	c := meta.(*cloudTruthClient)
 	projectID := d.Id()
 	projectName := d.Get("name").(string)

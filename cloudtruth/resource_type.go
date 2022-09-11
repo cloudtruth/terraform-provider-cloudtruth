@@ -194,6 +194,10 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 		return diag.FromErr(retryError)
 	}
 
+	err := d.Set("name", parameterType.GetName())
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	d.SetId(parameterType.GetId())
 	return nil
 }
