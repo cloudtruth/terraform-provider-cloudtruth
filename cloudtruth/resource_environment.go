@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
+	"strings"
 )
 
 func resourceEnvironment() *schema.Resource {
@@ -103,7 +104,21 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-	err := d.Set("description", env.GetDescription())
+	err := d.Set("name", env.GetName())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("description", env.GetDescription())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	parentURL := env.GetParent()
+	parentURLSegments := strings.Split(parentURL, "/")
+	parentName, err := c.lookupEnvironment(ctx, parentURLSegments[6])
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("parent", parentName)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -111,6 +126,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	return nil
 }
 
+// resourceEnvironmentUpdate matches the UI and does not support reparenting an environment
 func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceEnvironmentUpdate")
 	c := meta.(*cloudTruthClient)
@@ -126,6 +142,13 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta
 	if d.HasChange("description") {
 		patchedEnv.SetDescription(envDesc)
 		hasChange = true
+	}
+	if d.HasChange("force_delete") {
+		err := d.Set("force_delete", d.Get("force_delete").(bool))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		// This field is specific to the provider, there is no corresponding API change, thus no need to set hasChange
 	}
 	if hasChange {
 		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {

@@ -215,7 +215,7 @@ func (c *cloudTruthClient) removeProjectFromCaches(projectName, projectID string
 	delete(c.projectIDs, projectID)
 }
 
-// Look up an environment identifier first as a name, then as an ID
+// Look up an environment identifier first as a name and return its ID, then if not found as an ID and return its name
 func (c *cloudTruthClient) lookupEnvironment(ctx context.Context, envNameOrID string) (*string, error) {
 	tflog.Debug(ctx, fmt.Sprintf("lookupEnvironment: looking up environment with name/ID %s", envNameOrID))
 	if val, ok := c.envNames[envNameOrID]; ok {
@@ -224,7 +224,7 @@ func (c *cloudTruthClient) lookupEnvironment(ctx context.Context, envNameOrID st
 	} else {
 		if val, ok := c.envIDs[envNameOrID]; ok {
 			tflog.Debug(ctx, fmt.Sprintf("found environment by ID %s with name %s", envNameOrID, val))
-			return &envNameOrID, nil
+			return &val, nil
 		}
 	}
 	return nil, fmt.Errorf("lookupEnvironment: environment with name/ID %s not found", envNameOrID)
