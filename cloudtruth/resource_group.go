@@ -41,6 +41,12 @@ Your provider API key must have organization OWNER or ADMIN access to create, up
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Optional:    true,
 			},
+			"user_ids": {
+				Description: "The IDs of the CloudTruth users who are members of the group",
+				Type:        schema.TypeSet,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Computed:    true,
+			},
 		},
 	}
 }
@@ -86,6 +92,10 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
+	err := d.Set("user_ids", userURIs)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	c.groups[groupName] = *group
 	d.SetId(group.Id)
 	return nil
@@ -119,11 +129,10 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	/* todo: fix user reads
-	err = d.Set("users", group.GetUsers())
+	err = d.Set("user_ids", group.GetUsers())
 	if err != nil {
 		return diag.FromErr(err)
-	}*/
+	}
 	d.SetId(group.GetId())
 	return nil
 }
@@ -150,6 +159,10 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 			}
 		}
 		patchedGroup.SetUsers(userURIs)
+		hasChange = true
+	}
+	if d.HasChange("name") {
+		patchedGroup.SetName(d.Get("name").(string))
 		hasChange = true
 	}
 	if d.HasChange("description") {

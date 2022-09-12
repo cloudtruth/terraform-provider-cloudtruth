@@ -170,7 +170,6 @@ func resourceAzurePushActionCreate(ctx context.Context, d *schema.ResourceData, 
 	return nil
 }
 
-// todo: read tags and projects, possibly for both Azure and AWS pushes + implement a tag cache
 func resourceAzurePushActionRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAzurePushActionRead")
 	defer tflog.Debug(ctx, "exiting resourceAzurePushActionRead")
@@ -223,11 +222,26 @@ func resourceAzurePushActionRead(ctx context.Context, d *schema.ResourceData, me
 		}
 	}
 
+	tags, err := getTags(ctx, azurePush.GetTags(), d, meta)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("tags", tags)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	projects, err := getProjects(ctx, azurePush.GetProjects(), d, meta)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("projects", projects)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	d.SetId(azurePush.GetId())
 	return nil
 }
 
-// todo: update tags and projects, possibly for both Azure and AWS pushes
 func resourceAzurePushActionUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceAzurePushActionUpdate")
 	defer tflog.Debug(ctx, "exiting resourceAzurePushActionUpdate")
@@ -272,6 +286,16 @@ func resourceAzurePushActionUpdate(ctx context.Context, d *schema.ResourceData, 
 			return diag.FromErr(err)
 		}
 		patchedAzurePush.SetTags(tags)
+		hasChange = true
+	}
+
+	if d.HasChange("projects") {
+		rawProjects := d.Get("projects").([]interface{})
+		projects, err := getProjectURLs(ctx, c, rawProjects)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		patchedAzurePush.SetProjects(projects)
 		hasChange = true
 	}
 

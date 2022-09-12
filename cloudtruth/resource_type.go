@@ -135,7 +135,6 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, baseParamType, ruleName, ruleVal string) (*string, error) {
 	tflog.Debug(ctx, "entering addRuleToType")
 	defer tflog.Debug(ctx, "exiting addRuleToType")
-	retryCount := 0
 	var apiError error
 	if baseParamType == "string" {
 		if ruleName == "max" || ruleName == "min" {
@@ -153,6 +152,7 @@ func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, base
 
 	var typeRule *cloudtruthapi.ParameterTypeRule
 	var r *http.Response
+	retryCount := 0
 	for retryCount < ruleOperationRetries {
 		typeRule, r, err = c.openAPIClient.TypesApi.TypesRulesCreate(ctx, typeID).ParameterTypeRuleCreate(createTypeRule).Execute()
 		if r.StatusCode >= 500 {
@@ -264,7 +264,6 @@ func updateTypeRule(ctx context.Context, paramID, ruleName, ruleID string, d *sc
 	paramTypeRule.SetType(*ruleType)
 
 	var r *http.Response
-	// todo: (non)retryable errors here?
 	for retryCount < ruleOperationRetries {
 		ruleUpdateRequest = c.openAPIClient.TypesApi.TypesRulesUpdate(ctx, ruleID, paramID).ParameterTypeRule(*paramTypeRule)
 		_, r, err = ruleUpdateRequest.Execute()
@@ -291,7 +290,6 @@ func deleteTypeRule(ctx context.Context, paramID, ruleName, ruleID string, c *cl
 	var r *http.Response
 	var apiError, err error
 
-	// todo: (non)retryable errors here?
 	for retryCount < ruleOperationRetries {
 		ruleDestroyRequest = c.openAPIClient.TypesApi.TypesRulesDestroy(ctx, ruleID, paramID)
 		r, err = ruleDestroyRequest.Execute()

@@ -372,7 +372,6 @@ func updateParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID,
 	paramRule.SetType(*ruleType)
 
 	var r *http.Response
-	// todo: (non)retryable errors here?
 	for retryCount < ruleOperationRetries {
 		ruleUpdateRequest = c.openAPIClient.ProjectsApi.ProjectsParametersRulesUpdate(ctx, ruleID, paramID, projID).ParameterRule(*paramRule)
 		_, r, err = ruleUpdateRequest.Execute()
@@ -399,7 +398,6 @@ func deleteParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID 
 	var r *http.Response
 	var apiError, err error
 
-	// todo: (non)retryable errors here?
 	for retryCount < ruleOperationRetries {
 		ruleDestroyRequest = c.openAPIClient.ProjectsApi.ProjectsParametersRulesDestroy(ctx, ruleID, paramID, projID)
 		r, err = ruleDestroyRequest.Execute()

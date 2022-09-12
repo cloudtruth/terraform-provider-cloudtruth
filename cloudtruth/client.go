@@ -140,7 +140,7 @@ func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID strin
 	} else {
 		if val, ok := c.projectIDs[projNameOrID]; ok {
 			tflog.Debug(ctx, fmt.Sprintf("lookupProject: found project by ID %s with name %s", projNameOrID, val))
-			return &projNameOrID, nil
+			return &val, nil
 		}
 	}
 	return nil, fmt.Errorf("lookupProject: project with name/ID %s not found", projNameOrID)
