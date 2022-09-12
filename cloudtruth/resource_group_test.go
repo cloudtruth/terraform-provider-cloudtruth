@@ -57,7 +57,15 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "users.0", groupTestUser1),
 				),
 			},
-			{ // Change group membership & description
+			{ // swap users
+				Config: testAccResourceGroupCreateWithUser(groupName, groupDesc, groupTestUser2),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "name", groupName),
+					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "description", groupDesc),
+					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "users.0", groupTestUser2),
+				),
+			},
+			{ // Remove the user & update the description
 				Config: testAccResourceGroupCreateWithoutUser(groupName, updateGroupDesc),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "name", groupName),
@@ -82,13 +90,11 @@ func TestAccResourceGroupWithUsers(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_group.multi_user", "name", groupName),
 					resource.TestCheckResourceAttr("cloudtruth_group.multi_user", "description", groupDesc),
 					resource.TestCheckResourceAttr("cloudtruth_group.multi_user", "users.#", "2"),
-					// todo: add a better check for group users
 					resource.TestCheckResourceAttrSet("cloudtruth_group.multi_user", "users.0"),
 					resource.TestCheckResourceAttrSet("cloudtruth_group.multi_user", "users.1"),
 				),
 			},
 			{ // Reverse the order of names in the list, test should still pass
-				// todo: add a better check for group users
 				Config: testAccResourceGroupCreateWithUsers(groupName, groupDesc, groupTestUser2, groupTestUser1),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_group.multi_user", "name", groupName),

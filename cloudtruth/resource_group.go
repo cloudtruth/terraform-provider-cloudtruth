@@ -41,8 +41,8 @@ Your provider API key must have organization OWNER or ADMIN access to create, up
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Optional:    true,
 			},
-			"user_ids": {
-				Description: "The IDs of the CloudTruth users who are members of the group",
+			"user_uris": {
+				Description: "The URIs of the CloudTruth users who are members of the group",
 				Type:        schema.TypeSet,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Computed:    true,
@@ -92,7 +92,7 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-	err := d.Set("user_ids", userURIs)
+	err := d.Set("user_uris", userURIs)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -129,7 +129,7 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	err = d.Set("user_ids", group.GetUsers())
+	err = d.Set("user_uris", group.GetUsers())
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -145,7 +145,8 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 	groupID := d.Id()
 	patchedGroup := cloudtruthapi.PatchedGroup{}
 	hasChange := false
-	if d.HasChange("users") {
+	// users indicates an intentional change, user_uris alone indicates drift
+	if d.HasChange("users") || d.HasChange("user_uris") {
 		userURIs := []string{}
 		users := d.Get("users").(*schema.Set)
 		for _, v := range users.List() {

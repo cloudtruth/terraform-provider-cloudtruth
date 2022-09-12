@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
+	"strings"
 )
 
 const ruleOperationRetries = 5
@@ -138,7 +139,9 @@ func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, base
 	var apiError error
 	if baseParamType == "string" {
 		if ruleName == "max" || ruleName == "min" {
-			ruleName = fmt.Sprintf("%s_len", ruleName) // the API string rule names are min_len and max_len not max/min
+			// the API string rule names are min_len and max_len not max/min which are only for integers
+			// in the provider we use max/min for strings too, to avoid having 4 properties: max/min/max_len/min_len
+			ruleName = fmt.Sprintf("%s_len", ruleName)
 		}
 	}
 	var createTypeRule cloudtruthapi.ParameterTypeRuleCreate
@@ -198,6 +201,21 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 	if err != nil {
 		return diag.FromErr(err)
 	}
+	err = d.Set("description", parameterType.GetDescription())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	for _, rule := range parameterType.Rules {
+		ruleName := string(rule.GetType())
+		if strings.Contains(ruleName, "_len") {
+			ruleName = ruleName[:3] // e.g. max_len -> max
+		}
+		err = d.Set(ruleName, rule.GetConstraint())
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
 	d.SetId(parameterType.GetId())
 	return nil
 }
@@ -233,7 +251,7 @@ func updateTypeRules(ctx context.Context, paramID, typeName string, d *schema.Re
 					err = d.Set(ruleIDProperty, "")
 				}
 			} else {
-				r, err = updateTypeRule(ctx, paramID, updatedRule, ruleID, d, c)
+				r, err = updateTypeRule(ctx, paramID, updatedRule, ruleID, baseParamType, d, c)
 			}
 			if err != nil {
 				return nil, err
@@ -244,7 +262,7 @@ func updateTypeRules(ctx context.Context, paramID, typeName string, d *schema.Re
 }
 
 // Type rules are NOT associated with a CloudTruth project, unlike parameter rules which are project specific
-func updateTypeRule(ctx context.Context, paramID, ruleName, ruleID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
+func updateTypeRule(ctx context.Context, paramID, ruleName, ruleID, baseParamType string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
 	tflog.Debug(ctx, "entering updateTypeRule")
 	defer tflog.Debug(ctx, "exiting updateTypeRule")
 	_, newVal := d.GetChange(ruleName)
@@ -253,14 +271,20 @@ func updateTypeRule(ctx context.Context, paramID, ruleName, ruleID string, d *sc
 	var apiError error
 	var ruleUpdateRequest cloudtruthapi.ApiTypesRulesUpdateRequest
 
-	ruleType, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(ruleName)
+	// The provider uses max/min for strings instead of max_len/min_len
+	var providerRuleName = ruleName
+	if baseParamType == "string" {
+		if strings.Contains(providerRuleName, "max") || strings.Contains(providerRuleName, "min") {
+			providerRuleName = providerRuleName + "_len"
+		}
+	}
+	ruleType, err := cloudtruthapi.NewParameterRuleTypeEnumFromValue(providerRuleName)
 	if err != nil {
 		return nil, err
 	}
 	paramTypeRule := cloudtruthapi.NewParameterTypeRuleWithDefaults()
 	paramTypeRule.SetId(ruleID)
 	paramTypeRule.SetConstraint(ruleVal)
-	paramTypeRule.SetType(*ruleType)
 	paramTypeRule.SetType(*ruleType)
 
 	var r *http.Response
@@ -338,15 +362,17 @@ func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) d
 	}
 
 	// Rule changes
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-		r, err := updateTypeRules(ctx, typeID, typeName, d, c)
-		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceParameterUpdate: error updating rules for parameter %s", typeName), r, err)
+	if d.HasChange("max") || d.HasChange("min") || d.HasChange("regex") {
+		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+			r, err := updateTypeRules(ctx, typeID, typeName, d, c)
+			if err != nil {
+				return handleAPIError(fmt.Sprintf("resourceParameterUpdate: error updating rules for parameter %s", typeName), r, err)
+			}
+			return nil
+		})
+		if retryError != nil {
+			return diag.FromErr(retryError)
 		}
-		return nil
-	})
-	if retryError != nil {
-		return diag.FromErr(retryError)
 	}
 	return resourceTypeRead(ctx, d, meta)
 }

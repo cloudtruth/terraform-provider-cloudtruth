@@ -30,5 +30,6 @@ Your provider API key must have organization OWNER or ADMIN access to create, up
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `user_uris` (Set of String) The URIs of the CloudTruth users who are members of the group
 
 
