@@ -1,3 +1,20 @@
+## 0.5.0 (September 13, 2022)
+**FEATURES**
+	* Support for managing AWS and Azure push and import actions via the provider, see the new resource types: cloudtruth_aws_import_action, cloudtruth_azure_import_action, cloudtruth_aws_push_action and cloudtruth_azure_push_action.
+	* Support for managing AWS integrations, see the new resource type: cloudtruth_aws_integration.
+
+**ENHANCEMENTS**
+	* Upgraded from Go 1.18 -> 1.19
+	* Better error handling, end users now see full API error messages with 4xx responses.
+	* All resource types which support rename updates in the UI can also be renamed from the provider.
+	* Improved retry logic for CloudTruth API calls.
+	* Some List types were replaced with Sets to avoid plans erroneously reporting changes because the resource order is not stable.
+
+**BUG FIXES**
+	* Improved read functionality for all resource types. Previously, resource reads were not always querying the backing API resources and therefore not reporting deltas in situations where there was resource drift.
+	* Numerous fixes to parameter and type rule handling.
+
+
 ## 0.4.0 (August 14, 2022)
 
 **FEATURES**
