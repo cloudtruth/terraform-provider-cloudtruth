@@ -1,17 +1,13 @@
-# This GitHub action runs your tests for each commit push and/or PR. Optionally
-# you can turn it on using a cron schedule for regular testing.
-#
 name: Tests
 on:
   push:
     paths-ignore:
       - '**.md'
-  # For systems with an upstream API that could drift unexpectedly (like most SaaS systems, etc.),
-  # we recommend testing at a regular interval not necessarily tied to code changes. This will
-  # ensure you are alerted to something breaking due to an API change, even if the code did not
-  # change.
+
+  # Run regular tests to confirm that no upstream API changes have broken the provider
   schedule:
      - cron: '0 13 * * *'
+
 jobs:
   build:
     name: Build and lint
@@ -23,20 +19,27 @@ jobs:
       with:
         go-version: '1.19'
       id: go
+
     - name: Check out code into the Go module directory
       uses: actions/checkout@v3
+
     - name: Get dependencies
       run: |
         go mod download
-    - name: Build
-      run: |
-        go build -v .
-    - uses: golangci/golangci-lint-action@v3.2.0
+
+    - name: Lint
+      uses: golangci/golangci-lint-action@v3.2.0
       with:
           args: -v --timeout 1h ./...
           skip-cache: true
-    - name: Lint Terraform
-      uses: actionshub/terraform-lint@main
+
+    - name: Check for errors
+      run: |
+        make errcheck
+
+    - name: Build
+      run: |
+        go build -v .
 
   generate:
     runs-on: ubuntu-latest
@@ -51,7 +54,6 @@ jobs:
           git diff --compact-summary --exit-code || \
             (echo; echo "Unexpected difference in directories after code generation. Run 'go generate ./...' command and commit."; exit 1)
 
-  # run acceptance tests in a matrix with Terraform core versions
   test:
     name: Matrix Test
     needs: build
