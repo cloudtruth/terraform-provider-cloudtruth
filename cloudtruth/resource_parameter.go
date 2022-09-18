@@ -27,7 +27,7 @@ func resourceParameter() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: importHelper,
 		},
-
+		
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Description: "The name of the CloudTruth Parameter, unique per project",
@@ -208,10 +208,10 @@ func paramCreateConfig(d *schema.ResourceData, paramType string) *cloudtruthapi.
 	return paramCreate
 }
 
-func parseParamProjectAndID(ctx context.Context, projParamID string, meta any) (*string, *string, error) {
+func parseParamProjectAndID(ctx context.Context, c *cloudTruthClient, projParamID string, meta any) (*string, *string, error) {
 	tflog.Debug(ctx, "entering parseParamProjectAndID")
 	defer tflog.Debug(ctx, "exiting parseParamProjectAndID")
-	c := meta.(*cloudTruthClient)
+
 	projDotParam := strings.Split(projParamID, ".")
 	if len(projDotParam) != 2 {
 		return nil, nil, fmt.Errorf("invalid import ID format: %s, you must use the formt 'PROJECT_NAME_OR_ID.PARAMETER_ID'", projParamID)
@@ -235,17 +235,24 @@ We cannot import a Parameter solely by ID, the project must also be specified, t
 func importHelper(ctx context.Context, d *schema.ResourceData, meta any) ([]*schema.ResourceData, error) {
 	tflog.Debug(ctx, "entering importHelper")
 	defer tflog.Debug(ctx, "exiting importHelper")
+	c := meta.(*cloudTruthClient)
 
-	project, paramID, err := parseParamProjectAndID(ctx, d.Id(), meta)
+	projID, paramID, err := parseParamProjectAndID(ctx, c, d.Id(), meta)
 	if err != nil {
 		return nil, err
 	}
 
-	err = d.Set("project", *project)
+	// We have the project ID, look up its name
+	projName, err := c.lookupProject(ctx, *projID)
 	if err != nil {
 		return nil, err
 	}
-	d.SetId(fmt.Sprintf(*paramID))
+
+	err = d.Set("project", *projName)
+	if err != nil {
+		return nil, err
+	}
+	d.SetId(*paramID)
 
 	return []*schema.ResourceData{d}, nil
 }

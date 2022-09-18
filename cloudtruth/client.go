@@ -124,7 +124,7 @@ func convertMap(m map[string]string) map[string]string {
 	return inv
 }
 
-// Look up a project identifier first as a name, then as an ID
+// Look up a project identifier first as a name, returning its ID, then as an ID, returning its name
 func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID string) (*string, error) {
 	tflog.Debug(ctx, fmt.Sprintf("lookupProject: looking up project with name/ID %s", projNameOrID))
 	if projNameOrID == "" {

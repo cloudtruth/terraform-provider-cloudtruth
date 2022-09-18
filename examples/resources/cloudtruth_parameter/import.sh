@@ -1,0 +1,2 @@
+terraform init
+terraform import cloudtruth_parameter.example PROJECT_NAME.PARAMETER_ID

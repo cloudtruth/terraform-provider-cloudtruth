@@ -40,4 +40,11 @@ the empty string value for that purpose.
 - `min_id` (String) The internal ID of the min rule
 - `regex_id` (String) The internal ID of the regex rule
 
+## Import
 
+Import is supported using the following syntax:
+
+```shell
+terraform init
+terraform import cloudtruth_parameter.example PROJECT_NAME.PARAMETER_ID
+```

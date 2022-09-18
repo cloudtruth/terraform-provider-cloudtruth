@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"regexp"
 	"strconv"
 	"testing"
@@ -150,6 +151,7 @@ func TestAccResourceIntParameterAddRemoveRule(t *testing.T) {
 func TestAccResourceParameterBasic(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
 	resourceName := "basic"
+	fullResourceName := fmt.Sprintf("cloudtruth_parameter.%s", resourceName)
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -157,25 +159,60 @@ func TestAccResourceParameterBasic(t *testing.T) {
 			{
 				Config: testAccResourceParameterCreateBasic(accTestProject, resourceName, createParamName, paramDesc, true),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "name", createParamName),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "description", paramDesc),
-					resource.TestCheckResourceAttr("cloudtruth_parameter.basic", "secret",
+					resource.TestCheckResourceAttr(fullResourceName, "name", createParamName),
+					resource.TestCheckResourceAttr(fullResourceName, "description", paramDesc),
+					resource.TestCheckResourceAttr(fullResourceName, "secret",
 						strconv.FormatBool(true)),
 				),
 			},
 			{ // Update test, changing the description and the secret toggle
 				Config: testAccResourceParameterCreateBasic(accTestProject, resourceName, createParamName, updateParamDesc, false),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "name", createParamName),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "description", updateParamDesc),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", resourceName), "secret",
+					resource.TestCheckResourceAttr(fullResourceName, "name", createParamName),
+					resource.TestCheckResourceAttr(fullResourceName, "description", updateParamDesc),
+					resource.TestCheckResourceAttr(fullResourceName, "secret",
 						strconv.FormatBool(false)),
 				),
+			},
+			{
+				ResourceName:      fullResourceName,
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: paramStateIDFunc(fullResourceName, accTestProject),
 			},
 		},
 	})
 }
 
+func paramStateIDFunc(resourceName, projectName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		paramID := s.RootModule().Resources[resourceName].Primary.ID
+		return fmt.Sprintf("%s.%s", projectName, paramID), nil
+	}
+}
+
+/*
+	func CheckResourceAttrInstanceState(project string) resource.ImportStateCheckFunc {
+		return func(is []*terraform.InstanceState) error {
+			if len(is) != 1 {
+				return fmt.Errorf("unexpected number of instance states: %d", len(is))
+			}
+
+			s := is[0]
+
+			attrVal, ok := s.Attributes[project]
+			if !ok {
+				return fmt.Errorf("attribute '%s' not found in instance state", attributeName)
+			}
+
+			if attrVal != attributeValue {
+				return fmt.Errorf("attribute '%s' expected: '%s', got: '%s'", attributeName, attributeValue, attrVal)
+			}
+
+			return nil
+		}
+	}
+*/
 func TestAccResourceParameterWithBadRules(t *testing.T) {
 	resourceName := "bad_rules"
 	resource.Test(t, resource.TestCase{
