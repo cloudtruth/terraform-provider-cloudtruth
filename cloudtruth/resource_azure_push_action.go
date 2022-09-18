@@ -222,7 +222,7 @@ func resourceAzurePushActionRead(ctx context.Context, d *schema.ResourceData, me
 		}
 	}
 
-	tags, err := getTags(ctx, azurePush.GetTags(), d, meta)
+	tags, err := getTags(ctx, azurePush.GetTags(), meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -230,7 +230,7 @@ func resourceAzurePushActionRead(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	projects, err := getProjects(ctx, azurePush.GetProjects(), d, meta)
+	projects, err := getProjects(ctx, azurePush.GetProjects(), meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}

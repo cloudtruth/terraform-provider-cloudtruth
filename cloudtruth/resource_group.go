@@ -58,7 +58,7 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 	groupName := d.Get("name").(string)
 	desc := d.Get("description").(string)
 
-	userURIs := []string{}
+	userURIs := make([]string, 0)
 	groupCreate := cloudtruthapi.NewGroupWithDefaults()
 	groupCreate.SetName(groupName)
 	if desc != "" {
@@ -147,7 +147,7 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 	hasChange := false
 	// users indicates an intentional change, user_uris alone indicates drift
 	if d.HasChange("users") || d.HasChange("user_uris") {
-		userURIs := []string{}
+		userURIs := make([]string, 0)
 		users := d.Get("users").(*schema.Set)
 		for _, v := range users.List() {
 			userName := fmt.Sprint(v)

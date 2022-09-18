@@ -241,7 +241,7 @@ func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta
 			return diag.FromErr(err)
 		}
 	}
-	tags, err := getTags(ctx, awsPush.GetTags(), d, meta)
+	tags, err := getTags(ctx, awsPush.GetTags(), meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -249,7 +249,7 @@ func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	projects, err := getProjects(ctx, awsPush.GetProjects(), d, meta)
+	projects, err := getProjects(ctx, awsPush.GetProjects(), meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}

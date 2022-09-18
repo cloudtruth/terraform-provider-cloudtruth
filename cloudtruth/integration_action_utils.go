@@ -150,12 +150,12 @@ func lookupEnvTag(ctx context.Context, d *schema.ResourceData, c *cloudTruthClie
 	return tagID, nil
 }
 
-func getTags(ctx context.Context, tags []string, d *schema.ResourceData, meta any) ([]string, error) {
+func getTags(ctx context.Context, tags []string, meta any) ([]string, error) {
 	tflog.Debug(ctx, "entering getTags")
 	defer tflog.Debug(ctx, "exiting getTags")
 	c := meta.(*cloudTruthClient)
 	var apiError error
-	outTags := []string{}
+	outTags := make([]string, 0)
 	for _, t := range tags {
 		// tag URLs look like this:
 		// https://api.cloudtruth.io/api/v1/environments/e54d1802-1c46-49b0-b1ed-9417bac082a3/tags/7682da06-4342-47ae-9520-ded6870c2368/
@@ -189,12 +189,12 @@ func getTags(ctx context.Context, tags []string, d *schema.ResourceData, meta an
 	return outTags, nil
 }
 
-func getProjects(ctx context.Context, projects []string, d *schema.ResourceData, meta any) ([]string, error) {
+func getProjects(ctx context.Context, projects []string, meta any) ([]string, error) {
 	tflog.Debug(ctx, "entering getProjects")
 	defer tflog.Debug(ctx, "exiting getProjects")
 	c := meta.(*cloudTruthClient)
 	var apiError error
-	outProjects := []string{}
+	outProjects := make([]string, 0)
 	for _, p := range projects {
 		// project URLs look like this:
 		// https://api.cloudtruth.io/api/v1/projects/1bdbafff-66f6-4491-b3e2-cc1d1bf95918/

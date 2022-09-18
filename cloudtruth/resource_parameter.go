@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
+	"strings"
 )
 
 var intAndStringRuleTypes = []string{"min", "max"}
@@ -22,6 +23,10 @@ func resourceParameter() *schema.Resource {
 		ReadContext:   resourceParameterRead,
 		UpdateContext: resourceParameterUpdate,
 		DeleteContext: resourceParameterDelete,
+
+		Importer: &schema.ResourceImporter{
+			StateContext: importHelper,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -203,6 +208,48 @@ func paramCreateConfig(d *schema.ResourceData, paramType string) *cloudtruthapi.
 	return paramCreate
 }
 
+func parseParamProjectAndID(ctx context.Context, projParamID string, meta any) (*string, *string, error) {
+	tflog.Debug(ctx, "entering parseParamProjectAndID")
+	defer tflog.Debug(ctx, "exiting parseParamProjectAndID")
+	c := meta.(*cloudTruthClient)
+	projDotParam := strings.Split(projParamID, ".")
+	if len(projDotParam) != 2 {
+		return nil, nil, fmt.Errorf("invalid import ID format: %s, you must use the formt 'PROJECT_NAME_OR_ID.PARAMETER_ID'", projParamID)
+	}
+	projNameOrID, paramID := projDotParam[0], projDotParam[1]
+	projID, err := c.lookupProject(ctx, projNameOrID)
+	if err != nil {
+		return nil, nil, err
+	}
+	return projID, &paramID, nil
+}
+
+/*
+We cannot import a Parameter solely by ID, the project must also be specified, therefore we must define
+
+	this function instead of using schema.ImportStatePassthroughContext
+	We support this in the following formats:
+	PROJECT_ID.PARAMETER_ID
+	PROJECT_NAME.PARAMETER_ID
+*/
+func importHelper(ctx context.Context, d *schema.ResourceData, meta any) ([]*schema.ResourceData, error) {
+	tflog.Debug(ctx, "entering importHelper")
+	defer tflog.Debug(ctx, "exiting importHelper")
+
+	project, paramID, err := parseParamProjectAndID(ctx, d.Id(), meta)
+	if err != nil {
+		return nil, err
+	}
+
+	err = d.Set("project", *project)
+	if err != nil {
+		return nil, err
+	}
+	d.SetId(fmt.Sprintf(*paramID))
+
+	return []*schema.ResourceData{d}, nil
+}
+
 func setParameterReadProps(param *cloudtruthapi.Parameter, d *schema.ResourceData) error {
 	err := d.Set("name", param.GetName())
 	if err != nil {
@@ -246,7 +293,6 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	paramName := d.Get("name").(string)
 	paramID := d.Id()
 
 	var param *cloudtruthapi.Parameter
@@ -254,7 +300,7 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 		var r *http.Response
 		param, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(ctx, paramID, *projID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceParameterRead: error looking up parameter %s", paramName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceParameterRead: error looking up parameter with ID %s", paramID), r, err)
 		}
 		return nil
 	})
@@ -312,7 +358,7 @@ func updateParameterRules(ctx context.Context, paramID, projID string, paramType
 	return r, nil
 }
 
-func updateParameter(ctx context.Context, paramID, projID string, paramTypeName string, d *schema.ResourceData,
+func updateParameter(ctx context.Context, paramID, projID string, d *schema.ResourceData,
 	c *cloudTruthClient) (*http.Response, error) {
 	tflog.Debug(ctx, "entering updateParameter")
 	defer tflog.Debug(ctx, "exiting updateParameter")
@@ -429,7 +475,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 
 	// Top level property changes except for rules
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-		r, err := updateParameter(ctx, d.Id(), *projID, paramType, d, c)
+		r, err := updateParameter(ctx, d.Id(), *projID, d, c)
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterUpdate: error updating parameter level config for parameter %s", paramName), r, err)
 		}
