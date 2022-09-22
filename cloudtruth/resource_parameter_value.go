@@ -20,6 +20,11 @@ func resourceParameterValue() *schema.Resource {
 		UpdateContext: resourceParameterValueUpdate,
 		DeleteContext: resourceParameterValueDelete,
 
+		/*
+			Importer: &schema.ResourceImporter{
+				StateContext: paramValueImportHelper,
+			},*/
+
 		Schema: map[string]*schema.Schema{
 			"project": {
 				Description: "The CloudTruth project where the Parameter Value is defined",
@@ -164,6 +169,63 @@ func valueCreateConfig(envID string, d *schema.ResourceData) (*cloudtruthapi.Val
 	valueCreate.SetEnvironment(envID)
 	return valueCreate, nil
 }
+
+/*
+	WIP
+func parseParamValueIDInfo(ctx context.Context, c *cloudTruthClient, paramValueIDInfo string) (*string, *string, *string, error) {
+	tflog.Debug(ctx, "entering parseParamValueIDInfo")
+	defer tflog.Debug(ctx, "exiting parseParamValueIDInfo")
+
+	projParamParamValueIDs := strings.Split(paramValueIDInfo, ".")
+	if len(projParamParamValueIDs) != 3 {
+		return nil, nil, nil,
+			fmt.Errorf("invalid import ID format: %s, you must use the formt 'PROJECT_NAME.PARAMETER_ID.PARAMETER_VALUE_ID'", paramValueIDInfo)
+	}
+	projNameOrID, paramID, paramValueID := projParamParamValueIDs[0], projParamParamValueIDs[1], projParamParamValueIDs[2]
+	projID, err := c.lookupProject(ctx, projNameOrID)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	return projID, &paramID, &paramValueID, nil
+}
+
+
+
+func paramValueImportHelper(ctx context.Context, d *schema.ResourceData, meta any) ([]*schema.ResourceData, error) {
+	tflog.Debug(ctx, "entering paramImportHelper")
+	defer tflog.Debug(ctx, "exiting paramImportHelper")
+	c := meta.(*cloudTruthClient)
+
+	projID, paramID, paramValueID, err := parseParamValueIDInfo(ctx, c, d.Id())
+	if err != nil {
+		return nil, err
+	}
+
+	// We have the project ID, look up its name
+	projName, err := c.lookupProject(ctx, *projID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = d.Set("project", *projName)
+	if err != nil {
+		return nil, err
+	}
+
+	var parameterList *cloudtruthapi.PaginatedParameterList
+	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+		var r *http.Response
+		parameterList, r, err = filteredParamListRequest.Execute()
+		if err != nil {
+			return handleAPIError(fmt.Sprintf("dataCloudTruthParameterValueRead: error looking up parameter %s", paramName), r, err)
+		}
+		return nil
+	})
+
+	d.SetId(*paramValueID)
+
+	return []*schema.ResourceData{d}, nil
+}*/
 
 func resourceParameterValueRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "resourceParameterRead")

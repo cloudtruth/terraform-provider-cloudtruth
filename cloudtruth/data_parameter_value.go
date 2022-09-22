@@ -21,7 +21,7 @@ func dataCloudTruthParameterValue() *schema.Resource {
 			"project": {
 				Description: "The CloudTruth project",
 				Type:        schema.TypeString,
-				Optional:    true,
+				Optional:    true, // But must be set via this property or the CLOUDTRUTH_ENVIRONMENT env variable
 			},
 			"environment": {
 				Description: "The CloudTruth environment containing the Parameter Value",

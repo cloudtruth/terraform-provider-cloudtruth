@@ -25,9 +25,9 @@ func resourceParameter() *schema.Resource {
 		DeleteContext: resourceParameterDelete,
 
 		Importer: &schema.ResourceImporter{
-			StateContext: importHelper,
+			StateContext: paramImportHelper,
 		},
-		
+
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Description: "The name of the CloudTruth Parameter, unique per project",
@@ -208,7 +208,7 @@ func paramCreateConfig(d *schema.ResourceData, paramType string) *cloudtruthapi.
 	return paramCreate
 }
 
-func parseParamProjectAndID(ctx context.Context, c *cloudTruthClient, projParamID string, meta any) (*string, *string, error) {
+func parseParamProjectAndID(ctx context.Context, c *cloudTruthClient, projParamID string) (*string, *string, error) {
 	tflog.Debug(ctx, "entering parseParamProjectAndID")
 	defer tflog.Debug(ctx, "exiting parseParamProjectAndID")
 
@@ -216,8 +216,8 @@ func parseParamProjectAndID(ctx context.Context, c *cloudTruthClient, projParamI
 	if len(projDotParam) != 2 {
 		return nil, nil, fmt.Errorf("invalid import ID format: %s, you must use the formt 'PROJECT_NAME_OR_ID.PARAMETER_ID'", projParamID)
 	}
-	projNameOrID, paramID := projDotParam[0], projDotParam[1]
-	projID, err := c.lookupProject(ctx, projNameOrID)
+	projName, paramID := projDotParam[0], projDotParam[1]
+	projID, err := c.lookupProject(ctx, projName)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -226,28 +226,23 @@ func parseParamProjectAndID(ctx context.Context, c *cloudTruthClient, projParamI
 
 /*
 We cannot import a Parameter solely by ID, the project must also be specified, therefore we must define
-
-	this function instead of using schema.ImportStatePassthroughContext
-	We support this in the following formats:
-	PROJECT_ID.PARAMETER_ID
-	PROJECT_NAME.PARAMETER_ID
+this function instead of using schema.ImportStatePassthroughContext
+We support this in the following formats:
+PROJECT_NAME.PARAMETER_ID
 */
-func importHelper(ctx context.Context, d *schema.ResourceData, meta any) ([]*schema.ResourceData, error) {
-	tflog.Debug(ctx, "entering importHelper")
-	defer tflog.Debug(ctx, "exiting importHelper")
+func paramImportHelper(ctx context.Context, d *schema.ResourceData, meta any) ([]*schema.ResourceData, error) {
+	tflog.Debug(ctx, "entering paramImportHelper")
+	defer tflog.Debug(ctx, "exiting paramImportHelper")
 	c := meta.(*cloudTruthClient)
 
-	projID, paramID, err := parseParamProjectAndID(ctx, c, d.Id(), meta)
+	projID, paramID, err := parseParamProjectAndID(ctx, c, d.Id())
 	if err != nil {
 		return nil, err
 	}
-
-	// We have the project ID, look up its name
-	projName, err := c.lookupProject(ctx, *projID)
+	projName, err := c.lookupProject(ctx, *projID) // We have the project ID, look up its name
 	if err != nil {
 		return nil, err
 	}
-
 	err = d.Set("project", *projName)
 	if err != nil {
 		return nil, err
@@ -300,8 +295,8 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	paramID := d.Id()
 
+	paramID := d.Id()
 	var param *cloudtruthapi.Parameter
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
