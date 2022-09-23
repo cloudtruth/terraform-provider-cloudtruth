@@ -21,7 +21,7 @@ func dataCloudTruthTemplate() *schema.Resource {
 			"project": {
 				Description: "The CloudTruth project",
 				Type:        schema.TypeString,
-				Optional:    true,
+				Optional:    true, // But must be set via this property or the CLOUDTRUTH_PROJECT env variable
 			},
 			"environment": {
 				Description: "The CloudTruth environment",

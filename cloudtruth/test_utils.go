@@ -6,8 +6,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-// For the sake of isolation/bootstrapping
-// The provider acceptance tests assume that the following resources already exist in the target
+// For the sake of isolation and bootstrapping
+// the provider acceptance tests assume that the following resources already exist in the target
 // CloudTruth account, if they are destroyed/altered these tests will fail
 // The resource acceptance tests are "full service" tests which instantiate, modify and destroy
 // the resources which they reference.

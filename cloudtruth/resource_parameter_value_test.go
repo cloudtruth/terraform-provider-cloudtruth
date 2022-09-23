@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"testing"
 )
-
-//func testAccResourceParameterCreate(name, paramName, resName, env, value string) string {
 
 func TestAccResourceParameterValueCreateUpdate(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
 	environment := "staging"
 	resName := "create_update"
+	fullResourceName := fmt.Sprintf("cloudtruth_parameter_value.%s", resName)
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -20,23 +20,37 @@ func TestAccResourceParameterValueCreateUpdate(t *testing.T) {
 			{
 				Config: testAccResourceParameterCreate(createParamName, resName, environment, stagingParamVal),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "parameter_name", createParamName),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "value", stagingParamVal),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "environment", environment), resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "environment", environment),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "external", "false"),
+					resource.TestCheckResourceAttr(fullResourceName, "parameter_name", createParamName),
+					resource.TestCheckResourceAttr(fullResourceName, "value", stagingParamVal),
+					resource.TestCheckResourceAttr(fullResourceName, "environment", environment), resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "environment", environment),
+					resource.TestCheckResourceAttr(fullResourceName, "external", "false"),
 				),
 			},
 			{
 				Config: testAccResourceParameterCreate(createParamName, resName, environment, stagingParamValUpdate),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "parameter_name", createParamName),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "value", stagingParamValUpdate),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "environment", environment), resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "environment", environment),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "external", "false"),
+					resource.TestCheckResourceAttr(fullResourceName, "parameter_name", createParamName),
+					resource.TestCheckResourceAttr(fullResourceName, "value", stagingParamValUpdate),
+					resource.TestCheckResourceAttr(fullResourceName, "environment", environment), resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "environment", environment),
+					resource.TestCheckResourceAttr(fullResourceName, "external", "false"),
 				),
+			},
+			{
+				ResourceName:      fullResourceName,
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: paramValueStateIDFunc(fullResourceName, fmt.Sprintf("cloudtruth_parameter.%s", resName), accTestProject, environment),
 			},
 		},
 	})
+}
+
+func paramValueStateIDFunc(valueResourceName, paramResourceName, projectName, envName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		paramValueID := s.RootModule().Resources[valueResourceName].Primary.ID
+		paramID := s.RootModule().Resources[paramResourceName].Primary.ID
+		return fmt.Sprintf("%s.%s.%s.%s", projectName, envName, paramID, paramValueID), nil
+	}
 }
 
 func TestAccResourceParameterValueOverride(t *testing.T) {
@@ -79,14 +93,14 @@ func TestAccResourceParameterValueExternal(t *testing.T) {
 func testAccResourceParameterCreate(paramName, resName, env, value string) string {
 	return fmt.Sprintf(`
         resource "cloudtruth_parameter" "%s" {
-        project     = "AcceptanceTest"
-                name        = "%s"
-                description = "Just a description of a parameter"
+        		project     = "AcceptanceTest"
+				name        = "%s"
+				description = "Just a description of a parameter"
         }
 
         resource "cloudtruth_parameter_value" "%s" {
-                project        = "AcceptanceTest"
-                environment    = "%s"
+				project        = "AcceptanceTest"
+				environment    = "%s"
                 parameter_name = "%s"
                 value          = "%s"
                 depends_on = [

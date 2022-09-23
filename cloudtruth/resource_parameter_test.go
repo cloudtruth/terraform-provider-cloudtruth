@@ -191,28 +191,6 @@ func paramStateIDFunc(resourceName, projectName string) resource.ImportStateIdFu
 	}
 }
 
-/*
-	func CheckResourceAttrInstanceState(project string) resource.ImportStateCheckFunc {
-		return func(is []*terraform.InstanceState) error {
-			if len(is) != 1 {
-				return fmt.Errorf("unexpected number of instance states: %d", len(is))
-			}
-
-			s := is[0]
-
-			attrVal, ok := s.Attributes[project]
-			if !ok {
-				return fmt.Errorf("attribute '%s' not found in instance state", attributeName)
-			}
-
-			if attrVal != attributeValue {
-				return fmt.Errorf("attribute '%s' expected: '%s', got: '%s'", attributeName, attributeValue, attrVal)
-			}
-
-			return nil
-		}
-	}
-*/
 func TestAccResourceParameterWithBadRules(t *testing.T) {
 	resourceName := "bad_rules"
 	resource.Test(t, resource.TestCase{

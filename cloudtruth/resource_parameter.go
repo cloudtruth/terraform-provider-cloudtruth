@@ -42,7 +42,7 @@ func resourceParameter() *schema.Resource {
 			"project": {
 				Description: "The CloudTruth project where the Parameter is defined",
 				Type:        schema.TypeString,
-				Optional:    true,
+				Optional:    true, // But must be set via this property or the CLOUDTRUTH_PROJECT env variable
 			},
 			"secret": {
 				Description: "Whether or not the Parameter is a secret, defaults to false (non-secret)",
