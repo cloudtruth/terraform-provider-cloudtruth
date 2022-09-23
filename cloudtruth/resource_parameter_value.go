@@ -70,7 +70,7 @@ func resourceParameterValue() *schema.Resource {
 				Default:     false,
 			},
 			"location": {
-				Description: "The location of the secret value, required for external parameters",
+				Description: "The location (path/uri) of the secret value, required for external parameters",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",
@@ -82,7 +82,7 @@ func resourceParameterValue() *schema.Resource {
 				Default:     "",
 			},
 			"parameter_id": {
-				Description: "The ID of the CloudTruth Parameter which stores this value",
+				Description: "The ID of the CloudTruth Parameter which holds this value",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},

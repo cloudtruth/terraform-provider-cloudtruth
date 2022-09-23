@@ -25,13 +25,24 @@ A CloudTruth Parameter and environment specific value (defaulting to the 'defaul
 - `environment` (String) The CloudTruth environment where the Parameter Value will be added. Defaults to the 'default' environment
 - `external` (Boolean) Whether or not the value is external, defaults to false
 - `filter` (String) An optional filter (path/query), optional and used only with external parameters
-- `location` (String) The location of the secret value, required for external parameters
+- `location` (String) The location (path/uri) of the secret value, required for external parameters
 - `project` (String) The CloudTruth project where the Parameter Value is defined
 - `value` (String) The value of the CloudTruth Parameter, specific to an environment (can be overridden/inherited relative to other environments)
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
-- `parameter_id` (String) The ID of the CloudTruth Parameter which stores this value
+- `parameter_id` (String) The ID of the CloudTruth Parameter which holds this value
 
+## Import
 
+Import is supported using the following syntax:
+
+```shell
+terraform init
+# Explicit syntax which specifies the environment
+terraform import cloudtruth_parameter_value.example PROJECT_NAME.ENVIRONMENT_NAME.PARAMETER_ID.PARAMETER_VALUE_ID
+
+# When no environment is specified, the import defaults to the 'default' environment
+terraform import cloudtruth_parameter_value.example PROJECT_NAME.PARAMETER_ID.PARAMETER_VALUE_ID
+```

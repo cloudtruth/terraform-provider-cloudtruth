@@ -21,10 +21,10 @@ A CloudTruth parameter value data source
 
 ### Optional
 
-- `as_of` (String) Retrieve the parameter value 'as of' the specified RFC3333 date, mutually exclusive with 'tag'
-- `environment` (String) The CloudTruth environment containing the Parameter Value
+- `as_of` (String) A filter for retrieving the parameter value 'as of' the specified RFC3333 date, mutually exclusive with 'tag'
+- `environment` (String) The CloudTruth environment where the Parameter Value will be added. Defaults to the 'default' environment
 - `project` (String) The CloudTruth project
-- `tag` (String) Retrieve the parameter value that matches a specific tag, mutually exclusive with 'as_of'
+- `tag` (String) Retrieve the parameter value that matches this tag, mutually exclusive with 'as_of'
 
 ### Read-Only
 

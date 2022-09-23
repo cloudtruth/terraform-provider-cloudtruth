@@ -24,7 +24,7 @@ func dataCloudTruthParameterValue() *schema.Resource {
 				Optional:    true, // But must be set via this property or the CLOUDTRUTH_ENVIRONMENT env variable
 			},
 			"environment": {
-				Description: "The CloudTruth environment containing the Parameter Value",
+				Description: "The CloudTruth environment where the Parameter Value will be added. Defaults to the 'default' environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "default",
@@ -50,12 +50,12 @@ func dataCloudTruthParameterValue() *schema.Resource {
 				Computed:    true,
 			},
 			"as_of": {
-				Description: "Retrieve the parameter value 'as of' the specified RFC3333 date, mutually exclusive with 'tag'",
+				Description: "A filter for retrieving the parameter value 'as of' the specified RFC3333 date, mutually exclusive with 'tag'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"tag": {
-				Description: "Retrieve the parameter value that matches a specific tag, mutually exclusive with 'as_of'",
+				Description: "Retrieve the parameter value that matches this tag, mutually exclusive with 'as_of'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
@@ -70,7 +70,7 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 	project := d.Get("project").(string)
 	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: %w", err))
+		return diag.FromErr(err)
 	}
 	paramName := d.Get("parameter_name").(string)
 
@@ -113,11 +113,19 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 			paramName, environment, v.GetEnvironmentName()))
 		err := d.Set("value", v.GetValue())
 		if err != nil {
-			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: %w", err))
+			return diag.FromErr(err)
 		}
 		err = d.Set("parameter_id", paramID)
 		if err != nil {
-			return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: %w", err))
+			return diag.FromErr(err)
+		}
+		err = d.Set("dynamic", v.GetInterpolated())
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		err = d.Set("external", v.GetExternal())
+		if err != nil {
+			return diag.FromErr(err)
 		}
 		d.SetId(v.GetId())
 	}
@@ -166,7 +174,7 @@ func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceDa
 	project := d.Get("project").(string)
 	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValuesRead: %w", err))
+		return diag.FromErr(err)
 	}
 
 	var paramListRequest cloudtruthapi.ApiProjectsParametersListRequest
@@ -212,7 +220,7 @@ func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceDa
 
 	err = d.Set("parameter_values", paramsMap)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValuesRead: %w", err))
+		return diag.FromErr(err)
 	}
 
 	/* We use a composite ID for a cloudtruth_parameters result - <PROJECT_ID>:<ENVIRONMENT_ID>
@@ -243,7 +251,7 @@ func parseParamListFilters(paramListRequest cloudtruthapi.ApiProjectsParametersL
 		}
 		asOfTime, err := datetime.Parse(asOf, time.UTC)
 		if err != nil {
-			return nil, fmt.Errorf("parseParamListFilters: %w", err)
+			return nil, err
 		}
 		paramListRequest = paramListRequest.AsOf(asOfTime)
 	}

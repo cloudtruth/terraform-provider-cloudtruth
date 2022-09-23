@@ -54,7 +54,7 @@ func dataCloudTruthTagRead(ctx context.Context, d *schema.ResourceData, meta any
 	environment := d.Get("environment").(string)
 	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthTagRead: %w", err))
+		return diag.FromErr(err)
 	}
 	name := d.Get("name").(string)
 
