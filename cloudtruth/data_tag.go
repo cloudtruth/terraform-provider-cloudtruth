@@ -49,8 +49,9 @@ func dataCloudTruthTag() *schema.Resource {
 }
 
 func dataCloudTruthTagRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering dataCloudTruthTagRead")
+	defer tflog.Debug(ctx, "exiting dataCloudTruthTagRead")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "dataCloudTruthTagRead")
 	environment := d.Get("environment").(string)
 	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {

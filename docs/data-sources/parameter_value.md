@@ -28,6 +28,7 @@ A CloudTruth parameter value data source
 
 ### Read-Only
 
+- `dynamic` (Boolean) Whether or not to evaluate/interpolate the Parameter's value (incompatible with secret parameters)
 - `external` (Boolean) Whether or not the value is external, defaults to false
 - `id` (String) The ID of this resource.
 - `parameter_id` (String) The ID of the CloudTruth Parameter where this value is stored

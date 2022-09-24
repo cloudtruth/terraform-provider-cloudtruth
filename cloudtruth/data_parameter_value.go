@@ -39,6 +39,11 @@ func dataCloudTruthParameterValue() *schema.Resource {
 				Type:        schema.TypeBool,
 				Computed:    true,
 			},
+			"dynamic": {
+				Description: "Whether or not to evaluate/interpolate the Parameter's value (incompatible with secret parameters)",
+				Type:        schema.TypeBool,
+				Computed:    true,
+			},
 			"value": {
 				Description: "The actual value of the Parameter Value",
 				Type:        schema.TypeString,
@@ -64,8 +69,9 @@ func dataCloudTruthParameterValue() *schema.Resource {
 }
 
 func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering dataCloudTruthParameterValueRead")
+	defer tflog.Debug(ctx, "exiting dataCloudTruthParameterValueRead")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "dataCloudTruthParameterValueRead")
 	environment := d.Get("environment").(string)
 	project := d.Get("project").(string)
 	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
@@ -168,6 +174,8 @@ func dataCloudTruthParameterValues() *schema.Resource {
 }
 
 func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering dataCloudTruthParameterValuesRead")
+	defer tflog.Debug(ctx, "exiting dataCloudTruthParameterValuesRead")
 	c := meta.(*cloudTruthClient)
 	tflog.Debug(ctx, "dataCloudTruthParameterValuesRead")
 	environment := d.Get("environment").(string)

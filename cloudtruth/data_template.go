@@ -55,8 +55,9 @@ func dataCloudTruthTemplate() *schema.Resource {
 
 // This data source represents the evaluation of a template in a given environment (and project)
 func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering dataCloudTruthTemplateRead")
+	defer tflog.Debug(ctx, "exiting dataCloudTruthTemplateRead")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "dataCloudTruthTemplateRead")
 	environment := d.Get("environment").(string)
 	project := d.Get("project").(string)
 	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
@@ -110,8 +111,9 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 }
 
 func renderTemplateBody(ctx context.Context, name, body, projectID string, meta any) (*string, error) {
+	tflog.Debug(ctx, "entering renderTemplateBody")
+	defer tflog.Debug(ctx, "exiting renderTemplateBody")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "renderTemplateBody")
 	templatePrevReq := cloudtruthapi.NewTemplatePreviewCreateRequest(body)
 	var previewBody string
 	retry := 0
@@ -178,8 +180,9 @@ func dataCloudTruthTemplates() *schema.Resource {
 }
 
 func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering dataCloudTruthTemplatesRead")
+	defer tflog.Debug(ctx, "exiting dataCloudTruthTemplatesRead")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "dataCloudTruthTemplatesRead")
 	environment := d.Get("environment").(string)
 	project := d.Get("project").(string)
 	envID, projID, err := c.lookupEnvProj(ctx, environment, project)
