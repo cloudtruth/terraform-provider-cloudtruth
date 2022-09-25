@@ -47,7 +47,8 @@ func dataCloudTruthUser() *schema.Resource {
 
 // look up users by email or name
 func dataCloudTruthUserRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "dataCloudTruthUserRead")
+	tflog.Debug(ctx, "entering dataCloudTruthUserRead")
+	defer tflog.Debug(ctx, "exiting dataCloudTruthUserRead")
 	c := meta.(*cloudTruthClient)
 	nameOrEmail := d.Get("name")
 	if nameOrEmail == "" {
@@ -102,7 +103,8 @@ func dataCloudTruthUsers() *schema.Resource {
 }
 
 func dataCloudTruthUsersRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "dataCloudTruthUsersRead")
+	tflog.Debug(ctx, "entering dataCloudTruthUsersRead")
+	defer tflog.Debug(ctx, "exiting dataCloudTruthUsersRead")
 	c := meta.(*cloudTruthClient)
 	typeFilter := d.Get("type").(string)
 	dataUsers := make(map[string]interface{})

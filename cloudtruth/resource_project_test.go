@@ -14,6 +14,7 @@ const updateDesc = "A new description of a project"
 func TestAccResourceProjectBasic(t *testing.T) {
 	createProjName := fmt.Sprintf("TestProject-%s", uuid.New().String())
 	updateProjName := fmt.Sprintf("updated-%s", createProjName)
+	resourceName := "cloudtruth_project.basic"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories:         testProviderFactories,
 		PreCheck:                  func() { testAccPreCheck(t) },
@@ -22,18 +23,23 @@ func TestAccResourceProjectBasic(t *testing.T) {
 			{
 				Config: testAccResourceProjectCreateBasic(createProjName, desc),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_project.basic", "name", createProjName),
-					resource.TestCheckResourceAttr("cloudtruth_project.basic", "description", desc),
-					resource.TestCheckResourceAttr("cloudtruth_project.basic", "force_delete",
+					resource.TestCheckResourceAttr(resourceName, "name", createProjName),
+					resource.TestCheckResourceAttr(resourceName, "description", desc),
+					resource.TestCheckResourceAttr(resourceName, "force_delete",
 						strconv.FormatBool(true)),
 				),
 			},
 			{
+				ResourceName:      resourceName,
+				ImportState:       true,
+				ImportStateVerify: true,
+			},
+			{
 				Config: testAccResourceProjectUpdateBasic(updateProjName, updateDesc),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_project.basic", "name", updateProjName),
-					resource.TestCheckResourceAttr("cloudtruth_project.basic", "description", updateDesc),
-					resource.TestCheckResourceAttr("cloudtruth_project.basic", "force_delete",
+					resource.TestCheckResourceAttr(resourceName, "name", updateProjName),
+					resource.TestCheckResourceAttr(resourceName, "description", updateDesc),
+					resource.TestCheckResourceAttr(resourceName, "force_delete",
 						strconv.FormatBool(true)),
 				),
 			},

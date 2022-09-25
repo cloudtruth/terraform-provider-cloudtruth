@@ -67,8 +67,9 @@ non-owner grant(s) the owner grant is created before the non-owner grant(s) is c
 }
 
 func parsePrincipalInput(ctx context.Context, d *schema.ResourceData, meta any) (*string, error) {
+	tflog.Debug(ctx, "entering parsePrincipalInput")
+	defer tflog.Debug(ctx, "exiting parsePrincipalInput")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "parsePrincipalInput")
 	var principalName, principalURL string
 	if _, ok := d.GetOk("user"); ok {
 		principalName = d.Get("user").(string)
@@ -93,8 +94,9 @@ func parsePrincipalInput(ctx context.Context, d *schema.ResourceData, meta any) 
 }
 
 func parseScopeInput(ctx context.Context, d *schema.ResourceData, meta any) (*string, error) {
+	tflog.Debug(ctx, "entering parseScopeInput")
+	defer tflog.Debug(ctx, "exiting parseScopeInput")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "parseScopeInput")
 	var scopeName, scopeURL string
 	if _, ok := d.GetOk("environment"); ok {
 		scopeName = d.Get("environment").(string)
@@ -119,8 +121,9 @@ func parseScopeInput(ctx context.Context, d *schema.ResourceData, meta any) (*st
 }
 
 func resourceAccessGrantCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceAccessGrantCreate")
+	defer tflog.Debug(ctx, "exiting resourceAccessGrantCreate")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceAccessGrantCreate")
 	principalURL, err := parsePrincipalInput(ctx, d, meta)
 	if err != nil {
 		return diag.FromErr(err)
@@ -172,7 +175,8 @@ func resourceAccessGrantCreate(ctx context.Context, d *schema.ResourceData, meta
 }
 
 func resourceAccessGrantRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAccessGrantRead")
+	tflog.Debug(ctx, "entering resourceAccessGrantRead")
+	defer tflog.Debug(ctx, "exiting resourceAccessGrantRead")
 	c := meta.(*cloudTruthClient)
 	grantID := d.Id()
 
@@ -207,7 +211,8 @@ func resourceAccessGrantRead(ctx context.Context, d *schema.ResourceData, meta a
 }
 
 func resourceAccessGrantUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAccessGrantUpdate")
+	tflog.Debug(ctx, "entering resourceAccessGrantUpdate")
+	defer tflog.Debug(ctx, "exiting resourceAccessGrantUpdate")
 	c := meta.(*cloudTruthClient)
 	patchedGrant := cloudtruthapi.PatchedGrant{}
 	hasChange := false
@@ -253,7 +258,8 @@ func resourceAccessGrantUpdate(ctx context.Context, d *schema.ResourceData, meta
 }
 
 func resourceAccessGrantDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceAccessGrantDelete")
+	tflog.Debug(ctx, "entering resourceAccessGrantDelete")
+	defer tflog.Debug(ctx, "exiting resourceAccessGrantDelete")
 	c := meta.(*cloudTruthClient)
 	grantID := d.Id()
 
@@ -273,7 +279,8 @@ func resourceAccessGrantDelete(ctx context.Context, d *schema.ResourceData, meta
 }
 
 func getPrincipalID(ctx context.Context, principalURL string) (*string, error) {
-	tflog.Debug(ctx, "getUserName")
+	tflog.Debug(ctx, "entering getPrincipalID")
+	defer tflog.Debug(ctx, "exiting getPrincipalID")
 	// Sample principal URLs
 	// https://api.cloudtruth.io/api/v1/users/USER_ID/
 	// https://api.cloudtruth.io/api/v1/groups/GROUP_ID/

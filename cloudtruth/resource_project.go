@@ -20,6 +20,10 @@ func resourceProject() *schema.Resource {
 		UpdateContext: resourceProjectUpdate,
 		DeleteContext: resourceProjectDelete,
 
+		Importer: &schema.ResourceImporter{
+			StateContext: projectImportHelper,
+		},
+
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Description: "The name of the CloudTruth project",
@@ -87,6 +91,27 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 	return nil
 }
 
+/*
+We want to support importing projects by name, thus this function and not what could
+otherwise be a "pass through" import
+*/
+func projectImportHelper(ctx context.Context, d *schema.ResourceData, meta any) ([]*schema.ResourceData, error) {
+	tflog.Debug(ctx, "entering projectImportHelper")
+	defer tflog.Debug(ctx, "exiting projectImportHelper")
+	c := meta.(*cloudTruthClient)
+
+	projName, err := c.lookupProject(ctx, d.Id())
+	if err != nil {
+		return nil, err
+	}
+	err = d.Set("name", projName)
+	if err != nil {
+		return nil, err
+	}
+	d.SetId(d.Id())
+	return []*schema.ResourceData{d}, nil
+}
+
 func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	tflog.Debug(ctx, "entering resourceProjectRead")
 	defer tflog.Debug(ctx, "exiting resourceProjectRead")
@@ -107,14 +132,18 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-
 	d.SetId(project.GetId())
+
 	// explicitly not checking for/allowing reparenting from the provider because the UI does not allow it
 	err := d.Set("name", project.GetName())
 	if err != nil {
 		return diag.FromErr(err)
 	}
 	err = d.Set("description", project.GetDescription())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("force_delete", d.Get("force_delete"))
 	if err != nil {
 		return diag.FromErr(err)
 	}

@@ -24,6 +24,8 @@ func isValidAWSIntegrationName(v interface{}, attributeName string) (warns []str
 }
 
 func lookupAWSIntegration(ctx context.Context, intName string, c *cloudTruthClient, d *schema.ResourceData) (*string, error) {
+	tflog.Debug(ctx, "entering lookupAWSIntegration")
+	defer tflog.Debug(ctx, "exiting lookupAWSIntegration")
 	nameSegments := strings.Split(intName, "@")
 	role, awsAccountID := nameSegments[0], nameSegments[1]
 	var integrations *cloudtruthapi.PaginatedAwsIntegrationList
@@ -59,6 +61,8 @@ func isValidAzureIntegrationName(v interface{}, attributeName string) (warns []s
 }
 
 func lookupAzureIntegration(ctx context.Context, intName string, c *cloudTruthClient, d *schema.ResourceData) (*string, error) {
+	tflog.Debug(ctx, "entering lookupAzureIntegration")
+	defer tflog.Debug(ctx, "exiting lookupAzureIntegration")
 	nameSegments := strings.Split(intName, "@")
 	vaultName, tenantID := nameSegments[0], nameSegments[1]
 	var integrations *cloudtruthapi.PaginatedAzureKeyVaultIntegrationList
@@ -82,6 +86,8 @@ func lookupAzureIntegration(ctx context.Context, intName string, c *cloudTruthCl
 }
 
 func getProjectURLs(ctx context.Context, c *cloudTruthClient, rawProjects []interface{}) ([]string, error) {
+	tflog.Debug(ctx, "entering getProjectURLs")
+	defer tflog.Debug(ctx, "exiting getProjectURLs")
 	projects := make([]string, len(rawProjects))
 	for i, v := range projects {
 		projID, err := c.lookupProject(ctx, fmt.Sprint(v))
@@ -95,6 +101,8 @@ func getProjectURLs(ctx context.Context, c *cloudTruthClient, rawProjects []inte
 }
 
 func getEnvTags(ctx context.Context, d *schema.ResourceData, c *cloudTruthClient, rawTags []interface{}) ([]string, error) {
+	tflog.Debug(ctx, "entering getEnvTags")
+	defer tflog.Debug(ctx, "exiting getEnvTags")
 	tags := make([]string, len(rawTags))
 	seenTags := make(map[string]bool)
 	var err error
@@ -119,7 +127,8 @@ func getEnvTags(ctx context.Context, d *schema.ResourceData, c *cloudTruthClient
 // Helper function for push actions
 // todo: consider implementing a tag cache
 func lookupEnvTag(ctx context.Context, d *schema.ResourceData, c *cloudTruthClient, envTag string) (string, error) {
-	tflog.Debug(ctx, "lookupEnvTag")
+	tflog.Debug(ctx, "entering lookupEnvTag")
+	defer tflog.Debug(ctx, "exiting lookupEnvTag")
 	if !strings.Contains(envTag, ":") {
 		return "", fmt.Errorf("the tag %s is invalid, it must be specified using the form 'environment_name:tag_name'", envTag)
 	}
