@@ -22,7 +22,6 @@ A CloudTruth Environment.
 ### Optional
 
 - `description` (String) Description of the CloudTruth Environment
-- `force_delete` (Boolean) Whether to allow Terraform to delete the Environment or not, default to false/disallow
 - `parent` (String) The parent CloudTruth Environment
 
 ### Read-Only

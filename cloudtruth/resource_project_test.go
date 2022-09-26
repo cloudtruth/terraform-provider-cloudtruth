@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"strconv"
 	"testing"
 )
 
@@ -25,8 +24,6 @@ func TestAccResourceProjectBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", createProjName),
 					resource.TestCheckResourceAttr(resourceName, "description", desc),
-					resource.TestCheckResourceAttr(resourceName, "force_delete",
-						strconv.FormatBool(true)),
 				),
 			},
 			{
@@ -39,37 +36,6 @@ func TestAccResourceProjectBasic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", updateProjName),
 					resource.TestCheckResourceAttr(resourceName, "description", updateDesc),
-					resource.TestCheckResourceAttr(resourceName, "force_delete",
-						strconv.FormatBool(true)),
-				),
-			},
-		},
-	})
-}
-
-func TestAccResourceProjectForceDelete(t *testing.T) {
-	forceDeleteProjName := fmt.Sprintf("TestDeleteProject-%s", uuid.New().String())
-	resource.Test(t, resource.TestCase{
-		ProviderFactories:         testProviderFactories,
-		PreCheck:                  func() { testAccPreCheck(t) },
-		PreventPostDestroyRefresh: true,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccResourceProjectForceDeleteDisabled(forceDeleteProjName, desc),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "name", forceDeleteProjName),
-					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "description", desc),
-					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "force_delete",
-						strconv.FormatBool(false)),
-				),
-			},
-			{
-				Config: testAccResourceProjectForceDeleteEnabled(forceDeleteProjName, desc),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "name", forceDeleteProjName),
-					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "description", desc),
-					resource.TestCheckResourceAttr("cloudtruth_project.force_delete", "force_delete",
-						strconv.FormatBool(true)),
 				),
 			},
 		},
@@ -101,7 +67,6 @@ func testAccResourceProjectCreateBasic(projName, desc string) string {
 	resource "cloudtruth_project" "basic" {
   		name        = "%s"
   		description = "%s"
-        force_delete = true
 	}
 	`, projName, desc)
 }
@@ -111,26 +76,6 @@ func testAccResourceProjectUpdateBasic(projName, desc string) string {
 	resource "cloudtruth_project" "basic" {
   		name         = "%s"
   		description  =  "%s"
-		force_delete = true
-	}
-	`, projName, desc)
-}
-
-func testAccResourceProjectForceDeleteDisabled(projName, desc string) string {
-	return fmt.Sprintf(`
-	resource "cloudtruth_project" "force_delete" {
-  		name         = "%s"
-  		description  =  "%s"
-	}
-	`, projName, desc)
-}
-
-func testAccResourceProjectForceDeleteEnabled(projName, desc string) string {
-	return fmt.Sprintf(`
-	resource "cloudtruth_project" "force_delete" {
-  		name         = "%s"
-  		description  =  "%s"
-		force_delete = true
 	}
 	`, projName, desc)
 }
@@ -139,19 +84,16 @@ func testAccResourceProjectNested(projectOne, projectTwo, projectThree string) s
 	return fmt.Sprintf(`
 	resource "cloudtruth_project" "project_one" {
   		name         = "%s"
-		force_delete = true
 	}
 
 	resource "cloudtruth_project" "project_two" {
   		name         = "%s"
 		parent       = cloudtruth_project.project_one.name
-		force_delete = true
 	}
 
 	resource "cloudtruth_project" "project_three" {
   		name         = "%s"
 		parent       = cloudtruth_project.project_two.name
-		force_delete = true
 	}
 	`, projectOne, projectTwo, projectThree)
 }

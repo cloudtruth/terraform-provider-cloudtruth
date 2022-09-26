@@ -39,12 +39,6 @@ func resourceEnvironment() *schema.Resource {
 				Optional:    true,
 				Default:     "default",
 			},
-			"force_delete": {
-				Description: "Whether to allow Terraform to delete the Environment or not, default to false/disallow",
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-			},
 		},
 	}
 }
@@ -172,11 +166,6 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 	c := meta.(*cloudTruthClient)
 	envID := d.Id()
 	envName := d.Get("name").(string)
-	forceDelete := d.Get("force_delete").(bool)
-	if !forceDelete {
-		return diag.Errorf("resourceEnvironmentDelete: environment %s cannot be deleted unless you set the 'force_delete' property to true",
-			envName)
-	}
 
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
 		var r *http.Response

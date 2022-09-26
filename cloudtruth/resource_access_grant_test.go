@@ -69,7 +69,6 @@ func testAccResourceGrantGroup(project, groupName, groupUser, owner, role string
 	return fmt.Sprintf(`
 	resource "cloudtruth_project" "project" {
   		name        = "%s"
-        force_delete = true
 	}
 
 	resource "cloudtruth_group" "group" {
@@ -98,7 +97,6 @@ func testAccResourceGrantUser(environment, owner, nonOwner, role string) string 
 	return fmt.Sprintf(`
 	resource "cloudtruth_environment" "environment" {
   		name  = "%s"
-		force_delete = true
 	}
 
 	resource "cloudtruth_access_grant" "owner_access_grant" {

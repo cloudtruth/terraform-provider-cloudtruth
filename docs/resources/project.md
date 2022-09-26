@@ -22,7 +22,6 @@ A CloudTruth project.
 ### Optional
 
 - `description` (String) Description of the project
-- `force_delete` (Boolean) Whether to allow Terraform to delete the project or not
 - `parent` (String) The Parent CloudTruth project
 
 ### Read-Only

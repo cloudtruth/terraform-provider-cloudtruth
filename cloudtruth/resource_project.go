@@ -42,12 +42,6 @@ func resourceProject() *schema.Resource {
 				Optional:    true,
 				Default:     "",
 			},
-			"force_delete": {
-				Description: "Whether to allow Terraform to delete the project or not",
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Default:     false,
-			},
 		},
 	}
 }
@@ -143,10 +137,6 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	err = d.Set("force_delete", d.Get("force_delete"))
-	if err != nil {
-		return diag.FromErr(err)
-	}
 	return nil
 }
 
@@ -159,7 +149,6 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 	projectName := d.Get("name").(string)
 	projectDesc := d.Get("description").(string)
 
-	// force_delete is not a property in the API, it is only a guard rail used by this provider
 	patchedProject := cloudtruthapi.PatchedProject{}
 	hasChange := false
 
@@ -198,11 +187,6 @@ func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any
 	c := meta.(*cloudTruthClient)
 	projectID := d.Id()
 	projectName := d.Get("name").(string)
-	forceDelete := d.Get("force_delete").(bool)
-	if !forceDelete {
-		return diag.Errorf("resourceProjectDelete: project %s cannot be deleted unless you set the 'force_delete' property to be true",
-			projectName)
-	}
 
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
 		var r *http.Response
