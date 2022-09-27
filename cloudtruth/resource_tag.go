@@ -52,8 +52,9 @@ func resourceTag() *schema.Resource {
 }
 
 func resourceTagCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceTagCreate")
+	defer tflog.Debug(ctx, "exiting resourceTagCreate")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceTagCreate")
 	environment := d.Get("environment").(string)
 	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
@@ -94,13 +95,15 @@ func resourceTagCreate(ctx context.Context, d *schema.ResourceData, meta any) di
 }
 
 func resourceTagRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
-	tflog.Debug(ctx, "resourceTagRead")
+	tflog.Debug(ctx, "entering resourceTagRead")
+	defer tflog.Debug(ctx, "exiting resourceTagRead")
 	return dataCloudTruthTagRead(ctx, d, meta)
 }
 
 func resourceTagUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceTagUpdate")
+	defer tflog.Debug(ctx, "exiting resourceTagUpdate")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceTagUpdate")
 	environment := d.Get("environment").(string)
 	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
@@ -123,6 +126,7 @@ func resourceTagUpdate(ctx context.Context, d *schema.ResourceData, meta any) di
 		patchedTagUpdate.SetTimestamp(tsTime)
 		hasChange = true
 	}
+
 	tagID := d.Id()
 	if hasChange {
 		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
@@ -143,8 +147,9 @@ func resourceTagUpdate(ctx context.Context, d *schema.ResourceData, meta any) di
 }
 
 func resourceTagDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceTagDelete")
+	defer tflog.Debug(ctx, "exiting resourceTagDelete")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceTagDelete")
 	environment := d.Get("environment").(string)
 	envID, err := c.lookupEnvironment(ctx, environment)
 	if err != nil {
@@ -165,6 +170,5 @@ func resourceTagDelete(ctx context.Context, d *schema.ResourceData, meta any) di
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-
 	return nil
 }

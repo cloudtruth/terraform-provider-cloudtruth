@@ -281,9 +281,9 @@ func resourceAccessGrantDelete(ctx context.Context, d *schema.ResourceData, meta
 func getPrincipalID(ctx context.Context, principalURL string) (*string, error) {
 	tflog.Debug(ctx, "entering getPrincipalID")
 	defer tflog.Debug(ctx, "exiting getPrincipalID")
-	// Sample principal URLs
-	// https://api.cloudtruth.io/api/v1/users/USER_ID/
-	// https://api.cloudtruth.io/api/v1/groups/GROUP_ID/
+	/* Sample principal URLs
+	   https://api.cloudtruth.io/api/v1/users/USER_ID/
+	   https://api.cloudtruth.io/api/v1/groups/GROUP_ID/ */
 	urlSegments := strings.Split(principalURL, "/")
 	if len(urlSegments) < 7 {
 		return nil, fmt.Errorf("did not find the principal ID in the URL %s", principalURL)

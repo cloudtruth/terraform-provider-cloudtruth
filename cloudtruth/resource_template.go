@@ -47,8 +47,9 @@ func resourceTemplate() *schema.Resource {
 }
 
 func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceTemplateCreate")
+	defer tflog.Debug(ctx, "exiting resourceTemplateCreate")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceTemplateCreate")
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
@@ -86,8 +87,9 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 }
 
 func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceTemplateRead")
+	defer tflog.Debug(ctx, "exiting resourceTemplateRead")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceTemplateRead")
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
@@ -127,8 +129,9 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 }
 
 func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceTemplateUpdate")
+	defer tflog.Debug(ctx, "exiting resourceTemplateUpdate")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceTemplateUpdate")
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
@@ -176,8 +179,9 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 }
 
 func resourceTemplateDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+	tflog.Debug(ctx, "entering resourceTemplateDelete")
+	defer tflog.Debug(ctx, "exiting resourceTemplateDelete")
 	c := meta.(*cloudTruthClient)
-	tflog.Debug(ctx, "resourceTemplateDelete")
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
