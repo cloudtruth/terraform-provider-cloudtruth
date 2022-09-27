@@ -1,0 +1,2 @@
+terraform init
+terraform import cloudtruth_project.example PROJECT_ID
