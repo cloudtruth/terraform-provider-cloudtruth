@@ -13,6 +13,7 @@ const updateEnvDesc = "A new description of an environment"
 func TestAccResourceEnvBasic(t *testing.T) {
 	createEnvName := fmt.Sprintf("TestEnv-%s", uuid.New().String())
 	updateEnvName := fmt.Sprintf("updated-%s", createEnvName)
+	resourceName := "cloudtruth_environment.basic"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -20,15 +21,20 @@ func TestAccResourceEnvBasic(t *testing.T) {
 			{
 				Config: testAccResourceEnvCreateBasic(createEnvName, envdesc),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_environment.basic", "name", createEnvName),
-					resource.TestCheckResourceAttr("cloudtruth_environment.basic", "description", envdesc),
+					resource.TestCheckResourceAttr(resourceName, "name", createEnvName),
+					resource.TestCheckResourceAttr(resourceName, "description", envdesc),
 				),
+			},
+			{
+				ResourceName:      resourceName,
+				ImportState:       true,
+				ImportStateVerify: true,
 			},
 			{
 				Config: testAccResourceEnvUpdateBasic(updateEnvName, updateEnvDesc),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_environment.basic", "name", updateEnvName),
-					resource.TestCheckResourceAttr("cloudtruth_environment.basic", "description", updateEnvDesc),
+					resource.TestCheckResourceAttr(resourceName, "name", updateEnvName),
+					resource.TestCheckResourceAttr(resourceName, "description", updateEnvDesc),
 				),
 			},
 		},

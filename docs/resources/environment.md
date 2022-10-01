@@ -28,4 +28,11 @@ A CloudTruth Environment.
 
 - `id` (String) The ID of this resource.
 
+## Import
 
+Import is supported using the following syntax:
+
+```shell
+terraform init
+terraform import cloudtruth_environment.example ENVIRONMENT_ID
+```

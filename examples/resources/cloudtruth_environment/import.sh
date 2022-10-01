@@ -1,0 +1,2 @@
+terraform init
+terraform import cloudtruth_environment.example ENVIRONMENT_ID

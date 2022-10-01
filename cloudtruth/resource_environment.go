@@ -21,6 +21,10 @@ func resourceEnvironment() *schema.Resource {
 		UpdateContext: resourceEnvironmentUpdate,
 		DeleteContext: resourceEnvironmentDelete,
 
+		Importer: &schema.ResourceImporter{
+			StateContext: envImportHelper,
+		},
+
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Description: "The name of the CloudTruth Environment",
@@ -78,6 +82,23 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	d.SetId(envID)
 	c.addNewEnvToCaches(envName, envID)
 	return nil
+}
+
+func envImportHelper(ctx context.Context, d *schema.ResourceData, meta any) ([]*schema.ResourceData, error) {
+	tflog.Debug(ctx, "entering envImportHelper")
+	defer tflog.Debug(ctx, "exiting envImportHelper")
+	c := meta.(*cloudTruthClient)
+
+	envName, err := c.lookupEnvironment(ctx, d.Id())
+	if err != nil {
+		return nil, err
+	}
+	err = d.Set("name", envName)
+	if err != nil {
+		return nil, err
+	}
+	d.SetId(d.Id())
+	return []*schema.ResourceData{d}, nil
 }
 
 func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
