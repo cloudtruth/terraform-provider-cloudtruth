@@ -19,6 +19,10 @@ func resourceTemplate() *schema.Resource {
 		UpdateContext: resourceTemplateUpdate,
 		DeleteContext: resourceTemplateDelete,
 
+		Importer: &schema.ResourceImporter{
+			StateContext: paramOrTemplateImportHelper,
+		},
+
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Description: "The name of the CloudTruth Template",
@@ -40,7 +44,7 @@ func resourceTemplate() *schema.Resource {
 			"project": {
 				Description: "The CloudTruth project where the Template is defined",
 				Type:        schema.TypeString,
-				Optional:    true,
+				Optional:    true, // But must be set via this property or the CLOUDTRUTH_PROJECT env variable
 			},
 		},
 	}
@@ -93,7 +97,7 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 	project := d.Get("project").(string)
 	projID, err := c.lookupProject(ctx, project)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceTemplateRead: %w", err))
+		return diag.FromErr(err)
 	}
 	templateName := d.Get("name").(string)
 	templateID := d.Id()

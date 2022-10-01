@@ -29,4 +29,11 @@ A CloudTruth Template.
 
 - `id` (String) The ID of this resource.
 
+## Import
 
+Import is supported using the following syntax:
+
+```shell
+terraform init
+terraform import cloudtruth_template.example PROJECT_NAME.TEMPLATE_ID
+```

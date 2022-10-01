@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"regexp"
 	"strconv"
 	"testing"
@@ -178,17 +177,10 @@ func TestAccResourceParameterBasic(t *testing.T) {
 				ResourceName:      fullResourceName,
 				ImportState:       true,
 				ImportStateVerify: true,
-				ImportStateIdFunc: paramStateIDFunc(fullResourceName, accTestProject),
+				ImportStateIdFunc: paramOrTemplateStateIDFunc(fullResourceName, accTestProject),
 			},
 		},
 	})
-}
-
-func paramStateIDFunc(resourceName, projectName string) resource.ImportStateIdFunc {
-	return func(s *terraform.State) (string, error) {
-		paramID := s.RootModule().Resources[resourceName].Primary.ID
-		return fmt.Sprintf("%s.%s", projectName, paramID), nil
-	}
 }
 
 func TestAccResourceParameterWithBadRules(t *testing.T) {

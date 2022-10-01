@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
-	"strings"
 )
 
 var intAndStringRuleTypes = []string{"min", "max"}
@@ -25,7 +24,7 @@ func resourceParameter() *schema.Resource {
 		DeleteContext: resourceParameterDelete,
 
 		Importer: &schema.ResourceImporter{
-			StateContext: paramImportHelper,
+			StateContext: paramOrTemplateImportHelper,
 		},
 
 		Schema: map[string]*schema.Schema{
@@ -206,50 +205,6 @@ func paramCreateConfig(d *schema.ResourceData, paramType string) *cloudtruthapi.
 	isSecret := d.Get("secret").(bool)
 	paramCreate.SetSecret(isSecret)
 	return paramCreate
-}
-
-func parseParamProjectAndID(ctx context.Context, c *cloudTruthClient, projParamID string) (*string, *string, error) {
-	tflog.Debug(ctx, "entering parseParamProjectAndID")
-	defer tflog.Debug(ctx, "exiting parseParamProjectAndID")
-
-	projDotParam := strings.Split(projParamID, ".")
-	if len(projDotParam) != 2 {
-		return nil, nil, fmt.Errorf("invalid import ID format: %s, you must use the formt 'PROJECT_NAME_OR_ID.PARAMETER_ID'", projParamID)
-	}
-	projName, paramID := projDotParam[0], projDotParam[1]
-	projID, err := c.lookupProject(ctx, projName)
-	if err != nil {
-		return nil, nil, err
-	}
-	return projID, &paramID, nil
-}
-
-/*
-We cannot import a Parameter solely by ID, the project must also be specified, therefore we must define
-this function instead of using schema.ImportStatePassthroughContext
-We support this in the following formats:
-PROJECT_NAME.PARAMETER_ID
-*/
-func paramImportHelper(ctx context.Context, d *schema.ResourceData, meta any) ([]*schema.ResourceData, error) {
-	tflog.Debug(ctx, "entering paramImportHelper")
-	defer tflog.Debug(ctx, "exiting paramImportHelper")
-	c := meta.(*cloudTruthClient)
-
-	projID, paramID, err := parseParamProjectAndID(ctx, c, d.Id())
-	if err != nil {
-		return nil, err
-	}
-	projName, err := c.lookupProject(ctx, *projID) // We have the project ID, look up its name
-	if err != nil {
-		return nil, err
-	}
-	err = d.Set("project", *projName)
-	if err != nil {
-		return nil, err
-	}
-	d.SetId(*paramID)
-
-	return []*schema.ResourceData{d}, nil
 }
 
 func setParameterReadProps(param *cloudtruthapi.Parameter, d *schema.ResourceData) error {
