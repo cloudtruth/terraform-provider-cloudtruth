@@ -1,0 +1,2 @@
+terraform init
+terraform import cloudtruth_tag.example ENVIRONMENT_NAME.TAG_ID

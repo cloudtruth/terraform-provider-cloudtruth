@@ -228,7 +228,7 @@ func updateTypeRules(ctx context.Context, paramID, typeName string, d *schema.Re
 	baseParamType := getBaseParamType(ctx, paramType, c)
 	rules := intAndStringRuleTypes
 	if baseParamType == "string" { // regex types are valid with string types but not int types
-		rules = append(rules, stringRuletypes...)
+		rules = append(rules, stringRuleTypes...)
 	}
 	var updatedRules []string
 	for _, rule := range rules {

@@ -14,6 +14,7 @@ func TestAccResourceTagBasic(t *testing.T) {
 	createTagName := fmt.Sprintf("Test-%s", uuid.New().String())
 	timestamp := "2022-07-03T22:01:24Z"
 	updateTimestamp := "2022-07-03T22:02:24Z"
+	resourceName := "cloudtruth_tag.basic"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -21,17 +22,23 @@ func TestAccResourceTagBasic(t *testing.T) {
 			{
 				Config: testAccResourceTagCreateBasic(createTagName, tagDesc, timestamp),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_tag.basic", "name", createTagName),
-					resource.TestCheckResourceAttr("cloudtruth_tag.basic", "description", tagDesc),
-					resource.TestCheckResourceAttr("cloudtruth_tag.basic", "timestamp", timestamp),
+					resource.TestCheckResourceAttr(resourceName, "name", createTagName),
+					resource.TestCheckResourceAttr(resourceName, "description", tagDesc),
+					resource.TestCheckResourceAttr(resourceName, "timestamp", timestamp),
 				),
+			},
+			{
+				ResourceName:      resourceName,
+				ImportState:       true,
+				ImportStateVerify: true,
+				ImportStateIdFunc: tagStateIDFunc(resourceName, defaultEnv),
 			},
 			{
 				Config: testAccResourceTagUpdateBasic(createTagName, updateTagDesc, updateTimestamp),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("cloudtruth_tag.basic", "name", createTagName),
-					resource.TestCheckResourceAttr("cloudtruth_tag.basic", "description", updateTagDesc),
-					resource.TestCheckResourceAttr("cloudtruth_tag.basic", "timestamp", updateTimestamp),
+					resource.TestCheckResourceAttr(resourceName, "name", createTagName),
+					resource.TestCheckResourceAttr(resourceName, "description", updateTagDesc),
+					resource.TestCheckResourceAttr(resourceName, "timestamp", updateTimestamp),
 				),
 			},
 		},

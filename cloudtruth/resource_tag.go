@@ -9,8 +9,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/nav-inc/datetime"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -22,6 +24,10 @@ func resourceTag() *schema.Resource {
 		ReadContext:   resourceTagRead,
 		UpdateContext: resourceTagUpdate,
 		DeleteContext: resourceTagDelete,
+
+		Importer: &schema.ResourceImporter{
+			StateContext: tagImportHelper,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -92,6 +98,51 @@ func resourceTagCreate(ctx context.Context, d *schema.ResourceData, meta any) di
 	tagID = tagCreateResp.GetId()
 	d.SetId(tagID)
 	return nil
+}
+
+func tagStateIDFunc(resourceName, envName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		tagID := s.RootModule().Resources[resourceName].Primary.ID
+		return fmt.Sprintf("%s.%s", envName, tagID), nil
+	}
+}
+
+func parseEnvAndID(ctx context.Context, c *cloudTruthClient, envTagID string) (*string, *string, error) {
+	tflog.Debug(ctx, "entering parseEnvAndID")
+	defer tflog.Debug(ctx, "exiting parseEnvAndID")
+
+	envDotTag := strings.Split(envTagID, ".")
+	if len(envDotTag) != 2 {
+		return nil, nil, fmt.Errorf("invalid import ID format: %s, you must use the format 'ENVIRONMENT_NAME.TAG_ID'", envTagID)
+	}
+	envName, tagID := envDotTag[0], envDotTag[1]
+	envID, err := c.lookupEnvironment(ctx, envName)
+	if err != nil {
+		return nil, nil, err
+	}
+	return envID, &tagID, nil
+}
+
+func tagImportHelper(ctx context.Context, d *schema.ResourceData, meta any) ([]*schema.ResourceData, error) {
+	tflog.Debug(ctx, "entering tagImportHelper")
+	defer tflog.Debug(ctx, "exiting tagImportHelper")
+	c := meta.(*cloudTruthClient)
+
+	envID, tagID, err := parseEnvAndID(ctx, c, d.Id())
+	if err != nil {
+		return nil, err
+	}
+	envName, err := c.lookupEnvironment(ctx, *envID) // We have the environment ID, look up its name
+	if err != nil {
+		return nil, err
+	}
+	err = d.Set("environment", *envName)
+	if err != nil {
+		return nil, err
+	}
+	d.SetId(*tagID)
+
+	return []*schema.ResourceData{d}, nil
 }
 
 func resourceTagRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {

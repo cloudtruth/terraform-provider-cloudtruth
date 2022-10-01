@@ -12,7 +12,7 @@ import (
 )
 
 var intAndStringRuleTypes = []string{"min", "max"}
-var stringRuletypes = []string{"regex"}
+var stringRuleTypes = []string{"regex"}
 
 func resourceParameter() *schema.Resource {
 	return &schema.Resource{
@@ -282,7 +282,7 @@ func updateParameterRules(ctx context.Context, paramID, projID string, paramType
 	baseParamType := getBaseParamType(ctx, paramType, c)
 	rules := intAndStringRuleTypes
 	if baseParamType == "string" {
-		rules = append(rules, stringRuletypes...)
+		rules = append(rules, stringRuleTypes...)
 	}
 	var updatedRules []string
 	for _, rule := range rules {

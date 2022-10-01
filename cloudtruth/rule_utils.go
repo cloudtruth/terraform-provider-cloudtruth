@@ -34,7 +34,7 @@ func validateAndFetchRules(ctx context.Context, c *cloudTruthClient, d *schema.R
 	if baseParamTypeName == "boolean" {
 		return nil, fmt.Errorf("the base type 'boolean' does not support rules")
 	}
-	for _, r := range append(intAndStringRuleTypes, stringRuletypes...) {
+	for _, r := range append(intAndStringRuleTypes, stringRuleTypes...) {
 		if val, ok := d.GetOk(r); ok {
 			if baseParamTypeName == "integer" && r == "regex" {
 				return nil, fmt.Errorf("the base type '%s' does not support the %s rule type", baseParamTypeName, r)

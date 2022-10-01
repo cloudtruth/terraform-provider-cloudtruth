@@ -17,15 +17,16 @@ func paramOrTemplateStateIDFunc(resourceName, projectName string) resource.Impor
 	}
 }
 
-func parseProjectAndID(ctx context.Context, c *cloudTruthClient, projParamID string) (*string, *string, error) {
+func parseProjectAndID(ctx context.Context, c *cloudTruthClient, projParamOrTemplateID string) (*string, *string, error) {
 	tflog.Debug(ctx, "entering parseProjectAndID")
 	defer tflog.Debug(ctx, "exiting parseProjectAndID")
 
-	projDotParam := strings.Split(projParamID, ".")
-	if len(projDotParam) != 2 {
-		return nil, nil, fmt.Errorf("invalid import ID format: %s, you must use the format 'PROJECT_NAME.PARAMETER_ID' or 'PROJECT_NAME.TEMPLATE_ID'", projParamID)
+	projDotParamTemplate := strings.Split(projParamOrTemplateID, ".")
+	if len(projDotParamTemplate) != 2 {
+		return nil, nil, fmt.Errorf("invalid import ID format: %s, you must use the format 'PROJECT_NAME.PARAMETER_ID' or 'PROJECT_NAME.TEMPLATE_ID'",
+			projParamOrTemplateID)
 	}
-	projName, paramOrTemplateID := projDotParam[0], projDotParam[1]
+	projName, paramOrTemplateID := projDotParamTemplate[0], projDotParamTemplate[1]
 	projID, err := c.lookupProject(ctx, projName)
 	if err != nil {
 		return nil, nil, err
