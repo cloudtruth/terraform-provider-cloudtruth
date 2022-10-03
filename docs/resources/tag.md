@@ -29,4 +29,11 @@ A CloudTruth Tag - unique per environment, defaulting to the 'default' environme
 
 - `id` (String) The ID of this resource.
 
+## Import
 
+Import is supported using the following syntax:
+
+```shell
+terraform init
+terraform import cloudtruth_tag.example ENVIRONMENT_NAME.TAG_ID
+```

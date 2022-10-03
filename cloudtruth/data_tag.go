@@ -57,14 +57,18 @@ func dataCloudTruthTagRead(ctx context.Context, d *schema.ResourceData, meta any
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	name := d.Get("name").(string)
+	tagID := d.Id()
+	nameOrID := d.Get("name").(string)
+	if nameOrID == "" {
+		nameOrID = d.Id()
+	}
 
-	var tagList *cloudtruthapi.PaginatedTagList
+	var tag *cloudtruthapi.Tag
 	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
 		var r *http.Response
-		tagList, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsList(ctx, *envID).Name(name).Execute()
+		tag, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsRetrieve(ctx, *envID, tagID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("dataCloudTruthTagRead: error reading tag %s", name), r, err)
+			return handleAPIError(fmt.Sprintf("dataCloudTruthTagRead: error reading tag %s", nameOrID), r, err)
 		}
 		return nil
 	})
@@ -72,23 +76,16 @@ func dataCloudTruthTagRead(ctx context.Context, d *schema.ResourceData, meta any
 		return diag.FromErr(retryError)
 	}
 
-	// There should only be one tag per environment
-	if tagList.GetCount() != 1 {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthTagRead: expected 1 value for tag %s, found %d instead",
-			name, tagList.GetCount()))
-	}
-	tag := tagList.GetResults()[0]
 	ts := tag.Timestamp.Format(time.RFC3339)
-	tagID := tag.GetId()
 	err = d.Set("timestamp", ts)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	err = d.Set("name", name)
+	err = d.Set("name", tag.GetName())
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	err = d.Set("description", d.Get("description").(string))
+	err = d.Set("description", tag.GetDescription())
 	if err != nil {
 		return diag.FromErr(err)
 	}
