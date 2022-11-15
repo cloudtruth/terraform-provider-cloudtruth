@@ -116,8 +116,8 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(retryError)
 	}
 	if paramListResp.GetCount() != 1 {
-		return diag.FromErr(fmt.Errorf("resourceParameterValueCreate: expected 1 value for parameter %s, found %d instead",
-			paramName, paramListResp.GetCount()))
+		return diag.FromErr(fmt.Errorf("resourceParameterValueCreate: failed to create the parameter value, could not find the parameter %s in project %s",
+			paramName, project))
 	}
 
 	var valueID string
