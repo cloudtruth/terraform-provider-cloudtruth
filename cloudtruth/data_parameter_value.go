@@ -102,8 +102,8 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 	}
 
 	if parameterList.GetCount() != 1 {
-		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: expected 1 parameter %s, found %d instead",
-			paramName, parameterList.GetCount()))
+		return diag.FromErr(fmt.Errorf("dataCloudTruthParameterValueRead: failed to read the parameter value, could not find the parameter %s in project %s",
+			paramName, project))
 	}
 	results := parameterList.GetResults()
 	param := results[0]
