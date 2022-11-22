@@ -72,7 +72,7 @@ func TestMissingDataSourceParameter(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccMissingParameter,
-				ExpectError: regexp.MustCompile("expected 1 parameter"),
+				ExpectError: regexp.MustCompile("could not find the parameter"),
 			},
 		},
 	})
