@@ -1,3 +1,7 @@
+## 0.5.1 (December 5, 2022)
+**ENHANCEMENTS**
+* Improved error message with parameter value operations which fail when the containing parameter cannot be found.
+
 ## 0.5.0 (September 13, 2022)
 **FEATURES**
 * Support for managing AWS and Azure push and import actions via the provider, see the new resource types: `cloudtruth_aws_import_action`, `cloudtruth_azure_import_action`, `cloudtruth_aws_push_action` and `cloudtruth_azure_push_action`.
