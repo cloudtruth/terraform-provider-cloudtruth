@@ -1,9 +1,9 @@
 ## 0.5.2 (February 10, 2023)
 **ENHANCEMENTS**
-* Upgraded from Go 1.18 -> 1.19
+* Upgraded from Go 1.19 -> 1.20
 
 **BUG FIXES**
-Fixed an issue with resources without a `project` property when no default project was specified.
+Fixed an issue with resources without a `project` property when no default project is specified.
 
 ## 0.5.1 (December 5, 2022)
 **ENHANCEMENTS**
