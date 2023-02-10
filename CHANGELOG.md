@@ -1,3 +1,10 @@
+## 0.5.2 (February 10, 2023)
+**ENHANCEMENTS**
+* Upgraded from Go 1.18 -> 1.19
+
+**BUG FIXES**
+Fixed an issue with resources without a `project` property when no default project was specified.
+
 ## 0.5.1 (December 5, 2022)
 **ENHANCEMENTS**
 * Improved error message with parameter value operations which fail when the containing parameter cannot be found.
