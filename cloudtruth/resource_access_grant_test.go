@@ -5,13 +5,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"math/rand"
 	"testing"
-	"time"
 )
 
 func TestAccResourceAccessGrantGroup(t *testing.T) {
-	rand.Seed(time.Now().UnixNano())
-	groupName := fmt.Sprintf("TestGroup-%d", rand.Intn(100000))
-	projName := fmt.Sprintf("TestProject-%d", rand.Intn(100000))
+	groupName := fmt.Sprintf("TestGroup-%d", randInt(100000))
+	projName := fmt.Sprintf("TestProject-%d", randInt(100000))
 	contribRole := "CONTRIB"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
@@ -30,7 +28,6 @@ func TestAccResourceAccessGrantGroup(t *testing.T) {
 }
 
 func TestAccResourceAccessGrantUser(t *testing.T) {
-	rand.Seed(time.Now().UnixNano())
 	envName := fmt.Sprintf("TestEnv-%d", rand.Intn(100000))
 	contribRole := "CONTRIB"
 	ownerRole := "OWNER"

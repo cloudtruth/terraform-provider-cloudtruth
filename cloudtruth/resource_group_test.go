@@ -3,9 +3,7 @@ package cloudtruth
 import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"math/rand"
 	"testing"
-	"time"
 )
 
 const groupDesc = "Just a description of a group"
@@ -18,8 +16,7 @@ const groupTestUser1 = "matt@cloudtruth.com"
 const groupTestUser2 = "matthewcummings516@gmail.com"
 
 func TestAccResourceGroupBasic(t *testing.T) {
-	rand.Seed(time.Now().UnixNano())
-	groupName := fmt.Sprintf("TestGroup-%d", rand.Intn(100000))
+	groupName := fmt.Sprintf("TestGroup-%d", randInt(100000))
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -43,8 +40,7 @@ func TestAccResourceGroupBasic(t *testing.T) {
 }
 
 func TestAccResourceGroupWithUser(t *testing.T) {
-	rand.Seed(time.Now().UnixNano())
-	groupName := fmt.Sprintf("TestGroup-%d", rand.Intn(100000))
+	groupName := fmt.Sprintf("TestGroup-%d", randInt(100000))
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -78,8 +74,7 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 }
 
 func TestAccResourceGroupWithUsers(t *testing.T) {
-	rand.Seed(time.Now().UnixNano())
-	groupName := fmt.Sprintf("TestGroup-%d", rand.Intn(100000))
+	groupName := fmt.Sprintf("TestGroup-%d", randInt(100000))
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },

@@ -17,7 +17,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
-        go-version: '1.19'
+        go-version: '1.20'
       id: go
 
     - name: Check out code into the Go module directory
@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/setup-go@v3
         with:
-          go-version: '1.19'
+          go-version: '1.20'
       - uses: actions/checkout@v3
       - run: go generate ./...
       - name: git diff
@@ -71,7 +71,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
-        go-version: '1.19'
+        go-version: '1.20'
       id: go
 
     - uses: hashicorp/setup-terraform@v2
@@ -97,3 +97,16 @@ jobs:
         CLOUDTRUTH_ENVIRONMENT: default
       run: |
         go test -timeout 60m -v -cover ./cloudtruth
+
+    - name: TF acceptance tests
+      timeout-minutes: 60
+      env:
+        TF_ACC: "1"
+        #TF_LOG: debug
+        TF_VAR_cloudtruth_api_key: ${{ secrets.ACCEPTANCE_TEST_TOKEN }}
+        CLOUDTRUTH_API_KEY: ${{ secrets.ACCEPTANCE_TEST_TOKEN }} # for tests without provider defs
+        # Run the tests with no default project
+        # CLOUDTRUTH_PROJECT: AcceptanceTest
+        CLOUDTRUTH_ENVIRONMENT: default
+      run: |
+        go test -timeout 60m -v -cover ./cloudtruth/*action_test.go
