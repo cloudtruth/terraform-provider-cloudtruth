@@ -89,7 +89,7 @@ func getProjectURLs(ctx context.Context, c *cloudTruthClient, rawProjects []inte
 	tflog.Debug(ctx, "entering getProjectURLs")
 	defer tflog.Debug(ctx, "exiting getProjectURLs")
 	projects := make([]string, len(rawProjects))
-	for i, v := range projects {
+	for i, v := range rawProjects {
 		projID, err := c.lookupProject(ctx, fmt.Sprint(v))
 		if err != nil {
 			return nil, err

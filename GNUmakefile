@@ -37,6 +37,7 @@ vet:
 fmt:
 	gofmt -w $(GOFMT_FILES)
 
+
 fmtcheck:
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
 

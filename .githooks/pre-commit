@@ -52,7 +52,7 @@ make fmt
 # Make sure all .tf files are formatted
 terraform fmt -recursive
 
-# Run the Go linter
+# Go linting
 golangci-lint run
 
 

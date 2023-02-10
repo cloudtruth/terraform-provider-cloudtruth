@@ -163,8 +163,8 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 		tflog.Debug(ctx, "loadProjectNameCache: fetching project names")
 		retryCount := 0
 		var apiError error
-		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
-		// not client initialization so we employ a simple retry loop instead
+		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events.
+		// Therefore, we employ a simple retry loop here instead.
 		for retryCount < loadCacheRetries {
 			projectList, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Execute()
 			if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
