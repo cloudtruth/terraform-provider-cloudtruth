@@ -146,7 +146,7 @@ func TestAccAsOfDataSourceParameterValues(t *testing.T) {
 			{
 				// Use a date when the parameters did not exist
 				Config:      fmt.Sprintf(testAccParametersAsOf, accTestProject, "default", "2000-01-01T00:00:00"),
-				ExpectError: regexp.MustCompile("404 client error.*No HistoricalProject matches the given query"),
+				ExpectError: regexp.MustCompile("404 client error.*No ProjectLedger matches the given query"),
 			},
 			{
 				// And a date when the parameters definitely do exist, for simplicity we use time.Now
