@@ -154,8 +154,8 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 }
 
 func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID, baseParamType, ruleName string, ruleVal any) (*string, error) {
-	tflog.Debug(ctx, "entering addRuleToType")
-	defer tflog.Debug(ctx, "exiting addRuleToType")
+	tflog.Debug(ctx, "entering addRuleToParam")
+	defer tflog.Debug(ctx, "exiting addRuleToParam")
 	retryCount := 0
 	var apiError error
 	var createTypeRule cloudtruthapi.ParameterRuleCreate
@@ -176,7 +176,7 @@ func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID
 	for retryCount < ruleOperationRetries {
 		paramRule, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRulesCreate(ctx, paramID, projectID).ParameterRuleCreate(createTypeRule).Execute()
 		if r.StatusCode >= 500 {
-			tflog.Debug(ctx, fmt.Sprintf("addRuleToType: %s", err))
+			tflog.Debug(ctx, fmt.Sprintf("addRuleToParam: %s", err))
 			apiError = err
 			retryCount++
 		} else if r.StatusCode >= 400 {
