@@ -106,10 +106,8 @@ func TestDataSourceParameter(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					// regular parameter
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter_value.nonsecret_param", "value", regularParamVal),
-
 					// secret parameter
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter_value.secret_param", "value", secretParamVal),
-
 					// regular external parameter
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter_value.external_param", "value", regularExternalParamVal),
 				),
