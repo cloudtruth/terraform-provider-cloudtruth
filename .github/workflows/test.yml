@@ -98,6 +98,7 @@ jobs:
         CLOUDTRUTH_DOMAIN: api.staging.cloudtruth.io
       run: |
         go test -timeout 60m -v -cover ./cloudtruth
+      continue-on-error: true # We want to run prod tests even if staging tests fail
 
     - name: TF acceptance tests (prod backend)
       timeout-minutes: 60
