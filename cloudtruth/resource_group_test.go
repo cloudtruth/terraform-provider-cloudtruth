@@ -12,7 +12,7 @@ const updateGroupDesc = "A new description of a group"
 // Use internal accounts since they guaranteed to exist
 // Need to document/support a way for external contributors to
 // specify their own users
-const groupTestUser1 = "matt@cloudtruth.com"
+const groupTestUser1 = "matt.cummings@cloudtruth.com"
 const groupTestUser2 = "matthewcummings516@gmail.com"
 
 func TestAccResourceGroupBasic(t *testing.T) {

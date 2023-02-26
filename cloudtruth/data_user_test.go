@@ -31,8 +31,8 @@ data "cloudtruth_users" "%s" {
 }
 
 var testUser1 = user{
-	name:     "Matthew Conway",
-	email:    "matt@cloudtruth.com",
+	name:     "Matt Cummings",
+	email:    "matt.cummings@cloudtruth.com",
 	role:     "OWNER",
 	userType: "interactive",
 }
