@@ -23,6 +23,7 @@ func TestAccResourceAWSPushActionInvalid(t *testing.T) {
 					false, false, true, true, true, true, true,
 					createRegion, createService, createPushPattern),
 				ExpectError: regexp.MustCompile("one of `include_parameters` or `include_secrets` must be true"),
+				SkipFunc:    isRunningInStaging,
 			},
 		},
 	})
@@ -54,6 +55,7 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "force", fmt.Sprint(true)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "local", fmt.Sprint(true)),
 				),
+				SkipFunc: isRunningInStaging,
 			}, {
 				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationName, genericDesc,
 					false, true, false, false, false, false, false,
@@ -70,6 +72,7 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "force", fmt.Sprint(false)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "local", fmt.Sprint(false)),
 				),
+				SkipFunc: isRunningInStaging,
 			},
 		},
 	})

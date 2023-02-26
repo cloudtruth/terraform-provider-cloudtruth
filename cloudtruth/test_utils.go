@@ -5,6 +5,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"math/rand"
+	"os"
 	"time"
 )
 
@@ -43,6 +44,7 @@ const (
 	epochTimeTagTimestamp       = "1970-01-01T05:00:00Z"
 	ciServiceAccountName        = "ACCEPTANCE_TEST_TOKEN" // used in tests and CI
 	ciServiceAccountRole        = "ADMIN"
+	stagingDomain               = "api.staging.cloudtruth.io"
 )
 
 // Utility function to use with data sources and resources that are maps
@@ -77,4 +79,10 @@ func randInt(limit int) int {
 	source := rand.NewSource(seed)
 	r := rand.New(source)
 	return r.Intn(limit)
+}
+
+// Used to skip some tests in staging
+func isRunningInStaging() (bool, error) {
+	domain := os.Getenv("CLOUDTRUTH_DOMAIN")
+	return domain == stagingDomain, nil
 }

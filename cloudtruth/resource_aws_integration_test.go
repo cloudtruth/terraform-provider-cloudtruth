@@ -26,6 +26,7 @@ func TestAccResourceAWSIntegrationBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_integration.%s", resourceName), "kms_key_id", kmsKeyID),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_integration.%s", resourceName), "writable", fmt.Sprint(true)),
 				),
+				SkipFunc: isRunningInStaging,
 			},
 			{
 				Config: testAccResourceAWSIntegrationBasic(resourceName, updateAccountID, updateRole, updateKMSKeyID, false),
@@ -35,6 +36,7 @@ func TestAccResourceAWSIntegrationBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_integration.%s", resourceName), "kms_key_id", updateKMSKeyID),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_integration.%s", resourceName), "writable", fmt.Sprint(false)),
 				),
+				SkipFunc: isRunningInStaging,
 			},
 		},
 	})

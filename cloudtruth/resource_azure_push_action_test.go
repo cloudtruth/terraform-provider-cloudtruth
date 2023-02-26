@@ -20,6 +20,7 @@ func TestAccResourceAzurePushActionInvalid(t *testing.T) {
 				Config: testAccResourceAzurePushActionBasic(resourceName, pushActionName, accTestAzureIntegrationName, genericDesc,
 					false, false, true, true, true, true, true, createPushPattern),
 				ExpectError: regexp.MustCompile("one of `include_parameters` or `include_secrets` must be true"),
+				SkipFunc:    isRunningInStaging,
 			},
 		},
 	})
@@ -46,6 +47,7 @@ func TestAccResourceAzurePushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_azure_push_action.%s", resourceName), "force", fmt.Sprint(true)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_azure_push_action.%s", resourceName), "local", fmt.Sprint(true)),
 				),
+				SkipFunc: isRunningInStaging,
 			}, {
 				Config: testAccResourceAzurePushActionBasic(resourceName, pushActionName, accTestAzureIntegrationName, genericDesc,
 					false, true, true, false, false, false, false, updatePushPattern),
@@ -60,6 +62,7 @@ func TestAccResourceAzurePushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_azure_push_action.%s", resourceName), "force", fmt.Sprint(false)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_azure_push_action.%s", resourceName), "local", fmt.Sprint(false)),
 				),
+				SkipFunc: isRunningInStaging,
 			},
 		},
 	})
