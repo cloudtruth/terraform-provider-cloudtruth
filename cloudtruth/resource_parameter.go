@@ -50,7 +50,7 @@ func resourceParameter() *schema.Resource {
 				Default:     false,
 			},
 			"type": {
-				Description: "The parameter type, can be a builtin (string|int|boolean) or another custom type",
+				Description: "The parameter type, can be a builtin (string|int|boolean) or another custom type, defaults to string",
 				Type:        schema.TypeString,
 				Optional:    true, // Optional except when one or more rules are specified
 				Default:     "string",

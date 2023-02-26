@@ -30,12 +30,12 @@ func resourceParameterValue() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"project": {
-				Description: "The CloudTruth project where the Parameter Value is defined",
+				Description: "The name of the CloudTruth project where the Parameter Value is defined",
 				Type:        schema.TypeString,
 				Optional:    true, // But must be set via this property or the CLOUDTRUTH_PROJECT env variable
 			},
 			"environment": {
-				Description: "The CloudTruth environment where the Parameter Value will be added. Defaults to the 'default' environment",
+				Description: "The name of the CloudTruth environment where the Parameter Value will be added. Defaults to the 'default' environment",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "default",

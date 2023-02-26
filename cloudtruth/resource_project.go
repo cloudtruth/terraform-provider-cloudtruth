@@ -37,7 +37,7 @@ func resourceProject() *schema.Resource {
 				Default:     "",
 			},
 			"parent": {
-				Description: "The Parent CloudTruth project",
+				Description: "The parent CloudTruth project, defaults to no parent i.e. a top level project",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "",

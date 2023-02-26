@@ -38,27 +38,27 @@ non-owner grant(s) the owner grant is created before the non-owner grant(s) is c
 				Required: true,
 			},
 			"environment": {
-				Description: "The target environment to which the role will provide access, mutually exclusive with 'project'",
+				Description: "The name of the environment where the role provides access, mutually exclusive with 'project'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"project": {
-				Description: "The target project to which the role will provide access, mutually exclusive with 'environment'",
+				Description: "The name of the project where the role provides access, mutually exclusive with 'environment'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"user": {
-				Description: "The display name or email of the user who will be granted the role, mutually exclusive with 'group'.",
+				Description: "The display name or email of the user who is granted the role, mutually exclusive with 'group'.",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"group": {
-				Description: "The group which will be granted the role, mutually exclusive with 'user'",
+				Description: "The group which is granted the role, mutually exclusive with 'user'",
 				Type:        schema.TypeString,
 				Optional:    true,
 			},
 			"principal_id": {
-				Description: "The internal ID of the user or group granted the role",
+				Description: "The internal ID of the user or group which is granted the role",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
