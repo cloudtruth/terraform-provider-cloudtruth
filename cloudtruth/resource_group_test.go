@@ -2,6 +2,7 @@ package cloudtruth
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"testing"
 )
@@ -16,7 +17,7 @@ const groupTestUser1 = "matt.cummings@cloudtruth.com"
 const groupTestUser2 = "matthewcummings516@gmail.com"
 
 func TestAccResourceGroupBasic(t *testing.T) {
-	groupName := fmt.Sprintf("TestGroup-%d", randInt(100000))
+	groupName := fmt.Sprintf("TestGroup-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -40,7 +41,7 @@ func TestAccResourceGroupBasic(t *testing.T) {
 }
 
 func TestAccResourceGroupWithUser(t *testing.T) {
-	groupName := fmt.Sprintf("TestGroup-%d", randInt(100000))
+	groupName := fmt.Sprintf("TestGroup-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -74,7 +75,7 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 }
 
 func TestAccResourceGroupWithUsers(t *testing.T) {
-	groupName := fmt.Sprintf("TestGroup-%d", randInt(100000))
+	groupName := fmt.Sprintf("TestGroup-%s", uuid.New().String())
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },

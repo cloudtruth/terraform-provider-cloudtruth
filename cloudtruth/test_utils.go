@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-	"math/rand"
 	"os"
-	"time"
 )
 
 // For the sake of isolation and bootstrapping
@@ -69,16 +67,6 @@ func testAccCheckDataSourceValueMap(resourceName string, expMap map[string]inter
 		}
 		return nil
 	}
-}
-
-// Basic random number generator based off of the current Epoch Time, the motivation for this
-// was rand.Seed being deprecated in Go 1.20 and causing build/CI failures
-func randInt(limit int) int {
-	now := time.Now()
-	var seed int64 = now.Unix()
-	source := rand.NewSource(seed)
-	r := rand.New(source)
-	return r.Intn(limit)
 }
 
 // Used to skip some tests in staging

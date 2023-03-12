@@ -2,14 +2,15 @@ package cloudtruth
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"math/rand"
 	"testing"
 )
 
 func TestAccResourceAccessGrantGroup(t *testing.T) {
-	groupName := fmt.Sprintf("TestGroup-%d", randInt(100000))
-	projName := fmt.Sprintf("TestProject-%d", randInt(100000))
+	groupName := fmt.Sprintf("TestGroup-%s", uuid.New().String())
+	projName := fmt.Sprintf("TestProject-%s", uuid.New().String())
 	contribRole := "CONTRIB"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
