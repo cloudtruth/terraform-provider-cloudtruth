@@ -9,8 +9,8 @@ import (
 
 const templateDesc = "Just a description of a template"
 const updateTemplateDesc = "A new description of a template"
-const templateValue = "some_var={{ProdOnlyRegularParam}}"
-const updateTemplateValue = "some_other_var={{ProdOnlyRegularParam}}"
+const templateValue = "some_var={{DefaultRegularParam}}"
+const updateTemplateValue = "some_other_var={{DefaultRegularParam}}"
 
 func TestAccResourceTemplateBasic(t *testing.T) {
 	createTemplateName := fmt.Sprintf("TestTemplate-%s", uuid.New().String())
