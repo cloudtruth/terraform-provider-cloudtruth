@@ -22,7 +22,7 @@ A CloudTruth project.
 ### Optional
 
 - `description` (String) Description of the project
-- `parent` (String) The Parent CloudTruth project
+- `parent` (String) The parent CloudTruth project, defaults to no parent i.e. a top level project
 
 ### Read-Only
 

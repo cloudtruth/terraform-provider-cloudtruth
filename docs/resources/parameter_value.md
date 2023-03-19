@@ -22,11 +22,11 @@ A CloudTruth Parameter and environment specific value (defaulting to the 'defaul
 ### Optional
 
 - `dynamic` (Boolean) Whether or not to evaluate/interpolate the Parameter's value (incompatible with secret parameters)
-- `environment` (String) The CloudTruth environment where the Parameter Value will be added. Defaults to the 'default' environment
+- `environment` (String) The name of the CloudTruth environment where the Parameter Value will be added. Defaults to the 'default' environment
 - `external` (Boolean) Whether or not the value is external, defaults to false
 - `filter` (String) An optional filter (path/query), optional and used only with external parameters
 - `location` (String) The location (path/uri) of the secret value, required for external parameters
-- `project` (String) The CloudTruth project where the Parameter Value is defined
+- `project` (String) The name of the CloudTruth project where the Parameter Value is defined
 - `value` (String) The value of the CloudTruth Parameter, specific to an environment (can be overridden/inherited relative to other environments)
 
 ### Read-Only

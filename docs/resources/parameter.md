@@ -28,10 +28,10 @@ the empty string value for that purpose.
 - `min` (String) A rule constraint: the minimum value for integer types, the minimum length for string types.
 This value is specified as a string because we need a reliable way to distinguish between default/zero values and unset values.  We use
 the empty string value for that purpose.
-- `project` (String) The CloudTruth project where the Parameter is defined.
+- `project` (String) The CloudTruth project where the Parameter is defined
 - `regex` (String) A CloudTruth rule constraint: the regular expression a string type must match, only valid with string types
-- `secret` (Boolean) Whether or not the Parameter is a secret, defaults to false (non-secret).
-- `type` (String) The parameter type, can be a builtin (string|int|boolean) or another custom type, defaults to string.
+- `secret` (Boolean) Whether or not the Parameter is a secret, defaults to false (non-secret)
+- `type` (String) The parameter type, can be a builtin (string|int|boolean) or another custom type, defaults to string
 
 ### Read-Only
 

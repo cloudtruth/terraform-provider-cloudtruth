@@ -23,7 +23,7 @@ A CloudTruth Tag - unique per environment, defaulting to the 'default' environme
 ### Optional
 
 - `description` (String) Description of the CloudTruth Tag
-- `environment` (String) The CloudTruth environment where the Tag's value is defined. Defaults to the 'default' environment
+- `environment` (String) The name of the CloudTruth environment where the Tag's value is defined. Defaults to the 'default' environment
 
 ### Read-Only
 
