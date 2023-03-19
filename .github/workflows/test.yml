@@ -1,8 +1,6 @@
 name: Tests
 on:
   push:
-    paths-ignore:
-      - '**.md'
 
   # Run regular tests to confirm that no upstream API changes have broken the provider
   schedule:
