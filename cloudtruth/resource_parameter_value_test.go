@@ -55,16 +55,17 @@ func paramValueStateIDFunc(valueResourceName, paramResourceName, projectName, en
 
 func TestAccResourceParameterValueOverride(t *testing.T) {
 	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
+	overrideEnv := "production"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceParameterCreateValueOverride(createParamName, createParamName, prodParamVal),
+				Config: testAccResourceParameterCreateValueOverride(createParamName, overrideEnv, prodParamVal),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_parameter_value.prod_override", "parameter_name", createParamName),
 					resource.TestCheckResourceAttr("cloudtruth_parameter_value.prod_override", "value", prodParamVal),
-					resource.TestCheckResourceAttr("cloudtruth_parameter_value.prod_override", "environment", "production"),
+					resource.TestCheckResourceAttr("cloudtruth_parameter_value.prod_override", "environment", overrideEnv),
 				),
 			},
 		},
@@ -79,7 +80,7 @@ func TestAccResourceParameterValueExternal(t *testing.T) {
 		PreCheck:                  func() { testAccPreCheck(t) },
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceParameterValueCreateExternal(createParamName, paramDesc, createParamName, githubLocation, githubFilter),
+				Config: testAccResourceParameterValueCreateExternal(createParamName, paramDesc, githubLocation, githubFilter),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("cloudtruth_parameter_value.external", "parameter_name", createParamName),
 					resource.TestCheckResourceAttr("cloudtruth_parameter_value.external", "location", githubLocation),
@@ -90,7 +91,27 @@ func TestAccResourceParameterValueExternal(t *testing.T) {
 	})
 }
 
-func testAccResourceParameterCreate(paramName, resName, env, value string) string {
+/*
+	func TestAccResourceParameterValueChangeEnv(t *testing.T) {
+		createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
+		overrideEnv := "production"
+		resource.Test(t, resource.TestCase{
+			ProviderFactories: testProviderFactories,
+			PreCheck:          func() { testAccPreCheck(t) },
+			Steps: []resource.TestStep{
+				{
+					Config: testAccResourceParameterCreateValueOverride(createParamName, createParamName, overrideEnv, prodParamVal),
+					Check: resource.ComposeTestCheckFunc(
+						resource.TestCheckResourceAttr("cloudtruth_parameter_value.prod_override", "parameter_name", createParamName),
+						resource.TestCheckResourceAttr("cloudtruth_parameter_value.prod_override", "value", prodParamVal),
+						resource.TestCheckResourceAttr("cloudtruth_parameter_value.prod_override", "environment", overrideEnv),
+					),
+				},
+			},
+		})
+	}
+*/
+func testAccResourceParameterCreate(paramName, resName, envName, value string) string {
 	return fmt.Sprintf(`
         resource "cloudtruth_parameter" "%s" {
         		project     = "AcceptanceTest"
@@ -101,16 +122,13 @@ func testAccResourceParameterCreate(paramName, resName, env, value string) strin
         resource "cloudtruth_parameter_value" "%s" {
 				project        = "AcceptanceTest"
 				environment    = "%s"
-                parameter_name = "%s"
+                parameter_name = cloudtruth_parameter.%s.name
                 value          = "%s"
-                depends_on = [
-                      cloudtruth_parameter.%s
-                ]
         }
-	`, resName, paramName, resName, env, paramName, value, resName)
+	`, resName, paramName, resName, envName, resName, value)
 }
 
-func testAccResourceParameterCreateValueOverride(name, paramName, prodValue string) string {
+func testAccResourceParameterCreateValueOverride(name, envName, value string) string {
 	return fmt.Sprintf(`
         resource "cloudtruth_parameter" "basic" {
                 project     = "AcceptanceTest"
@@ -120,17 +138,14 @@ func testAccResourceParameterCreateValueOverride(name, paramName, prodValue stri
 
         resource "cloudtruth_parameter_value" "prod_override" {
                 project        = "AcceptanceTest"
-                environment    = "production"
-  		parameter_name = "%s"
+                environment    = "%s"
+  				parameter_name = cloudtruth_parameter.basic.name
                 value          = "%s"
-                depends_on = [
-                      cloudtruth_parameter.basic
-                ]
         }
-	`, name, paramName, prodValue)
+	`, name, envName, value)
 }
 
-func testAccResourceParameterValueCreateExternal(name, desc, paramName, location, filter string) string {
+func testAccResourceParameterValueCreateExternal(name, desc, location, filter string) string {
 	return fmt.Sprintf(`
         resource "cloudtruth_parameter" "external" {
                 project     = "AcceptanceTest"
@@ -139,14 +154,29 @@ func testAccResourceParameterValueCreateExternal(name, desc, paramName, location
         }
 
         resource "cloudtruth_parameter_value" "external" {
-	        project          = "AcceptanceTest"
-                parameter_name   = "%s"
+	        	project          = "AcceptanceTest"
+                parameter_name   = cloudtruth_parameter.external.name
                 external         = true
                 location         = "%s"
                 filter           = "%s"
-                depends_on = [
-                      cloudtruth_parameter.external
-                ]
         }
-	`, name, desc, paramName, location, filter)
+	`, name, desc, location, filter)
 }
+
+/*
+func testAccResourceParameterCreateValueEnvChange(paramName, envName, value string) string {
+	return fmt.Sprintf(`
+        resource "cloudtruth_parameter" "basic" {
+                project     = "AcceptanceTest"
+                name        = "%s"
+        }
+
+        resource "cloudtruth_parameter_value" "env_change" {
+                project        = "AcceptanceTest"
+                environment    = "%s"
+  				parameter_name = cloudtruth_parameter.basic.name
+                value          = "%s"
+        }
+	`, paramName, envName, value)
+}
+*/
