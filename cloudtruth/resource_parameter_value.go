@@ -257,12 +257,6 @@ func updateParameterValue(ctx context.Context, paramID, paramValueID, projID str
 	if d.HasChange("value") {
 		value := d.Get("value").(string)
 		updateValue.SetInternalValue(value)
-		paramEnv := d.Get("environment").(string)
-		envID, err := c.lookupEnvironment(ctx, paramEnv)
-		if err != nil {
-			return nil, err
-		}
-		updateValue.SetEnvironment(*envID)
 		hasParamValueChange = true
 	}
 	if d.HasChange("external") {
@@ -275,14 +269,50 @@ func updateParameterValue(ctx context.Context, paramID, paramValueID, projID str
 		updateValue.SetInterpolated(evalValue)
 		hasParamValueChange = true
 	}
-	var r *http.Response
-	var err error
-	if hasParamValueChange {
-		// No retry logic here, the caller handles that
-		_, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
-			projID).Value(*updateValue).Execute()
+
+	// Ignore all other changes - we are deleting the current value
+	// and replacing it in the target env
+	if d.HasChange("environment") {
+		// Check that the target env exists
+		environment := d.Get("environment").(string)
+		project := d.Get("project").(string)
+		envID, projID, err := c.lookupEnvProj(ctx, environment, project)
+		if err != nil {
+			return nil, err
+		}
+		// Create value in new env
+		// Need to handle changes to other properties at the same time!
+		// Maybe we automatically pick them up???
+		valueCreate, err := valueCreateConfig(*envID, d)
+		if err != nil {
+			return nil, err
+		}
+		var r *http.Response
+		var value *cloudtruthapi.Value
+		value, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx, paramID, *projID).
+			ValueCreate(*valueCreate).Execute()
 		if err != nil {
 			return r, err
+		}
+		// Update property ID
+		d.SetId(value.GetId())
+
+		// Delete the value in the old env, it's not orphaned in TF
+		r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(ctx, paramValueID,
+			paramID, *projID).Execute()
+		if err != nil {
+			return r, nil
+		}
+	} else {
+		var r *http.Response
+		var err error
+		if hasParamValueChange {
+			// No retry logic here, the caller handles that
+			_, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
+				projID).Value(*updateValue).Execute()
+			if err != nil {
+				return r, err
+			}
 		}
 	}
 	return nil, nil

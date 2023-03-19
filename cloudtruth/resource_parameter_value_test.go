@@ -22,7 +22,7 @@ func TestAccResourceParameterValueCreateUpdate(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(fullResourceName, "parameter_name", createParamName),
 					resource.TestCheckResourceAttr(fullResourceName, "value", stagingParamVal),
-					resource.TestCheckResourceAttr(fullResourceName, "environment", environment), resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "environment", environment),
+					resource.TestCheckResourceAttr(fullResourceName, "environment", environment),
 					resource.TestCheckResourceAttr(fullResourceName, "external", "false"),
 				),
 			},
@@ -31,7 +31,7 @@ func TestAccResourceParameterValueCreateUpdate(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(fullResourceName, "parameter_name", createParamName),
 					resource.TestCheckResourceAttr(fullResourceName, "value", stagingParamValUpdate),
-					resource.TestCheckResourceAttr(fullResourceName, "environment", environment), resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter_value.%s", resName), "environment", environment),
+					resource.TestCheckResourceAttr(fullResourceName, "environment", environment),
 					resource.TestCheckResourceAttr(fullResourceName, "external", "false"),
 				),
 			},
@@ -91,26 +91,45 @@ func TestAccResourceParameterValueExternal(t *testing.T) {
 	})
 }
 
-/*
-	func TestAccResourceParameterValueChangeEnv(t *testing.T) {
-		createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
-		overrideEnv := "production"
-		resource.Test(t, resource.TestCase{
-			ProviderFactories: testProviderFactories,
-			PreCheck:          func() { testAccPreCheck(t) },
-			Steps: []resource.TestStep{
-				{
-					Config: testAccResourceParameterCreateValueOverride(createParamName, createParamName, overrideEnv, prodParamVal),
-					Check: resource.ComposeTestCheckFunc(
-						resource.TestCheckResourceAttr("cloudtruth_parameter_value.prod_override", "parameter_name", createParamName),
-						resource.TestCheckResourceAttr("cloudtruth_parameter_value.prod_override", "value", prodParamVal),
-						resource.TestCheckResourceAttr("cloudtruth_parameter_value.prod_override", "environment", overrideEnv),
-					),
-				},
+func TestAccResourceParameterValueChangeEnv(t *testing.T) {
+	createParamName := fmt.Sprintf("Test-%s", uuid.New().String())
+	startEnv := "default"
+	updateEnv := "production"
+	paramVal := "some string"
+	resName := "update_env"
+	fullResourceName := fmt.Sprintf("cloudtruth_parameter_value.%s", resName)
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		PreCheck:          func() { testAccPreCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config: testAccResourceParameterCreate(createParamName, resName, startEnv, paramVal),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(fullResourceName, "parameter_name", createParamName),
+					resource.TestCheckResourceAttr(fullResourceName, "value", paramVal),
+					resource.TestCheckResourceAttr(fullResourceName, "environment", startEnv),
+				),
 			},
-		})
-	}
-*/
+			{
+				Config: testAccResourceParameterCreate(createParamName, resName, updateEnv, prodParamVal),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(fullResourceName, "parameter_name", createParamName),
+					resource.TestCheckResourceAttr(fullResourceName, "value", prodParamVal),
+					resource.TestCheckResourceAttr(fullResourceName, "environment", updateEnv),
+				),
+			},
+			{
+				Config: testAccResourceParameterCreate(createParamName, resName, updateEnv, paramVal),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(fullResourceName, "parameter_name", createParamName),
+					resource.TestCheckResourceAttr(fullResourceName, "value", paramVal),
+					resource.TestCheckResourceAttr(fullResourceName, "environment", updateEnv),
+				),
+			},
+		},
+	})
+}
+
 func testAccResourceParameterCreate(paramName, resName, envName, value string) string {
 	return fmt.Sprintf(`
         resource "cloudtruth_parameter" "%s" {
@@ -162,21 +181,3 @@ func testAccResourceParameterValueCreateExternal(name, desc, location, filter st
         }
 	`, name, desc, location, filter)
 }
-
-/*
-func testAccResourceParameterCreateValueEnvChange(paramName, envName, value string) string {
-	return fmt.Sprintf(`
-        resource "cloudtruth_parameter" "basic" {
-                project     = "AcceptanceTest"
-                name        = "%s"
-        }
-
-        resource "cloudtruth_parameter_value" "env_change" {
-                project        = "AcceptanceTest"
-                environment    = "%s"
-  				parameter_name = cloudtruth_parameter.basic.name
-                value          = "%s"
-        }
-	`, paramName, envName, value)
-}
-*/
