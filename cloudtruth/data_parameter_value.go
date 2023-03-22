@@ -6,7 +6,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/nav-inc/datetime"
 	"net/http"
@@ -88,7 +88,7 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 	}
 
 	var parameterList *cloudtruthapi.PaginatedParameterList
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		parameterList, r, err = filteredParamListRequest.Execute()
 		if err != nil {
@@ -196,7 +196,7 @@ func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceDa
 		filteredParamListRequest, err := parseParamListFilters(paramListRequest, d)
 
 		var parameterList *cloudtruthapi.PaginatedParameterList
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 			var r *http.Response
 			parameterList, r, err = filteredParamListRequest.Execute()
 			if err != nil {

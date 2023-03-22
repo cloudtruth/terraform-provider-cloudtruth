@@ -6,7 +6,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/nav-inc/datetime"
 	"net/http"
@@ -73,7 +73,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 		return diag.FromErr(err)
 	}
 	var templateList *cloudtruthapi.PaginatedTemplateList
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		templateList, r, err = filteredTemplateListRequest.Execute()
 		if err != nil {
@@ -116,11 +116,11 @@ func renderTemplateBody(ctx context.Context, name, body, projectID string, meta 
 	c := meta.(*cloudTruthClient)
 	templatePrevReq := cloudtruthapi.NewTemplatePreviewCreateRequest(body)
 	var previewBody string
-	retry := 0
+	retryCount := 0
 	var apiError error
 	// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
 	// so we employ a simple retry loop instead
-	for retry < loadCacheRetries {
+	for retryCount < loadCacheRetries {
 		previewCreate, r, err := c.openAPIClient.ProjectsApi.ProjectsTemplatePreviewCreate(ctx, projectID).
 			TemplatePreviewCreateRequest(*templatePrevReq).Execute()
 		if r.StatusCode >= 500 {
@@ -136,7 +136,7 @@ func renderTemplateBody(ctx context.Context, name, body, projectID string, meta 
 			apiError = nil
 			break
 		}
-		retry++
+		retryCount++
 	}
 	if apiError != nil {
 		return nil, fmt.Errorf("renderTemplateBody: %w", apiError)
@@ -201,7 +201,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 		filteredTemplateListRequest, err := parseTemplateListFilters(templateListRequest, d)
 
 		var templateList *cloudtruthapi.PaginatedTemplateList
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 			var r *http.Response
 			templateList, r, err = filteredTemplateListRequest.Execute()
 			if err != nil {

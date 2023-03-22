@@ -6,7 +6,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
 	"strings"
@@ -103,7 +103,7 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 	typeCreate.SetParent(concreteType.GetUrl())
 	var typeID string
 	var parameterType *cloudtruthapi.ParameterType
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		parameterType, r, err = c.openAPIClient.TypesApi.TypesCreate(ctx).ParameterTypeCreate(*typeCreate).Execute()
@@ -184,7 +184,7 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 	typeID := d.Id()
 
 	var parameterType *cloudtruthapi.ParameterType
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		parameterType, r, err = c.openAPIClient.TypesApi.TypesRetrieve(ctx, typeID).Execute()
@@ -347,7 +347,7 @@ func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) d
 
 	typeID := d.Id()
 	if hasChange {
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
 			_, r, err = c.openAPIClient.TypesApi.TypesPartialUpdate(ctx, typeID).PatchedParameterType(*patchedTypeUpdate).Execute()
@@ -363,7 +363,7 @@ func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) d
 
 	// Rule changes
 	if d.HasChange("max") || d.HasChange("min") || d.HasChange("regex") {
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 			r, err := updateTypeRules(ctx, typeID, typeName, d, c)
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceParameterUpdate: error updating rules for parameter %s", typeName), r, err)
@@ -384,7 +384,7 @@ func resourceTypeDelete(ctx context.Context, d *schema.ResourceData, meta any) d
 	typeName := d.Get("name").(string)
 	typeID := d.Id()
 
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		r, err = c.openAPIClient.TypesApi.TypesDestroy(ctx, typeID).Execute()

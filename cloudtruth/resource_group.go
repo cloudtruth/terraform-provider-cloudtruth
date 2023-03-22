@@ -6,7 +6,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
 )
@@ -80,7 +80,7 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 	groupCreate.SetUsers(userURIs)
 
 	var group *cloudtruthapi.Group
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		group, r, err = c.openAPIClient.GroupsApi.GroupsCreate(ctx).Group(*groupCreate).Execute()
@@ -109,7 +109,7 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	groupID := d.Id()
 
 	var group *cloudtruthapi.Group
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		group, r, err = c.openAPIClient.GroupsApi.GroupsRetrieve(ctx, groupID).Execute()
@@ -171,7 +171,7 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 		hasChange = true
 	}
 	if hasChange {
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
 			_, r, err = c.openAPIClient.GroupsApi.GroupsPartialUpdate(ctx, groupID).PatchedGroup(patchedGroup).Execute()
@@ -194,7 +194,7 @@ func resourceGroupDelete(ctx context.Context, d *schema.ResourceData, meta any) 
 	groupName := d.Get("name").(string)
 	groupID := d.Id()
 
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		r, err = c.openAPIClient.GroupsApi.GroupsDestroy(ctx, groupID).Execute()

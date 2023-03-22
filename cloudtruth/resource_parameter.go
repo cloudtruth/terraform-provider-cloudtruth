@@ -6,7 +6,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
 )
@@ -121,7 +121,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 
 	var paramID string
 	var parameter *cloudtruthapi.Parameter
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		paramCreate := paramCreateConfig(d, paramTypeName)
@@ -253,7 +253,7 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 
 	paramID := d.Id()
 	var param *cloudtruthapi.Parameter
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		param, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(ctx, paramID, *projID).Execute()
 		if err != nil {
@@ -431,7 +431,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	paramName, paramType := d.Get("name").(string), d.Get("type").(string)
 
 	// Top level property changes except for rules
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		r, err := updateParameter(ctx, d.Id(), *projID, d, c)
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterUpdate: error updating parameter level config for parameter %s", paramName), r, err)
@@ -443,7 +443,7 @@ func resourceParameterUpdate(ctx context.Context, d *schema.ResourceData, meta a
 	}
 
 	// Rule changes
-	retryError = resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError = retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		r, err := updateParameterRules(ctx, d.Id(), *projID, paramType, d, c)
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterUpdate: error updating rules for parameter %s", paramName), r, err)
@@ -467,7 +467,7 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	}
 	paramName := d.Get("name").(string)
 
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		r, err = c.openAPIClient.ProjectsApi.ProjectsParametersDestroy(ctx, d.Id(), *projID).Execute()

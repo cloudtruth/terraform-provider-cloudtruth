@@ -6,7 +6,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
 	"strings"
@@ -65,7 +65,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	}
 
 	var env *cloudtruthapi.Environment
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		env, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
@@ -109,7 +109,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	envID := d.Id()
 
 	var env *cloudtruthapi.Environment
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		env, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsRetrieve(ctx, envID).Execute()
@@ -163,7 +163,7 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta
 	}
 
 	if hasChange {
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
 			_, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsPartialUpdate(ctx,
@@ -188,7 +188,7 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 	envID := d.Id()
 	envName := d.Get("name").(string)
 
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsDestroy(ctx, envID).Execute()

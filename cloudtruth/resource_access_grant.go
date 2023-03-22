@@ -6,7 +6,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
 	"strings"
@@ -144,7 +144,7 @@ func resourceAccessGrantCreate(ctx context.Context, d *schema.ResourceData, meta
 	grantCreate.SetRole(*role)
 
 	var grant *cloudtruthapi.Grant
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		grant, r, err = c.openAPIClient.GrantsApi.GrantsCreate(ctx).Grant(*grantCreate).Execute()
@@ -181,7 +181,7 @@ func resourceAccessGrantRead(ctx context.Context, d *schema.ResourceData, meta a
 	grantID := d.Id()
 
 	var grant *cloudtruthapi.Grant
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		grant, r, err = c.openAPIClient.GrantsApi.GrantsRetrieve(ctx, grantID).Execute()
@@ -241,7 +241,7 @@ func resourceAccessGrantUpdate(ctx context.Context, d *schema.ResourceData, meta
 	}
 
 	if hasChange {
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
 			_, r, err = c.openAPIClient.GrantsApi.GrantsPartialUpdate(ctx, d.Id()).PatchedGrant(patchedGrant).Execute()
@@ -263,7 +263,7 @@ func resourceAccessGrantDelete(ctx context.Context, d *schema.ResourceData, meta
 	c := meta.(*cloudTruthClient)
 	grantID := d.Id()
 
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		r, err = c.openAPIClient.GrantsApi.GrantsDestroy(ctx, grantID).Execute()

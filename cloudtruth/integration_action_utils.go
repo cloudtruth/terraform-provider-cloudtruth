@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
 	"strings"
@@ -29,7 +29,7 @@ func lookupAWSIntegration(ctx context.Context, intName string, c *cloudTruthClie
 	nameSegments := strings.Split(intName, "@")
 	role, awsAccountID := nameSegments[0], nameSegments[1]
 	var integrations *cloudtruthapi.PaginatedAwsIntegrationList
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		integrations, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsList(ctx).AwsAccountId(awsAccountID).AwsRoleName(role).Execute()
@@ -37,7 +37,7 @@ func lookupAWSIntegration(ctx context.Context, intName string, c *cloudTruthClie
 			return handleAPIError(fmt.Sprintf("lookupAWSIntegration: error looking up AWS integration %s", intName), r, err)
 		}
 		if *integrations.Count != 1 {
-			return resource.NonRetryableError(fmt.Errorf("lookupAWSIntegration: unexpected number of AWS integrations found for %s", intName))
+			return retry.NonRetryableError(fmt.Errorf("lookupAWSIntegration: unexpected number of AWS integrations found for %s", intName))
 		}
 		return nil
 	})
@@ -66,7 +66,7 @@ func lookupAzureIntegration(ctx context.Context, intName string, c *cloudTruthCl
 	nameSegments := strings.Split(intName, "@")
 	vaultName, tenantID := nameSegments[0], nameSegments[1]
 	var integrations *cloudtruthapi.PaginatedAzureKeyVaultIntegrationList
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		integrations, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultList(ctx).VaultName(vaultName).TenantId(tenantID).Execute()
@@ -74,7 +74,7 @@ func lookupAzureIntegration(ctx context.Context, intName string, c *cloudTruthCl
 			return handleAPIError(fmt.Sprintf("lookupAzureIntegration: error looking up Azure integration %s", intName), r, err)
 		}
 		if *integrations.Count != 1 {
-			return resource.NonRetryableError(fmt.Errorf("lookupAzureIntegration: unexpected number of Azure integrations found for %s", intName))
+			return retry.NonRetryableError(fmt.Errorf("lookupAzureIntegration: unexpected number of Azure integrations found for %s", intName))
 		}
 		return nil
 	})
@@ -140,7 +140,7 @@ func lookupEnvTag(ctx context.Context, d *schema.ResourceData, c *cloudTruthClie
 	}
 
 	var tagList *cloudtruthapi.PaginatedTagList
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		tagList, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsList(ctx, *envID).Name(tagName).Execute()
 		if err != nil {

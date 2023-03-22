@@ -6,7 +6,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
 )
@@ -149,7 +149,7 @@ func resourceAzurePushActionCreate(ctx context.Context, d *schema.ResourceData, 
 	}
 
 	var azurePush *cloudtruthapi.AzureKeyVaultPush
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		azurePush, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPushesCreate(ctx, *azureIntegrationID).AzureKeyVaultPush(*pushActionCreate).Execute()
@@ -179,7 +179,7 @@ func resourceAzurePushActionRead(ctx context.Context, d *schema.ResourceData, me
 	pushActionID := d.Id()
 
 	var azurePush *cloudtruthapi.AzureKeyVaultPush
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		azurePush, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPushesRetrieve(ctx, azureIntegrationID, pushActionID).Execute()
@@ -300,7 +300,7 @@ func resourceAzurePushActionUpdate(ctx context.Context, d *schema.ResourceData, 
 	}
 
 	if hasChange {
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
 			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPushesPartialUpdate(ctx, azureIntegrationID,
@@ -326,7 +326,7 @@ func resourceAzurePushActionDelete(ctx context.Context, d *schema.ResourceData, 
 	pushActionID := d.Id()
 	azureIntegrationID := d.Get("integration_id").(string)
 
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPushesDestroy(ctx, azureIntegrationID, pushActionID).Execute()

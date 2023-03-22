@@ -6,7 +6,7 @@ import (
 	"github.com/cloudtruth/terraform-provider-cloudtruth/pkg/cloudtruthapi"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"net/http"
 )
@@ -112,7 +112,7 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 	importActionCreate.SetResource(resourcePath)
 
 	var awsPull *cloudtruthapi.AwsPull
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		awsPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsCreate(ctx, *awsIntegrationID).AwsPull(*importActionCreate).Execute()
@@ -176,7 +176,7 @@ func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, me
 	importActionID := d.Id()
 
 	var awsPull *cloudtruthapi.AwsPull
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		awsPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsRetrieve(ctx, awsIntegrationID, importActionID).Execute()
@@ -236,7 +236,7 @@ func resourceAWSImportActionUpdate(ctx context.Context, d *schema.ResourceData, 
 	}
 
 	if hasChange {
-		retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *resource.RetryError {
+		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
 			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsPartialUpdate(ctx, awsIntegrationID,
@@ -262,7 +262,7 @@ func resourceAWSImportActionDelete(ctx context.Context, d *schema.ResourceData, 
 	importActionID := d.Id()
 	awsIntegrationID := d.Get("integration_id").(string)
 
-	retryError := resource.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *resource.RetryError {
+	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
 		r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsDestroy(ctx, awsIntegrationID, importActionID).Execute()
