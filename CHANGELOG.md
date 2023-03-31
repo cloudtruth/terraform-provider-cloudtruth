@@ -1,3 +1,8 @@
+## 0.5.5 (March 31, 2023)
+**ENHANCEMENTS**
+* Updated the cloudtruth_parameter_value to handle changes to the environment property, which effectively removes a parameter
+value from the source environment and recreates it in the target environment.
+
 ## 0.5.2 (February 10, 2023)
 **ENHANCEMENTS**
 * Upgraded from Go 1.19 -> 1.20
