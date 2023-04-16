@@ -17,7 +17,7 @@ jobs:
       with:
         go-version: '1.20'
         check-latest: true
-        cache-dependency-path: ../go.sum # this action is looking one level too deep apparently
+        cache: false
       id: go
 
     - name: Check out code into the Go module directory
@@ -48,7 +48,7 @@ jobs:
         with:
           go-version: '1.20'
           check-latest: true
-          cache-dependency-path: ../go.sum # this action is looking one level too deep apparently
+          cache: false
       - uses: actions/checkout@v3
       - run: go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
       - name: git diff
@@ -74,6 +74,8 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version: '1.20'
+        check-latest: true
+        cache: false
       id: go
 
     - uses: hashicorp/setup-terraform@v2
