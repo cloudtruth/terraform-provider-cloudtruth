@@ -47,6 +47,8 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version: '1.20'
+          check-latest: true
+          cache-dependency-path: ../go.sum # this action is looking one level too deep apparently
       - uses: actions/checkout@v3
       - run: go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
       - name: git diff
