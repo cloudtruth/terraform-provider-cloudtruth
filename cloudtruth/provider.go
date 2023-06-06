@@ -38,8 +38,8 @@ func New(version string) func() *schema.Provider {
 				"port": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Default:     "",
-					Description: "The HTTP port, ignored if not set",
+					DefaultFunc: schema.EnvDefaultFunc(port, defaultPort),
+					Description: "The HTTP port, defaults to an empty string if not set",
 				},
 				"protocol": {
 					Type:        schema.TypeString,

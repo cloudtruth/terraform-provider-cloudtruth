@@ -23,6 +23,8 @@ const (
 	defaultDomain   = "api.cloudtruth.io"
 	protocolVarName = "CLOUDTRUTH_PROTOCOL"
 	defaultProtocol = "https"
+	port            = "CLOUDTRUTH_PORT"
+	defaultPort     = "" // By default, we don't specify a port
 
 	// Optional config variables with no defaults - settable/overridable in HCL
 	projectVarName     = "CLOUDTRUTH_PROJECT"
