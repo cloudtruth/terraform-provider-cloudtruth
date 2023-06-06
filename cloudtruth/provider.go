@@ -35,6 +35,12 @@ func New(version string) func() *schema.Provider {
 					DefaultFunc: schema.EnvDefaultFunc(environmentVarName, nil),
 					Description: "Provider level environment declaration (overridable)",
 				},
+				"port": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Default:     "",
+					Description: "The HTTP port, ignored if not set",
+				},
 				"protocol": {
 					Type:        schema.TypeString,
 					Optional:    true,
@@ -77,6 +83,7 @@ func New(version string) func() *schema.Provider {
 					Project:     d.Get("project").(string),
 					Environment: d.Get("environment").(string),
 					Domain:      d.Get("domain").(string),
+					Port:        d.Get("port").(string),
 					Protocol:    d.Get("protocol").(string),
 					UserAgent:   provider.UserAgent("terraform-provider-cloudtruth", version),
 				})

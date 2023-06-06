@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "cloudtruth" {
-  domain  = "api.staging.cloudtruth.io"
+  domain  = "app.cloudtruth.local"
   project = "AcceptanceTest"
 }
 

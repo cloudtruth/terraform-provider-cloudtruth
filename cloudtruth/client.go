@@ -45,6 +45,7 @@ type clientConfig struct {
 	Domain      string
 	Protocol    string
 	BaseURL     string
+	Port        string
 }
 
 // todo consolidate and refactor retry logic
@@ -56,8 +57,12 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 	apiConfig.Scheme = conf.Protocol
 	apiConfig.AddDefaultHeader("Authorization", fmt.Sprintf("Api-Key %s", conf.APIKey))
 	apiConfig.AddDefaultHeader("UserAgent", conf.UserAgent)
-	conf.BaseURL = fmt.Sprintf("%s://%s/api/%s", conf.Protocol, conf.Domain,
-		apiVersion)
+	if conf.Port != "" {
+		conf.BaseURL = fmt.Sprintf("%s://%s:%s/api/%s", conf.Protocol, conf.Port, conf.Domain,
+			apiVersion)
+	} else {
+		conf.BaseURL = fmt.Sprintf("%s://%s/api/%s", conf.Protocol, conf.Domain, apiVersion)
+	}
 
 	client := cloudTruthClient{
 		config:        conf,
