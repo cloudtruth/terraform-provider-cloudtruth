@@ -20,5 +20,6 @@ description: |-
 - `api_key` (String, Sensitive)
 - `domain` (String) The CloudTruth API domain name
 - `environment` (String) Provider level environment declaration (overridable)
+- `port` (String) The HTTP port, ignored if not set
 - `project` (String) Provider level project declaration (overridable)
 - `protocol` (String) The network protocol, default https
