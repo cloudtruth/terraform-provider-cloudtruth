@@ -29,7 +29,7 @@ func TestAccResourceAWSImportActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "resource", createImportPattern),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "mode", "pattern"),
 				),
-				SkipFunc: isRunningInStaging,
+				SkipFunc: isSelfHostedOrStaging,
 			},
 			{
 				Config: testAccResourceAWSImportActionBasic(resourceName, importActionName, accTestAWSIntegrationName, genericDesc, true, true,
@@ -41,7 +41,7 @@ func TestAccResourceAWSImportActionBasic(t *testing.T) {
 					//resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "create_projects", fmt.Sprint(false)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_import_action.%s", resourceName), "resource", updateImportPattern),
 				),
-				SkipFunc: isRunningInStaging,
+				SkipFunc: isSelfHostedOrStaging,
 			},
 		},
 	})

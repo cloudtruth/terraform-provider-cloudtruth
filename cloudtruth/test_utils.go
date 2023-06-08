@@ -74,3 +74,14 @@ func isRunningInStaging() (bool, error) {
 	domain := os.Getenv("CLOUDTRUTH_DOMAIN")
 	return domain == stagingDomain, nil
 }
+
+func isRunningSelfHosted() (bool, error) {
+	selfHosted := os.Getenv("SELF_HOSTED")
+	return selfHosted != "", nil
+}
+
+func isSelfHostedOrStaging() (bool, error) {
+	staging, _ := isRunningInStaging()
+	selfHosted, _ := isRunningSelfHosted()
+	return staging || selfHosted, nil
+}

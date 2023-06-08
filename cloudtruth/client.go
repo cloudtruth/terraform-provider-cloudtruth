@@ -14,8 +14,7 @@ import (
 )
 
 const (
-	// Allow for CloudTruth CLI API key definitions in addition to TF_VAR_var_name approach
-	// no default
+	// Allow for CloudTruth CLI API key definitions in addition to the standard TF_VAR_var_name approach
 	apiKeyVarName = "CLOUDTRUTH_API_KEY"
 
 	// Optional variables with default values, settable/overridable per Terraform state
@@ -47,7 +46,6 @@ type clientConfig struct {
 	BaseURL     string
 }
 
-// todo consolidate and refactor retry logic
 func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient, diag.Diagnostics) {
 	tflog.Debug(ctx, "configureClient")
 	tflog.Debug(ctx, fmt.Sprintf("%+v", conf))
@@ -55,7 +53,7 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 	apiConfig.Host = conf.Domain
 	apiConfig.Scheme = conf.Protocol
 	apiConfig.AddDefaultHeader("Authorization", fmt.Sprintf("Api-Key %s", conf.APIKey))
-	apiConfig.AddDefaultHeader("UserAgent", conf.UserAgent)
+	apiConfig.AddDefaultHeader("User-Agent", conf.UserAgent)
 	conf.BaseURL = fmt.Sprintf("%s://%s/api/%s", conf.Protocol, conf.Domain,
 		apiVersion)
 
@@ -67,25 +65,25 @@ func configureClient(ctx context.Context, conf clientConfig) (*cloudTruthClient,
 	loadErrors := make(chan error, cacheCount)
 	var wg sync.WaitGroup
 	wg.Add(5)
-	go func() { // load project caches, ID cache is generated from the name cache
+	go func() {
 		defer wg.Done()
 		loadErrors <- client.loadProjectNameCache(ctx)
 		loadErrors <- client.loadProjectIDCache(ctx)
 	}()
-	go func() { // load environment caches, ID cache is generated from the name cache
+	go func() {
 		defer wg.Done()
 		loadErrors <- client.loadEnvNameCache(ctx)
 		loadErrors <- client.loadEnvIDCache(ctx)
 	}()
-	go func() { // load user cache
+	go func() {
 		defer wg.Done()
 		loadErrors <- client.loadUserCache(ctx)
 	}()
-	go func() { // load group cache
+	go func() {
 		defer wg.Done()
 		loadErrors <- client.loadGroupCache(ctx)
 	}()
-	go func() { // load type cache
+	go func() {
 		defer wg.Done()
 		loadErrors <- client.loadTypeCache(ctx)
 	}()
@@ -114,8 +112,8 @@ type cloudTruthClient struct {
 	types         map[string]cloudtruthapi.ParameterType
 }
 
-// Utility function with an input k -> v map, returns the "reverse"
-// v -> k map
+// Utility function
+// With an input k -> v map, returns the "reverse" v -> k map
 func convertMap(m map[string]string) map[string]string {
 	inv := make(map[string]string)
 	for k, v := range m {
@@ -164,7 +162,7 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 		retryCount := 0
 		var apiError error
 		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events.
-		// Therefore, we employ a simple retry loop here instead.
+		// Therefore, we employ a simple retry loop instead.
 		for retryCount < loadCacheRetries {
 			projectList, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Execute()
 			if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
@@ -236,8 +234,8 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 		tflog.Debug(ctx, "loadEnvNameCache: fetching environment names")
 		retryCount := 0
 		var apiError error
-		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
-		// not client initialization so we employ a simple retryCount loop instead
+		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events.
+		// Therefore, we employ a simple retry loop instead.
 		for retryCount < loadCacheRetries {
 			envList, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Execute()
 			if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
@@ -302,8 +300,8 @@ func (c *cloudTruthClient) lookupEnvProj(ctx context.Context, envNameOrID, projN
 	return envID, projID, nil
 }
 
-// map of ALL user names -> user structs
-// we also add email -> user struct entries for easy lookups by name or email
+// Map of ALL usernames -> user structs
+// We also add email -> user struct entries for easy lookups by name or email
 func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 	if c.users == nil {
 		tflog.Debug(ctx, "loadUserCache: fetching user accounts")
@@ -476,7 +474,7 @@ func (c *cloudTruthClient) lookupType(ctx context.Context, typeName string) *clo
 Helper function for making API errors more useful
 API/server side errors are generally retryable
 client side errors are not retryable, and we extract the underlying API error
-so that the end user can see what's wrong
+so that we can present it to the end user
 */
 func handleAPIError(msg string, r *http.Response, err error) *retry.RetryError {
 	outErr := fmt.Errorf(msg, err)

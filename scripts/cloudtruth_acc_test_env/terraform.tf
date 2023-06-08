@@ -8,7 +8,8 @@ terraform {
 }
 
 provider "cloudtruth" {
-  domain  = "api.staging.cloudtruth.io"
-  project = "AcceptanceTest"
+  domain   = "api.cloudtruth.local:8080"
+  project  = "AcceptanceTest"
+  protocol = "http"
 }
 

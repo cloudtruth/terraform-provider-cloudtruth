@@ -32,8 +32,7 @@ resource "cloudtruth_parameter_value" "default_secret" {
   value          = "ultratopsecret"
 }
 
-# Need to add the integration externally/by hand for now
-resource "cloudtruth_parameter" "default_regular_external" {
+/*resource "cloudtruth_parameter" "default_regular_external" {
   name        = "DefaultRegularExternalParam"
   type        = "string"
   description = "For simplicity/stability, we reference the provider repo's manifest file which is required by the Terraform Registry"
@@ -45,7 +44,7 @@ resource "cloudtruth_parameter_value" "default_regular_external" {
   external       = true
   location       = "github://cloudtruth/terraform-provider-cloudtruth/main/terraform-registry-manifest.json"
   filter         = "metadata.protocol_versions[0]"
-}
+}*/
 
 resource "cloudtruth_tag" "epoch_time" {
   name        = "EpochTime"
