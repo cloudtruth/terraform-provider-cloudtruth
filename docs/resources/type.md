@@ -37,5 +37,3 @@ the empty string value for that purpose.
 - `max_id` (String) The internal ID of the max rule
 - `min_id` (String) The internal ID of the min rule
 - `regex_id` (String) The internal ID of the regex rule
-
-

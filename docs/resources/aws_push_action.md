@@ -40,5 +40,3 @@ A CloudTruth push action.
 
 - `id` (String) The ID of this resource.
 - `integration_id` (String) The ID of the CloudTruth integration corresponding to this push action
-
-
