@@ -31,5 +31,3 @@ at least one service must be specified
 ### Read-Only
 
 - `id` (String) The ID of this resource.
-
-

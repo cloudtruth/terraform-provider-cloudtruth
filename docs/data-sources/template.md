@@ -30,5 +30,3 @@ A CloudTruth template data source
 
 - `id` (String) The ID of this resource.
 - `value` (String) The template's computed value
-
-

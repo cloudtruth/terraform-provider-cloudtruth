@@ -26,5 +26,3 @@ A CloudTruth user data source
 - `organization` (String) The name of the CloudTruth organization containing the user
 - `role` (String) The user's role
 - `type` (String) The user's type: interactive or service
-
-

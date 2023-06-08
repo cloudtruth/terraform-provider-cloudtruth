@@ -35,5 +35,3 @@ Read-Only:
 - `organization` (String)
 - `role` (String)
 - `type` (String)
-
-

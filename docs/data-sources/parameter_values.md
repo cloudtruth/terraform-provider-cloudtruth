@@ -26,5 +26,3 @@ A CloudTruth Parameter data source
 
 - `id` (String) The ID of this resource.
 - `parameter_values` (Map of String) The computed values for all CloudTruth Parameters matching the filter(s) and environment
-
-

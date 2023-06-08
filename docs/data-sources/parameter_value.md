@@ -33,5 +33,3 @@ A CloudTruth parameter value data source
 - `id` (String) The ID of this resource.
 - `parameter_id` (String) The ID of the CloudTruth Parameter where this value is stored
 - `value` (String) The actual value of the Parameter Value
-
-

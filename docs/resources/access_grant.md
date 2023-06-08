@@ -44,5 +44,3 @@ non-owner grant(s) the owner grant is created before the non-owner grant(s) is c
 
 - `id` (String) The ID of this resource.
 - `principal_id` (String) The internal ID of the user or group which is granted the role
-
-
