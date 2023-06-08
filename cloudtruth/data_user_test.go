@@ -59,6 +59,7 @@ func TestDataSourceUser(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("data.cloudtruth_user.%s", sourceName), "email", testUser1.email),
 					resource.TestCheckResourceAttr(fmt.Sprintf("data.cloudtruth_user.%s", sourceName), "type", testUser1.userType),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 		},
 	})
@@ -85,6 +86,7 @@ func TestDataSourceInteractiveUsers(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("data.cloudtruth_users.%s", sourceName), "users.1.email", testUser2.email),
 					resource.TestCheckResourceAttr(fmt.Sprintf("data.cloudtruth_users.%s", sourceName), "users.1.type", testUser2.userType),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 		},
 	})
@@ -109,6 +111,7 @@ func TestDataSourceServiceUsers(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("data.cloudtruth_users.%s", sourceName), "users.0.email", ""),
 					resource.TestCheckResourceAttr(fmt.Sprintf("data.cloudtruth_users.%s", sourceName), "users.0.type", "service"),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 		},
 	})
@@ -139,6 +142,7 @@ func TestDataSourceAllUsers(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("data.cloudtruth_users.%s", sourceName), "users.2.email", testUser2.email),
 					resource.TestCheckResourceAttr(fmt.Sprintf("data.cloudtruth_users.%s", sourceName), "users.2.type", testUser2.userType),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 		},
 	})

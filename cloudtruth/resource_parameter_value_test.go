@@ -86,6 +86,7 @@ func TestAccResourceParameterValueExternal(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_parameter_value.external", "location", githubLocation),
 					resource.TestCheckResourceAttr("cloudtruth_parameter_value.external", "filter", githubFilter),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 		},
 	})

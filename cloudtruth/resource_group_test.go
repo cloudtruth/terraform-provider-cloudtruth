@@ -53,6 +53,7 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "description", groupDesc),
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "users.0", groupTestUser1),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 			{ // swap users
 				Config: testAccResourceGroupCreateWithUser(groupName, groupDesc, groupTestUser2),
@@ -61,6 +62,7 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "description", groupDesc),
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "users.0", groupTestUser2),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 			{ // Remove the user & update the description
 				Config: testAccResourceGroupCreateWithoutUser(groupName, updateGroupDesc),
@@ -69,6 +71,7 @@ func TestAccResourceGroupWithUser(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "description", updateGroupDesc),
 					resource.TestCheckResourceAttr("cloudtruth_group.user_test", "users.#", "0"),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 		},
 	})
@@ -89,6 +92,7 @@ func TestAccResourceGroupWithUsers(t *testing.T) {
 					resource.TestCheckResourceAttrSet("cloudtruth_group.multi_user", "users.0"),
 					resource.TestCheckResourceAttrSet("cloudtruth_group.multi_user", "users.1"),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 			{ // Reverse the order of names in the list, test should still pass
 				Config: testAccResourceGroupCreateWithUsers(groupName, groupDesc, groupTestUser2, groupTestUser1),
@@ -99,6 +103,7 @@ func TestAccResourceGroupWithUsers(t *testing.T) {
 					resource.TestCheckResourceAttrSet("cloudtruth_group.multi_user", "users.0"),
 					resource.TestCheckResourceAttrSet("cloudtruth_group.multi_user", "users.1"),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 		},
 	})

@@ -101,7 +101,18 @@ func TestDataSourceParameter(t *testing.T) {
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter_value.secret", "value", secretParamVal),
 				),
 			},
-			{ // In this step, the environment and project default to the values specified at the provider level
+		},
+	})
+}
+
+// In this test, the environment and project default to the values specified at the provider level
+func TestDataSourceParameterProviderConfig(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		ProviderFactories:         testProviderFactories,
+		PreCheck:                  func() { testAccPreCheck(t) },
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
 				Config: fmt.Sprintf(testAccParameterProvEnvProj, regularParam, secretParam, regularExternalParam),
 				Check: resource.ComposeTestCheckFunc(
 					// regular parameter
@@ -111,6 +122,7 @@ func TestDataSourceParameter(t *testing.T) {
 					// regular external parameter
 					resource.TestCheckResourceAttr("data.cloudtruth_parameter_value.external_param", "value", regularExternalParamVal),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 		},
 	})

@@ -23,6 +23,7 @@ func TestAccResourceAccessGrantGroup(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_access_grant.group_access_grant", "project", projName),
 					resource.TestCheckResourceAttr("cloudtruth_access_grant.group_access_grant", "role", contribRole),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 		},
 	})
@@ -47,6 +48,7 @@ func TestAccResourceAccessGrantUser(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_access_grant.non_owner_access_grant", "environment", envName),
 					resource.TestCheckResourceAttr("cloudtruth_access_grant.non_owner_access_grant", "role", contribRole),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 			{
 				Config: testAccResourceGrantUser(envName, testUser2.name, testUser1.name, viewerRole),
@@ -58,6 +60,7 @@ func TestAccResourceAccessGrantUser(t *testing.T) {
 					resource.TestCheckResourceAttr("cloudtruth_access_grant.non_owner_access_grant", "environment", envName),
 					resource.TestCheckResourceAttr("cloudtruth_access_grant.non_owner_access_grant", "role", viewerRole),
 				),
+				SkipFunc: isRunningSelfHosted,
 			},
 		},
 	})
