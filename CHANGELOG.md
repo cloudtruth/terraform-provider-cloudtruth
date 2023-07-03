@@ -1,3 +1,8 @@
+## 0.5.9 (July 3, 2023)
+**ENHANCEMENTS**
+* Added a flag to make it easy to skip tests when running against a self-hosted/local instance of CloudTruth. Also included
+- a bunch of Dependabot updates.
+
 ## 0.5.5 (March 31, 2023)
 **ENHANCEMENTS**
 * Updated the cloudtruth_parameter_value to handle changes to the environment property, which effectively removes a parameter
