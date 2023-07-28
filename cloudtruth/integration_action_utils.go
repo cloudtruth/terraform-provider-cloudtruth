@@ -152,8 +152,11 @@ func lookupEnvTag(ctx context.Context, d *schema.ResourceData, c *cloudTruthClie
 		return "", retryError
 	}
 
-	// There should only be one tag with the specified per environment
+	// We should get one and only tag per lookup
 	results := tagList.GetResults()
+	if len(results) == 0 {
+		return "", fmt.Errorf("did not find the tag %s in the %s environment", tagName, env)
+	}
 	tag := results[0]
 	tagID := tag.GetId()
 	return tagID, nil
