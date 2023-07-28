@@ -280,8 +280,8 @@ func resourceAzurePushActionUpdate(ctx context.Context, d *schema.ResourceData, 
 	}
 
 	if d.HasChange("tags") {
-		rawTags := d.Get("tags").([]interface{})
-		tags, err := getEnvTags(ctx, d, c, rawTags)
+		rawTags := d.Get("tags").(*schema.Set)
+		tags, err := getEnvTags(ctx, d, c, rawTags.List())
 		if err != nil {
 			return diag.FromErr(err)
 		}
