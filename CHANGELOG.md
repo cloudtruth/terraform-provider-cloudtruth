@@ -1,3 +1,7 @@
+## 0.5.10 (July 3, 2023)
+**BUG FIXES**
+* Fixes a panic when a push action references an nonexistent tag in an environment that exists.
+
 ## 0.5.9 (July 3, 2023)
 **ENHANCEMENTS**
 * Added a flag to make it easy to skip tests when running against a self-hosted/local instance of CloudTruth. Also included
