@@ -61,12 +61,37 @@ func TestAccResourceAzurePushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_azure_push_action.%s", resourceName), "local", fmt.Sprint(false)),
 				),
 				SkipFunc: isSelfHostedOrStaging,
+			}, {
+				Config: testAccResourceAzurePushActionBadTag(resourceName, pushActionName, accTestAzureIntegrationName, genericDesc,
+					false, true, true, false, false, false, false, updatePushPattern),
+				ExpectError: regexp.MustCompile("did not find the tag"),
+				SkipFunc:    isSelfHostedOrStaging,
 			},
 		},
 	})
 }
 
 func testAccResourceAzurePushActionBasic(resource, name, intName, desc string, params, secrets, templates, coerce, force, local, dryRun bool, resourcePattern string) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_azure_push_action" "%s" {
+		name                 = "%s"
+		integration          = "%s"
+		description          = "%s"
+		parameters           = "%t"
+		secrets              = "%t"
+		templates            = "%t"
+		coerce               = "%t"
+		force                = "%t"
+		local                = "%t"
+		dry_run              = "%t"
+		resource             = "%s"
+		projects             = ["AcceptanceTest"]
+		tags                 = ["default:EpochTime"]
+	}
+	`, resource, name, intName, desc, params, secrets, templates, coerce, force, local, dryRun, resourcePattern)
+}
+
+func testAccResourceAzurePushActionBadTag(resource, name, intName, desc string, params, secrets, templates, coerce, force, local, dryRun bool, resourcePattern string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_azure_push_action" "%s" {
   		name                 = "%s"
@@ -81,7 +106,7 @@ func testAccResourceAzurePushActionBasic(resource, name, intName, desc string, p
 		dry_run              = "%t"
 		resource		     = "%s"
 		projects             = ["AcceptanceTest"]
-		tags                 = ["default:EpochTime"]
+		tags                 = ["default:xxx"]
 	}
 	`, resource, name, intName, desc, params, secrets, templates, coerce, force, local, dryRun, resourcePattern)
 }

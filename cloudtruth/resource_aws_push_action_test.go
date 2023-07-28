@@ -73,6 +73,12 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "local", fmt.Sprint(false)),
 				),
 				SkipFunc: isSelfHostedOrStaging,
+			}, {
+				Config: testAccResourceAWSPushActionBadTag(resourceName, pushActionName, accTestAWSIntegrationName, genericDesc,
+					false, true, false, false, false, false, false,
+					createRegion, createService, updatePushPattern),
+				ExpectError: regexp.MustCompile("did not find the tag"),
+				SkipFunc:    isSelfHostedOrStaging,
 			},
 		},
 	})
@@ -96,6 +102,28 @@ func testAccResourceAWSPushActionBasic(resource, name, intName, desc string, par
 		resource		     = "%s"
 		projects             = ["AcceptanceTest"]
 		tags                 = ["default:EpochTime"]
+	}
+	`, resource, name, intName, desc, params, secrets, templates, coerce, force, local, dryRun, region, service, resourcePattern)
+}
+
+func testAccResourceAWSPushActionBadTag(resource, name, intName, desc string, params, secrets, templates, coerce, force, local, dryRun bool, region, service, resourcePattern string) string {
+	return fmt.Sprintf(`
+	resource "cloudtruth_aws_push_action" "%s" {
+		name                 = "%s"
+		integration          = "%s"
+		description          = "%s"
+		parameters           = "%t"
+		secrets              = "%t"
+		templates            = "%t"
+		coerce               = "%t"
+		force                = "%t"
+		local                = "%t"
+		dry_run              = "%t"
+		region               = "%s"
+		service              = "%s"
+		resource             = "%s"
+		projects             = ["AcceptanceTest"]
+		tags                 = ["default:xxx"]
 	}
 	`, resource, name, intName, desc, params, secrets, templates, coerce, force, local, dryRun, region, service, resourcePattern)
 }
