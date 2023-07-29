@@ -28,7 +28,7 @@ func resourceAWSIntegration() *schema.Resource {
 				Required:    true,
 			},
 			"role": {
-				Description: "The name of the role which CloudTruth will assume in the AWS account",
+				Description: "The name of the role which CloudTruth will assume in the target AWS account",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
@@ -39,10 +39,11 @@ func resourceAWSIntegration() *schema.Resource {
 				Default:     false,
 			},
 			"kms_key_id": {
-				Description: "The name of the role which CloudTruth will assume in the AWS account",
-				Type:        schema.TypeString,
-				Optional:    true,
-				Default:     "",
+				Description: `The ID of the KMS key which CloudTruth will use to decrypt content in the target AWS account (optional and
+needed only when the content is encryped with a non-default KMS key)`,
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "",
 			},
 			"aws_enabled_regions": {
 				Description: "The AWS regions where the integration will be used, at lease one region must be specified",
@@ -56,6 +57,12 @@ at least one service must be specified`,
 				Type:     schema.TypeSet,
 				Required: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
+			"external_id": {
+				Description: `The generated external ID for the AWS integration, needed for CloudTruth to assume the specified role
+in the target AWS account`,
+				Type:     schema.TypeString,
+				Computed: true,
 			},
 		},
 	}
@@ -127,7 +134,10 @@ func resourceAWSIntegrationCreate(ctx context.Context, d *schema.ResourceData, m
 	if retryError != nil {
 		return diag.FromErr(retryError)
 	}
-
+	err = d.Set("external_id", integration.GetAwsExternalId())
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	d.SetId(integration.GetId())
 	return nil
 }

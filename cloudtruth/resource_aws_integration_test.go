@@ -25,6 +25,7 @@ func TestAccResourceAWSIntegrationBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_integration.%s", resourceName), "role", role),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_integration.%s", resourceName), "kms_key_id", kmsKeyID),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_integration.%s", resourceName), "writable", fmt.Sprint(true)),
+					resource.TestCheckResourceAttrSet(fmt.Sprintf("cloudtruth_aws_integration.%s", resourceName), "external_id"),
 				),
 				SkipFunc: isSelfHostedOrStaging,
 			},

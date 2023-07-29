@@ -1,4 +1,8 @@
-## 0.5.10 (July 3, 2023)
+## 0.5.11 (July 29, 2023)
+**BUG FIXES**
+* Fixes an issue where the AWS integration resource was not outputting the external AWS ID correctly
+
+## 0.5.10 (July 28, 2023)
 **BUG FIXES**
 * Fixes a panic when a push action references an nonexistent tag in an environment that exists.
 
@@ -17,7 +21,7 @@ value from the source environment and recreates it in the target environment.
 * Upgraded from Go 1.19 -> 1.20
 
 **BUG FIXES**
-Fixed an issue with resources without a `project` property when no default project is specified.
+* Fixed an issue with resources without a `project` property when no default project is specified.
 
 ## 0.5.1 (December 5, 2022)
 **ENHANCEMENTS**

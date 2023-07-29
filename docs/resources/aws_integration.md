@@ -21,13 +21,16 @@ A CloudTruth AWS integration.
 - `aws_enabled_regions` (Set of String) The AWS regions where the integration will be used, at lease one region must be specified
 - `aws_enabled_services` (Set of String) The AWS services which the integration will use, one or more of ssm|secretsmanager|s3, 
 at least one service must be specified
-- `role` (String) The name of the role which CloudTruth will assume in the AWS account
+- `role` (String) The name of the role which CloudTruth will assume in the target AWS account
 
 ### Optional
 
-- `kms_key_id` (String) The name of the role which CloudTruth will assume in the AWS account
+- `kms_key_id` (String) The ID of the KMS key which CloudTruth will use to decrypt content in the target AWS account (optional and
+needed only when the content is encryped with a non-default KMS key)
 - `writable` (Boolean) Whether or not the CloudTruth integration can write to the AWS service(s), defaults to false
 
 ### Read-Only
 
+- `external_id` (String) The generated external ID for the AWS integration, needed for CloudTruth to assume the specified role
+in the target AWS account
 - `id` (String) The ID of this resource.
