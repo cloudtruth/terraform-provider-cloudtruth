@@ -75,7 +75,7 @@ func resourceTemplateCreate(ctx context.Context, d *schema.ResourceData, meta an
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		template, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesCreate(ctx,
+		template, r, err = c.openAPIClient.ProjectsAPI.ProjectsTemplatesCreate(ctx,
 			*projID).TemplateCreate(*templateCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTemplateCreate: error creating template %s", templateName), r, err)
@@ -106,7 +106,7 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		template, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesRetrieve(ctx, templateID, *projID).Execute()
+		template, r, err = c.openAPIClient.ProjectsAPI.ProjectsTemplatesRetrieve(ctx, templateID, *projID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTemplateRead: error reading template %s", templateName), r, err)
 		}
@@ -164,7 +164,7 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesPartialUpdate(ctx, templateID,
+			_, r, err = c.openAPIClient.ProjectsAPI.ProjectsTemplatesPartialUpdate(ctx, templateID,
 				*projID).PatchedTemplate(patchedTemplate).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceTemplateUpdate: error updating template %s", templateName), r, err)
@@ -197,7 +197,7 @@ func resourceTemplateDelete(ctx context.Context, d *schema.ResourceData, meta an
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.ProjectsApi.ProjectsTemplatesDestroy(ctx, templateID, *projID).Execute()
+		r, err = c.openAPIClient.ProjectsAPI.ProjectsTemplatesDestroy(ctx, templateID, *projID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTemplateDelete: error destroying template %s", templateName), r, err)
 		}

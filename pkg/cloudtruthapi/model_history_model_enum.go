@@ -21,9 +21,9 @@ type HistoryModelEnum string
 
 // List of HistoryModelEnum
 const (
-	HISTORYMODELENUM_PARAMETER      HistoryModelEnum = "Parameter"
+	HISTORYMODELENUM_PARAMETER HistoryModelEnum = "Parameter"
 	HISTORYMODELENUM_PARAMETER_RULE HistoryModelEnum = "ParameterRule"
-	HISTORYMODELENUM_VALUE          HistoryModelEnum = "Value"
+	HISTORYMODELENUM_VALUE HistoryModelEnum = "Value"
 )
 
 // All allowed values of HistoryModelEnum enum
@@ -111,3 +111,4 @@ func (v *NullableHistoryModelEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+

@@ -125,7 +125,7 @@ func resourceAWSIntegrationCreate(ctx context.Context, d *schema.ResourceData, m
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		integration, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsCreate(ctx).AwsIntegrationCreate(*intCreate).Execute()
+		integration, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsCreate(ctx).AwsIntegrationCreate(*intCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSIntegrationCreate: error creating integration %s@%s", role, accountID), r, err)
 		}
@@ -154,7 +154,7 @@ func resourceAWSIntegrationRead(ctx context.Context, d *schema.ResourceData, met
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		integration, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsRetrieve(ctx, integrationID).Execute()
+		integration, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsRetrieve(ctx, integrationID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSIntegrationRead: error reading AWS integration %s@%s",
 				role, accountID), r, err)
@@ -251,7 +251,7 @@ func resourceAWSIntegrationUpdate(ctx context.Context, d *schema.ResourceData, m
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPartialUpdate(ctx, integrationID).PatchedAwsIntegration(patchedAwsIntegration).Execute()
+			_, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPartialUpdate(ctx, integrationID).PatchedAwsIntegration(patchedAwsIntegration).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceAWSIntegrationUpdate: error updating AWS integration %s@%s",
 					role, accountID), r, err)
@@ -277,7 +277,7 @@ func resourceAWSIntegrationDelete(ctx context.Context, d *schema.ResourceData, m
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsDestroy(ctx, intID).Execute()
+		r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsDestroy(ctx, intID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSIntegrationDelete: error destroying AWS integration %s@%s", role, accountID), r, err)
 		}

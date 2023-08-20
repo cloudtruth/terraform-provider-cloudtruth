@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ImportCreateRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ImportCreateRequest{}
+
 // ImportCreateRequest struct for ImportCreateRequest
 type ImportCreateRequest struct {
 	// Project name or identifier
@@ -106,7 +109,7 @@ func (o *ImportCreateRequest) SetProject(v string) {
 
 // GetEnvironment returns the Environment field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *ImportCreateRequest) GetEnvironment() string {
-	if o == nil || o.Environment.Get() == nil {
+	if o == nil || IsNil(o.Environment.Get()) {
 		var ret string
 		return ret
 	}
@@ -136,7 +139,6 @@ func (o *ImportCreateRequest) HasEnvironment() bool {
 func (o *ImportCreateRequest) SetEnvironment(v string) {
 	o.Environment.Set(&v)
 }
-
 // SetEnvironmentNil sets the value for Environment to be an explicit nil
 func (o *ImportCreateRequest) SetEnvironmentNil() {
 	o.Environment.Set(nil)
@@ -221,7 +223,7 @@ func (o *ImportCreateRequest) SetIgnore(v []string) {
 
 // GetAddProject returns the AddProject field value if set, zero value otherwise.
 func (o *ImportCreateRequest) GetAddProject() bool {
-	if o == nil || o.AddProject == nil {
+	if o == nil || IsNil(o.AddProject) {
 		var ret bool
 		return ret
 	}
@@ -231,7 +233,7 @@ func (o *ImportCreateRequest) GetAddProject() bool {
 // GetAddProjectOk returns a tuple with the AddProject field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ImportCreateRequest) GetAddProjectOk() (*bool, bool) {
-	if o == nil || o.AddProject == nil {
+	if o == nil || IsNil(o.AddProject) {
 		return nil, false
 	}
 	return o.AddProject, true
@@ -239,7 +241,7 @@ func (o *ImportCreateRequest) GetAddProjectOk() (*bool, bool) {
 
 // HasAddProject returns a boolean if a field has been set.
 func (o *ImportCreateRequest) HasAddProject() bool {
-	if o != nil && o.AddProject != nil {
+	if o != nil && !IsNil(o.AddProject) {
 		return true
 	}
 
@@ -253,7 +255,7 @@ func (o *ImportCreateRequest) SetAddProject(v bool) {
 
 // GetAddEnvironment returns the AddEnvironment field value if set, zero value otherwise.
 func (o *ImportCreateRequest) GetAddEnvironment() bool {
-	if o == nil || o.AddEnvironment == nil {
+	if o == nil || IsNil(o.AddEnvironment) {
 		var ret bool
 		return ret
 	}
@@ -263,7 +265,7 @@ func (o *ImportCreateRequest) GetAddEnvironment() bool {
 // GetAddEnvironmentOk returns a tuple with the AddEnvironment field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ImportCreateRequest) GetAddEnvironmentOk() (*bool, bool) {
-	if o == nil || o.AddEnvironment == nil {
+	if o == nil || IsNil(o.AddEnvironment) {
 		return nil, false
 	}
 	return o.AddEnvironment, true
@@ -271,7 +273,7 @@ func (o *ImportCreateRequest) GetAddEnvironmentOk() (*bool, bool) {
 
 // HasAddEnvironment returns a boolean if a field has been set.
 func (o *ImportCreateRequest) HasAddEnvironment() bool {
-	if o != nil && o.AddEnvironment != nil {
+	if o != nil && !IsNil(o.AddEnvironment) {
 		return true
 	}
 
@@ -285,7 +287,7 @@ func (o *ImportCreateRequest) SetAddEnvironment(v bool) {
 
 // GetAddParameters returns the AddParameters field value if set, zero value otherwise.
 func (o *ImportCreateRequest) GetAddParameters() bool {
-	if o == nil || o.AddParameters == nil {
+	if o == nil || IsNil(o.AddParameters) {
 		var ret bool
 		return ret
 	}
@@ -295,7 +297,7 @@ func (o *ImportCreateRequest) GetAddParameters() bool {
 // GetAddParametersOk returns a tuple with the AddParameters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ImportCreateRequest) GetAddParametersOk() (*bool, bool) {
-	if o == nil || o.AddParameters == nil {
+	if o == nil || IsNil(o.AddParameters) {
 		return nil, false
 	}
 	return o.AddParameters, true
@@ -303,7 +305,7 @@ func (o *ImportCreateRequest) GetAddParametersOk() (*bool, bool) {
 
 // HasAddParameters returns a boolean if a field has been set.
 func (o *ImportCreateRequest) HasAddParameters() bool {
-	if o != nil && o.AddParameters != nil {
+	if o != nil && !IsNil(o.AddParameters) {
 		return true
 	}
 
@@ -317,7 +319,7 @@ func (o *ImportCreateRequest) SetAddParameters(v bool) {
 
 // GetAddOverrides returns the AddOverrides field value if set, zero value otherwise.
 func (o *ImportCreateRequest) GetAddOverrides() bool {
-	if o == nil || o.AddOverrides == nil {
+	if o == nil || IsNil(o.AddOverrides) {
 		var ret bool
 		return ret
 	}
@@ -327,7 +329,7 @@ func (o *ImportCreateRequest) GetAddOverrides() bool {
 // GetAddOverridesOk returns a tuple with the AddOverrides field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ImportCreateRequest) GetAddOverridesOk() (*bool, bool) {
-	if o == nil || o.AddOverrides == nil {
+	if o == nil || IsNil(o.AddOverrides) {
 		return nil, false
 	}
 	return o.AddOverrides, true
@@ -335,7 +337,7 @@ func (o *ImportCreateRequest) GetAddOverridesOk() (*bool, bool) {
 
 // HasAddOverrides returns a boolean if a field has been set.
 func (o *ImportCreateRequest) HasAddOverrides() bool {
-	if o != nil && o.AddOverrides != nil {
+	if o != nil && !IsNil(o.AddOverrides) {
 		return true
 	}
 
@@ -349,7 +351,7 @@ func (o *ImportCreateRequest) SetAddOverrides(v bool) {
 
 // GetInheritOnSame returns the InheritOnSame field value if set, zero value otherwise.
 func (o *ImportCreateRequest) GetInheritOnSame() bool {
-	if o == nil || o.InheritOnSame == nil {
+	if o == nil || IsNil(o.InheritOnSame) {
 		var ret bool
 		return ret
 	}
@@ -359,7 +361,7 @@ func (o *ImportCreateRequest) GetInheritOnSame() bool {
 // GetInheritOnSameOk returns a tuple with the InheritOnSame field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ImportCreateRequest) GetInheritOnSameOk() (*bool, bool) {
-	if o == nil || o.InheritOnSame == nil {
+	if o == nil || IsNil(o.InheritOnSame) {
 		return nil, false
 	}
 	return o.InheritOnSame, true
@@ -367,7 +369,7 @@ func (o *ImportCreateRequest) GetInheritOnSameOk() (*bool, bool) {
 
 // HasInheritOnSame returns a boolean if a field has been set.
 func (o *ImportCreateRequest) HasInheritOnSame() bool {
-	if o != nil && o.InheritOnSame != nil {
+	if o != nil && !IsNil(o.InheritOnSame) {
 		return true
 	}
 
@@ -380,38 +382,38 @@ func (o *ImportCreateRequest) SetInheritOnSame(v bool) {
 }
 
 func (o ImportCreateRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["project"] = o.Project
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
+	return json.Marshal(toSerialize)
+}
+
+func (o ImportCreateRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["project"] = o.Project
 	if o.Environment.IsSet() {
 		toSerialize["environment"] = o.Environment.Get()
 	}
-	if true {
-		toSerialize["body"] = o.Body
-	}
-	if true {
-		toSerialize["secrets"] = o.Secrets
-	}
-	if true {
-		toSerialize["ignore"] = o.Ignore
-	}
-	if o.AddProject != nil {
+	toSerialize["body"] = o.Body
+	toSerialize["secrets"] = o.Secrets
+	toSerialize["ignore"] = o.Ignore
+	if !IsNil(o.AddProject) {
 		toSerialize["add_project"] = o.AddProject
 	}
-	if o.AddEnvironment != nil {
+	if !IsNil(o.AddEnvironment) {
 		toSerialize["add_environment"] = o.AddEnvironment
 	}
-	if o.AddParameters != nil {
+	if !IsNil(o.AddParameters) {
 		toSerialize["add_parameters"] = o.AddParameters
 	}
-	if o.AddOverrides != nil {
+	if !IsNil(o.AddOverrides) {
 		toSerialize["add_overrides"] = o.AddOverrides
 	}
-	if o.InheritOnSame != nil {
+	if !IsNil(o.InheritOnSame) {
 		toSerialize["inherit_on_same"] = o.InheritOnSame
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableImportCreateRequest struct {
@@ -449,3 +451,5 @@ func (v *NullableImportCreateRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

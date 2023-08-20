@@ -15,10 +15,13 @@ import (
 	"encoding/json"
 )
 
+// checks if the ParameterTypeRuleCreate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ParameterTypeRuleCreate{}
+
 // ParameterTypeRuleCreate A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead of primary key relationships.  Specifically:  * A 'url' field is included instead of the 'id' field. * Relationships to other instances are hyperlinks, instead of primary keys.  NOTE: this only works with DRF 3.1.0 and above.
 type ParameterTypeRuleCreate struct {
-	Type       ParameterRuleTypeEnum `json:"type"`
-	Constraint string                `json:"constraint"`
+	Type ParameterRuleTypeEnum `json:"type"`
+	Constraint string `json:"constraint"`
 }
 
 // NewParameterTypeRuleCreate instantiates a new ParameterTypeRuleCreate object
@@ -89,14 +92,18 @@ func (o *ParameterTypeRuleCreate) SetConstraint(v string) {
 }
 
 func (o ParameterTypeRuleCreate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["type"] = o.Type
-	}
-	if true {
-		toSerialize["constraint"] = o.Constraint
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ParameterTypeRuleCreate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["type"] = o.Type
+	toSerialize["constraint"] = o.Constraint
+	return toSerialize, nil
 }
 
 type NullableParameterTypeRuleCreate struct {
@@ -134,3 +141,5 @@ func (v *NullableParameterTypeRuleCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

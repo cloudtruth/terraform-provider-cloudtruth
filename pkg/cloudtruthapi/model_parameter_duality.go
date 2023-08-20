@@ -15,17 +15,20 @@ import (
 	"encoding/json"
 )
 
+// checks if the ParameterDuality type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ParameterDuality{}
+
 // ParameterDuality Details about a parameter at two timepoints.  If t1 or t2 is null then the parameter did not exist at that timepoint.
 type ParameterDuality struct {
-	T1 NullableParameterDualityT1 `json:"t1"`
-	T2 NullableParameterDualityT1 `json:"t2"`
+	T1 NullableParameter `json:"t1"`
+	T2 NullableParameter `json:"t2"`
 }
 
 // NewParameterDuality instantiates a new ParameterDuality object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewParameterDuality(t1 NullableParameterDualityT1, t2 NullableParameterDualityT1) *ParameterDuality {
+func NewParameterDuality(t1 NullableParameter, t2 NullableParameter) *ParameterDuality {
 	this := ParameterDuality{}
 	this.T1 = t1
 	this.T2 = t2
@@ -41,10 +44,10 @@ func NewParameterDualityWithDefaults() *ParameterDuality {
 }
 
 // GetT1 returns the T1 field value
-// If the value is explicit nil, the zero value for ParameterDualityT1 will be returned
-func (o *ParameterDuality) GetT1() ParameterDualityT1 {
+// If the value is explicit nil, the zero value for Parameter will be returned
+func (o *ParameterDuality) GetT1() Parameter {
 	if o == nil || o.T1.Get() == nil {
-		var ret ParameterDualityT1
+		var ret Parameter
 		return ret
 	}
 
@@ -54,7 +57,7 @@ func (o *ParameterDuality) GetT1() ParameterDualityT1 {
 // GetT1Ok returns a tuple with the T1 field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *ParameterDuality) GetT1Ok() (*ParameterDualityT1, bool) {
+func (o *ParameterDuality) GetT1Ok() (*Parameter, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -62,15 +65,15 @@ func (o *ParameterDuality) GetT1Ok() (*ParameterDualityT1, bool) {
 }
 
 // SetT1 sets field value
-func (o *ParameterDuality) SetT1(v ParameterDualityT1) {
+func (o *ParameterDuality) SetT1(v Parameter) {
 	o.T1.Set(&v)
 }
 
 // GetT2 returns the T2 field value
-// If the value is explicit nil, the zero value for ParameterDualityT1 will be returned
-func (o *ParameterDuality) GetT2() ParameterDualityT1 {
+// If the value is explicit nil, the zero value for Parameter will be returned
+func (o *ParameterDuality) GetT2() Parameter {
 	if o == nil || o.T2.Get() == nil {
-		var ret ParameterDualityT1
+		var ret Parameter
 		return ret
 	}
 
@@ -80,7 +83,7 @@ func (o *ParameterDuality) GetT2() ParameterDualityT1 {
 // GetT2Ok returns a tuple with the T2 field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *ParameterDuality) GetT2Ok() (*ParameterDualityT1, bool) {
+func (o *ParameterDuality) GetT2Ok() (*Parameter, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -88,19 +91,23 @@ func (o *ParameterDuality) GetT2Ok() (*ParameterDualityT1, bool) {
 }
 
 // SetT2 sets field value
-func (o *ParameterDuality) SetT2(v ParameterDualityT1) {
+func (o *ParameterDuality) SetT2(v Parameter) {
 	o.T2.Set(&v)
 }
 
 func (o ParameterDuality) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["t1"] = o.T1.Get()
-	}
-	if true {
-		toSerialize["t2"] = o.T2.Get()
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ParameterDuality) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["t1"] = o.T1.Get()
+	toSerialize["t2"] = o.T2.Get()
+	return toSerialize, nil
 }
 
 type NullableParameterDuality struct {
@@ -138,3 +145,5 @@ func (v *NullableParameterDuality) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

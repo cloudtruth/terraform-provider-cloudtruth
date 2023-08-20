@@ -21,12 +21,12 @@ type StatusEnum string
 
 // List of StatusEnum
 const (
-	STATUSENUM_UNKNOWN   StatusEnum = "unknown"
-	STATUSENUM_PENDING   StatusEnum = "pending"
-	STATUSENUM_CHECKING  StatusEnum = "checking"
+	STATUSENUM_UNKNOWN StatusEnum = "unknown"
+	STATUSENUM_PENDING StatusEnum = "pending"
+	STATUSENUM_CHECKING StatusEnum = "checking"
 	STATUSENUM_CONNECTED StatusEnum = "connected"
-	STATUSENUM_ERRORED   StatusEnum = "errored"
-	STATUSENUM_MISSING   StatusEnum = "missing"
+	STATUSENUM_ERRORED StatusEnum = "errored"
+	STATUSENUM_MISSING StatusEnum = "missing"
 )
 
 // All allowed values of StatusEnum enum
@@ -117,3 +117,4 @@ func (v *NullableStatusEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+

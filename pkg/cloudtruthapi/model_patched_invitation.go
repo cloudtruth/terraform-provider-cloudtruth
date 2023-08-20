@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the PatchedInvitation type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedInvitation{}
+
 // PatchedInvitation struct for PatchedInvitation
 type PatchedInvitation struct {
 	Url *string `json:"url,omitempty"`
@@ -22,8 +25,7 @@ type PatchedInvitation struct {
 	Id *string `json:"id,omitempty"`
 	// The email address of the user to be invited.
 	Email *string `json:"email,omitempty"`
-	// The role that the user will have in the organization, should the user accept.
-	Role NullableRoleEnum `json:"role,omitempty"`
+	Role *RoleEnum `json:"role,omitempty"`
 	// The user that created the invitation.
 	Inviter *string `json:"inviter,omitempty"`
 	// The name of the user that created the invitation.
@@ -57,7 +59,7 @@ func NewPatchedInvitationWithDefaults() *PatchedInvitation {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedInvitation) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -67,7 +69,7 @@ func (o *PatchedInvitation) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedInvitation) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -75,7 +77,7 @@ func (o *PatchedInvitation) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedInvitation) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -89,7 +91,7 @@ func (o *PatchedInvitation) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedInvitation) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -99,7 +101,7 @@ func (o *PatchedInvitation) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedInvitation) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -107,7 +109,7 @@ func (o *PatchedInvitation) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedInvitation) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -121,7 +123,7 @@ func (o *PatchedInvitation) SetId(v string) {
 
 // GetEmail returns the Email field value if set, zero value otherwise.
 func (o *PatchedInvitation) GetEmail() string {
-	if o == nil || o.Email == nil {
+	if o == nil || IsNil(o.Email) {
 		var ret string
 		return ret
 	}
@@ -131,7 +133,7 @@ func (o *PatchedInvitation) GetEmail() string {
 // GetEmailOk returns a tuple with the Email field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedInvitation) GetEmailOk() (*string, bool) {
-	if o == nil || o.Email == nil {
+	if o == nil || IsNil(o.Email) {
 		return nil, false
 	}
 	return o.Email, true
@@ -139,7 +141,7 @@ func (o *PatchedInvitation) GetEmailOk() (*string, bool) {
 
 // HasEmail returns a boolean if a field has been set.
 func (o *PatchedInvitation) HasEmail() bool {
-	if o != nil && o.Email != nil {
+	if o != nil && !IsNil(o.Email) {
 		return true
 	}
 
@@ -151,52 +153,41 @@ func (o *PatchedInvitation) SetEmail(v string) {
 	o.Email = &v
 }
 
-// GetRole returns the Role field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetRole returns the Role field value if set, zero value otherwise.
 func (o *PatchedInvitation) GetRole() RoleEnum {
-	if o == nil || o.Role.Get() == nil {
+	if o == nil || IsNil(o.Role) {
 		var ret RoleEnum
 		return ret
 	}
-	return *o.Role.Get()
+	return *o.Role
 }
 
 // GetRoleOk returns a tuple with the Role field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PatchedInvitation) GetRoleOk() (*RoleEnum, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Role) {
 		return nil, false
 	}
-	return o.Role.Get(), o.Role.IsSet()
+	return o.Role, true
 }
 
 // HasRole returns a boolean if a field has been set.
 func (o *PatchedInvitation) HasRole() bool {
-	if o != nil && o.Role.IsSet() {
+	if o != nil && !IsNil(o.Role) {
 		return true
 	}
 
 	return false
 }
 
-// SetRole gets a reference to the given NullableRoleEnum and assigns it to the Role field.
+// SetRole gets a reference to the given RoleEnum and assigns it to the Role field.
 func (o *PatchedInvitation) SetRole(v RoleEnum) {
-	o.Role.Set(&v)
-}
-
-// SetRoleNil sets the value for Role to be an explicit nil
-func (o *PatchedInvitation) SetRoleNil() {
-	o.Role.Set(nil)
-}
-
-// UnsetRole ensures that no value is present for Role, not even an explicit nil
-func (o *PatchedInvitation) UnsetRole() {
-	o.Role.Unset()
+	o.Role = &v
 }
 
 // GetInviter returns the Inviter field value if set, zero value otherwise.
 func (o *PatchedInvitation) GetInviter() string {
-	if o == nil || o.Inviter == nil {
+	if o == nil || IsNil(o.Inviter) {
 		var ret string
 		return ret
 	}
@@ -206,7 +197,7 @@ func (o *PatchedInvitation) GetInviter() string {
 // GetInviterOk returns a tuple with the Inviter field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedInvitation) GetInviterOk() (*string, bool) {
-	if o == nil || o.Inviter == nil {
+	if o == nil || IsNil(o.Inviter) {
 		return nil, false
 	}
 	return o.Inviter, true
@@ -214,7 +205,7 @@ func (o *PatchedInvitation) GetInviterOk() (*string, bool) {
 
 // HasInviter returns a boolean if a field has been set.
 func (o *PatchedInvitation) HasInviter() bool {
-	if o != nil && o.Inviter != nil {
+	if o != nil && !IsNil(o.Inviter) {
 		return true
 	}
 
@@ -228,7 +219,7 @@ func (o *PatchedInvitation) SetInviter(v string) {
 
 // GetInviterName returns the InviterName field value if set, zero value otherwise.
 func (o *PatchedInvitation) GetInviterName() string {
-	if o == nil || o.InviterName == nil {
+	if o == nil || IsNil(o.InviterName) {
 		var ret string
 		return ret
 	}
@@ -238,7 +229,7 @@ func (o *PatchedInvitation) GetInviterName() string {
 // GetInviterNameOk returns a tuple with the InviterName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedInvitation) GetInviterNameOk() (*string, bool) {
-	if o == nil || o.InviterName == nil {
+	if o == nil || IsNil(o.InviterName) {
 		return nil, false
 	}
 	return o.InviterName, true
@@ -246,7 +237,7 @@ func (o *PatchedInvitation) GetInviterNameOk() (*string, bool) {
 
 // HasInviterName returns a boolean if a field has been set.
 func (o *PatchedInvitation) HasInviterName() bool {
-	if o != nil && o.InviterName != nil {
+	if o != nil && !IsNil(o.InviterName) {
 		return true
 	}
 
@@ -260,7 +251,7 @@ func (o *PatchedInvitation) SetInviterName(v string) {
 
 // GetState returns the State field value if set, zero value otherwise.
 func (o *PatchedInvitation) GetState() string {
-	if o == nil || o.State == nil {
+	if o == nil || IsNil(o.State) {
 		var ret string
 		return ret
 	}
@@ -270,7 +261,7 @@ func (o *PatchedInvitation) GetState() string {
 // GetStateOk returns a tuple with the State field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedInvitation) GetStateOk() (*string, bool) {
-	if o == nil || o.State == nil {
+	if o == nil || IsNil(o.State) {
 		return nil, false
 	}
 	return o.State, true
@@ -278,7 +269,7 @@ func (o *PatchedInvitation) GetStateOk() (*string, bool) {
 
 // HasState returns a boolean if a field has been set.
 func (o *PatchedInvitation) HasState() bool {
-	if o != nil && o.State != nil {
+	if o != nil && !IsNil(o.State) {
 		return true
 	}
 
@@ -292,7 +283,7 @@ func (o *PatchedInvitation) SetState(v string) {
 
 // GetStateDetail returns the StateDetail field value if set, zero value otherwise.
 func (o *PatchedInvitation) GetStateDetail() string {
-	if o == nil || o.StateDetail == nil {
+	if o == nil || IsNil(o.StateDetail) {
 		var ret string
 		return ret
 	}
@@ -302,7 +293,7 @@ func (o *PatchedInvitation) GetStateDetail() string {
 // GetStateDetailOk returns a tuple with the StateDetail field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedInvitation) GetStateDetailOk() (*string, bool) {
-	if o == nil || o.StateDetail == nil {
+	if o == nil || IsNil(o.StateDetail) {
 		return nil, false
 	}
 	return o.StateDetail, true
@@ -310,7 +301,7 @@ func (o *PatchedInvitation) GetStateDetailOk() (*string, bool) {
 
 // HasStateDetail returns a boolean if a field has been set.
 func (o *PatchedInvitation) HasStateDetail() bool {
-	if o != nil && o.StateDetail != nil {
+	if o != nil && !IsNil(o.StateDetail) {
 		return true
 	}
 
@@ -324,7 +315,7 @@ func (o *PatchedInvitation) SetStateDetail(v string) {
 
 // GetMembership returns the Membership field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedInvitation) GetMembership() string {
-	if o == nil || o.Membership.Get() == nil {
+	if o == nil || IsNil(o.Membership.Get()) {
 		var ret string
 		return ret
 	}
@@ -354,7 +345,6 @@ func (o *PatchedInvitation) HasMembership() bool {
 func (o *PatchedInvitation) SetMembership(v string) {
 	o.Membership.Set(&v)
 }
-
 // SetMembershipNil sets the value for Membership to be an explicit nil
 func (o *PatchedInvitation) SetMembershipNil() {
 	o.Membership.Set(nil)
@@ -367,7 +357,7 @@ func (o *PatchedInvitation) UnsetMembership() {
 
 // GetOrganization returns the Organization field value if set, zero value otherwise.
 func (o *PatchedInvitation) GetOrganization() string {
-	if o == nil || o.Organization == nil {
+	if o == nil || IsNil(o.Organization) {
 		var ret string
 		return ret
 	}
@@ -377,7 +367,7 @@ func (o *PatchedInvitation) GetOrganization() string {
 // GetOrganizationOk returns a tuple with the Organization field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedInvitation) GetOrganizationOk() (*string, bool) {
-	if o == nil || o.Organization == nil {
+	if o == nil || IsNil(o.Organization) {
 		return nil, false
 	}
 	return o.Organization, true
@@ -385,7 +375,7 @@ func (o *PatchedInvitation) GetOrganizationOk() (*string, bool) {
 
 // HasOrganization returns a boolean if a field has been set.
 func (o *PatchedInvitation) HasOrganization() bool {
-	if o != nil && o.Organization != nil {
+	if o != nil && !IsNil(o.Organization) {
 		return true
 	}
 
@@ -398,38 +388,46 @@ func (o *PatchedInvitation) SetOrganization(v string) {
 }
 
 func (o PatchedInvitation) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PatchedInvitation) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
+	if !IsNil(o.Url) {
 		toSerialize["url"] = o.Url
 	}
-	if o.Id != nil {
+	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
-	if o.Email != nil {
+	if !IsNil(o.Email) {
 		toSerialize["email"] = o.Email
 	}
-	if o.Role.IsSet() {
-		toSerialize["role"] = o.Role.Get()
+	if !IsNil(o.Role) {
+		toSerialize["role"] = o.Role
 	}
-	if o.Inviter != nil {
+	if !IsNil(o.Inviter) {
 		toSerialize["inviter"] = o.Inviter
 	}
-	if o.InviterName != nil {
+	if !IsNil(o.InviterName) {
 		toSerialize["inviter_name"] = o.InviterName
 	}
-	if o.State != nil {
+	if !IsNil(o.State) {
 		toSerialize["state"] = o.State
 	}
-	if o.StateDetail != nil {
+	if !IsNil(o.StateDetail) {
 		toSerialize["state_detail"] = o.StateDetail
 	}
 	if o.Membership.IsSet() {
 		toSerialize["membership"] = o.Membership.Get()
 	}
-	if o.Organization != nil {
+	if !IsNil(o.Organization) {
 		toSerialize["organization"] = o.Organization
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePatchedInvitation struct {
@@ -467,3 +465,5 @@ func (v *NullablePatchedInvitation) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -14,19 +14,20 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
 )
 
-// InvitationsApiService InvitationsApi service
-type InvitationsApiService service
+
+// InvitationsAPIService InvitationsAPI service
+type InvitationsAPIService service
 
 type ApiInvitationsAcceptCreateRequest struct {
-	ctx        context.Context
-	ApiService *InvitationsApiService
-	id         string
+	ctx context.Context
+	ApiService *InvitationsAPIService
+	id string
 }
 
 func (r ApiInvitationsAcceptCreateRequest) Execute() (*Invitation, *http.Response, error) {
@@ -45,36 +46,35 @@ On success the client receives the invitation record as it was updated.
 The client should then regenerate the JWT with the organization scope and
 proceed to the default landing page.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The invitation ID.
-	@return ApiInvitationsAcceptCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id The invitation ID.
+ @return ApiInvitationsAcceptCreateRequest
 */
-func (a *InvitationsApiService) InvitationsAcceptCreate(ctx context.Context, id string) ApiInvitationsAcceptCreateRequest {
+func (a *InvitationsAPIService) InvitationsAcceptCreate(ctx context.Context, id string) ApiInvitationsAcceptCreateRequest {
 	return ApiInvitationsAcceptCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Invitation
-func (a *InvitationsApiService) InvitationsAcceptCreateExecute(r ApiInvitationsAcceptCreateRequest) (*Invitation, *http.Response, error) {
+//  @return Invitation
+func (a *InvitationsAPIService) InvitationsAcceptCreateExecute(r ApiInvitationsAcceptCreateRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Invitation
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Invitation
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsApiService.InvitationsAcceptCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsAcceptCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/invitations/{id}/accept/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -135,9 +135,9 @@ func (a *InvitationsApiService) InvitationsAcceptCreateExecute(r ApiInvitationsA
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -163,8 +163,8 @@ func (a *InvitationsApiService) InvitationsAcceptCreateExecute(r ApiInvitationsA
 }
 
 type ApiInvitationsCreateRequest struct {
-	ctx              context.Context
-	ApiService       *InvitationsApiService
+	ctx context.Context
+	ApiService *InvitationsAPIService
 	invitationCreate *InvitationCreate
 }
 
@@ -182,28 +182,27 @@ InvitationsCreate Create an invitation.
 
 Extend an invitation for someone else to join your organization.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiInvitationsCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiInvitationsCreateRequest
 */
-func (a *InvitationsApiService) InvitationsCreate(ctx context.Context) ApiInvitationsCreateRequest {
+func (a *InvitationsAPIService) InvitationsCreate(ctx context.Context) ApiInvitationsCreateRequest {
 	return ApiInvitationsCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Invitation
-func (a *InvitationsApiService) InvitationsCreateExecute(r ApiInvitationsCreateRequest) (*Invitation, *http.Response, error) {
+//  @return Invitation
+func (a *InvitationsAPIService) InvitationsCreateExecute(r ApiInvitationsCreateRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Invitation
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Invitation
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsApiService.InvitationsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -274,9 +273,9 @@ func (a *InvitationsApiService) InvitationsCreateExecute(r ApiInvitationsCreateR
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -302,9 +301,9 @@ func (a *InvitationsApiService) InvitationsCreateExecute(r ApiInvitationsCreateR
 }
 
 type ApiInvitationsDestroyRequest struct {
-	ctx        context.Context
-	ApiService *InvitationsApiService
-	id         string
+	ctx context.Context
+	ApiService *InvitationsAPIService
+	id string
 }
 
 func (r ApiInvitationsDestroyRequest) Execute() (*http.Response, error) {
@@ -314,33 +313,33 @@ func (r ApiInvitationsDestroyRequest) Execute() (*http.Response, error) {
 /*
 InvitationsDestroy Method for InvitationsDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiInvitationsDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiInvitationsDestroyRequest
 */
-func (a *InvitationsApiService) InvitationsDestroy(ctx context.Context, id string) ApiInvitationsDestroyRequest {
+func (a *InvitationsAPIService) InvitationsDestroy(ctx context.Context, id string) ApiInvitationsDestroyRequest {
 	return ApiInvitationsDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *InvitationsApiService) InvitationsDestroyExecute(r ApiInvitationsDestroyRequest) (*http.Response, error) {
+func (a *InvitationsAPIService) InvitationsDestroyExecute(r ApiInvitationsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsApiService.InvitationsDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/invitations/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -401,9 +400,9 @@ func (a *InvitationsApiService) InvitationsDestroyExecute(r ApiInvitationsDestro
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -420,14 +419,14 @@ func (a *InvitationsApiService) InvitationsDestroyExecute(r ApiInvitationsDestro
 }
 
 type ApiInvitationsListRequest struct {
-	ctx        context.Context
-	ApiService *InvitationsApiService
-	email      *string
-	ordering   *string
-	page       *int32
-	pageSize   *int32
-	role       *string
-	state      *string
+	ctx context.Context
+	ApiService *InvitationsAPIService
+	email *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	role *string
+	state *string
 }
 
 func (r ApiInvitationsListRequest) Email(email string) ApiInvitationsListRequest {
@@ -472,28 +471,27 @@ func (r ApiInvitationsListRequest) Execute() (*PaginatedInvitationList, *http.Re
 /*
 InvitationsList Method for InvitationsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiInvitationsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiInvitationsListRequest
 */
-func (a *InvitationsApiService) InvitationsList(ctx context.Context) ApiInvitationsListRequest {
+func (a *InvitationsAPIService) InvitationsList(ctx context.Context) ApiInvitationsListRequest {
 	return ApiInvitationsListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedInvitationList
-func (a *InvitationsApiService) InvitationsListExecute(r ApiInvitationsListRequest) (*PaginatedInvitationList, *http.Response, error) {
+//  @return PaginatedInvitationList
+func (a *InvitationsAPIService) InvitationsListExecute(r ApiInvitationsListRequest) (*PaginatedInvitationList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedInvitationList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedInvitationList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsApiService.InvitationsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -505,22 +503,22 @@ func (a *InvitationsApiService) InvitationsListExecute(r ApiInvitationsListReque
 	localVarFormParams := url.Values{}
 
 	if r.email != nil {
-		localVarQueryParams.Add("email", parameterToString(*r.email, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "email", r.email, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.role != nil {
-		localVarQueryParams.Add("role", parameterToString(*r.role, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "role", r.role, "")
 	}
 	if r.state != nil {
-		localVarQueryParams.Add("state", parameterToString(*r.state, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "state", r.state, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -577,9 +575,9 @@ func (a *InvitationsApiService) InvitationsListExecute(r ApiInvitationsListReque
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -605,9 +603,9 @@ func (a *InvitationsApiService) InvitationsListExecute(r ApiInvitationsListReque
 }
 
 type ApiInvitationsPartialUpdateRequest struct {
-	ctx               context.Context
-	ApiService        *InvitationsApiService
-	id                string
+	ctx context.Context
+	ApiService *InvitationsAPIService
+	id string
 	patchedInvitation *PatchedInvitation
 }
 
@@ -623,36 +621,35 @@ func (r ApiInvitationsPartialUpdateRequest) Execute() (*Invitation, *http.Respon
 /*
 InvitationsPartialUpdate Method for InvitationsPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiInvitationsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiInvitationsPartialUpdateRequest
 */
-func (a *InvitationsApiService) InvitationsPartialUpdate(ctx context.Context, id string) ApiInvitationsPartialUpdateRequest {
+func (a *InvitationsAPIService) InvitationsPartialUpdate(ctx context.Context, id string) ApiInvitationsPartialUpdateRequest {
 	return ApiInvitationsPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Invitation
-func (a *InvitationsApiService) InvitationsPartialUpdateExecute(r ApiInvitationsPartialUpdateRequest) (*Invitation, *http.Response, error) {
+//  @return Invitation
+func (a *InvitationsAPIService) InvitationsPartialUpdateExecute(r ApiInvitationsPartialUpdateRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Invitation
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Invitation
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsApiService.InvitationsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/invitations/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -715,9 +712,9 @@ func (a *InvitationsApiService) InvitationsPartialUpdateExecute(r ApiInvitations
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -743,9 +740,9 @@ func (a *InvitationsApiService) InvitationsPartialUpdateExecute(r ApiInvitations
 }
 
 type ApiInvitationsResendCreateRequest struct {
-	ctx        context.Context
-	ApiService *InvitationsApiService
-	id         string
+	ctx context.Context
+	ApiService *InvitationsAPIService
+	id string
 }
 
 func (r ApiInvitationsResendCreateRequest) Execute() (*Invitation, *http.Response, error) {
@@ -757,36 +754,35 @@ InvitationsResendCreate Resend an invitation.
 
 Re-send an invitation to the recipient.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The invitation ID.
-	@return ApiInvitationsResendCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id The invitation ID.
+ @return ApiInvitationsResendCreateRequest
 */
-func (a *InvitationsApiService) InvitationsResendCreate(ctx context.Context, id string) ApiInvitationsResendCreateRequest {
+func (a *InvitationsAPIService) InvitationsResendCreate(ctx context.Context, id string) ApiInvitationsResendCreateRequest {
 	return ApiInvitationsResendCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Invitation
-func (a *InvitationsApiService) InvitationsResendCreateExecute(r ApiInvitationsResendCreateRequest) (*Invitation, *http.Response, error) {
+//  @return Invitation
+func (a *InvitationsAPIService) InvitationsResendCreateExecute(r ApiInvitationsResendCreateRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Invitation
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Invitation
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsApiService.InvitationsResendCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsResendCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/invitations/{id}/resend/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -847,9 +843,9 @@ func (a *InvitationsApiService) InvitationsResendCreateExecute(r ApiInvitationsR
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -875,9 +871,9 @@ func (a *InvitationsApiService) InvitationsResendCreateExecute(r ApiInvitationsR
 }
 
 type ApiInvitationsRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *InvitationsApiService
-	id         string
+	ctx context.Context
+	ApiService *InvitationsAPIService
+	id string
 }
 
 func (r ApiInvitationsRetrieveRequest) Execute() (*Invitation, *http.Response, error) {
@@ -887,36 +883,35 @@ func (r ApiInvitationsRetrieveRequest) Execute() (*Invitation, *http.Response, e
 /*
 InvitationsRetrieve Method for InvitationsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiInvitationsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiInvitationsRetrieveRequest
 */
-func (a *InvitationsApiService) InvitationsRetrieve(ctx context.Context, id string) ApiInvitationsRetrieveRequest {
+func (a *InvitationsAPIService) InvitationsRetrieve(ctx context.Context, id string) ApiInvitationsRetrieveRequest {
 	return ApiInvitationsRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Invitation
-func (a *InvitationsApiService) InvitationsRetrieveExecute(r ApiInvitationsRetrieveRequest) (*Invitation, *http.Response, error) {
+//  @return Invitation
+func (a *InvitationsAPIService) InvitationsRetrieveExecute(r ApiInvitationsRetrieveRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Invitation
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Invitation
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsApiService.InvitationsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/invitations/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -977,9 +972,9 @@ func (a *InvitationsApiService) InvitationsRetrieveExecute(r ApiInvitationsRetri
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1005,9 +1000,9 @@ func (a *InvitationsApiService) InvitationsRetrieveExecute(r ApiInvitationsRetri
 }
 
 type ApiInvitationsUpdateRequest struct {
-	ctx        context.Context
-	ApiService *InvitationsApiService
-	id         string
+	ctx context.Context
+	ApiService *InvitationsAPIService
+	id string
 	invitation *Invitation
 }
 
@@ -1023,36 +1018,35 @@ func (r ApiInvitationsUpdateRequest) Execute() (*Invitation, *http.Response, err
 /*
 InvitationsUpdate Method for InvitationsUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiInvitationsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiInvitationsUpdateRequest
 */
-func (a *InvitationsApiService) InvitationsUpdate(ctx context.Context, id string) ApiInvitationsUpdateRequest {
+func (a *InvitationsAPIService) InvitationsUpdate(ctx context.Context, id string) ApiInvitationsUpdateRequest {
 	return ApiInvitationsUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Invitation
-func (a *InvitationsApiService) InvitationsUpdateExecute(r ApiInvitationsUpdateRequest) (*Invitation, *http.Response, error) {
+//  @return Invitation
+func (a *InvitationsAPIService) InvitationsUpdateExecute(r ApiInvitationsUpdateRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Invitation
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Invitation
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsApiService.InvitationsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/invitations/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1118,9 +1112,9 @@ func (a *InvitationsApiService) InvitationsUpdateExecute(r ApiInvitationsUpdateR
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

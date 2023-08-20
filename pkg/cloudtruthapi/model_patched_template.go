@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the PatchedTemplate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedTemplate{}
+
 // PatchedTemplate A parameter template in a given project, optionally instantiated against an environment.
 type PatchedTemplate struct {
 	// The templates this value references, if interpolated.
@@ -39,8 +42,8 @@ type PatchedTemplate struct {
 	// The dynamic values that reference this template.
 	ReferencingValues []string `json:"referencing_values,omitempty"`
 	// If True, this template contains secrets.
-	HasSecret  *bool      `json:"has_secret,omitempty"`
-	CreatedAt  *time.Time `json:"created_at,omitempty"`
+	HasSecret *bool `json:"has_secret,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 }
 
@@ -63,7 +66,7 @@ func NewPatchedTemplateWithDefaults() *PatchedTemplate {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -73,7 +76,7 @@ func (o *PatchedTemplate) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -81,7 +84,7 @@ func (o *PatchedTemplate) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -95,7 +98,7 @@ func (o *PatchedTemplate) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -105,7 +108,7 @@ func (o *PatchedTemplate) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -113,7 +116,7 @@ func (o *PatchedTemplate) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -127,7 +130,7 @@ func (o *PatchedTemplate) SetId(v string) {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -137,7 +140,7 @@ func (o *PatchedTemplate) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -145,7 +148,7 @@ func (o *PatchedTemplate) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -159,7 +162,7 @@ func (o *PatchedTemplate) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -169,7 +172,7 @@ func (o *PatchedTemplate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -177,7 +180,7 @@ func (o *PatchedTemplate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -191,7 +194,7 @@ func (o *PatchedTemplate) SetDescription(v string) {
 
 // GetEvaluated returns the Evaluated field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetEvaluated() bool {
-	if o == nil || o.Evaluated == nil {
+	if o == nil || IsNil(o.Evaluated) {
 		var ret bool
 		return ret
 	}
@@ -201,7 +204,7 @@ func (o *PatchedTemplate) GetEvaluated() bool {
 // GetEvaluatedOk returns a tuple with the Evaluated field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetEvaluatedOk() (*bool, bool) {
-	if o == nil || o.Evaluated == nil {
+	if o == nil || IsNil(o.Evaluated) {
 		return nil, false
 	}
 	return o.Evaluated, true
@@ -209,7 +212,7 @@ func (o *PatchedTemplate) GetEvaluatedOk() (*bool, bool) {
 
 // HasEvaluated returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasEvaluated() bool {
-	if o != nil && o.Evaluated != nil {
+	if o != nil && !IsNil(o.Evaluated) {
 		return true
 	}
 
@@ -223,7 +226,7 @@ func (o *PatchedTemplate) SetEvaluated(v bool) {
 
 // GetBody returns the Body field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetBody() string {
-	if o == nil || o.Body == nil {
+	if o == nil || IsNil(o.Body) {
 		var ret string
 		return ret
 	}
@@ -233,7 +236,7 @@ func (o *PatchedTemplate) GetBody() string {
 // GetBodyOk returns a tuple with the Body field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetBodyOk() (*string, bool) {
-	if o == nil || o.Body == nil {
+	if o == nil || IsNil(o.Body) {
 		return nil, false
 	}
 	return o.Body, true
@@ -241,7 +244,7 @@ func (o *PatchedTemplate) GetBodyOk() (*string, bool) {
 
 // HasBody returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasBody() bool {
-	if o != nil && o.Body != nil {
+	if o != nil && !IsNil(o.Body) {
 		return true
 	}
 
@@ -255,7 +258,7 @@ func (o *PatchedTemplate) SetBody(v string) {
 
 // GetReferencedParameters returns the ReferencedParameters field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetReferencedParameters() []string {
-	if o == nil || o.ReferencedParameters == nil {
+	if o == nil || IsNil(o.ReferencedParameters) {
 		var ret []string
 		return ret
 	}
@@ -265,7 +268,7 @@ func (o *PatchedTemplate) GetReferencedParameters() []string {
 // GetReferencedParametersOk returns a tuple with the ReferencedParameters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetReferencedParametersOk() ([]string, bool) {
-	if o == nil || o.ReferencedParameters == nil {
+	if o == nil || IsNil(o.ReferencedParameters) {
 		return nil, false
 	}
 	return o.ReferencedParameters, true
@@ -273,7 +276,7 @@ func (o *PatchedTemplate) GetReferencedParametersOk() ([]string, bool) {
 
 // HasReferencedParameters returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasReferencedParameters() bool {
-	if o != nil && o.ReferencedParameters != nil {
+	if o != nil && !IsNil(o.ReferencedParameters) {
 		return true
 	}
 
@@ -287,7 +290,7 @@ func (o *PatchedTemplate) SetReferencedParameters(v []string) {
 
 // GetReferencedTemplates returns the ReferencedTemplates field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetReferencedTemplates() []string {
-	if o == nil || o.ReferencedTemplates == nil {
+	if o == nil || IsNil(o.ReferencedTemplates) {
 		var ret []string
 		return ret
 	}
@@ -297,7 +300,7 @@ func (o *PatchedTemplate) GetReferencedTemplates() []string {
 // GetReferencedTemplatesOk returns a tuple with the ReferencedTemplates field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetReferencedTemplatesOk() ([]string, bool) {
-	if o == nil || o.ReferencedTemplates == nil {
+	if o == nil || IsNil(o.ReferencedTemplates) {
 		return nil, false
 	}
 	return o.ReferencedTemplates, true
@@ -305,7 +308,7 @@ func (o *PatchedTemplate) GetReferencedTemplatesOk() ([]string, bool) {
 
 // HasReferencedTemplates returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasReferencedTemplates() bool {
-	if o != nil && o.ReferencedTemplates != nil {
+	if o != nil && !IsNil(o.ReferencedTemplates) {
 		return true
 	}
 
@@ -319,7 +322,7 @@ func (o *PatchedTemplate) SetReferencedTemplates(v []string) {
 
 // GetReferencingTemplates returns the ReferencingTemplates field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetReferencingTemplates() []string {
-	if o == nil || o.ReferencingTemplates == nil {
+	if o == nil || IsNil(o.ReferencingTemplates) {
 		var ret []string
 		return ret
 	}
@@ -329,7 +332,7 @@ func (o *PatchedTemplate) GetReferencingTemplates() []string {
 // GetReferencingTemplatesOk returns a tuple with the ReferencingTemplates field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetReferencingTemplatesOk() ([]string, bool) {
-	if o == nil || o.ReferencingTemplates == nil {
+	if o == nil || IsNil(o.ReferencingTemplates) {
 		return nil, false
 	}
 	return o.ReferencingTemplates, true
@@ -337,7 +340,7 @@ func (o *PatchedTemplate) GetReferencingTemplatesOk() ([]string, bool) {
 
 // HasReferencingTemplates returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasReferencingTemplates() bool {
-	if o != nil && o.ReferencingTemplates != nil {
+	if o != nil && !IsNil(o.ReferencingTemplates) {
 		return true
 	}
 
@@ -351,7 +354,7 @@ func (o *PatchedTemplate) SetReferencingTemplates(v []string) {
 
 // GetReferencingValues returns the ReferencingValues field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetReferencingValues() []string {
-	if o == nil || o.ReferencingValues == nil {
+	if o == nil || IsNil(o.ReferencingValues) {
 		var ret []string
 		return ret
 	}
@@ -361,7 +364,7 @@ func (o *PatchedTemplate) GetReferencingValues() []string {
 // GetReferencingValuesOk returns a tuple with the ReferencingValues field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetReferencingValuesOk() ([]string, bool) {
-	if o == nil || o.ReferencingValues == nil {
+	if o == nil || IsNil(o.ReferencingValues) {
 		return nil, false
 	}
 	return o.ReferencingValues, true
@@ -369,7 +372,7 @@ func (o *PatchedTemplate) GetReferencingValuesOk() ([]string, bool) {
 
 // HasReferencingValues returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasReferencingValues() bool {
-	if o != nil && o.ReferencingValues != nil {
+	if o != nil && !IsNil(o.ReferencingValues) {
 		return true
 	}
 
@@ -383,7 +386,7 @@ func (o *PatchedTemplate) SetReferencingValues(v []string) {
 
 // GetHasSecret returns the HasSecret field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetHasSecret() bool {
-	if o == nil || o.HasSecret == nil {
+	if o == nil || IsNil(o.HasSecret) {
 		var ret bool
 		return ret
 	}
@@ -393,7 +396,7 @@ func (o *PatchedTemplate) GetHasSecret() bool {
 // GetHasSecretOk returns a tuple with the HasSecret field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetHasSecretOk() (*bool, bool) {
-	if o == nil || o.HasSecret == nil {
+	if o == nil || IsNil(o.HasSecret) {
 		return nil, false
 	}
 	return o.HasSecret, true
@@ -401,7 +404,7 @@ func (o *PatchedTemplate) GetHasSecretOk() (*bool, bool) {
 
 // HasHasSecret returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasHasSecret() bool {
-	if o != nil && o.HasSecret != nil {
+	if o != nil && !IsNil(o.HasSecret) {
 		return true
 	}
 
@@ -415,7 +418,7 @@ func (o *PatchedTemplate) SetHasSecret(v bool) {
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -425,7 +428,7 @@ func (o *PatchedTemplate) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -433,7 +436,7 @@ func (o *PatchedTemplate) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -447,7 +450,7 @@ func (o *PatchedTemplate) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *PatchedTemplate) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -457,7 +460,7 @@ func (o *PatchedTemplate) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTemplate) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -465,7 +468,7 @@ func (o *PatchedTemplate) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedTemplate) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -478,47 +481,55 @@ func (o *PatchedTemplate) SetModifiedAt(v time.Time) {
 }
 
 func (o PatchedTemplate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
-		toSerialize["url"] = o.Url
-	}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if o.Name != nil {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Evaluated != nil {
-		toSerialize["evaluated"] = o.Evaluated
-	}
-	if o.Body != nil {
-		toSerialize["body"] = o.Body
-	}
-	if o.ReferencedParameters != nil {
-		toSerialize["referenced_parameters"] = o.ReferencedParameters
-	}
-	if o.ReferencedTemplates != nil {
-		toSerialize["referenced_templates"] = o.ReferencedTemplates
-	}
-	if o.ReferencingTemplates != nil {
-		toSerialize["referencing_templates"] = o.ReferencingTemplates
-	}
-	if o.ReferencingValues != nil {
-		toSerialize["referencing_values"] = o.ReferencingValues
-	}
-	if o.HasSecret != nil {
-		toSerialize["has_secret"] = o.HasSecret
-	}
-	if o.CreatedAt != nil {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if o.ModifiedAt != nil {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PatchedTemplate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Url) {
+		toSerialize["url"] = o.Url
+	}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	if !IsNil(o.Name) {
+		toSerialize["name"] = o.Name
+	}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Evaluated) {
+		toSerialize["evaluated"] = o.Evaluated
+	}
+	if !IsNil(o.Body) {
+		toSerialize["body"] = o.Body
+	}
+	if !IsNil(o.ReferencedParameters) {
+		toSerialize["referenced_parameters"] = o.ReferencedParameters
+	}
+	if !IsNil(o.ReferencedTemplates) {
+		toSerialize["referenced_templates"] = o.ReferencedTemplates
+	}
+	if !IsNil(o.ReferencingTemplates) {
+		toSerialize["referencing_templates"] = o.ReferencingTemplates
+	}
+	if !IsNil(o.ReferencingValues) {
+		toSerialize["referencing_values"] = o.ReferencingValues
+	}
+	if !IsNil(o.HasSecret) {
+		toSerialize["has_secret"] = o.HasSecret
+	}
+	if !IsNil(o.CreatedAt) {
+		toSerialize["created_at"] = o.CreatedAt
+	}
+	if !IsNil(o.ModifiedAt) {
+		toSerialize["modified_at"] = o.ModifiedAt
+	}
+	return toSerialize, nil
 }
 
 type NullablePatchedTemplate struct {
@@ -556,3 +567,5 @@ func (v *NullablePatchedTemplate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

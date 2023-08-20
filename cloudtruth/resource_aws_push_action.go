@@ -172,7 +172,7 @@ func resourceAWSPushActionCreate(ctx context.Context, d *schema.ResourceData, me
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		awsPush, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesCreate(ctx, *awsIntegrationID).AwsPush(*pushActionCreate).Execute()
+		awsPush, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPushesCreate(ctx, *awsIntegrationID).AwsPush(*pushActionCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSPushActionCreate: error creating AWS push action %s", pushActionName), r, err)
 		}
@@ -202,7 +202,7 @@ func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		awsPush, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesRetrieve(ctx, awsIntegrationID, pushActionID).Execute()
+		awsPush, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPushesRetrieve(ctx, awsIntegrationID, pushActionID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSPushActionRead: error reading AWS push action %s", pushActionName), r, err)
 		}
@@ -322,7 +322,7 @@ func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, me
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesPartialUpdate(ctx, awsIntegrationID,
+			_, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPushesPartialUpdate(ctx, awsIntegrationID,
 				pushActionID).PatchedAwsPushUpdate(patchedAWSPush).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceAWSPushActionUpdate: error updating AWS push action %s", pushActionName), r, err)
@@ -348,7 +348,7 @@ func resourceAWSPushActionDelete(ctx context.Context, d *schema.ResourceData, me
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPushesDestroy(ctx, awsIntegrationID, pushActionID).Execute()
+		r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPushesDestroy(ctx, awsIntegrationID, pushActionID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSPushActionDelete: error destroying AWS push action %s", pushActionName), r, err)
 		}

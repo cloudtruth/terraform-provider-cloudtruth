@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the Project type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Project{}
+
 // Project struct for Project
 type Project struct {
 	Url string `json:"url"`
@@ -31,13 +34,12 @@ type Project struct {
 	DependsOn NullableString `json:"depends_on,omitempty"`
 	// Indicates if access control is being enforced through grants.
 	AccessControlled *bool `json:"access_controlled,omitempty"`
-	// Your role in the project, if the project is access-controlled.
 	Role NullableRoleEnum `json:"role"`
 	// Deprecated. Only shows pushes for aws integrations in /api/v1/.
 	Pushes []AwsPush `json:"pushes"`
 	// Push actions associated with the project.
-	PushUrls   []string  `json:"push_urls"`
-	CreatedAt  time.Time `json:"created_at"`
+	PushUrls []string `json:"push_urls"`
+	CreatedAt time.Time `json:"created_at"`
 	ModifiedAt time.Time `json:"modified_at"`
 }
 
@@ -141,7 +143,7 @@ func (o *Project) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *Project) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -151,7 +153,7 @@ func (o *Project) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Project) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -159,7 +161,7 @@ func (o *Project) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *Project) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -197,7 +199,7 @@ func (o *Project) SetDependents(v []string) {
 
 // GetDependsOn returns the DependsOn field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Project) GetDependsOn() string {
-	if o == nil || o.DependsOn.Get() == nil {
+	if o == nil || IsNil(o.DependsOn.Get()) {
 		var ret string
 		return ret
 	}
@@ -227,7 +229,6 @@ func (o *Project) HasDependsOn() bool {
 func (o *Project) SetDependsOn(v string) {
 	o.DependsOn.Set(&v)
 }
-
 // SetDependsOnNil sets the value for DependsOn to be an explicit nil
 func (o *Project) SetDependsOnNil() {
 	o.DependsOn.Set(nil)
@@ -240,7 +241,7 @@ func (o *Project) UnsetDependsOn() {
 
 // GetAccessControlled returns the AccessControlled field value if set, zero value otherwise.
 func (o *Project) GetAccessControlled() bool {
-	if o == nil || o.AccessControlled == nil {
+	if o == nil || IsNil(o.AccessControlled) {
 		var ret bool
 		return ret
 	}
@@ -250,7 +251,7 @@ func (o *Project) GetAccessControlled() bool {
 // GetAccessControlledOk returns a tuple with the AccessControlled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Project) GetAccessControlledOk() (*bool, bool) {
-	if o == nil || o.AccessControlled == nil {
+	if o == nil || IsNil(o.AccessControlled) {
 		return nil, false
 	}
 	return o.AccessControlled, true
@@ -258,7 +259,7 @@ func (o *Project) GetAccessControlledOk() (*bool, bool) {
 
 // HasAccessControlled returns a boolean if a field has been set.
 func (o *Project) HasAccessControlled() bool {
-	if o != nil && o.AccessControlled != nil {
+	if o != nil && !IsNil(o.AccessControlled) {
 		return true
 	}
 
@@ -393,44 +394,34 @@ func (o *Project) SetModifiedAt(v time.Time) {
 }
 
 func (o Project) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o Project) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if true {
-		toSerialize["dependents"] = o.Dependents
-	}
+	toSerialize["dependents"] = o.Dependents
 	if o.DependsOn.IsSet() {
 		toSerialize["depends_on"] = o.DependsOn.Get()
 	}
-	if o.AccessControlled != nil {
+	if !IsNil(o.AccessControlled) {
 		toSerialize["access_controlled"] = o.AccessControlled
 	}
-	if true {
-		toSerialize["role"] = o.Role.Get()
-	}
-	if true {
-		toSerialize["pushes"] = o.Pushes
-	}
-	if true {
-		toSerialize["push_urls"] = o.PushUrls
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["role"] = o.Role.Get()
+	toSerialize["pushes"] = o.Pushes
+	toSerialize["push_urls"] = o.PushUrls
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableProject struct {
@@ -468,3 +459,5 @@ func (v *NullableProject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

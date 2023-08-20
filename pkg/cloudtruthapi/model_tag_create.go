@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the TagCreate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TagCreate{}
+
 // TagCreate Details for creating a tag.
 type TagCreate struct {
 	// The tag name. Tag names may contain alphanumeric, hyphen, underscore, or period characters. Tag names are case sensitive. The name cannot be modified.
@@ -70,7 +73,7 @@ func (o *TagCreate) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *TagCreate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -80,7 +83,7 @@ func (o *TagCreate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TagCreate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -88,7 +91,7 @@ func (o *TagCreate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *TagCreate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -102,7 +105,7 @@ func (o *TagCreate) SetDescription(v string) {
 
 // GetTimestamp returns the Timestamp field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *TagCreate) GetTimestamp() time.Time {
-	if o == nil || o.Timestamp.Get() == nil {
+	if o == nil || IsNil(o.Timestamp.Get()) {
 		var ret time.Time
 		return ret
 	}
@@ -132,7 +135,6 @@ func (o *TagCreate) HasTimestamp() bool {
 func (o *TagCreate) SetTimestamp(v time.Time) {
 	o.Timestamp.Set(&v)
 }
-
 // SetTimestampNil sets the value for Timestamp to be an explicit nil
 func (o *TagCreate) SetTimestampNil() {
 	o.Timestamp.Set(nil)
@@ -144,17 +146,23 @@ func (o *TagCreate) UnsetTimestamp() {
 }
 
 func (o TagCreate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
-	if o.Description != nil {
+	return json.Marshal(toSerialize)
+}
+
+func (o TagCreate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
 	if o.Timestamp.IsSet() {
 		toSerialize["timestamp"] = o.Timestamp.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableTagCreate struct {
@@ -192,3 +200,5 @@ func (v *NullableTagCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

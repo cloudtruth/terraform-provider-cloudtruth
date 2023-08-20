@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the TemplateLookupError type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TemplateLookupError{}
+
 // TemplateLookupError Indicates errors occurred while retrieving values to substitute into the template.
 type TemplateLookupError struct {
 	Detail []TemplateLookupErrorEntry `json:"detail"`
@@ -63,11 +66,17 @@ func (o *TemplateLookupError) SetDetail(v []TemplateLookupErrorEntry) {
 }
 
 func (o TemplateLookupError) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["detail"] = o.Detail
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TemplateLookupError) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["detail"] = o.Detail
+	return toSerialize, nil
 }
 
 type NullableTemplateLookupError struct {
@@ -105,3 +114,5 @@ func (v *NullableTemplateLookupError) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

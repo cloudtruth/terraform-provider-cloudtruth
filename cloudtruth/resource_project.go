@@ -69,7 +69,7 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		project, r, err = c.openAPIClient.ProjectsApi.ProjectsCreate(ctx).ProjectCreate(*projectCreate).Execute()
+		project, r, err = c.openAPIClient.ProjectsAPI.ProjectsCreate(ctx).ProjectCreate(*projectCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceProjectCreate: error creating project %s", projectName), r, err)
 		}
@@ -117,7 +117,7 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		project, r, err = c.openAPIClient.ProjectsApi.ProjectsRetrieve(ctx, projectID).Execute()
+		project, r, err = c.openAPIClient.ProjectsAPI.ProjectsRetrieve(ctx, projectID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceProjectRead: error reading project %s", projectName), r, err)
 		}
@@ -166,7 +166,7 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.ProjectsApi.ProjectsPartialUpdate(ctx,
+			_, r, err = c.openAPIClient.ProjectsAPI.ProjectsPartialUpdate(ctx,
 				projectID).PatchedProject(patchedProject).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceProjectUpdate: error updating project %s", projectName), r, err)
@@ -191,7 +191,7 @@ func resourceProjectDelete(ctx context.Context, d *schema.ResourceData, meta any
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.ProjectsApi.ProjectsDestroy(ctx, projectID).Execute()
+		r, err = c.openAPIClient.ProjectsAPI.ProjectsDestroy(ctx, projectID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceProjectDelete: error destroying project %s", projectName), r, err)
 		}

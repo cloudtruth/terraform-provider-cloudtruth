@@ -15,18 +15,21 @@ import (
 	"encoding/json"
 )
 
+// checks if the IntegrationNode type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &IntegrationNode{}
+
 // IntegrationNode Describes the content available at a given location.
 type IntegrationNode struct {
-	Fqn         string         `json:"fqn"`
-	NodeType    NodeTypeEnum   `json:"node_type"`
-	Secret      *bool          `json:"secret,omitempty"`
-	Name        *string        `json:"name,omitempty"`
-	Jmespath    NullableString `json:"jmespath,omitempty"`
+	Fqn string `json:"fqn"`
+	NodeType NodeTypeEnum `json:"node_type"`
+	Secret *bool `json:"secret,omitempty"`
+	Name *string `json:"name,omitempty"`
+	Jmespath NullableString `json:"jmespath,omitempty"`
 	ContentType NullableString `json:"content_type,omitempty"`
 	ContentData NullableString `json:"content_data,omitempty"`
-	ContentSize NullableInt32  `json:"content_size,omitempty"`
-	ContentKeys []string       `json:"content_keys,omitempty"`
-	VenueId     NullableString `json:"venue_id,omitempty"`
+	ContentSize NullableInt32 `json:"content_size,omitempty"`
+	ContentKeys []string `json:"content_keys,omitempty"`
+	VenueId NullableString `json:"venue_id,omitempty"`
 }
 
 // NewIntegrationNode instantiates a new IntegrationNode object
@@ -98,7 +101,7 @@ func (o *IntegrationNode) SetNodeType(v NodeTypeEnum) {
 
 // GetSecret returns the Secret field value if set, zero value otherwise.
 func (o *IntegrationNode) GetSecret() bool {
-	if o == nil || o.Secret == nil {
+	if o == nil || IsNil(o.Secret) {
 		var ret bool
 		return ret
 	}
@@ -108,7 +111,7 @@ func (o *IntegrationNode) GetSecret() bool {
 // GetSecretOk returns a tuple with the Secret field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IntegrationNode) GetSecretOk() (*bool, bool) {
-	if o == nil || o.Secret == nil {
+	if o == nil || IsNil(o.Secret) {
 		return nil, false
 	}
 	return o.Secret, true
@@ -116,7 +119,7 @@ func (o *IntegrationNode) GetSecretOk() (*bool, bool) {
 
 // HasSecret returns a boolean if a field has been set.
 func (o *IntegrationNode) HasSecret() bool {
-	if o != nil && o.Secret != nil {
+	if o != nil && !IsNil(o.Secret) {
 		return true
 	}
 
@@ -130,7 +133,7 @@ func (o *IntegrationNode) SetSecret(v bool) {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *IntegrationNode) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -140,7 +143,7 @@ func (o *IntegrationNode) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *IntegrationNode) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -148,7 +151,7 @@ func (o *IntegrationNode) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *IntegrationNode) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -162,7 +165,7 @@ func (o *IntegrationNode) SetName(v string) {
 
 // GetJmespath returns the Jmespath field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *IntegrationNode) GetJmespath() string {
-	if o == nil || o.Jmespath.Get() == nil {
+	if o == nil || IsNil(o.Jmespath.Get()) {
 		var ret string
 		return ret
 	}
@@ -192,7 +195,6 @@ func (o *IntegrationNode) HasJmespath() bool {
 func (o *IntegrationNode) SetJmespath(v string) {
 	o.Jmespath.Set(&v)
 }
-
 // SetJmespathNil sets the value for Jmespath to be an explicit nil
 func (o *IntegrationNode) SetJmespathNil() {
 	o.Jmespath.Set(nil)
@@ -205,7 +207,7 @@ func (o *IntegrationNode) UnsetJmespath() {
 
 // GetContentType returns the ContentType field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *IntegrationNode) GetContentType() string {
-	if o == nil || o.ContentType.Get() == nil {
+	if o == nil || IsNil(o.ContentType.Get()) {
 		var ret string
 		return ret
 	}
@@ -235,7 +237,6 @@ func (o *IntegrationNode) HasContentType() bool {
 func (o *IntegrationNode) SetContentType(v string) {
 	o.ContentType.Set(&v)
 }
-
 // SetContentTypeNil sets the value for ContentType to be an explicit nil
 func (o *IntegrationNode) SetContentTypeNil() {
 	o.ContentType.Set(nil)
@@ -248,7 +249,7 @@ func (o *IntegrationNode) UnsetContentType() {
 
 // GetContentData returns the ContentData field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *IntegrationNode) GetContentData() string {
-	if o == nil || o.ContentData.Get() == nil {
+	if o == nil || IsNil(o.ContentData.Get()) {
 		var ret string
 		return ret
 	}
@@ -278,7 +279,6 @@ func (o *IntegrationNode) HasContentData() bool {
 func (o *IntegrationNode) SetContentData(v string) {
 	o.ContentData.Set(&v)
 }
-
 // SetContentDataNil sets the value for ContentData to be an explicit nil
 func (o *IntegrationNode) SetContentDataNil() {
 	o.ContentData.Set(nil)
@@ -291,7 +291,7 @@ func (o *IntegrationNode) UnsetContentData() {
 
 // GetContentSize returns the ContentSize field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *IntegrationNode) GetContentSize() int32 {
-	if o == nil || o.ContentSize.Get() == nil {
+	if o == nil || IsNil(o.ContentSize.Get()) {
 		var ret int32
 		return ret
 	}
@@ -321,7 +321,6 @@ func (o *IntegrationNode) HasContentSize() bool {
 func (o *IntegrationNode) SetContentSize(v int32) {
 	o.ContentSize.Set(&v)
 }
-
 // SetContentSizeNil sets the value for ContentSize to be an explicit nil
 func (o *IntegrationNode) SetContentSizeNil() {
 	o.ContentSize.Set(nil)
@@ -345,7 +344,7 @@ func (o *IntegrationNode) GetContentKeys() []string {
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *IntegrationNode) GetContentKeysOk() ([]string, bool) {
-	if o == nil || o.ContentKeys == nil {
+	if o == nil || IsNil(o.ContentKeys) {
 		return nil, false
 	}
 	return o.ContentKeys, true
@@ -353,7 +352,7 @@ func (o *IntegrationNode) GetContentKeysOk() ([]string, bool) {
 
 // HasContentKeys returns a boolean if a field has been set.
 func (o *IntegrationNode) HasContentKeys() bool {
-	if o != nil && o.ContentKeys != nil {
+	if o != nil && IsNil(o.ContentKeys) {
 		return true
 	}
 
@@ -367,7 +366,7 @@ func (o *IntegrationNode) SetContentKeys(v []string) {
 
 // GetVenueId returns the VenueId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *IntegrationNode) GetVenueId() string {
-	if o == nil || o.VenueId.Get() == nil {
+	if o == nil || IsNil(o.VenueId.Get()) {
 		var ret string
 		return ret
 	}
@@ -397,7 +396,6 @@ func (o *IntegrationNode) HasVenueId() bool {
 func (o *IntegrationNode) SetVenueId(v string) {
 	o.VenueId.Set(&v)
 }
-
 // SetVenueIdNil sets the value for VenueId to be an explicit nil
 func (o *IntegrationNode) SetVenueIdNil() {
 	o.VenueId.Set(nil)
@@ -409,17 +407,21 @@ func (o *IntegrationNode) UnsetVenueId() {
 }
 
 func (o IntegrationNode) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o IntegrationNode) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fqn"] = o.Fqn
-	}
-	if true {
-		toSerialize["node_type"] = o.NodeType
-	}
-	if o.Secret != nil {
+	toSerialize["fqn"] = o.Fqn
+	toSerialize["node_type"] = o.NodeType
+	if !IsNil(o.Secret) {
 		toSerialize["secret"] = o.Secret
 	}
-	if o.Name != nil {
+	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
 	if o.Jmespath.IsSet() {
@@ -440,7 +442,7 @@ func (o IntegrationNode) MarshalJSON() ([]byte, error) {
 	if o.VenueId.IsSet() {
 		toSerialize["venue_id"] = o.VenueId.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableIntegrationNode struct {
@@ -478,3 +480,5 @@ func (v *NullableIntegrationNode) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

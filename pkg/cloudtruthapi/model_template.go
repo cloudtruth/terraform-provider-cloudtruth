@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the Template type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Template{}
+
 // Template A parameter template in a given project, optionally instantiated against an environment.
 type Template struct {
 	// The templates this value references, if interpolated.
@@ -39,8 +42,8 @@ type Template struct {
 	// The dynamic values that reference this template.
 	ReferencingValues []string `json:"referencing_values"`
 	// If True, this template contains secrets.
-	HasSecret  bool      `json:"has_secret"`
-	CreatedAt  time.Time `json:"created_at"`
+	HasSecret bool `json:"has_secret"`
+	CreatedAt time.Time `json:"created_at"`
 	ModifiedAt time.Time `json:"modified_at"`
 }
 
@@ -146,7 +149,7 @@ func (o *Template) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *Template) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -156,7 +159,7 @@ func (o *Template) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Template) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -164,7 +167,7 @@ func (o *Template) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *Template) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -202,7 +205,7 @@ func (o *Template) SetEvaluated(v bool) {
 
 // GetBody returns the Body field value if set, zero value otherwise.
 func (o *Template) GetBody() string {
-	if o == nil || o.Body == nil {
+	if o == nil || IsNil(o.Body) {
 		var ret string
 		return ret
 	}
@@ -212,7 +215,7 @@ func (o *Template) GetBody() string {
 // GetBodyOk returns a tuple with the Body field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Template) GetBodyOk() (*string, bool) {
-	if o == nil || o.Body == nil {
+	if o == nil || IsNil(o.Body) {
 		return nil, false
 	}
 	return o.Body, true
@@ -220,7 +223,7 @@ func (o *Template) GetBodyOk() (*string, bool) {
 
 // HasBody returns a boolean if a field has been set.
 func (o *Template) HasBody() bool {
-	if o != nil && o.Body != nil {
+	if o != nil && !IsNil(o.Body) {
 		return true
 	}
 
@@ -401,47 +404,33 @@ func (o *Template) SetModifiedAt(v time.Time) {
 }
 
 func (o Template) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["evaluated"] = o.Evaluated
-	}
-	if o.Body != nil {
-		toSerialize["body"] = o.Body
-	}
-	if true {
-		toSerialize["referenced_parameters"] = o.ReferencedParameters
-	}
-	if true {
-		toSerialize["referenced_templates"] = o.ReferencedTemplates
-	}
-	if true {
-		toSerialize["referencing_templates"] = o.ReferencingTemplates
-	}
-	if true {
-		toSerialize["referencing_values"] = o.ReferencingValues
-	}
-	if true {
-		toSerialize["has_secret"] = o.HasSecret
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Template) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["evaluated"] = o.Evaluated
+	if !IsNil(o.Body) {
+		toSerialize["body"] = o.Body
+	}
+	toSerialize["referenced_parameters"] = o.ReferencedParameters
+	toSerialize["referenced_templates"] = o.ReferencedTemplates
+	toSerialize["referencing_templates"] = o.ReferencingTemplates
+	toSerialize["referencing_values"] = o.ReferencingValues
+	toSerialize["has_secret"] = o.HasSecret
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableTemplate struct {
@@ -479,3 +468,5 @@ func (v *NullableTemplate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

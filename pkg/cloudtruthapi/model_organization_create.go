@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the OrganizationCreate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &OrganizationCreate{}
+
 // OrganizationCreate struct for OrganizationCreate
 type OrganizationCreate struct {
 	// The organization name.
@@ -64,11 +67,17 @@ func (o *OrganizationCreate) SetName(v string) {
 }
 
 func (o OrganizationCreate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o OrganizationCreate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	return toSerialize, nil
 }
 
 type NullableOrganizationCreate struct {
@@ -106,3 +115,5 @@ func (v *NullableOrganizationCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

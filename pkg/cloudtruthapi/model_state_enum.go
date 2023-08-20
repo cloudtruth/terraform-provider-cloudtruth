@@ -21,7 +21,7 @@ type StateEnum string
 
 // List of StateEnum
 const (
-	STATEENUM_QUEUED  StateEnum = "queued"
+	STATEENUM_QUEUED StateEnum = "queued"
 	STATEENUM_RUNNING StateEnum = "running"
 	STATEENUM_SKIPPED StateEnum = "skipped"
 	STATEENUM_SUCCESS StateEnum = "success"
@@ -115,3 +115,4 @@ func (v *NullableStateEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+

@@ -14,20 +14,21 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 )
 
-// ImportApiService ImportApi service
-type ImportApiService service
+
+// ImportAPIService ImportAPI service
+type ImportAPIService service
 
 type ApiImportCreateRequest struct {
-	ctx                 context.Context
-	ApiService          *ImportApiService
+	ctx context.Context
+	ApiService *ImportAPIService
 	importCreateRequest *ImportCreateRequest
-	maskSecrets         *bool
-	preview             *bool
+	maskSecrets *bool
+	preview *bool
 }
 
 func (r ApiImportCreateRequest) ImportCreateRequest(importCreateRequest ImportCreateRequest) ApiImportCreateRequest {
@@ -56,28 +57,27 @@ ImportCreate Method for ImportCreate
 
 Import parameters from the provided data.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiImportCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiImportCreateRequest
 */
-func (a *ImportApiService) ImportCreate(ctx context.Context) ApiImportCreateRequest {
+func (a *ImportAPIService) ImportCreate(ctx context.Context) ApiImportCreateRequest {
 	return ApiImportCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ImportCreateResponse
-func (a *ImportApiService) ImportCreateExecute(r ApiImportCreateRequest) (*ImportCreateResponse, *http.Response, error) {
+//  @return ImportCreateResponse
+func (a *ImportAPIService) ImportCreateExecute(r ApiImportCreateRequest) (*ImportCreateResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ImportCreateResponse
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ImportCreateResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ImportApiService.ImportCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ImportAPIService.ImportCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -92,10 +92,10 @@ func (a *ImportApiService) ImportCreateExecute(r ApiImportCreateRequest) (*Impor
 	}
 
 	if r.maskSecrets != nil {
-		localVarQueryParams.Add("mask_secrets", parameterToString(*r.maskSecrets, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
 	if r.preview != nil {
-		localVarQueryParams.Add("preview", parameterToString(*r.preview, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "preview", r.preview, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -154,9 +154,9 @@ func (a *ImportApiService) ImportCreateExecute(r ApiImportCreateRequest) (*Impor
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

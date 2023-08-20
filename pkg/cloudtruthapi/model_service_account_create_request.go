@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ServiceAccountCreateRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceAccountCreateRequest{}
+
 // ServiceAccountCreateRequest struct for ServiceAccountCreateRequest
 type ServiceAccountCreateRequest struct {
 	// The name of the process or system using the service account.
@@ -67,7 +70,7 @@ func (o *ServiceAccountCreateRequest) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *ServiceAccountCreateRequest) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -77,7 +80,7 @@ func (o *ServiceAccountCreateRequest) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceAccountCreateRequest) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -85,7 +88,7 @@ func (o *ServiceAccountCreateRequest) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *ServiceAccountCreateRequest) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -98,14 +101,20 @@ func (o *ServiceAccountCreateRequest) SetDescription(v string) {
 }
 
 func (o ServiceAccountCreateRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ServiceAccountCreateRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	return toSerialize, nil
 }
 
 type NullableServiceAccountCreateRequest struct {
@@ -143,3 +152,5 @@ func (v *NullableServiceAccountCreateRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

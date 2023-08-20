@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the PatchedAzureKeyVaultPushUpdate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedAzureKeyVaultPushUpdate{}
+
 // PatchedAzureKeyVaultPushUpdate Update a push.
 type PatchedAzureKeyVaultPushUpdate struct {
 	// The action name.
@@ -60,7 +63,7 @@ func NewPatchedAzureKeyVaultPushUpdateWithDefaults() *PatchedAzureKeyVaultPushUp
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultPushUpdate) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -70,7 +73,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -78,7 +81,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -92,7 +95,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultPushUpdate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -102,7 +105,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -110,7 +113,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -124,7 +127,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) SetDescription(v string) {
 
 // GetProjects returns the Projects field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultPushUpdate) GetProjects() []string {
-	if o == nil || o.Projects == nil {
+	if o == nil || IsNil(o.Projects) {
 		var ret []string
 		return ret
 	}
@@ -134,7 +137,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetProjects() []string {
 // GetProjectsOk returns a tuple with the Projects field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) GetProjectsOk() ([]string, bool) {
-	if o == nil || o.Projects == nil {
+	if o == nil || IsNil(o.Projects) {
 		return nil, false
 	}
 	return o.Projects, true
@@ -142,7 +145,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetProjectsOk() ([]string, bool) {
 
 // HasProjects returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) HasProjects() bool {
-	if o != nil && o.Projects != nil {
+	if o != nil && !IsNil(o.Projects) {
 		return true
 	}
 
@@ -156,7 +159,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) SetProjects(v []string) {
 
 // GetTags returns the Tags field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultPushUpdate) GetTags() []string {
-	if o == nil || o.Tags == nil {
+	if o == nil || IsNil(o.Tags) {
 		var ret []string
 		return ret
 	}
@@ -166,7 +169,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetTags() []string {
 // GetTagsOk returns a tuple with the Tags field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) GetTagsOk() ([]string, bool) {
-	if o == nil || o.Tags == nil {
+	if o == nil || IsNil(o.Tags) {
 		return nil, false
 	}
 	return o.Tags, true
@@ -174,7 +177,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetTagsOk() ([]string, bool) {
 
 // HasTags returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) HasTags() bool {
-	if o != nil && o.Tags != nil {
+	if o != nil && !IsNil(o.Tags) {
 		return true
 	}
 
@@ -188,7 +191,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) SetTags(v []string) {
 
 // GetResource returns the Resource field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedAzureKeyVaultPushUpdate) GetResource() string {
-	if o == nil || o.Resource.Get() == nil {
+	if o == nil || IsNil(o.Resource.Get()) {
 		var ret string
 		return ret
 	}
@@ -218,7 +221,6 @@ func (o *PatchedAzureKeyVaultPushUpdate) HasResource() bool {
 func (o *PatchedAzureKeyVaultPushUpdate) SetResource(v string) {
 	o.Resource.Set(&v)
 }
-
 // SetResourceNil sets the value for Resource to be an explicit nil
 func (o *PatchedAzureKeyVaultPushUpdate) SetResourceNil() {
 	o.Resource.Set(nil)
@@ -231,7 +233,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) UnsetResource() {
 
 // GetDryRun returns the DryRun field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultPushUpdate) GetDryRun() bool {
-	if o == nil || o.DryRun == nil {
+	if o == nil || IsNil(o.DryRun) {
 		var ret bool
 		return ret
 	}
@@ -241,7 +243,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetDryRun() bool {
 // GetDryRunOk returns a tuple with the DryRun field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) GetDryRunOk() (*bool, bool) {
-	if o == nil || o.DryRun == nil {
+	if o == nil || IsNil(o.DryRun) {
 		return nil, false
 	}
 	return o.DryRun, true
@@ -249,7 +251,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetDryRunOk() (*bool, bool) {
 
 // HasDryRun returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) HasDryRun() bool {
-	if o != nil && o.DryRun != nil {
+	if o != nil && !IsNil(o.DryRun) {
 		return true
 	}
 
@@ -263,7 +265,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) SetDryRun(v bool) {
 
 // GetForce returns the Force field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultPushUpdate) GetForce() bool {
-	if o == nil || o.Force == nil {
+	if o == nil || IsNil(o.Force) {
 		var ret bool
 		return ret
 	}
@@ -273,7 +275,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetForce() bool {
 // GetForceOk returns a tuple with the Force field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) GetForceOk() (*bool, bool) {
-	if o == nil || o.Force == nil {
+	if o == nil || IsNil(o.Force) {
 		return nil, false
 	}
 	return o.Force, true
@@ -281,7 +283,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetForceOk() (*bool, bool) {
 
 // HasForce returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) HasForce() bool {
-	if o != nil && o.Force != nil {
+	if o != nil && !IsNil(o.Force) {
 		return true
 	}
 
@@ -295,7 +297,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) SetForce(v bool) {
 
 // GetLocal returns the Local field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultPushUpdate) GetLocal() bool {
-	if o == nil || o.Local == nil {
+	if o == nil || IsNil(o.Local) {
 		var ret bool
 		return ret
 	}
@@ -305,7 +307,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetLocal() bool {
 // GetLocalOk returns a tuple with the Local field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) GetLocalOk() (*bool, bool) {
-	if o == nil || o.Local == nil {
+	if o == nil || IsNil(o.Local) {
 		return nil, false
 	}
 	return o.Local, true
@@ -313,7 +315,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetLocalOk() (*bool, bool) {
 
 // HasLocal returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) HasLocal() bool {
-	if o != nil && o.Local != nil {
+	if o != nil && !IsNil(o.Local) {
 		return true
 	}
 
@@ -327,7 +329,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) SetLocal(v bool) {
 
 // GetCoerceParameters returns the CoerceParameters field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultPushUpdate) GetCoerceParameters() bool {
-	if o == nil || o.CoerceParameters == nil {
+	if o == nil || IsNil(o.CoerceParameters) {
 		var ret bool
 		return ret
 	}
@@ -337,7 +339,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetCoerceParameters() bool {
 // GetCoerceParametersOk returns a tuple with the CoerceParameters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) GetCoerceParametersOk() (*bool, bool) {
-	if o == nil || o.CoerceParameters == nil {
+	if o == nil || IsNil(o.CoerceParameters) {
 		return nil, false
 	}
 	return o.CoerceParameters, true
@@ -345,7 +347,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetCoerceParametersOk() (*bool, bool) {
 
 // HasCoerceParameters returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) HasCoerceParameters() bool {
-	if o != nil && o.CoerceParameters != nil {
+	if o != nil && !IsNil(o.CoerceParameters) {
 		return true
 	}
 
@@ -359,7 +361,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) SetCoerceParameters(v bool) {
 
 // GetIncludeParameters returns the IncludeParameters field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultPushUpdate) GetIncludeParameters() bool {
-	if o == nil || o.IncludeParameters == nil {
+	if o == nil || IsNil(o.IncludeParameters) {
 		var ret bool
 		return ret
 	}
@@ -369,7 +371,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetIncludeParameters() bool {
 // GetIncludeParametersOk returns a tuple with the IncludeParameters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) GetIncludeParametersOk() (*bool, bool) {
-	if o == nil || o.IncludeParameters == nil {
+	if o == nil || IsNil(o.IncludeParameters) {
 		return nil, false
 	}
 	return o.IncludeParameters, true
@@ -377,7 +379,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetIncludeParametersOk() (*bool, bool) 
 
 // HasIncludeParameters returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) HasIncludeParameters() bool {
-	if o != nil && o.IncludeParameters != nil {
+	if o != nil && !IsNil(o.IncludeParameters) {
 		return true
 	}
 
@@ -391,7 +393,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) SetIncludeParameters(v bool) {
 
 // GetIncludeSecrets returns the IncludeSecrets field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultPushUpdate) GetIncludeSecrets() bool {
-	if o == nil || o.IncludeSecrets == nil {
+	if o == nil || IsNil(o.IncludeSecrets) {
 		var ret bool
 		return ret
 	}
@@ -401,7 +403,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetIncludeSecrets() bool {
 // GetIncludeSecretsOk returns a tuple with the IncludeSecrets field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) GetIncludeSecretsOk() (*bool, bool) {
-	if o == nil || o.IncludeSecrets == nil {
+	if o == nil || IsNil(o.IncludeSecrets) {
 		return nil, false
 	}
 	return o.IncludeSecrets, true
@@ -409,7 +411,7 @@ func (o *PatchedAzureKeyVaultPushUpdate) GetIncludeSecretsOk() (*bool, bool) {
 
 // HasIncludeSecrets returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultPushUpdate) HasIncludeSecrets() bool {
-	if o != nil && o.IncludeSecrets != nil {
+	if o != nil && !IsNil(o.IncludeSecrets) {
 		return true
 	}
 
@@ -422,41 +424,49 @@ func (o *PatchedAzureKeyVaultPushUpdate) SetIncludeSecrets(v bool) {
 }
 
 func (o PatchedAzureKeyVaultPushUpdate) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PatchedAzureKeyVaultPushUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Name != nil {
+	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
-	if o.Description != nil {
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.Projects != nil {
+	if !IsNil(o.Projects) {
 		toSerialize["projects"] = o.Projects
 	}
-	if o.Tags != nil {
+	if !IsNil(o.Tags) {
 		toSerialize["tags"] = o.Tags
 	}
 	if o.Resource.IsSet() {
 		toSerialize["resource"] = o.Resource.Get()
 	}
-	if o.DryRun != nil {
+	if !IsNil(o.DryRun) {
 		toSerialize["dry_run"] = o.DryRun
 	}
-	if o.Force != nil {
+	if !IsNil(o.Force) {
 		toSerialize["force"] = o.Force
 	}
-	if o.Local != nil {
+	if !IsNil(o.Local) {
 		toSerialize["local"] = o.Local
 	}
-	if o.CoerceParameters != nil {
+	if !IsNil(o.CoerceParameters) {
 		toSerialize["coerce_parameters"] = o.CoerceParameters
 	}
-	if o.IncludeParameters != nil {
+	if !IsNil(o.IncludeParameters) {
 		toSerialize["include_parameters"] = o.IncludeParameters
 	}
-	if o.IncludeSecrets != nil {
+	if !IsNil(o.IncludeSecrets) {
 		toSerialize["include_secrets"] = o.IncludeSecrets
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePatchedAzureKeyVaultPushUpdate struct {
@@ -494,3 +504,5 @@ func (v *NullablePatchedAzureKeyVaultPushUpdate) UnmarshalJSON(src []byte) error
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

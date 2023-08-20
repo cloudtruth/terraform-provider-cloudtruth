@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the PatchedAwsPushUpdate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedAwsPushUpdate{}
+
 // PatchedAwsPushUpdate Update a push.  The `region` and `service` cannot be changed on an existing push.
 type PatchedAwsPushUpdate struct {
 	// The action name.
@@ -62,7 +65,7 @@ func NewPatchedAwsPushUpdateWithDefaults() *PatchedAwsPushUpdate {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -72,7 +75,7 @@ func (o *PatchedAwsPushUpdate) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -80,7 +83,7 @@ func (o *PatchedAwsPushUpdate) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -94,7 +97,7 @@ func (o *PatchedAwsPushUpdate) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -104,7 +107,7 @@ func (o *PatchedAwsPushUpdate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -112,7 +115,7 @@ func (o *PatchedAwsPushUpdate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -126,7 +129,7 @@ func (o *PatchedAwsPushUpdate) SetDescription(v string) {
 
 // GetProjects returns the Projects field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetProjects() []string {
-	if o == nil || o.Projects == nil {
+	if o == nil || IsNil(o.Projects) {
 		var ret []string
 		return ret
 	}
@@ -136,7 +139,7 @@ func (o *PatchedAwsPushUpdate) GetProjects() []string {
 // GetProjectsOk returns a tuple with the Projects field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetProjectsOk() ([]string, bool) {
-	if o == nil || o.Projects == nil {
+	if o == nil || IsNil(o.Projects) {
 		return nil, false
 	}
 	return o.Projects, true
@@ -144,7 +147,7 @@ func (o *PatchedAwsPushUpdate) GetProjectsOk() ([]string, bool) {
 
 // HasProjects returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasProjects() bool {
-	if o != nil && o.Projects != nil {
+	if o != nil && !IsNil(o.Projects) {
 		return true
 	}
 
@@ -158,7 +161,7 @@ func (o *PatchedAwsPushUpdate) SetProjects(v []string) {
 
 // GetTags returns the Tags field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetTags() []string {
-	if o == nil || o.Tags == nil {
+	if o == nil || IsNil(o.Tags) {
 		var ret []string
 		return ret
 	}
@@ -168,7 +171,7 @@ func (o *PatchedAwsPushUpdate) GetTags() []string {
 // GetTagsOk returns a tuple with the Tags field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetTagsOk() ([]string, bool) {
-	if o == nil || o.Tags == nil {
+	if o == nil || IsNil(o.Tags) {
 		return nil, false
 	}
 	return o.Tags, true
@@ -176,7 +179,7 @@ func (o *PatchedAwsPushUpdate) GetTagsOk() ([]string, bool) {
 
 // HasTags returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasTags() bool {
-	if o != nil && o.Tags != nil {
+	if o != nil && !IsNil(o.Tags) {
 		return true
 	}
 
@@ -190,7 +193,7 @@ func (o *PatchedAwsPushUpdate) SetTags(v []string) {
 
 // GetResource returns the Resource field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedAwsPushUpdate) GetResource() string {
-	if o == nil || o.Resource.Get() == nil {
+	if o == nil || IsNil(o.Resource.Get()) {
 		var ret string
 		return ret
 	}
@@ -220,7 +223,6 @@ func (o *PatchedAwsPushUpdate) HasResource() bool {
 func (o *PatchedAwsPushUpdate) SetResource(v string) {
 	o.Resource.Set(&v)
 }
-
 // SetResourceNil sets the value for Resource to be an explicit nil
 func (o *PatchedAwsPushUpdate) SetResourceNil() {
 	o.Resource.Set(nil)
@@ -233,7 +235,7 @@ func (o *PatchedAwsPushUpdate) UnsetResource() {
 
 // GetDryRun returns the DryRun field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetDryRun() bool {
-	if o == nil || o.DryRun == nil {
+	if o == nil || IsNil(o.DryRun) {
 		var ret bool
 		return ret
 	}
@@ -243,7 +245,7 @@ func (o *PatchedAwsPushUpdate) GetDryRun() bool {
 // GetDryRunOk returns a tuple with the DryRun field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetDryRunOk() (*bool, bool) {
-	if o == nil || o.DryRun == nil {
+	if o == nil || IsNil(o.DryRun) {
 		return nil, false
 	}
 	return o.DryRun, true
@@ -251,7 +253,7 @@ func (o *PatchedAwsPushUpdate) GetDryRunOk() (*bool, bool) {
 
 // HasDryRun returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasDryRun() bool {
-	if o != nil && o.DryRun != nil {
+	if o != nil && !IsNil(o.DryRun) {
 		return true
 	}
 
@@ -265,7 +267,7 @@ func (o *PatchedAwsPushUpdate) SetDryRun(v bool) {
 
 // GetForce returns the Force field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetForce() bool {
-	if o == nil || o.Force == nil {
+	if o == nil || IsNil(o.Force) {
 		var ret bool
 		return ret
 	}
@@ -275,7 +277,7 @@ func (o *PatchedAwsPushUpdate) GetForce() bool {
 // GetForceOk returns a tuple with the Force field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetForceOk() (*bool, bool) {
-	if o == nil || o.Force == nil {
+	if o == nil || IsNil(o.Force) {
 		return nil, false
 	}
 	return o.Force, true
@@ -283,7 +285,7 @@ func (o *PatchedAwsPushUpdate) GetForceOk() (*bool, bool) {
 
 // HasForce returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasForce() bool {
-	if o != nil && o.Force != nil {
+	if o != nil && !IsNil(o.Force) {
 		return true
 	}
 
@@ -297,7 +299,7 @@ func (o *PatchedAwsPushUpdate) SetForce(v bool) {
 
 // GetLocal returns the Local field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetLocal() bool {
-	if o == nil || o.Local == nil {
+	if o == nil || IsNil(o.Local) {
 		var ret bool
 		return ret
 	}
@@ -307,7 +309,7 @@ func (o *PatchedAwsPushUpdate) GetLocal() bool {
 // GetLocalOk returns a tuple with the Local field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetLocalOk() (*bool, bool) {
-	if o == nil || o.Local == nil {
+	if o == nil || IsNil(o.Local) {
 		return nil, false
 	}
 	return o.Local, true
@@ -315,7 +317,7 @@ func (o *PatchedAwsPushUpdate) GetLocalOk() (*bool, bool) {
 
 // HasLocal returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasLocal() bool {
-	if o != nil && o.Local != nil {
+	if o != nil && !IsNil(o.Local) {
 		return true
 	}
 
@@ -329,7 +331,7 @@ func (o *PatchedAwsPushUpdate) SetLocal(v bool) {
 
 // GetCoerceParameters returns the CoerceParameters field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetCoerceParameters() bool {
-	if o == nil || o.CoerceParameters == nil {
+	if o == nil || IsNil(o.CoerceParameters) {
 		var ret bool
 		return ret
 	}
@@ -339,7 +341,7 @@ func (o *PatchedAwsPushUpdate) GetCoerceParameters() bool {
 // GetCoerceParametersOk returns a tuple with the CoerceParameters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetCoerceParametersOk() (*bool, bool) {
-	if o == nil || o.CoerceParameters == nil {
+	if o == nil || IsNil(o.CoerceParameters) {
 		return nil, false
 	}
 	return o.CoerceParameters, true
@@ -347,7 +349,7 @@ func (o *PatchedAwsPushUpdate) GetCoerceParametersOk() (*bool, bool) {
 
 // HasCoerceParameters returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasCoerceParameters() bool {
-	if o != nil && o.CoerceParameters != nil {
+	if o != nil && !IsNil(o.CoerceParameters) {
 		return true
 	}
 
@@ -361,7 +363,7 @@ func (o *PatchedAwsPushUpdate) SetCoerceParameters(v bool) {
 
 // GetIncludeParameters returns the IncludeParameters field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetIncludeParameters() bool {
-	if o == nil || o.IncludeParameters == nil {
+	if o == nil || IsNil(o.IncludeParameters) {
 		var ret bool
 		return ret
 	}
@@ -371,7 +373,7 @@ func (o *PatchedAwsPushUpdate) GetIncludeParameters() bool {
 // GetIncludeParametersOk returns a tuple with the IncludeParameters field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetIncludeParametersOk() (*bool, bool) {
-	if o == nil || o.IncludeParameters == nil {
+	if o == nil || IsNil(o.IncludeParameters) {
 		return nil, false
 	}
 	return o.IncludeParameters, true
@@ -379,7 +381,7 @@ func (o *PatchedAwsPushUpdate) GetIncludeParametersOk() (*bool, bool) {
 
 // HasIncludeParameters returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasIncludeParameters() bool {
-	if o != nil && o.IncludeParameters != nil {
+	if o != nil && !IsNil(o.IncludeParameters) {
 		return true
 	}
 
@@ -393,7 +395,7 @@ func (o *PatchedAwsPushUpdate) SetIncludeParameters(v bool) {
 
 // GetIncludeSecrets returns the IncludeSecrets field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetIncludeSecrets() bool {
-	if o == nil || o.IncludeSecrets == nil {
+	if o == nil || IsNil(o.IncludeSecrets) {
 		var ret bool
 		return ret
 	}
@@ -403,7 +405,7 @@ func (o *PatchedAwsPushUpdate) GetIncludeSecrets() bool {
 // GetIncludeSecretsOk returns a tuple with the IncludeSecrets field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetIncludeSecretsOk() (*bool, bool) {
-	if o == nil || o.IncludeSecrets == nil {
+	if o == nil || IsNil(o.IncludeSecrets) {
 		return nil, false
 	}
 	return o.IncludeSecrets, true
@@ -411,7 +413,7 @@ func (o *PatchedAwsPushUpdate) GetIncludeSecretsOk() (*bool, bool) {
 
 // HasIncludeSecrets returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasIncludeSecrets() bool {
-	if o != nil && o.IncludeSecrets != nil {
+	if o != nil && !IsNil(o.IncludeSecrets) {
 		return true
 	}
 
@@ -425,7 +427,7 @@ func (o *PatchedAwsPushUpdate) SetIncludeSecrets(v bool) {
 
 // GetIncludeTemplates returns the IncludeTemplates field value if set, zero value otherwise.
 func (o *PatchedAwsPushUpdate) GetIncludeTemplates() bool {
-	if o == nil || o.IncludeTemplates == nil {
+	if o == nil || IsNil(o.IncludeTemplates) {
 		var ret bool
 		return ret
 	}
@@ -435,7 +437,7 @@ func (o *PatchedAwsPushUpdate) GetIncludeTemplates() bool {
 // GetIncludeTemplatesOk returns a tuple with the IncludeTemplates field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAwsPushUpdate) GetIncludeTemplatesOk() (*bool, bool) {
-	if o == nil || o.IncludeTemplates == nil {
+	if o == nil || IsNil(o.IncludeTemplates) {
 		return nil, false
 	}
 	return o.IncludeTemplates, true
@@ -443,7 +445,7 @@ func (o *PatchedAwsPushUpdate) GetIncludeTemplatesOk() (*bool, bool) {
 
 // HasIncludeTemplates returns a boolean if a field has been set.
 func (o *PatchedAwsPushUpdate) HasIncludeTemplates() bool {
-	if o != nil && o.IncludeTemplates != nil {
+	if o != nil && !IsNil(o.IncludeTemplates) {
 		return true
 	}
 
@@ -456,44 +458,52 @@ func (o *PatchedAwsPushUpdate) SetIncludeTemplates(v bool) {
 }
 
 func (o PatchedAwsPushUpdate) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PatchedAwsPushUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Name != nil {
+	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
-	if o.Description != nil {
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.Projects != nil {
+	if !IsNil(o.Projects) {
 		toSerialize["projects"] = o.Projects
 	}
-	if o.Tags != nil {
+	if !IsNil(o.Tags) {
 		toSerialize["tags"] = o.Tags
 	}
 	if o.Resource.IsSet() {
 		toSerialize["resource"] = o.Resource.Get()
 	}
-	if o.DryRun != nil {
+	if !IsNil(o.DryRun) {
 		toSerialize["dry_run"] = o.DryRun
 	}
-	if o.Force != nil {
+	if !IsNil(o.Force) {
 		toSerialize["force"] = o.Force
 	}
-	if o.Local != nil {
+	if !IsNil(o.Local) {
 		toSerialize["local"] = o.Local
 	}
-	if o.CoerceParameters != nil {
+	if !IsNil(o.CoerceParameters) {
 		toSerialize["coerce_parameters"] = o.CoerceParameters
 	}
-	if o.IncludeParameters != nil {
+	if !IsNil(o.IncludeParameters) {
 		toSerialize["include_parameters"] = o.IncludeParameters
 	}
-	if o.IncludeSecrets != nil {
+	if !IsNil(o.IncludeSecrets) {
 		toSerialize["include_secrets"] = o.IncludeSecrets
 	}
-	if o.IncludeTemplates != nil {
+	if !IsNil(o.IncludeTemplates) {
 		toSerialize["include_templates"] = o.IncludeTemplates
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePatchedAwsPushUpdate struct {
@@ -531,3 +541,5 @@ func (v *NullablePatchedAwsPushUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

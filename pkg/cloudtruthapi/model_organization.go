@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the Organization type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Organization{}
+
 // Organization struct for Organization
 type Organization struct {
 	Url string `json:"url"`
@@ -25,22 +28,21 @@ type Organization struct {
 	Name string `json:"name"`
 	// Indicates if this Organization is the one currently targeted by the Bearer token used by the client to authorize.
 	Current bool `json:"current"`
-	// Your role in the organization.
-	Role                  NullableRoleEnum `json:"role"`
-	SubscriptionExpiresAt NullableTime     `json:"subscription_expires_at"`
-	SubscriptionFeatures  []string         `json:"subscription_features"`
-	SubscriptionId        NullableString   `json:"subscription_id"`
-	SubscriptionPlanId    NullableString   `json:"subscription_plan_id"`
-	SubscriptionPlanName  NullableString   `json:"subscription_plan_name"`
-	CreatedAt             time.Time        `json:"created_at"`
-	ModifiedAt            time.Time        `json:"modified_at"`
+	Role RoleEnum `json:"role"`
+	SubscriptionExpiresAt NullableTime `json:"subscription_expires_at"`
+	SubscriptionFeatures []string `json:"subscription_features"`
+	SubscriptionId NullableString `json:"subscription_id"`
+	SubscriptionPlanId NullableString `json:"subscription_plan_id"`
+	SubscriptionPlanName NullableString `json:"subscription_plan_name"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 }
 
 // NewOrganization instantiates a new Organization object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewOrganization(url string, id string, name string, current bool, role NullableRoleEnum, subscriptionExpiresAt NullableTime, subscriptionFeatures []string, subscriptionId NullableString, subscriptionPlanId NullableString, subscriptionPlanName NullableString, createdAt time.Time, modifiedAt time.Time) *Organization {
+func NewOrganization(url string, id string, name string, current bool, role RoleEnum, subscriptionExpiresAt NullableTime, subscriptionFeatures []string, subscriptionId NullableString, subscriptionPlanId NullableString, subscriptionPlanName NullableString, createdAt time.Time, modifiedAt time.Time) *Organization {
 	this := Organization{}
 	this.Url = url
 	this.Id = id
@@ -162,29 +164,27 @@ func (o *Organization) SetCurrent(v bool) {
 }
 
 // GetRole returns the Role field value
-// If the value is explicit nil, the zero value for RoleEnum will be returned
 func (o *Organization) GetRole() RoleEnum {
-	if o == nil || o.Role.Get() == nil {
+	if o == nil {
 		var ret RoleEnum
 		return ret
 	}
 
-	return *o.Role.Get()
+	return o.Role
 }
 
 // GetRoleOk returns a tuple with the Role field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Organization) GetRoleOk() (*RoleEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Role.Get(), o.Role.IsSet()
+	return &o.Role, true
 }
 
 // SetRole sets field value
 func (o *Organization) SetRole(v RoleEnum) {
-	o.Role.Set(&v)
+	o.Role = v
 }
 
 // GetSubscriptionExpiresAt returns the SubscriptionExpiresAt field value
@@ -364,44 +364,28 @@ func (o *Organization) SetModifiedAt(v time.Time) {
 }
 
 func (o Organization) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["current"] = o.Current
-	}
-	if true {
-		toSerialize["role"] = o.Role.Get()
-	}
-	if true {
-		toSerialize["subscription_expires_at"] = o.SubscriptionExpiresAt.Get()
-	}
-	if true {
-		toSerialize["subscription_features"] = o.SubscriptionFeatures
-	}
-	if true {
-		toSerialize["subscription_id"] = o.SubscriptionId.Get()
-	}
-	if true {
-		toSerialize["subscription_plan_id"] = o.SubscriptionPlanId.Get()
-	}
-	if true {
-		toSerialize["subscription_plan_name"] = o.SubscriptionPlanName.Get()
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Organization) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	toSerialize["current"] = o.Current
+	toSerialize["role"] = o.Role
+	toSerialize["subscription_expires_at"] = o.SubscriptionExpiresAt.Get()
+	toSerialize["subscription_features"] = o.SubscriptionFeatures
+	toSerialize["subscription_id"] = o.SubscriptionId.Get()
+	toSerialize["subscription_plan_id"] = o.SubscriptionPlanId.Get()
+	toSerialize["subscription_plan_name"] = o.SubscriptionPlanName.Get()
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableOrganization struct {
@@ -439,3 +423,5 @@ func (v *NullableOrganization) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

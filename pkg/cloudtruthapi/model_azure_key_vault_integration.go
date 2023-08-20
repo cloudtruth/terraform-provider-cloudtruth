@@ -16,23 +16,25 @@ import (
 	"time"
 )
 
+// checks if the AzureKeyVaultIntegration type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AzureKeyVaultIntegration{}
+
 // AzureKeyVaultIntegration struct for AzureKeyVaultIntegration
 type AzureKeyVaultIntegration struct {
 	Url string `json:"url"`
 	// The unique identifier for the integration.
-	Id   string `json:"id"`
+	Id string `json:"id"`
 	Name string `json:"name"`
 	// An optional description for the integration.
 	Description *string `json:"description,omitempty"`
-	// The status of the integration connection with the third-party provider as of the `status_last_checked_at` field.  The status is updated automatically by the server when the integration is modified.
-	Status NullableStatusEnum `json:"status"`
+	Status StatusEnum `json:"status"`
 	// If an error occurs, more details will be available in this field.
 	StatusDetail string `json:"status_detail"`
 	// The last time the status was evaluated.
 	StatusLastCheckedAt time.Time `json:"status_last_checked_at"`
-	CreatedAt           time.Time `json:"created_at"`
-	ModifiedAt          time.Time `json:"modified_at"`
-	Fqn                 string    `json:"fqn"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
+	Fqn string `json:"fqn"`
 	// The type of integration.
 	Type string `json:"type"`
 	// Allow actions to write to the integration.
@@ -47,7 +49,7 @@ type AzureKeyVaultIntegration struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAzureKeyVaultIntegration(url string, id string, name string, status NullableStatusEnum, statusDetail string, statusLastCheckedAt time.Time, createdAt time.Time, modifiedAt time.Time, fqn string, type_ string, vaultName string, tenantId string) *AzureKeyVaultIntegration {
+func NewAzureKeyVaultIntegration(url string, id string, name string, status StatusEnum, statusDetail string, statusLastCheckedAt time.Time, createdAt time.Time, modifiedAt time.Time, fqn string, type_ string, vaultName string, tenantId string) *AzureKeyVaultIntegration {
 	this := AzureKeyVaultIntegration{}
 	this.Url = url
 	this.Id = id
@@ -146,7 +148,7 @@ func (o *AzureKeyVaultIntegration) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *AzureKeyVaultIntegration) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -156,7 +158,7 @@ func (o *AzureKeyVaultIntegration) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AzureKeyVaultIntegration) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -164,7 +166,7 @@ func (o *AzureKeyVaultIntegration) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *AzureKeyVaultIntegration) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -177,29 +179,27 @@ func (o *AzureKeyVaultIntegration) SetDescription(v string) {
 }
 
 // GetStatus returns the Status field value
-// If the value is explicit nil, the zero value for StatusEnum will be returned
 func (o *AzureKeyVaultIntegration) GetStatus() StatusEnum {
-	if o == nil || o.Status.Get() == nil {
+	if o == nil {
 		var ret StatusEnum
 		return ret
 	}
 
-	return *o.Status.Get()
+	return o.Status
 }
 
 // GetStatusOk returns a tuple with the Status field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *AzureKeyVaultIntegration) GetStatusOk() (*StatusEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Status.Get(), o.Status.IsSet()
+	return &o.Status, true
 }
 
 // SetStatus sets field value
 func (o *AzureKeyVaultIntegration) SetStatus(v StatusEnum) {
-	o.Status.Set(&v)
+	o.Status = v
 }
 
 // GetStatusDetail returns the StatusDetail field value
@@ -348,7 +348,7 @@ func (o *AzureKeyVaultIntegration) SetType(v string) {
 
 // GetWritable returns the Writable field value if set, zero value otherwise.
 func (o *AzureKeyVaultIntegration) GetWritable() bool {
-	if o == nil || o.Writable == nil {
+	if o == nil || IsNil(o.Writable) {
 		var ret bool
 		return ret
 	}
@@ -358,7 +358,7 @@ func (o *AzureKeyVaultIntegration) GetWritable() bool {
 // GetWritableOk returns a tuple with the Writable field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AzureKeyVaultIntegration) GetWritableOk() (*bool, bool) {
-	if o == nil || o.Writable == nil {
+	if o == nil || IsNil(o.Writable) {
 		return nil, false
 	}
 	return o.Writable, true
@@ -366,7 +366,7 @@ func (o *AzureKeyVaultIntegration) GetWritableOk() (*bool, bool) {
 
 // HasWritable returns a boolean if a field has been set.
 func (o *AzureKeyVaultIntegration) HasWritable() bool {
-	if o != nil && o.Writable != nil {
+	if o != nil && !IsNil(o.Writable) {
 		return true
 	}
 
@@ -427,50 +427,34 @@ func (o *AzureKeyVaultIntegration) SetTenantId(v string) {
 }
 
 func (o AzureKeyVaultIntegration) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["status"] = o.Status.Get()
-	}
-	if true {
-		toSerialize["status_detail"] = o.StatusDetail
-	}
-	if true {
-		toSerialize["status_last_checked_at"] = o.StatusLastCheckedAt
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["fqn"] = o.Fqn
-	}
-	if true {
-		toSerialize["type"] = o.Type
-	}
-	if o.Writable != nil {
-		toSerialize["writable"] = o.Writable
-	}
-	if true {
-		toSerialize["vault_name"] = o.VaultName
-	}
-	if true {
-		toSerialize["tenant_id"] = o.TenantId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AzureKeyVaultIntegration) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["status"] = o.Status
+	toSerialize["status_detail"] = o.StatusDetail
+	toSerialize["status_last_checked_at"] = o.StatusLastCheckedAt
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["fqn"] = o.Fqn
+	toSerialize["type"] = o.Type
+	if !IsNil(o.Writable) {
+		toSerialize["writable"] = o.Writable
+	}
+	toSerialize["vault_name"] = o.VaultName
+	toSerialize["tenant_id"] = o.TenantId
+	return toSerialize, nil
 }
 
 type NullableAzureKeyVaultIntegration struct {
@@ -508,3 +492,5 @@ func (v *NullableAzureKeyVaultIntegration) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

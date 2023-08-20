@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the Parameter type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Parameter{}
+
 // Parameter A single parameter inside of a project.
 type Parameter struct {
 	Url string `json:"url"`
@@ -39,19 +42,19 @@ type Parameter struct {
 	ReferencingTemplates []string `json:"referencing_templates"`
 	// Dynamic values that reference this Parameter.
 	ReferencingValues []string `json:"referencing_values"`
-	//              This dictionary has keys that correspond to environment urls, and values             that correspond to the effective value for this parameter in that environment.             Each parameter has an effective value in every environment based on             project dependencies and environment inheritance.              The effective value is found by looking (within the keyed environment) up             the project dependencies by parameter name.  If a value is not found, the             parent environment is consulted with the same logic to locate a value.  It             is possible for there to be a `null` value record for an environment, which             means there is no value set; it is also possible for there to be a value record             with a `value` of `null`, which means the value was explicitly set to `null`.              If the value's parameter does not match the enclosing parameter (holding the             values array) then that value is flowing in through project dependencies.             Clients must recognize this in case the user asks to modify the value; in this             case the client must POST a new Value to the current parameter to override the             value coming in from the project dependency.              If the Value.environment matches the key, then it is an explicit value set for             that environment.  If they differ, the value was obtained from a parent             environment (directly or indirectly).  If the value is None then no value has             ever been set in any environment for this parameter within all the project             dependencies.
-	Values map[string]ParameterValuesValue `json:"values"`
+	//              This dictionary has keys that correspond to environment urls, and values             that correspond to the effective value for this parameter in that environment.             Each parameter has an effective value in every environment based on             project dependencies and environment inheritance.              The effective value is found by looking (within the keyed environment) up             the project dependencies by parameter name.  If a value is not found, the             parent environment is consulted with the same logic to locate a value.  It             is possible for there to be a `null` value record for an environment, which             means there is no value set; it is also possible for there to be a value record             with a `value` of `null`, which means the value was explicitly set to `null`.              If the value's parameter does not match the enclosing parameter (holding the             values array) then that value is flowing in through project dependencies.             Clients must recognize this in case the user asks to modify the value; in this             case the client must POST a new Value to the current parameter to override the             value coming in from the project dependency.              If the Value.environment matches the key, then it is an explicit value set for             that environment.  If they differ, the value was obtained from a parent             environment (directly or indirectly).  If the value is None then no value has             ever been set in any environment for this parameter within all the project             dependencies.         
+	Values map[string]Value `json:"values"`
 	// If this parameter's project depends on another project which provides a parameter of the same name, this parameter overrides the one provided by the dependee.  You can use this field to determine if there will be side-effects the user should know about when deleting a parameter.  Deleting a parameter that overrides another one due to an identical name will uncover the one from the dependee project.
-	Overrides  NullableString `json:"overrides"`
-	CreatedAt  time.Time      `json:"created_at"`
-	ModifiedAt time.Time      `json:"modified_at"`
+	Overrides NullableString `json:"overrides"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 }
 
 // NewParameter instantiates a new Parameter object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewParameter(url string, id string, name string, rules []ParameterRule, project string, projectName string, referencingTemplates []string, referencingValues []string, values map[string]ParameterValuesValue, overrides NullableString, createdAt time.Time, modifiedAt time.Time) *Parameter {
+func NewParameter(url string, id string, name string, rules []ParameterRule, project string, projectName string, referencingTemplates []string, referencingValues []string, values map[string]Value, overrides NullableString, createdAt time.Time, modifiedAt time.Time) *Parameter {
 	this := Parameter{}
 	this.Url = url
 	this.Id = id
@@ -154,7 +157,7 @@ func (o *Parameter) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *Parameter) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -164,7 +167,7 @@ func (o *Parameter) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Parameter) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -172,7 +175,7 @@ func (o *Parameter) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *Parameter) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -186,7 +189,7 @@ func (o *Parameter) SetDescription(v string) {
 
 // GetSecret returns the Secret field value if set, zero value otherwise.
 func (o *Parameter) GetSecret() bool {
-	if o == nil || o.Secret == nil {
+	if o == nil || IsNil(o.Secret) {
 		var ret bool
 		return ret
 	}
@@ -196,7 +199,7 @@ func (o *Parameter) GetSecret() bool {
 // GetSecretOk returns a tuple with the Secret field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Parameter) GetSecretOk() (*bool, bool) {
-	if o == nil || o.Secret == nil {
+	if o == nil || IsNil(o.Secret) {
 		return nil, false
 	}
 	return o.Secret, true
@@ -204,7 +207,7 @@ func (o *Parameter) GetSecretOk() (*bool, bool) {
 
 // HasSecret returns a boolean if a field has been set.
 func (o *Parameter) HasSecret() bool {
-	if o != nil && o.Secret != nil {
+	if o != nil && !IsNil(o.Secret) {
 		return true
 	}
 
@@ -218,7 +221,7 @@ func (o *Parameter) SetSecret(v bool) {
 
 // GetType returns the Type field value if set, zero value otherwise.
 func (o *Parameter) GetType() string {
-	if o == nil || o.Type == nil {
+	if o == nil || IsNil(o.Type) {
 		var ret string
 		return ret
 	}
@@ -228,7 +231,7 @@ func (o *Parameter) GetType() string {
 // GetTypeOk returns a tuple with the Type field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Parameter) GetTypeOk() (*string, bool) {
-	if o == nil || o.Type == nil {
+	if o == nil || IsNil(o.Type) {
 		return nil, false
 	}
 	return o.Type, true
@@ -236,7 +239,7 @@ func (o *Parameter) GetTypeOk() (*string, bool) {
 
 // HasType returns a boolean if a field has been set.
 func (o *Parameter) HasType() bool {
-	if o != nil && o.Type != nil {
+	if o != nil && !IsNil(o.Type) {
 		return true
 	}
 
@@ -369,9 +372,9 @@ func (o *Parameter) SetReferencingValues(v []string) {
 }
 
 // GetValues returns the Values field value
-func (o *Parameter) GetValues() map[string]ParameterValuesValue {
+func (o *Parameter) GetValues() map[string]Value {
 	if o == nil {
-		var ret map[string]ParameterValuesValue
+		var ret map[string]Value
 		return ret
 	}
 
@@ -380,15 +383,15 @@ func (o *Parameter) GetValues() map[string]ParameterValuesValue {
 
 // GetValuesOk returns a tuple with the Values field value
 // and a boolean to check if the value has been set.
-func (o *Parameter) GetValuesOk() (*map[string]ParameterValuesValue, bool) {
+func (o *Parameter) GetValuesOk() (map[string]Value, bool) {
 	if o == nil {
-		return nil, false
+		return map[string]Value{}, false
 	}
-	return &o.Values, true
+	return o.Values, true
 }
 
 // SetValues sets field value
-func (o *Parameter) SetValues(v map[string]ParameterValuesValue) {
+func (o *Parameter) SetValues(v map[string]Value) {
 	o.Values = v
 }
 
@@ -467,53 +470,37 @@ func (o *Parameter) SetModifiedAt(v time.Time) {
 }
 
 func (o Parameter) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Secret != nil {
-		toSerialize["secret"] = o.Secret
-	}
-	if o.Type != nil {
-		toSerialize["type"] = o.Type
-	}
-	if true {
-		toSerialize["rules"] = o.Rules
-	}
-	if true {
-		toSerialize["project"] = o.Project
-	}
-	if true {
-		toSerialize["project_name"] = o.ProjectName
-	}
-	if true {
-		toSerialize["referencing_templates"] = o.ReferencingTemplates
-	}
-	if true {
-		toSerialize["referencing_values"] = o.ReferencingValues
-	}
-	if true {
-		toSerialize["values"] = o.Values
-	}
-	if true {
-		toSerialize["overrides"] = o.Overrides.Get()
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Parameter) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Secret) {
+		toSerialize["secret"] = o.Secret
+	}
+	if !IsNil(o.Type) {
+		toSerialize["type"] = o.Type
+	}
+	toSerialize["rules"] = o.Rules
+	toSerialize["project"] = o.Project
+	toSerialize["project_name"] = o.ProjectName
+	toSerialize["referencing_templates"] = o.ReferencingTemplates
+	toSerialize["referencing_values"] = o.ReferencingValues
+	toSerialize["values"] = o.Values
+	toSerialize["overrides"] = o.Overrides.Get()
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableParameter struct {
@@ -551,3 +538,5 @@ func (v *NullableParameter) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

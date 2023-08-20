@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the PatchedGroup type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedGroup{}
+
 // PatchedGroup struct for PatchedGroup
 type PatchedGroup struct {
 	Url *string `json:"url,omitempty"`
@@ -24,10 +27,10 @@ type PatchedGroup struct {
 	// The group name.
 	Name *string `json:"name,omitempty"`
 	// A description of the group.  You may find it helpful to document how this group is used to assist others when they need to maintain this organization.
-	Description *string    `json:"description,omitempty"`
-	Users       []string   `json:"users,omitempty"`
-	CreatedAt   *time.Time `json:"created_at,omitempty"`
-	ModifiedAt  *time.Time `json:"modified_at,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Users []string `json:"users,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 }
 
 // NewPatchedGroup instantiates a new PatchedGroup object
@@ -49,7 +52,7 @@ func NewPatchedGroupWithDefaults() *PatchedGroup {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedGroup) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -59,7 +62,7 @@ func (o *PatchedGroup) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGroup) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -67,7 +70,7 @@ func (o *PatchedGroup) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedGroup) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -81,7 +84,7 @@ func (o *PatchedGroup) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedGroup) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -91,7 +94,7 @@ func (o *PatchedGroup) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGroup) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -99,7 +102,7 @@ func (o *PatchedGroup) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedGroup) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -113,7 +116,7 @@ func (o *PatchedGroup) SetId(v string) {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *PatchedGroup) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -123,7 +126,7 @@ func (o *PatchedGroup) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGroup) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -131,7 +134,7 @@ func (o *PatchedGroup) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *PatchedGroup) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -145,7 +148,7 @@ func (o *PatchedGroup) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *PatchedGroup) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -155,7 +158,7 @@ func (o *PatchedGroup) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGroup) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -163,7 +166,7 @@ func (o *PatchedGroup) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *PatchedGroup) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -177,7 +180,7 @@ func (o *PatchedGroup) SetDescription(v string) {
 
 // GetUsers returns the Users field value if set, zero value otherwise.
 func (o *PatchedGroup) GetUsers() []string {
-	if o == nil || o.Users == nil {
+	if o == nil || IsNil(o.Users) {
 		var ret []string
 		return ret
 	}
@@ -187,7 +190,7 @@ func (o *PatchedGroup) GetUsers() []string {
 // GetUsersOk returns a tuple with the Users field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGroup) GetUsersOk() ([]string, bool) {
-	if o == nil || o.Users == nil {
+	if o == nil || IsNil(o.Users) {
 		return nil, false
 	}
 	return o.Users, true
@@ -195,7 +198,7 @@ func (o *PatchedGroup) GetUsersOk() ([]string, bool) {
 
 // HasUsers returns a boolean if a field has been set.
 func (o *PatchedGroup) HasUsers() bool {
-	if o != nil && o.Users != nil {
+	if o != nil && !IsNil(o.Users) {
 		return true
 	}
 
@@ -209,7 +212,7 @@ func (o *PatchedGroup) SetUsers(v []string) {
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedGroup) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -219,7 +222,7 @@ func (o *PatchedGroup) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGroup) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -227,7 +230,7 @@ func (o *PatchedGroup) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *PatchedGroup) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -241,7 +244,7 @@ func (o *PatchedGroup) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *PatchedGroup) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -251,7 +254,7 @@ func (o *PatchedGroup) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGroup) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -259,7 +262,7 @@ func (o *PatchedGroup) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedGroup) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -272,29 +275,37 @@ func (o *PatchedGroup) SetModifiedAt(v time.Time) {
 }
 
 func (o PatchedGroup) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
-		toSerialize["url"] = o.Url
-	}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if o.Name != nil {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Users != nil {
-		toSerialize["users"] = o.Users
-	}
-	if o.CreatedAt != nil {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if o.ModifiedAt != nil {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PatchedGroup) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Url) {
+		toSerialize["url"] = o.Url
+	}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	if !IsNil(o.Name) {
+		toSerialize["name"] = o.Name
+	}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Users) {
+		toSerialize["users"] = o.Users
+	}
+	if !IsNil(o.CreatedAt) {
+		toSerialize["created_at"] = o.CreatedAt
+	}
+	if !IsNil(o.ModifiedAt) {
+		toSerialize["modified_at"] = o.ModifiedAt
+	}
+	return toSerialize, nil
 }
 
 type NullablePatchedGroup struct {
@@ -332,3 +343,5 @@ func (v *NullablePatchedGroup) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

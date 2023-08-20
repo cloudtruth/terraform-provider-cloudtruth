@@ -86,7 +86,7 @@ func resourceTagCreate(ctx context.Context, d *schema.ResourceData, meta any) di
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		tagCreateResp, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsCreate(ctx, *envID).TagCreate(*tagCreate).Execute()
+		tagCreateResp, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsTagsCreate(ctx, *envID).TagCreate(*tagCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTagCreate: error creating tag %s", tagName), r, err)
 		}
@@ -184,7 +184,7 @@ func resourceTagUpdate(ctx context.Context, d *schema.ResourceData, meta any) di
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsPartialUpdate(ctx, *envID, tagID).PatchedTagUpdate(*patchedTagUpdate).Execute()
+			_, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsTagsPartialUpdate(ctx, *envID, tagID).PatchedTagUpdate(*patchedTagUpdate).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceTagUpdate: error updating tag %s", tagName), r, err)
 			}
@@ -213,7 +213,7 @@ func resourceTagDelete(ctx context.Context, d *schema.ResourceData, meta any) di
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsDestroy(ctx, *envID, tagID).Execute()
+		r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsTagsDestroy(ctx, *envID, tagID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTagDelete: error deleting tag %s", tagName), r, err)
 		}

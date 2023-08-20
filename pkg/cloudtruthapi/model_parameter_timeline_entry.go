@@ -16,16 +16,18 @@ import (
 	"time"
 )
 
+// checks if the ParameterTimelineEntry type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ParameterTimelineEntry{}
+
 // ParameterTimelineEntry Details about a single change.
 type ParameterTimelineEntry struct {
-	HistoryDate time.Time               `json:"history_date"`
-	HistoryType NullableHistoryTypeEnum `json:"history_type"`
+	HistoryDate time.Time `json:"history_date"`
+	HistoryType HistoryTypeEnum `json:"history_type"`
 	// The unique identifier of a user.
 	HistoryUser NullableString `json:"history_user,omitempty"`
 	// The affected environment(s).
 	HistoryEnvironments []ParameterTimelineEntryEnvironment `json:"history_environments"`
-	// The component of the parameter that changed.
-	HistoryModel     NullableHistoryModelEnum               `json:"history_model"`
+	HistoryModel HistoryModelEnum `json:"history_model"`
 	HistoryParameter ParameterTimelineEntryHistoryParameter `json:"history_parameter"`
 }
 
@@ -33,7 +35,7 @@ type ParameterTimelineEntry struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewParameterTimelineEntry(historyDate time.Time, historyType NullableHistoryTypeEnum, historyEnvironments []ParameterTimelineEntryEnvironment, historyModel NullableHistoryModelEnum, historyParameter ParameterTimelineEntryHistoryParameter) *ParameterTimelineEntry {
+func NewParameterTimelineEntry(historyDate time.Time, historyType HistoryTypeEnum, historyEnvironments []ParameterTimelineEntryEnvironment, historyModel HistoryModelEnum, historyParameter ParameterTimelineEntryHistoryParameter) *ParameterTimelineEntry {
 	this := ParameterTimelineEntry{}
 	this.HistoryDate = historyDate
 	this.HistoryType = historyType
@@ -76,34 +78,32 @@ func (o *ParameterTimelineEntry) SetHistoryDate(v time.Time) {
 }
 
 // GetHistoryType returns the HistoryType field value
-// If the value is explicit nil, the zero value for HistoryTypeEnum will be returned
 func (o *ParameterTimelineEntry) GetHistoryType() HistoryTypeEnum {
-	if o == nil || o.HistoryType.Get() == nil {
+	if o == nil {
 		var ret HistoryTypeEnum
 		return ret
 	}
 
-	return *o.HistoryType.Get()
+	return o.HistoryType
 }
 
 // GetHistoryTypeOk returns a tuple with the HistoryType field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ParameterTimelineEntry) GetHistoryTypeOk() (*HistoryTypeEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.HistoryType.Get(), o.HistoryType.IsSet()
+	return &o.HistoryType, true
 }
 
 // SetHistoryType sets field value
 func (o *ParameterTimelineEntry) SetHistoryType(v HistoryTypeEnum) {
-	o.HistoryType.Set(&v)
+	o.HistoryType = v
 }
 
 // GetHistoryUser returns the HistoryUser field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *ParameterTimelineEntry) GetHistoryUser() string {
-	if o == nil || o.HistoryUser.Get() == nil {
+	if o == nil || IsNil(o.HistoryUser.Get()) {
 		var ret string
 		return ret
 	}
@@ -133,7 +133,6 @@ func (o *ParameterTimelineEntry) HasHistoryUser() bool {
 func (o *ParameterTimelineEntry) SetHistoryUser(v string) {
 	o.HistoryUser.Set(&v)
 }
-
 // SetHistoryUserNil sets the value for HistoryUser to be an explicit nil
 func (o *ParameterTimelineEntry) SetHistoryUserNil() {
 	o.HistoryUser.Set(nil)
@@ -169,29 +168,27 @@ func (o *ParameterTimelineEntry) SetHistoryEnvironments(v []ParameterTimelineEnt
 }
 
 // GetHistoryModel returns the HistoryModel field value
-// If the value is explicit nil, the zero value for HistoryModelEnum will be returned
 func (o *ParameterTimelineEntry) GetHistoryModel() HistoryModelEnum {
-	if o == nil || o.HistoryModel.Get() == nil {
+	if o == nil {
 		var ret HistoryModelEnum
 		return ret
 	}
 
-	return *o.HistoryModel.Get()
+	return o.HistoryModel
 }
 
 // GetHistoryModelOk returns a tuple with the HistoryModel field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ParameterTimelineEntry) GetHistoryModelOk() (*HistoryModelEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.HistoryModel.Get(), o.HistoryModel.IsSet()
+	return &o.HistoryModel, true
 }
 
 // SetHistoryModel sets field value
 func (o *ParameterTimelineEntry) SetHistoryModel(v HistoryModelEnum) {
-	o.HistoryModel.Set(&v)
+	o.HistoryModel = v
 }
 
 // GetHistoryParameter returns the HistoryParameter field value
@@ -219,26 +216,24 @@ func (o *ParameterTimelineEntry) SetHistoryParameter(v ParameterTimelineEntryHis
 }
 
 func (o ParameterTimelineEntry) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o ParameterTimelineEntry) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["history_date"] = o.HistoryDate
-	}
-	if true {
-		toSerialize["history_type"] = o.HistoryType.Get()
-	}
+	toSerialize["history_date"] = o.HistoryDate
+	toSerialize["history_type"] = o.HistoryType
 	if o.HistoryUser.IsSet() {
 		toSerialize["history_user"] = o.HistoryUser.Get()
 	}
-	if true {
-		toSerialize["history_environments"] = o.HistoryEnvironments
-	}
-	if true {
-		toSerialize["history_model"] = o.HistoryModel.Get()
-	}
-	if true {
-		toSerialize["history_parameter"] = o.HistoryParameter
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["history_environments"] = o.HistoryEnvironments
+	toSerialize["history_model"] = o.HistoryModel
+	toSerialize["history_parameter"] = o.HistoryParameter
+	return toSerialize, nil
 }
 
 type NullableParameterTimelineEntry struct {
@@ -276,3 +271,5 @@ func (v *NullableParameterTimelineEntry) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

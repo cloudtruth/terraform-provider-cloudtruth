@@ -164,7 +164,7 @@ func (c *cloudTruthClient) loadProjectNameCache(ctx context.Context) error {
 		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events.
 		// Therefore, we employ a simple retry loop instead.
 		for retryCount < loadCacheRetries {
-			projectList, r, err := c.openAPIClient.ProjectsApi.ProjectsList(ctx).Execute()
+			projectList, r, err := c.openAPIClient.ProjectsAPI.ProjectsList(ctx).Execute()
 			if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
 				apiError = err
 				break
@@ -237,7 +237,7 @@ func (c *cloudTruthClient) loadEnvNameCache(ctx context.Context) error {
 		// We cannot use the TF Provider SDK's retry functionality because it only works with state change events.
 		// Therefore, we employ a simple retry loop instead.
 		for retryCount < loadCacheRetries {
-			envList, r, err := c.openAPIClient.EnvironmentsApi.EnvironmentsList(ctx).Execute()
+			envList, r, err := c.openAPIClient.EnvironmentsAPI.EnvironmentsList(ctx).Execute()
 			if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
 				apiError = err
 				break
@@ -308,7 +308,7 @@ func (c *cloudTruthClient) loadUserCache(ctx context.Context) error {
 		c.users = make(map[string]cloudtruthapi.User)
 		var pageNum int32 = 0
 		for {
-			userListRequest := c.openAPIClient.UsersApi.UsersList(ctx)
+			userListRequest := c.openAPIClient.UsersAPI.UsersList(ctx)
 			var userList *cloudtruthapi.PaginatedUserList
 			if pageNum > 0 {
 				userListRequest = userListRequest.Page(pageNum)
@@ -369,7 +369,7 @@ func (c *cloudTruthClient) loadGroupCache(ctx context.Context) error {
 		c.groups = make(map[string]cloudtruthapi.Group)
 		var pageNum int32 = 0
 		for {
-			groupListRequest := c.openAPIClient.GroupsApi.GroupsList(ctx)
+			groupListRequest := c.openAPIClient.GroupsAPI.GroupsList(ctx)
 			var groupList *cloudtruthapi.PaginatedGroupList
 			if pageNum > 0 {
 				groupListRequest = groupListRequest.Page(pageNum)
@@ -422,7 +422,7 @@ func (c *cloudTruthClient) loadTypeCache(ctx context.Context) error {
 		c.types = make(map[string]cloudtruthapi.ParameterType)
 		var pageNum int32 = 0 // Pagination is likely overkill here
 		for {
-			typeListRequest := c.openAPIClient.TypesApi.TypesList(ctx).PageSize(pageNum)
+			typeListRequest := c.openAPIClient.TypesAPI.TypesList(ctx).PageSize(pageNum)
 			var typeList *cloudtruthapi.PaginatedParameterTypeList
 			if pageNum > 0 {
 				typeListRequest = typeListRequest.Page(pageNum)

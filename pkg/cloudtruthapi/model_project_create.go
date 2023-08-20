@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ProjectCreate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ProjectCreate{}
+
 // ProjectCreate struct for ProjectCreate
 type ProjectCreate struct {
 	// The project name.
@@ -69,7 +72,7 @@ func (o *ProjectCreate) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *ProjectCreate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -79,7 +82,7 @@ func (o *ProjectCreate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ProjectCreate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -87,7 +90,7 @@ func (o *ProjectCreate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *ProjectCreate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -101,7 +104,7 @@ func (o *ProjectCreate) SetDescription(v string) {
 
 // GetDependsOn returns the DependsOn field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *ProjectCreate) GetDependsOn() string {
-	if o == nil || o.DependsOn.Get() == nil {
+	if o == nil || IsNil(o.DependsOn.Get()) {
 		var ret string
 		return ret
 	}
@@ -131,7 +134,6 @@ func (o *ProjectCreate) HasDependsOn() bool {
 func (o *ProjectCreate) SetDependsOn(v string) {
 	o.DependsOn.Set(&v)
 }
-
 // SetDependsOnNil sets the value for DependsOn to be an explicit nil
 func (o *ProjectCreate) SetDependsOnNil() {
 	o.DependsOn.Set(nil)
@@ -143,17 +145,23 @@ func (o *ProjectCreate) UnsetDependsOn() {
 }
 
 func (o ProjectCreate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
-	if o.Description != nil {
+	return json.Marshal(toSerialize)
+}
+
+func (o ProjectCreate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
 	if o.DependsOn.IsSet() {
 		toSerialize["depends_on"] = o.DependsOn.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableProjectCreate struct {
@@ -191,3 +199,5 @@ func (v *NullableProjectCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

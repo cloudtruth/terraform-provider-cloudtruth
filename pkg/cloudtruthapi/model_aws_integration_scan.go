@@ -15,12 +15,13 @@ import (
 	"encoding/json"
 )
 
+// checks if the AwsIntegrationScan type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AwsIntegrationScan{}
+
 // AwsIntegrationScan struct for AwsIntegrationScan
 type AwsIntegrationScan struct {
-	// The AWS region to use.  This region must be enabled in the integration.
-	Region NullableAwsRegionEnum `json:"region"`
-	// The AWS service to use.  This service must be enabled in the integration.
-	Service NullableAwsServiceEnum `json:"service"`
+	Region AwsRegionEnum `json:"region"`
+	Service AwsServiceEnum `json:"service"`
 	// Defines a pattern matching string that contains either mustache or regular expression syntax (with named capture groups) that locate the environment, project, and parameter name of the content you are looking for.  If you are using mustache pattern matching, use:    - ``{{ environment }}`` to identify the environment name   - ``{{ parameter }}`` to identify the parameter name   - ``{{ project }}`` to identify the project name  If you are using a regular expression, use Python syntax with named capture groups that locate the `environment`, `project`, and `parameter`.
 	Resource NullableString `json:"resource"`
 }
@@ -29,7 +30,7 @@ type AwsIntegrationScan struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAwsIntegrationScan(region NullableAwsRegionEnum, service NullableAwsServiceEnum, resource NullableString) *AwsIntegrationScan {
+func NewAwsIntegrationScan(region AwsRegionEnum, service AwsServiceEnum, resource NullableString) *AwsIntegrationScan {
 	this := AwsIntegrationScan{}
 	this.Region = region
 	this.Service = service
@@ -46,55 +47,51 @@ func NewAwsIntegrationScanWithDefaults() *AwsIntegrationScan {
 }
 
 // GetRegion returns the Region field value
-// If the value is explicit nil, the zero value for AwsRegionEnum will be returned
 func (o *AwsIntegrationScan) GetRegion() AwsRegionEnum {
-	if o == nil || o.Region.Get() == nil {
+	if o == nil {
 		var ret AwsRegionEnum
 		return ret
 	}
 
-	return *o.Region.Get()
+	return o.Region
 }
 
 // GetRegionOk returns a tuple with the Region field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *AwsIntegrationScan) GetRegionOk() (*AwsRegionEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Region.Get(), o.Region.IsSet()
+	return &o.Region, true
 }
 
 // SetRegion sets field value
 func (o *AwsIntegrationScan) SetRegion(v AwsRegionEnum) {
-	o.Region.Set(&v)
+	o.Region = v
 }
 
 // GetService returns the Service field value
-// If the value is explicit nil, the zero value for AwsServiceEnum will be returned
 func (o *AwsIntegrationScan) GetService() AwsServiceEnum {
-	if o == nil || o.Service.Get() == nil {
+	if o == nil {
 		var ret AwsServiceEnum
 		return ret
 	}
 
-	return *o.Service.Get()
+	return o.Service
 }
 
 // GetServiceOk returns a tuple with the Service field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *AwsIntegrationScan) GetServiceOk() (*AwsServiceEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Service.Get(), o.Service.IsSet()
+	return &o.Service, true
 }
 
 // SetService sets field value
 func (o *AwsIntegrationScan) SetService(v AwsServiceEnum) {
-	o.Service.Set(&v)
+	o.Service = v
 }
 
 // GetResource returns the Resource field value
@@ -124,17 +121,19 @@ func (o *AwsIntegrationScan) SetResource(v string) {
 }
 
 func (o AwsIntegrationScan) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["region"] = o.Region.Get()
-	}
-	if true {
-		toSerialize["service"] = o.Service.Get()
-	}
-	if true {
-		toSerialize["resource"] = o.Resource.Get()
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AwsIntegrationScan) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["region"] = o.Region
+	toSerialize["service"] = o.Service
+	toSerialize["resource"] = o.Resource.Get()
+	return toSerialize, nil
 }
 
 type NullableAwsIntegrationScan struct {
@@ -172,3 +171,5 @@ func (v *NullableAwsIntegrationScan) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

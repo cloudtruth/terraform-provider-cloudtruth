@@ -16,16 +16,19 @@ import (
 	"time"
 )
 
+// checks if the PatchedParameterRule type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedParameterRule{}
+
 // PatchedParameterRule A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead of primary key relationships.  Specifically:  * A 'url' field is included instead of the 'id' field. * Relationships to other instances are hyperlinks, instead of primary keys.  NOTE: this only works with DRF 3.1.0 and above.
 type PatchedParameterRule struct {
 	Url *string `json:"url,omitempty"`
-	Id  *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty"`
 	// The parameter this rule is for.
-	Parameter  *string                `json:"parameter,omitempty"`
-	Type       *ParameterRuleTypeEnum `json:"type,omitempty"`
-	Constraint *string                `json:"constraint,omitempty"`
-	CreatedAt  *time.Time             `json:"created_at,omitempty"`
-	ModifiedAt *time.Time             `json:"modified_at,omitempty"`
+	Parameter *string `json:"parameter,omitempty"`
+	Type *ParameterRuleTypeEnum `json:"type,omitempty"`
+	Constraint *string `json:"constraint,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 }
 
 // NewPatchedParameterRule instantiates a new PatchedParameterRule object
@@ -47,7 +50,7 @@ func NewPatchedParameterRuleWithDefaults() *PatchedParameterRule {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedParameterRule) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -57,7 +60,7 @@ func (o *PatchedParameterRule) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterRule) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -65,7 +68,7 @@ func (o *PatchedParameterRule) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedParameterRule) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -79,7 +82,7 @@ func (o *PatchedParameterRule) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedParameterRule) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -89,7 +92,7 @@ func (o *PatchedParameterRule) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterRule) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -97,7 +100,7 @@ func (o *PatchedParameterRule) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedParameterRule) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -111,7 +114,7 @@ func (o *PatchedParameterRule) SetId(v string) {
 
 // GetParameter returns the Parameter field value if set, zero value otherwise.
 func (o *PatchedParameterRule) GetParameter() string {
-	if o == nil || o.Parameter == nil {
+	if o == nil || IsNil(o.Parameter) {
 		var ret string
 		return ret
 	}
@@ -121,7 +124,7 @@ func (o *PatchedParameterRule) GetParameter() string {
 // GetParameterOk returns a tuple with the Parameter field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterRule) GetParameterOk() (*string, bool) {
-	if o == nil || o.Parameter == nil {
+	if o == nil || IsNil(o.Parameter) {
 		return nil, false
 	}
 	return o.Parameter, true
@@ -129,7 +132,7 @@ func (o *PatchedParameterRule) GetParameterOk() (*string, bool) {
 
 // HasParameter returns a boolean if a field has been set.
 func (o *PatchedParameterRule) HasParameter() bool {
-	if o != nil && o.Parameter != nil {
+	if o != nil && !IsNil(o.Parameter) {
 		return true
 	}
 
@@ -143,7 +146,7 @@ func (o *PatchedParameterRule) SetParameter(v string) {
 
 // GetType returns the Type field value if set, zero value otherwise.
 func (o *PatchedParameterRule) GetType() ParameterRuleTypeEnum {
-	if o == nil || o.Type == nil {
+	if o == nil || IsNil(o.Type) {
 		var ret ParameterRuleTypeEnum
 		return ret
 	}
@@ -153,7 +156,7 @@ func (o *PatchedParameterRule) GetType() ParameterRuleTypeEnum {
 // GetTypeOk returns a tuple with the Type field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterRule) GetTypeOk() (*ParameterRuleTypeEnum, bool) {
-	if o == nil || o.Type == nil {
+	if o == nil || IsNil(o.Type) {
 		return nil, false
 	}
 	return o.Type, true
@@ -161,7 +164,7 @@ func (o *PatchedParameterRule) GetTypeOk() (*ParameterRuleTypeEnum, bool) {
 
 // HasType returns a boolean if a field has been set.
 func (o *PatchedParameterRule) HasType() bool {
-	if o != nil && o.Type != nil {
+	if o != nil && !IsNil(o.Type) {
 		return true
 	}
 
@@ -175,7 +178,7 @@ func (o *PatchedParameterRule) SetType(v ParameterRuleTypeEnum) {
 
 // GetConstraint returns the Constraint field value if set, zero value otherwise.
 func (o *PatchedParameterRule) GetConstraint() string {
-	if o == nil || o.Constraint == nil {
+	if o == nil || IsNil(o.Constraint) {
 		var ret string
 		return ret
 	}
@@ -185,7 +188,7 @@ func (o *PatchedParameterRule) GetConstraint() string {
 // GetConstraintOk returns a tuple with the Constraint field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterRule) GetConstraintOk() (*string, bool) {
-	if o == nil || o.Constraint == nil {
+	if o == nil || IsNil(o.Constraint) {
 		return nil, false
 	}
 	return o.Constraint, true
@@ -193,7 +196,7 @@ func (o *PatchedParameterRule) GetConstraintOk() (*string, bool) {
 
 // HasConstraint returns a boolean if a field has been set.
 func (o *PatchedParameterRule) HasConstraint() bool {
-	if o != nil && o.Constraint != nil {
+	if o != nil && !IsNil(o.Constraint) {
 		return true
 	}
 
@@ -207,7 +210,7 @@ func (o *PatchedParameterRule) SetConstraint(v string) {
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedParameterRule) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -217,7 +220,7 @@ func (o *PatchedParameterRule) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterRule) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -225,7 +228,7 @@ func (o *PatchedParameterRule) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *PatchedParameterRule) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -239,7 +242,7 @@ func (o *PatchedParameterRule) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *PatchedParameterRule) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -249,7 +252,7 @@ func (o *PatchedParameterRule) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterRule) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -257,7 +260,7 @@ func (o *PatchedParameterRule) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedParameterRule) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -270,29 +273,37 @@ func (o *PatchedParameterRule) SetModifiedAt(v time.Time) {
 }
 
 func (o PatchedParameterRule) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
-		toSerialize["url"] = o.Url
-	}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if o.Parameter != nil {
-		toSerialize["parameter"] = o.Parameter
-	}
-	if o.Type != nil {
-		toSerialize["type"] = o.Type
-	}
-	if o.Constraint != nil {
-		toSerialize["constraint"] = o.Constraint
-	}
-	if o.CreatedAt != nil {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if o.ModifiedAt != nil {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PatchedParameterRule) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Url) {
+		toSerialize["url"] = o.Url
+	}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	if !IsNil(o.Parameter) {
+		toSerialize["parameter"] = o.Parameter
+	}
+	if !IsNil(o.Type) {
+		toSerialize["type"] = o.Type
+	}
+	if !IsNil(o.Constraint) {
+		toSerialize["constraint"] = o.Constraint
+	}
+	if !IsNil(o.CreatedAt) {
+		toSerialize["created_at"] = o.CreatedAt
+	}
+	if !IsNil(o.ModifiedAt) {
+		toSerialize["modified_at"] = o.ModifiedAt
+	}
+	return toSerialize, nil
 }
 
 type NullablePatchedParameterRule struct {
@@ -330,3 +341,5 @@ func (v *NullablePatchedParameterRule) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

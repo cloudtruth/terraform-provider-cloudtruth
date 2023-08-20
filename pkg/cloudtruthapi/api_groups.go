@@ -14,21 +14,22 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
 )
 
-// GroupsApiService GroupsApi service
-type GroupsApiService service
+
+// GroupsAPIService GroupsAPI service
+type GroupsAPIService service
 
 type ApiGroupsAddCreateRequest struct {
-	ctx        context.Context
-	ApiService *GroupsApiService
-	id         string
-	user       *string
-	group      *Group
+	ctx context.Context
+	ApiService *GroupsAPIService
+	id string
+	user *string
+	group *Group
 }
 
 func (r ApiGroupsAddCreateRequest) User(user string) ApiGroupsAddCreateRequest {
@@ -50,36 +51,35 @@ GroupsAddCreate Method for GroupsAddCreate
 
 Add a user to the group.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiGroupsAddCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiGroupsAddCreateRequest
 */
-func (a *GroupsApiService) GroupsAddCreate(ctx context.Context, id string) ApiGroupsAddCreateRequest {
+func (a *GroupsAPIService) GroupsAddCreate(ctx context.Context, id string) ApiGroupsAddCreateRequest {
 	return ApiGroupsAddCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Group
-func (a *GroupsApiService) GroupsAddCreateExecute(r ApiGroupsAddCreateRequest) (*Group, *http.Response, error) {
+//  @return Group
+func (a *GroupsAPIService) GroupsAddCreateExecute(r ApiGroupsAddCreateRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Group
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Group
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsAddCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsAPIService.GroupsAddCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/groups/{id}/add/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -94,7 +94,7 @@ func (a *GroupsApiService) GroupsAddCreateExecute(r ApiGroupsAddCreateRequest) (
 		return localVarReturnValue, nil, reportError("group is required and must be specified")
 	}
 
-	localVarQueryParams.Add("user", parameterToString(*r.user, ""))
+	parameterAddToHeaderOrQuery(localVarQueryParams, "user", r.user, "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
 
@@ -152,9 +152,9 @@ func (a *GroupsApiService) GroupsAddCreateExecute(r ApiGroupsAddCreateRequest) (
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -180,9 +180,9 @@ func (a *GroupsApiService) GroupsAddCreateExecute(r ApiGroupsAddCreateRequest) (
 }
 
 type ApiGroupsCreateRequest struct {
-	ctx        context.Context
-	ApiService *GroupsApiService
-	group      *Group
+	ctx context.Context
+	ApiService *GroupsAPIService
+	group *Group
 }
 
 func (r ApiGroupsCreateRequest) Group(group Group) ApiGroupsCreateRequest {
@@ -200,28 +200,27 @@ GroupsCreate Method for GroupsCreate
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGroupsCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGroupsCreateRequest
 */
-func (a *GroupsApiService) GroupsCreate(ctx context.Context) ApiGroupsCreateRequest {
+func (a *GroupsAPIService) GroupsCreate(ctx context.Context) ApiGroupsCreateRequest {
 	return ApiGroupsCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Group
-func (a *GroupsApiService) GroupsCreateExecute(r ApiGroupsCreateRequest) (*Group, *http.Response, error) {
+//  @return Group
+func (a *GroupsAPIService) GroupsCreateExecute(r ApiGroupsCreateRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Group
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Group
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsAPIService.GroupsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -292,9 +291,9 @@ func (a *GroupsApiService) GroupsCreateExecute(r ApiGroupsCreateRequest) (*Group
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -320,9 +319,9 @@ func (a *GroupsApiService) GroupsCreateExecute(r ApiGroupsCreateRequest) (*Group
 }
 
 type ApiGroupsDestroyRequest struct {
-	ctx        context.Context
-	ApiService *GroupsApiService
-	id         string
+	ctx context.Context
+	ApiService *GroupsAPIService
+	id string
 }
 
 func (r ApiGroupsDestroyRequest) Execute() (*http.Response, error) {
@@ -335,33 +334,33 @@ GroupsDestroy Method for GroupsDestroy
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiGroupsDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiGroupsDestroyRequest
 */
-func (a *GroupsApiService) GroupsDestroy(ctx context.Context, id string) ApiGroupsDestroyRequest {
+func (a *GroupsAPIService) GroupsDestroy(ctx context.Context, id string) ApiGroupsDestroyRequest {
 	return ApiGroupsDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *GroupsApiService) GroupsDestroyExecute(r ApiGroupsDestroyRequest) (*http.Response, error) {
+func (a *GroupsAPIService) GroupsDestroyExecute(r ApiGroupsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsAPIService.GroupsDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/groups/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -422,9 +421,9 @@ func (a *GroupsApiService) GroupsDestroyExecute(r ApiGroupsDestroyRequest) (*htt
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -441,13 +440,13 @@ func (a *GroupsApiService) GroupsDestroyExecute(r ApiGroupsDestroyRequest) (*htt
 }
 
 type ApiGroupsListRequest struct {
-	ctx        context.Context
-	ApiService *GroupsApiService
-	name       *string
-	ordering   *string
-	page       *int32
-	pageSize   *int32
-	user       *string
+	ctx context.Context
+	ApiService *GroupsAPIService
+	name *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	user *string
 }
 
 func (r ApiGroupsListRequest) Name(name string) ApiGroupsListRequest {
@@ -489,28 +488,27 @@ GroupsList Method for GroupsList
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGroupsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGroupsListRequest
 */
-func (a *GroupsApiService) GroupsList(ctx context.Context) ApiGroupsListRequest {
+func (a *GroupsAPIService) GroupsList(ctx context.Context) ApiGroupsListRequest {
 	return ApiGroupsListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedGroupList
-func (a *GroupsApiService) GroupsListExecute(r ApiGroupsListRequest) (*PaginatedGroupList, *http.Response, error) {
+//  @return PaginatedGroupList
+func (a *GroupsAPIService) GroupsListExecute(r ApiGroupsListRequest) (*PaginatedGroupList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedGroupList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedGroupList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsAPIService.GroupsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -522,19 +520,19 @@ func (a *GroupsApiService) GroupsListExecute(r ApiGroupsListRequest) (*Paginated
 	localVarFormParams := url.Values{}
 
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.user != nil {
-		localVarQueryParams.Add("user", parameterToString(*r.user, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "user", r.user, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -591,9 +589,9 @@ func (a *GroupsApiService) GroupsListExecute(r ApiGroupsListRequest) (*Paginated
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -619,9 +617,9 @@ func (a *GroupsApiService) GroupsListExecute(r ApiGroupsListRequest) (*Paginated
 }
 
 type ApiGroupsPartialUpdateRequest struct {
-	ctx          context.Context
-	ApiService   *GroupsApiService
-	id           string
+	ctx context.Context
+	ApiService *GroupsAPIService
+	id string
 	patchedGroup *PatchedGroup
 }
 
@@ -640,36 +638,35 @@ GroupsPartialUpdate Method for GroupsPartialUpdate
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiGroupsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiGroupsPartialUpdateRequest
 */
-func (a *GroupsApiService) GroupsPartialUpdate(ctx context.Context, id string) ApiGroupsPartialUpdateRequest {
+func (a *GroupsAPIService) GroupsPartialUpdate(ctx context.Context, id string) ApiGroupsPartialUpdateRequest {
 	return ApiGroupsPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Group
-func (a *GroupsApiService) GroupsPartialUpdateExecute(r ApiGroupsPartialUpdateRequest) (*Group, *http.Response, error) {
+//  @return Group
+func (a *GroupsAPIService) GroupsPartialUpdateExecute(r ApiGroupsPartialUpdateRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Group
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Group
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsAPIService.GroupsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/groups/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -732,9 +729,9 @@ func (a *GroupsApiService) GroupsPartialUpdateExecute(r ApiGroupsPartialUpdateRe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -760,11 +757,11 @@ func (a *GroupsApiService) GroupsPartialUpdateExecute(r ApiGroupsPartialUpdateRe
 }
 
 type ApiGroupsRemoveCreateRequest struct {
-	ctx        context.Context
-	ApiService *GroupsApiService
-	id         string
-	user       *string
-	group      *Group
+	ctx context.Context
+	ApiService *GroupsAPIService
+	id string
+	user *string
+	group *Group
 }
 
 func (r ApiGroupsRemoveCreateRequest) User(user string) ApiGroupsRemoveCreateRequest {
@@ -786,36 +783,35 @@ GroupsRemoveCreate Method for GroupsRemoveCreate
 
 Remove a user from the group.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiGroupsRemoveCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiGroupsRemoveCreateRequest
 */
-func (a *GroupsApiService) GroupsRemoveCreate(ctx context.Context, id string) ApiGroupsRemoveCreateRequest {
+func (a *GroupsAPIService) GroupsRemoveCreate(ctx context.Context, id string) ApiGroupsRemoveCreateRequest {
 	return ApiGroupsRemoveCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Group
-func (a *GroupsApiService) GroupsRemoveCreateExecute(r ApiGroupsRemoveCreateRequest) (*Group, *http.Response, error) {
+//  @return Group
+func (a *GroupsAPIService) GroupsRemoveCreateExecute(r ApiGroupsRemoveCreateRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Group
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Group
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsRemoveCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsAPIService.GroupsRemoveCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/groups/{id}/remove/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -830,7 +826,7 @@ func (a *GroupsApiService) GroupsRemoveCreateExecute(r ApiGroupsRemoveCreateRequ
 		return localVarReturnValue, nil, reportError("group is required and must be specified")
 	}
 
-	localVarQueryParams.Add("user", parameterToString(*r.user, ""))
+	parameterAddToHeaderOrQuery(localVarQueryParams, "user", r.user, "")
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
 
@@ -888,9 +884,9 @@ func (a *GroupsApiService) GroupsRemoveCreateExecute(r ApiGroupsRemoveCreateRequ
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -916,9 +912,9 @@ func (a *GroupsApiService) GroupsRemoveCreateExecute(r ApiGroupsRemoveCreateRequ
 }
 
 type ApiGroupsRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *GroupsApiService
-	id         string
+	ctx context.Context
+	ApiService *GroupsAPIService
+	id string
 }
 
 func (r ApiGroupsRetrieveRequest) Execute() (*Group, *http.Response, error) {
@@ -931,36 +927,35 @@ GroupsRetrieve Method for GroupsRetrieve
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiGroupsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiGroupsRetrieveRequest
 */
-func (a *GroupsApiService) GroupsRetrieve(ctx context.Context, id string) ApiGroupsRetrieveRequest {
+func (a *GroupsAPIService) GroupsRetrieve(ctx context.Context, id string) ApiGroupsRetrieveRequest {
 	return ApiGroupsRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Group
-func (a *GroupsApiService) GroupsRetrieveExecute(r ApiGroupsRetrieveRequest) (*Group, *http.Response, error) {
+//  @return Group
+func (a *GroupsAPIService) GroupsRetrieveExecute(r ApiGroupsRetrieveRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Group
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Group
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsAPIService.GroupsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/groups/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1021,9 +1016,9 @@ func (a *GroupsApiService) GroupsRetrieveExecute(r ApiGroupsRetrieveRequest) (*G
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1049,10 +1044,10 @@ func (a *GroupsApiService) GroupsRetrieveExecute(r ApiGroupsRetrieveRequest) (*G
 }
 
 type ApiGroupsUpdateRequest struct {
-	ctx        context.Context
-	ApiService *GroupsApiService
-	id         string
-	group      *Group
+	ctx context.Context
+	ApiService *GroupsAPIService
+	id string
+	group *Group
 }
 
 func (r ApiGroupsUpdateRequest) Group(group Group) ApiGroupsUpdateRequest {
@@ -1070,36 +1065,35 @@ GroupsUpdate Method for GroupsUpdate
 Groups allow you to aggregate users for purposes of assigning
 grants more easily.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiGroupsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiGroupsUpdateRequest
 */
-func (a *GroupsApiService) GroupsUpdate(ctx context.Context, id string) ApiGroupsUpdateRequest {
+func (a *GroupsAPIService) GroupsUpdate(ctx context.Context, id string) ApiGroupsUpdateRequest {
 	return ApiGroupsUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Group
-func (a *GroupsApiService) GroupsUpdateExecute(r ApiGroupsUpdateRequest) (*Group, *http.Response, error) {
+//  @return Group
+func (a *GroupsAPIService) GroupsUpdateExecute(r ApiGroupsUpdateRequest) (*Group, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Group
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Group
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsApiService.GroupsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GroupsAPIService.GroupsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/groups/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1165,9 +1159,9 @@ func (a *GroupsApiService) GroupsUpdateExecute(r ApiGroupsUpdateRequest) (*Group
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

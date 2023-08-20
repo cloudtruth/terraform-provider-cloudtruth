@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the TemplatePreview type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TemplatePreview{}
+
 // TemplatePreview struct for TemplatePreview
 type TemplatePreview struct {
 	// The template body to instantiate on request, instantiated on response.
@@ -91,14 +94,18 @@ func (o *TemplatePreview) SetHasSecret(v bool) {
 }
 
 func (o TemplatePreview) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["body"] = o.Body
-	}
-	if true {
-		toSerialize["has_secret"] = o.HasSecret
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TemplatePreview) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["body"] = o.Body
+	toSerialize["has_secret"] = o.HasSecret
+	return toSerialize, nil
 }
 
 type NullableTemplatePreview struct {
@@ -136,3 +143,5 @@ func (v *NullableTemplatePreview) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

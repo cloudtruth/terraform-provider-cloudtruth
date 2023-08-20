@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the Group type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Group{}
+
 // Group struct for Group
 type Group struct {
 	Url string `json:"url"`
@@ -24,10 +27,10 @@ type Group struct {
 	// The group name.
 	Name string `json:"name"`
 	// A description of the group.  You may find it helpful to document how this group is used to assist others when they need to maintain this organization.
-	Description *string   `json:"description,omitempty"`
-	Users       []string  `json:"users"`
-	CreatedAt   time.Time `json:"created_at"`
-	ModifiedAt  time.Time `json:"modified_at"`
+	Description *string `json:"description,omitempty"`
+	Users []string `json:"users"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 }
 
 // NewGroup instantiates a new Group object
@@ -127,7 +130,7 @@ func (o *Group) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *Group) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -137,7 +140,7 @@ func (o *Group) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Group) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -145,7 +148,7 @@ func (o *Group) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *Group) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -230,29 +233,25 @@ func (o *Group) SetModifiedAt(v time.Time) {
 }
 
 func (o Group) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["users"] = o.Users
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Group) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["users"] = o.Users
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableGroup struct {
@@ -290,3 +289,5 @@ func (v *NullableGroup) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

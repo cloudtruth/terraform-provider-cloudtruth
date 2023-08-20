@@ -14,19 +14,20 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 )
 
-// IntegrationsApiService IntegrationsApi service
-type IntegrationsApiService service
+
+// IntegrationsAPIService IntegrationsAPI service
+type IntegrationsAPIService service
 
 type ApiIntegrationsAwsCreateRequest struct {
-	ctx                  context.Context
-	ApiService           *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsIntegrationCreate *AwsIntegrationCreate
 }
 
@@ -53,28 +54,27 @@ Establishes an AWS Integration for your CloudTruth organization.
 
 - You must establish an IAM role and trust relationship based on the Role Name and the External ID.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiIntegrationsAwsCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiIntegrationsAwsCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsCreate(ctx context.Context) ApiIntegrationsAwsCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsCreate(ctx context.Context) ApiIntegrationsAwsCreateRequest {
 	return ApiIntegrationsAwsCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsIntegration
-func (a *IntegrationsApiService) IntegrationsAwsCreateExecute(r ApiIntegrationsAwsCreateRequest) (*AwsIntegration, *http.Response, error) {
+//  @return AwsIntegration
+func (a *IntegrationsAPIService) IntegrationsAwsCreateExecute(r ApiIntegrationsAwsCreateRequest) (*AwsIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsIntegration
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsIntegration
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -145,9 +145,9 @@ func (a *IntegrationsApiService) IntegrationsAwsCreateExecute(r ApiIntegrationsA
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -173,10 +173,10 @@ func (a *IntegrationsApiService) IntegrationsAwsCreateExecute(r ApiIntegrationsA
 }
 
 type ApiIntegrationsAwsDestroyRequest struct {
-	ctx        context.Context
-	ApiService *IntegrationsApiService
-	id         string
-	inUse      *string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
+	inUse *string
 }
 
 // (Optional) Desired behavior if the integration has in-use values.  - &#x60;fail&#x60; will return HTTP error 409 if there are any values using the integration. - &#x60;leave&#x60; (default) will leave values in place and future queries may fail; you can control future value query behavior with the &#x60;lookup_error&#x60; query parameter on those requests. - &#x60;remove&#x60; will remove the all values using the integration when the integration is removed.
@@ -192,40 +192,40 @@ func (r ApiIntegrationsAwsDestroyRequest) Execute() (*http.Response, error) {
 /*
 IntegrationsAwsDestroy Delete an AWS integration.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsAwsDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsAwsDestroyRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsDestroy(ctx context.Context, id string) ApiIntegrationsAwsDestroyRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsDestroy(ctx context.Context, id string) ApiIntegrationsAwsDestroyRequest {
 	return ApiIntegrationsAwsDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsAwsDestroyExecute(r ApiIntegrationsAwsDestroyRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsAwsDestroyExecute(r ApiIntegrationsAwsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.inUse != nil {
-		localVarQueryParams.Add("in_use", parameterToString(*r.inUse, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "in_use", r.inUse, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -282,9 +282,9 @@ func (a *IntegrationsApiService) IntegrationsAwsDestroyExecute(r ApiIntegrations
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -301,13 +301,13 @@ func (a *IntegrationsApiService) IntegrationsAwsDestroyExecute(r ApiIntegrations
 }
 
 type ApiIntegrationsAwsListRequest struct {
-	ctx          context.Context
-	ApiService   *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsAccountId *string
-	awsRoleName  *string
-	ordering     *string
-	page         *int32
-	pageSize     *int32
+	awsRoleName *string
+	ordering *string
+	page *int32
+	pageSize *int32
 }
 
 func (r ApiIntegrationsAwsListRequest) AwsAccountId(awsAccountId string) ApiIntegrationsAwsListRequest {
@@ -345,28 +345,27 @@ func (r ApiIntegrationsAwsListRequest) Execute() (*PaginatedAwsIntegrationList, 
 /*
 IntegrationsAwsList Method for IntegrationsAwsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiIntegrationsAwsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiIntegrationsAwsListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsList(ctx context.Context) ApiIntegrationsAwsListRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsList(ctx context.Context) ApiIntegrationsAwsListRequest {
 	return ApiIntegrationsAwsListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAwsIntegrationList
-func (a *IntegrationsApiService) IntegrationsAwsListExecute(r ApiIntegrationsAwsListRequest) (*PaginatedAwsIntegrationList, *http.Response, error) {
+//  @return PaginatedAwsIntegrationList
+func (a *IntegrationsAPIService) IntegrationsAwsListExecute(r ApiIntegrationsAwsListRequest) (*PaginatedAwsIntegrationList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAwsIntegrationList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAwsIntegrationList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -378,19 +377,19 @@ func (a *IntegrationsApiService) IntegrationsAwsListExecute(r ApiIntegrationsAws
 	localVarFormParams := url.Values{}
 
 	if r.awsAccountId != nil {
-		localVarQueryParams.Add("aws_account_id", parameterToString(*r.awsAccountId, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "aws_account_id", r.awsAccountId, "")
 	}
 	if r.awsRoleName != nil {
-		localVarQueryParams.Add("aws_role_name", parameterToString(*r.awsRoleName, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "aws_role_name", r.awsRoleName, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -447,9 +446,9 @@ func (a *IntegrationsApiService) IntegrationsAwsListExecute(r ApiIntegrationsAws
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -475,9 +474,9 @@ func (a *IntegrationsApiService) IntegrationsAwsListExecute(r ApiIntegrationsAws
 }
 
 type ApiIntegrationsAwsPartialUpdateRequest struct {
-	ctx                   context.Context
-	ApiService            *IntegrationsApiService
-	id                    string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
 	patchedAwsIntegration *PatchedAwsIntegration
 }
 
@@ -493,36 +492,35 @@ func (r ApiIntegrationsAwsPartialUpdateRequest) Execute() (*AwsIntegration, *htt
 /*
 IntegrationsAwsPartialUpdate Method for IntegrationsAwsPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsAwsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsAwsPartialUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPartialUpdate(ctx context.Context, id string) ApiIntegrationsAwsPartialUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPartialUpdate(ctx context.Context, id string) ApiIntegrationsAwsPartialUpdateRequest {
 	return ApiIntegrationsAwsPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsIntegration
-func (a *IntegrationsApiService) IntegrationsAwsPartialUpdateExecute(r ApiIntegrationsAwsPartialUpdateRequest) (*AwsIntegration, *http.Response, error) {
+//  @return AwsIntegration
+func (a *IntegrationsAPIService) IntegrationsAwsPartialUpdateExecute(r ApiIntegrationsAwsPartialUpdateRequest) (*AwsIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsIntegration
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsIntegration
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -585,9 +583,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPartialUpdateExecute(r ApiIntegr
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -613,10 +611,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPartialUpdateExecute(r ApiIntegr
 }
 
 type ApiIntegrationsAwsPullsCreateRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	awsPull          *AwsPull
+	awsPull *AwsPull
 }
 
 func (r ApiIntegrationsAwsPullsCreateRequest) AwsPull(awsPull AwsPull) ApiIntegrationsAwsPullsCreateRequest {
@@ -631,36 +629,35 @@ func (r ApiIntegrationsAwsPullsCreateRequest) Execute() (*AwsPull, *http.Respons
 /*
 IntegrationsAwsPullsCreate Method for IntegrationsAwsPullsCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@return ApiIntegrationsAwsPullsCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @return ApiIntegrationsAwsPullsCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsCreate(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPullsCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsCreate(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPullsCreateRequest {
 	return ApiIntegrationsAwsPullsCreateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPull
-func (a *IntegrationsApiService) IntegrationsAwsPullsCreateExecute(r ApiIntegrationsAwsPullsCreateRequest) (*AwsPull, *http.Response, error) {
+//  @return AwsPull
+func (a *IntegrationsAPIService) IntegrationsAwsPullsCreateExecute(r ApiIntegrationsAwsPullsCreateRequest) (*AwsPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPull
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -726,9 +723,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsCreateExecute(r ApiIntegrat
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -754,10 +751,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsCreateExecute(r ApiIntegrat
 }
 
 type ApiIntegrationsAwsPullsDestroyRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	id               string
+	id string
 }
 
 func (r ApiIntegrationsAwsPullsDestroyRequest) Execute() (*http.Response, error) {
@@ -767,36 +764,36 @@ func (r ApiIntegrationsAwsPullsDestroyRequest) Execute() (*http.Response, error)
 /*
 IntegrationsAwsPullsDestroy Method for IntegrationsAwsPullsDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param id
-	@return ApiIntegrationsAwsPullsDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param id
+ @return ApiIntegrationsAwsPullsDestroyRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsDestroy(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsDestroyRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsDestroy(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsDestroyRequest {
 	return ApiIntegrationsAwsPullsDestroyRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsAwsPullsDestroyExecute(r ApiIntegrationsAwsPullsDestroyRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsDestroyExecute(r ApiIntegrationsAwsPullsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -857,9 +854,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsDestroyExecute(r ApiIntegra
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -876,15 +873,15 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsDestroyExecute(r ApiIntegra
 }
 
 type ApiIntegrationsAwsPullsListRequest struct {
-	ctx                  context.Context
-	ApiService           *IntegrationsApiService
-	awsintegrationPk     string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	awsintegrationPk string
 	descriptionIcontains *string
-	name                 *string
-	nameIcontains        *string
-	ordering             *string
-	page                 *int32
-	pageSize             *int32
+	name *string
+	nameIcontains *string
+	ordering *string
+	page *int32
+	pageSize *int32
 }
 
 func (r ApiIntegrationsAwsPullsListRequest) DescriptionIcontains(descriptionIcontains string) ApiIntegrationsAwsPullsListRequest {
@@ -927,58 +924,57 @@ func (r ApiIntegrationsAwsPullsListRequest) Execute() (*PaginatedAwsPullList, *h
 /*
 IntegrationsAwsPullsList Method for IntegrationsAwsPullsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@return ApiIntegrationsAwsPullsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @return ApiIntegrationsAwsPullsListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsList(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPullsListRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsList(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPullsListRequest {
 	return ApiIntegrationsAwsPullsListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAwsPullList
-func (a *IntegrationsApiService) IntegrationsAwsPullsListExecute(r ApiIntegrationsAwsPullsListRequest) (*PaginatedAwsPullList, *http.Response, error) {
+//  @return PaginatedAwsPullList
+func (a *IntegrationsAPIService) IntegrationsAwsPullsListExecute(r ApiIntegrationsAwsPullsListRequest) (*PaginatedAwsPullList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAwsPullList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAwsPullList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.descriptionIcontains != nil {
-		localVarQueryParams.Add("description__icontains", parameterToString(*r.descriptionIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description__icontains", r.descriptionIcontains, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1035,9 +1031,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsListExecute(r ApiIntegratio
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1063,11 +1059,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsListExecute(r ApiIntegratio
 }
 
 type ApiIntegrationsAwsPullsPartialUpdateRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	id               string
-	patchedAwsPull   *PatchedAwsPull
+	id string
+	patchedAwsPull *PatchedAwsPull
 }
 
 func (r ApiIntegrationsAwsPullsPartialUpdateRequest) PatchedAwsPull(patchedAwsPull PatchedAwsPull) ApiIntegrationsAwsPullsPartialUpdateRequest {
@@ -1082,39 +1078,38 @@ func (r ApiIntegrationsAwsPullsPartialUpdateRequest) Execute() (*AwsPull, *http.
 /*
 IntegrationsAwsPullsPartialUpdate Method for IntegrationsAwsPullsPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param id
-	@return ApiIntegrationsAwsPullsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param id
+ @return ApiIntegrationsAwsPullsPartialUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsPartialUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsPartialUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsPartialUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsPartialUpdateRequest {
 	return ApiIntegrationsAwsPullsPartialUpdateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPull
-func (a *IntegrationsApiService) IntegrationsAwsPullsPartialUpdateExecute(r ApiIntegrationsAwsPullsPartialUpdateRequest) (*AwsPull, *http.Response, error) {
+//  @return AwsPull
+func (a *IntegrationsAPIService) IntegrationsAwsPullsPartialUpdateExecute(r ApiIntegrationsAwsPullsPartialUpdateRequest) (*AwsPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPull
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1177,9 +1172,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsPartialUpdateExecute(r ApiI
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1205,10 +1200,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsPartialUpdateExecute(r ApiI
 }
 
 type ApiIntegrationsAwsPullsRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	id               string
+	id string
 }
 
 func (r ApiIntegrationsAwsPullsRetrieveRequest) Execute() (*AwsPull, *http.Response, error) {
@@ -1218,39 +1213,38 @@ func (r ApiIntegrationsAwsPullsRetrieveRequest) Execute() (*AwsPull, *http.Respo
 /*
 IntegrationsAwsPullsRetrieve Method for IntegrationsAwsPullsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param id
-	@return ApiIntegrationsAwsPullsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param id
+ @return ApiIntegrationsAwsPullsRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsRetrieve(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsRetrieve(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsRetrieveRequest {
 	return ApiIntegrationsAwsPullsRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPull
-func (a *IntegrationsApiService) IntegrationsAwsPullsRetrieveExecute(r ApiIntegrationsAwsPullsRetrieveRequest) (*AwsPull, *http.Response, error) {
+//  @return AwsPull
+func (a *IntegrationsAPIService) IntegrationsAwsPullsRetrieveExecute(r ApiIntegrationsAwsPullsRetrieveRequest) (*AwsPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPull
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1311,9 +1305,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsRetrieveExecute(r ApiIntegr
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1339,10 +1333,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsRetrieveExecute(r ApiIntegr
 }
 
 type ApiIntegrationsAwsPullsSyncCreateRequest struct {
-	ctx                      context.Context
-	ApiService               *IntegrationsApiService
-	awsintegrationPk         string
-	id                       string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	awsintegrationPk string
+	id string
 	awsPullSyncActionRequest *AwsPullSyncActionRequest
 }
 
@@ -1360,36 +1354,36 @@ IntegrationsAwsPullsSyncCreate Method for IntegrationsAwsPullsSyncCreate
 
 Enqueue a pull synchronization task for mapped external values accessible with this integration.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param id
-	@return ApiIntegrationsAwsPullsSyncCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param id
+ @return ApiIntegrationsAwsPullsSyncCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsSyncCreate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsSyncCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsSyncCreate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsSyncCreateRequest {
 	return ApiIntegrationsAwsPullsSyncCreateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsAwsPullsSyncCreateExecute(r ApiIntegrationsAwsPullsSyncCreateRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsSyncCreateExecute(r ApiIntegrationsAwsPullsSyncCreateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodPost
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsSyncCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsSyncCreate")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/{id}/sync/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1452,9 +1446,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsSyncCreateExecute(r ApiInte
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -1471,17 +1465,17 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsSyncCreateExecute(r ApiInte
 }
 
 type ApiIntegrationsAwsPullsTasksListRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	awspullPk        string
-	modifiedAt       *time.Time
-	modifiedAtGte    *time.Time
-	modifiedAtLte    *time.Time
-	ordering         *string
-	page             *int32
-	pageSize         *int32
-	state            *string
+	awspullPk string
+	modifiedAt *time.Time
+	modifiedAtGte *time.Time
+	modifiedAtLte *time.Time
+	ordering *string
+	page *int32
+	pageSize *int32
+	state *string
 }
 
 func (r ApiIntegrationsAwsPullsTasksListRequest) ModifiedAt(modifiedAt time.Time) ApiIntegrationsAwsPullsTasksListRequest {
@@ -1530,64 +1524,63 @@ func (r ApiIntegrationsAwsPullsTasksListRequest) Execute() (*PaginatedAwsPullTas
 /*
 IntegrationsAwsPullsTasksList Method for IntegrationsAwsPullsTasksList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param awspullPk
-	@return ApiIntegrationsAwsPullsTasksListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param awspullPk
+ @return ApiIntegrationsAwsPullsTasksListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsTasksList(ctx context.Context, awsintegrationPk string, awspullPk string) ApiIntegrationsAwsPullsTasksListRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsTasksList(ctx context.Context, awsintegrationPk string, awspullPk string) ApiIntegrationsAwsPullsTasksListRequest {
 	return ApiIntegrationsAwsPullsTasksListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspullPk:        awspullPk,
+		awspullPk: awspullPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAwsPullTaskList
-func (a *IntegrationsApiService) IntegrationsAwsPullsTasksListExecute(r ApiIntegrationsAwsPullsTasksListRequest) (*PaginatedAwsPullTaskList, *http.Response, error) {
+//  @return PaginatedAwsPullTaskList
+func (a *IntegrationsAPIService) IntegrationsAwsPullsTasksListExecute(r ApiIntegrationsAwsPullsTasksListRequest) (*PaginatedAwsPullTaskList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAwsPullTaskList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAwsPullTaskList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsTasksList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsTasksList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/{awspull_pk}/tasks/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspull_pk"+"}", url.PathEscape(parameterToString(r.awspullPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspull_pk"+"}", url.PathEscape(parameterValueToString(r.awspullPk, "awspullPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.modifiedAt != nil {
-		localVarQueryParams.Add("modified_at", parameterToString(*r.modifiedAt, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at", r.modifiedAt, "")
 	}
 	if r.modifiedAtGte != nil {
-		localVarQueryParams.Add("modified_at__gte", parameterToString(*r.modifiedAtGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__gte", r.modifiedAtGte, "")
 	}
 	if r.modifiedAtLte != nil {
-		localVarQueryParams.Add("modified_at__lte", parameterToString(*r.modifiedAtLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__lte", r.modifiedAtLte, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.state != nil {
-		localVarQueryParams.Add("state", parameterToString(*r.state, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "state", r.state, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1644,9 +1637,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksListExecute(r ApiInteg
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1672,11 +1665,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksListExecute(r ApiInteg
 }
 
 type ApiIntegrationsAwsPullsTasksRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	awspullPk        string
-	id               string
+	awspullPk string
+	id string
 }
 
 func (r ApiIntegrationsAwsPullsTasksRetrieveRequest) Execute() (*AwsPullTask, *http.Response, error) {
@@ -1686,42 +1679,41 @@ func (r ApiIntegrationsAwsPullsTasksRetrieveRequest) Execute() (*AwsPullTask, *h
 /*
 IntegrationsAwsPullsTasksRetrieve Method for IntegrationsAwsPullsTasksRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param awspullPk
-	@param id
-	@return ApiIntegrationsAwsPullsTasksRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param awspullPk
+ @param id
+ @return ApiIntegrationsAwsPullsTasksRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsTasksRetrieve(ctx context.Context, awsintegrationPk string, awspullPk string, id string) ApiIntegrationsAwsPullsTasksRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsTasksRetrieve(ctx context.Context, awsintegrationPk string, awspullPk string, id string) ApiIntegrationsAwsPullsTasksRetrieveRequest {
 	return ApiIntegrationsAwsPullsTasksRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspullPk:        awspullPk,
-		id:               id,
+		awspullPk: awspullPk,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPullTask
-func (a *IntegrationsApiService) IntegrationsAwsPullsTasksRetrieveExecute(r ApiIntegrationsAwsPullsTasksRetrieveRequest) (*AwsPullTask, *http.Response, error) {
+//  @return AwsPullTask
+func (a *IntegrationsAPIService) IntegrationsAwsPullsTasksRetrieveExecute(r ApiIntegrationsAwsPullsTasksRetrieveRequest) (*AwsPullTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPullTask
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPullTask
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsTasksRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsTasksRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/{awspull_pk}/tasks/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspull_pk"+"}", url.PathEscape(parameterToString(r.awspullPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspull_pk"+"}", url.PathEscape(parameterValueToString(r.awspullPk, "awspullPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1782,9 +1774,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksRetrieveExecute(r ApiI
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1810,23 +1802,23 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksRetrieveExecute(r ApiI
 }
 
 type ApiIntegrationsAwsPullsTasksStepsListRequest struct {
-	ctx                context.Context
-	ApiService         *IntegrationsApiService
-	awsintegrationPk   string
-	awspullPk          string
-	awspulltaskPk      string
-	fqn                *string
-	modifiedAt         *time.Time
-	modifiedAtGte      *time.Time
-	modifiedAtLte      *time.Time
-	operation          *string
-	ordering           *string
-	page               *int32
-	pageSize           *int32
-	success            *bool
-	venueId            *string
-	venueIdIcontains   *string
-	venueName          *string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	awsintegrationPk string
+	awspullPk string
+	awspulltaskPk string
+	fqn *string
+	modifiedAt *time.Time
+	modifiedAtGte *time.Time
+	modifiedAtLte *time.Time
+	operation *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	success *bool
+	venueId *string
+	venueIdIcontains *string
+	venueName *string
 	venueNameIcontains *string
 }
 
@@ -1906,85 +1898,84 @@ func (r ApiIntegrationsAwsPullsTasksStepsListRequest) Execute() (*PaginatedAwsPu
 /*
 IntegrationsAwsPullsTasksStepsList Method for IntegrationsAwsPullsTasksStepsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param awspullPk
-	@param awspulltaskPk
-	@return ApiIntegrationsAwsPullsTasksStepsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param awspullPk
+ @param awspulltaskPk
+ @return ApiIntegrationsAwsPullsTasksStepsListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsList(ctx context.Context, awsintegrationPk string, awspullPk string, awspulltaskPk string) ApiIntegrationsAwsPullsTasksStepsListRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsTasksStepsList(ctx context.Context, awsintegrationPk string, awspullPk string, awspulltaskPk string) ApiIntegrationsAwsPullsTasksStepsListRequest {
 	return ApiIntegrationsAwsPullsTasksStepsListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspullPk:        awspullPk,
-		awspulltaskPk:    awspulltaskPk,
+		awspullPk: awspullPk,
+		awspulltaskPk: awspulltaskPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAwsPullTaskStepList
-func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsListExecute(r ApiIntegrationsAwsPullsTasksStepsListRequest) (*PaginatedAwsPullTaskStepList, *http.Response, error) {
+//  @return PaginatedAwsPullTaskStepList
+func (a *IntegrationsAPIService) IntegrationsAwsPullsTasksStepsListExecute(r ApiIntegrationsAwsPullsTasksStepsListRequest) (*PaginatedAwsPullTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAwsPullTaskStepList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAwsPullTaskStepList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsTasksStepsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsTasksStepsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/{awspull_pk}/tasks/{awspulltask_pk}/steps/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspull_pk"+"}", url.PathEscape(parameterToString(r.awspullPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspulltask_pk"+"}", url.PathEscape(parameterToString(r.awspulltaskPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspull_pk"+"}", url.PathEscape(parameterValueToString(r.awspullPk, "awspullPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspulltask_pk"+"}", url.PathEscape(parameterValueToString(r.awspulltaskPk, "awspulltaskPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.fqn != nil {
-		localVarQueryParams.Add("fqn", parameterToString(*r.fqn, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "fqn", r.fqn, "")
 	}
 	if r.modifiedAt != nil {
-		localVarQueryParams.Add("modified_at", parameterToString(*r.modifiedAt, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at", r.modifiedAt, "")
 	}
 	if r.modifiedAtGte != nil {
-		localVarQueryParams.Add("modified_at__gte", parameterToString(*r.modifiedAtGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__gte", r.modifiedAtGte, "")
 	}
 	if r.modifiedAtLte != nil {
-		localVarQueryParams.Add("modified_at__lte", parameterToString(*r.modifiedAtLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__lte", r.modifiedAtLte, "")
 	}
 	if r.operation != nil {
-		localVarQueryParams.Add("operation", parameterToString(*r.operation, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "operation", r.operation, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.success != nil {
-		localVarQueryParams.Add("success", parameterToString(*r.success, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "success", r.success, "")
 	}
 	if r.venueId != nil {
-		localVarQueryParams.Add("venue_id", parameterToString(*r.venueId, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_id", r.venueId, "")
 	}
 	if r.venueIdIcontains != nil {
-		localVarQueryParams.Add("venue_id__icontains", parameterToString(*r.venueIdIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_id__icontains", r.venueIdIcontains, "")
 	}
 	if r.venueName != nil {
-		localVarQueryParams.Add("venue_name", parameterToString(*r.venueName, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_name", r.venueName, "")
 	}
 	if r.venueNameIcontains != nil {
-		localVarQueryParams.Add("venue_name__icontains", parameterToString(*r.venueNameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_name__icontains", r.venueNameIcontains, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -2041,9 +2032,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsListExecute(r Api
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2069,12 +2060,12 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsListExecute(r Api
 }
 
 type ApiIntegrationsAwsPullsTasksStepsRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	awspullPk        string
-	awspulltaskPk    string
-	id               string
+	awspullPk string
+	awspulltaskPk string
+	id string
 }
 
 func (r ApiIntegrationsAwsPullsTasksStepsRetrieveRequest) Execute() (*AwsPullTaskStep, *http.Response, error) {
@@ -2084,45 +2075,44 @@ func (r ApiIntegrationsAwsPullsTasksStepsRetrieveRequest) Execute() (*AwsPullTas
 /*
 IntegrationsAwsPullsTasksStepsRetrieve Method for IntegrationsAwsPullsTasksStepsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param awspullPk
-	@param awspulltaskPk
-	@param id
-	@return ApiIntegrationsAwsPullsTasksStepsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param awspullPk
+ @param awspulltaskPk
+ @param id
+ @return ApiIntegrationsAwsPullsTasksStepsRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsRetrieve(ctx context.Context, awsintegrationPk string, awspullPk string, awspulltaskPk string, id string) ApiIntegrationsAwsPullsTasksStepsRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsTasksStepsRetrieve(ctx context.Context, awsintegrationPk string, awspullPk string, awspulltaskPk string, id string) ApiIntegrationsAwsPullsTasksStepsRetrieveRequest {
 	return ApiIntegrationsAwsPullsTasksStepsRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspullPk:        awspullPk,
-		awspulltaskPk:    awspulltaskPk,
-		id:               id,
+		awspullPk: awspullPk,
+		awspulltaskPk: awspulltaskPk,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPullTaskStep
-func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsRetrieveExecute(r ApiIntegrationsAwsPullsTasksStepsRetrieveRequest) (*AwsPullTaskStep, *http.Response, error) {
+//  @return AwsPullTaskStep
+func (a *IntegrationsAPIService) IntegrationsAwsPullsTasksStepsRetrieveExecute(r ApiIntegrationsAwsPullsTasksStepsRetrieveRequest) (*AwsPullTaskStep, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPullTaskStep
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPullTaskStep
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsTasksStepsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsTasksStepsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/{awspull_pk}/tasks/{awspulltask_pk}/steps/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspull_pk"+"}", url.PathEscape(parameterToString(r.awspullPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspulltask_pk"+"}", url.PathEscape(parameterToString(r.awspulltaskPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspull_pk"+"}", url.PathEscape(parameterValueToString(r.awspullPk, "awspullPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspulltask_pk"+"}", url.PathEscape(parameterValueToString(r.awspulltaskPk, "awspulltaskPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2183,9 +2173,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsRetrieveExecute(r
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2211,11 +2201,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsTasksStepsRetrieveExecute(r
 }
 
 type ApiIntegrationsAwsPullsUpdateRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	id               string
-	awsPull          *AwsPull
+	id string
+	awsPull *AwsPull
 }
 
 func (r ApiIntegrationsAwsPullsUpdateRequest) AwsPull(awsPull AwsPull) ApiIntegrationsAwsPullsUpdateRequest {
@@ -2230,39 +2220,38 @@ func (r ApiIntegrationsAwsPullsUpdateRequest) Execute() (*AwsPull, *http.Respons
 /*
 IntegrationsAwsPullsUpdate Method for IntegrationsAwsPullsUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param id
-	@return ApiIntegrationsAwsPullsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param id
+ @return ApiIntegrationsAwsPullsUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPullsUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPullsUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPullsUpdateRequest {
 	return ApiIntegrationsAwsPullsUpdateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPull
-func (a *IntegrationsApiService) IntegrationsAwsPullsUpdateExecute(r ApiIntegrationsAwsPullsUpdateRequest) (*AwsPull, *http.Response, error) {
+//  @return AwsPull
+func (a *IntegrationsAPIService) IntegrationsAwsPullsUpdateExecute(r ApiIntegrationsAwsPullsUpdateRequest) (*AwsPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPull
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPullsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPullsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2328,9 +2317,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsUpdateExecute(r ApiIntegrat
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2356,10 +2345,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPullsUpdateExecute(r ApiIntegrat
 }
 
 type ApiIntegrationsAwsPushesCreateRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	awsPush          *AwsPush
+	awsPush *AwsPush
 }
 
 func (r ApiIntegrationsAwsPushesCreateRequest) AwsPush(awsPush AwsPush) ApiIntegrationsAwsPushesCreateRequest {
@@ -2374,36 +2363,35 @@ func (r ApiIntegrationsAwsPushesCreateRequest) Execute() (*AwsPush, *http.Respon
 /*
 IntegrationsAwsPushesCreate Method for IntegrationsAwsPushesCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@return ApiIntegrationsAwsPushesCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @return ApiIntegrationsAwsPushesCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesCreate(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPushesCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesCreate(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPushesCreateRequest {
 	return ApiIntegrationsAwsPushesCreateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPush
-func (a *IntegrationsApiService) IntegrationsAwsPushesCreateExecute(r ApiIntegrationsAwsPushesCreateRequest) (*AwsPush, *http.Response, error) {
+//  @return AwsPush
+func (a *IntegrationsAPIService) IntegrationsAwsPushesCreateExecute(r ApiIntegrationsAwsPushesCreateRequest) (*AwsPush, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPush
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPush
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2469,9 +2457,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesCreateExecute(r ApiIntegra
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2497,10 +2485,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesCreateExecute(r ApiIntegra
 }
 
 type ApiIntegrationsAwsPushesDestroyRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	id               string
+	id string
 }
 
 func (r ApiIntegrationsAwsPushesDestroyRequest) Execute() (*http.Response, error) {
@@ -2510,36 +2498,36 @@ func (r ApiIntegrationsAwsPushesDestroyRequest) Execute() (*http.Response, error
 /*
 IntegrationsAwsPushesDestroy Method for IntegrationsAwsPushesDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param id
-	@return ApiIntegrationsAwsPushesDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param id
+ @return ApiIntegrationsAwsPushesDestroyRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesDestroy(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesDestroyRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesDestroy(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesDestroyRequest {
 	return ApiIntegrationsAwsPushesDestroyRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsAwsPushesDestroyExecute(r ApiIntegrationsAwsPushesDestroyRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesDestroyExecute(r ApiIntegrationsAwsPushesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2600,9 +2588,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesDestroyExecute(r ApiIntegr
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -2619,18 +2607,18 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesDestroyExecute(r ApiIntegr
 }
 
 type ApiIntegrationsAwsPushesListRequest struct {
-	ctx                  context.Context
-	ApiService           *IntegrationsApiService
-	awsintegrationPk     string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	awsintegrationPk string
 	descriptionIcontains *string
-	environment          *string
-	name                 *string
-	nameIcontains        *string
-	ordering             *string
-	page                 *int32
-	pageSize             *int32
-	project              *string
-	tag                  *string
+	environment *string
+	name *string
+	nameIcontains *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	project *string
+	tag *string
 }
 
 func (r ApiIntegrationsAwsPushesListRequest) DescriptionIcontains(descriptionIcontains string) ApiIntegrationsAwsPushesListRequest {
@@ -2691,67 +2679,66 @@ func (r ApiIntegrationsAwsPushesListRequest) Execute() (*PaginatedAwsPushList, *
 /*
 IntegrationsAwsPushesList Method for IntegrationsAwsPushesList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@return ApiIntegrationsAwsPushesListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @return ApiIntegrationsAwsPushesListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesList(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPushesListRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesList(ctx context.Context, awsintegrationPk string) ApiIntegrationsAwsPushesListRequest {
 	return ApiIntegrationsAwsPushesListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAwsPushList
-func (a *IntegrationsApiService) IntegrationsAwsPushesListExecute(r ApiIntegrationsAwsPushesListRequest) (*PaginatedAwsPushList, *http.Response, error) {
+//  @return PaginatedAwsPushList
+func (a *IntegrationsAPIService) IntegrationsAwsPushesListExecute(r ApiIntegrationsAwsPushesListRequest) (*PaginatedAwsPushList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAwsPushList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAwsPushList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.descriptionIcontains != nil {
-		localVarQueryParams.Add("description__icontains", parameterToString(*r.descriptionIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description__icontains", r.descriptionIcontains, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.project != nil {
-		localVarQueryParams.Add("project", parameterToString(*r.project, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "project", r.project, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -2808,9 +2795,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesListExecute(r ApiIntegrati
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2836,10 +2823,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesListExecute(r ApiIntegrati
 }
 
 type ApiIntegrationsAwsPushesPartialUpdateRequest struct {
-	ctx                  context.Context
-	ApiService           *IntegrationsApiService
-	awsintegrationPk     string
-	id                   string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	awsintegrationPk string
+	id string
 	patchedAwsPushUpdate *PatchedAwsPushUpdate
 }
 
@@ -2855,39 +2842,38 @@ func (r ApiIntegrationsAwsPushesPartialUpdateRequest) Execute() (*AwsPushUpdate,
 /*
 IntegrationsAwsPushesPartialUpdate Method for IntegrationsAwsPushesPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param id
-	@return ApiIntegrationsAwsPushesPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param id
+ @return ApiIntegrationsAwsPushesPartialUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesPartialUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesPartialUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesPartialUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesPartialUpdateRequest {
 	return ApiIntegrationsAwsPushesPartialUpdateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPushUpdate
-func (a *IntegrationsApiService) IntegrationsAwsPushesPartialUpdateExecute(r ApiIntegrationsAwsPushesPartialUpdateRequest) (*AwsPushUpdate, *http.Response, error) {
+//  @return AwsPushUpdate
+func (a *IntegrationsAPIService) IntegrationsAwsPushesPartialUpdateExecute(r ApiIntegrationsAwsPushesPartialUpdateRequest) (*AwsPushUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPushUpdate
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPushUpdate
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2950,9 +2936,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesPartialUpdateExecute(r Api
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2978,10 +2964,10 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesPartialUpdateExecute(r Api
 }
 
 type ApiIntegrationsAwsPushesRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	id               string
+	id string
 }
 
 func (r ApiIntegrationsAwsPushesRetrieveRequest) Execute() (*AwsPush, *http.Response, error) {
@@ -2991,39 +2977,38 @@ func (r ApiIntegrationsAwsPushesRetrieveRequest) Execute() (*AwsPush, *http.Resp
 /*
 IntegrationsAwsPushesRetrieve Method for IntegrationsAwsPushesRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param id
-	@return ApiIntegrationsAwsPushesRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param id
+ @return ApiIntegrationsAwsPushesRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesRetrieve(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesRetrieve(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesRetrieveRequest {
 	return ApiIntegrationsAwsPushesRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPush
-func (a *IntegrationsApiService) IntegrationsAwsPushesRetrieveExecute(r ApiIntegrationsAwsPushesRetrieveRequest) (*AwsPush, *http.Response, error) {
+//  @return AwsPush
+func (a *IntegrationsAPIService) IntegrationsAwsPushesRetrieveExecute(r ApiIntegrationsAwsPushesRetrieveRequest) (*AwsPush, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPush
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPush
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3084,9 +3069,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesRetrieveExecute(r ApiInteg
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -3112,11 +3097,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesRetrieveExecute(r ApiInteg
 }
 
 type ApiIntegrationsAwsPushesSyncCreateRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	id               string
-	awsPush          *AwsPush
+	id string
+	awsPush *AwsPush
 }
 
 func (r ApiIntegrationsAwsPushesSyncCreateRequest) AwsPush(awsPush AwsPush) ApiIntegrationsAwsPushesSyncCreateRequest {
@@ -3133,36 +3118,36 @@ IntegrationsAwsPushesSyncCreate Method for IntegrationsAwsPushesSyncCreate
 
 Enqueue a push synchronization task.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param id
-	@return ApiIntegrationsAwsPushesSyncCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param id
+ @return ApiIntegrationsAwsPushesSyncCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesSyncCreate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesSyncCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesSyncCreate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesSyncCreateRequest {
 	return ApiIntegrationsAwsPushesSyncCreateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsAwsPushesSyncCreateExecute(r ApiIntegrationsAwsPushesSyncCreateRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesSyncCreateExecute(r ApiIntegrationsAwsPushesSyncCreateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodPost
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesSyncCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesSyncCreate")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/{id}/sync/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3228,9 +3213,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesSyncCreateExecute(r ApiInt
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -3247,17 +3232,17 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesSyncCreateExecute(r ApiInt
 }
 
 type ApiIntegrationsAwsPushesTasksListRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	awspushPk        string
-	modifiedAt       *time.Time
-	modifiedAtGte    *time.Time
-	modifiedAtLte    *time.Time
-	ordering         *string
-	page             *int32
-	pageSize         *int32
-	state            *string
+	awspushPk string
+	modifiedAt *time.Time
+	modifiedAtGte *time.Time
+	modifiedAtLte *time.Time
+	ordering *string
+	page *int32
+	pageSize *int32
+	state *string
 }
 
 func (r ApiIntegrationsAwsPushesTasksListRequest) ModifiedAt(modifiedAt time.Time) ApiIntegrationsAwsPushesTasksListRequest {
@@ -3306,64 +3291,63 @@ func (r ApiIntegrationsAwsPushesTasksListRequest) Execute() (*PaginatedAwsPushTa
 /*
 IntegrationsAwsPushesTasksList Method for IntegrationsAwsPushesTasksList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param awspushPk
-	@return ApiIntegrationsAwsPushesTasksListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param awspushPk
+ @return ApiIntegrationsAwsPushesTasksListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesTasksList(ctx context.Context, awsintegrationPk string, awspushPk string) ApiIntegrationsAwsPushesTasksListRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesTasksList(ctx context.Context, awsintegrationPk string, awspushPk string) ApiIntegrationsAwsPushesTasksListRequest {
 	return ApiIntegrationsAwsPushesTasksListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspushPk:        awspushPk,
+		awspushPk: awspushPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAwsPushTaskList
-func (a *IntegrationsApiService) IntegrationsAwsPushesTasksListExecute(r ApiIntegrationsAwsPushesTasksListRequest) (*PaginatedAwsPushTaskList, *http.Response, error) {
+//  @return PaginatedAwsPushTaskList
+func (a *IntegrationsAPIService) IntegrationsAwsPushesTasksListExecute(r ApiIntegrationsAwsPushesTasksListRequest) (*PaginatedAwsPushTaskList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAwsPushTaskList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAwsPushTaskList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesTasksList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesTasksList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/{awspush_pk}/tasks/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspush_pk"+"}", url.PathEscape(parameterToString(r.awspushPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspush_pk"+"}", url.PathEscape(parameterValueToString(r.awspushPk, "awspushPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.modifiedAt != nil {
-		localVarQueryParams.Add("modified_at", parameterToString(*r.modifiedAt, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at", r.modifiedAt, "")
 	}
 	if r.modifiedAtGte != nil {
-		localVarQueryParams.Add("modified_at__gte", parameterToString(*r.modifiedAtGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__gte", r.modifiedAtGte, "")
 	}
 	if r.modifiedAtLte != nil {
-		localVarQueryParams.Add("modified_at__lte", parameterToString(*r.modifiedAtLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__lte", r.modifiedAtLte, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.state != nil {
-		localVarQueryParams.Add("state", parameterToString(*r.state, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "state", r.state, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -3420,9 +3404,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksListExecute(r ApiInte
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -3448,11 +3432,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksListExecute(r ApiInte
 }
 
 type ApiIntegrationsAwsPushesTasksRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	awspushPk        string
-	id               string
+	awspushPk string
+	id string
 }
 
 func (r ApiIntegrationsAwsPushesTasksRetrieveRequest) Execute() (*AwsPushTask, *http.Response, error) {
@@ -3462,42 +3446,41 @@ func (r ApiIntegrationsAwsPushesTasksRetrieveRequest) Execute() (*AwsPushTask, *
 /*
 IntegrationsAwsPushesTasksRetrieve Method for IntegrationsAwsPushesTasksRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param awspushPk
-	@param id
-	@return ApiIntegrationsAwsPushesTasksRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param awspushPk
+ @param id
+ @return ApiIntegrationsAwsPushesTasksRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesTasksRetrieve(ctx context.Context, awsintegrationPk string, awspushPk string, id string) ApiIntegrationsAwsPushesTasksRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesTasksRetrieve(ctx context.Context, awsintegrationPk string, awspushPk string, id string) ApiIntegrationsAwsPushesTasksRetrieveRequest {
 	return ApiIntegrationsAwsPushesTasksRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspushPk:        awspushPk,
-		id:               id,
+		awspushPk: awspushPk,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPushTask
-func (a *IntegrationsApiService) IntegrationsAwsPushesTasksRetrieveExecute(r ApiIntegrationsAwsPushesTasksRetrieveRequest) (*AwsPushTask, *http.Response, error) {
+//  @return AwsPushTask
+func (a *IntegrationsAPIService) IntegrationsAwsPushesTasksRetrieveExecute(r ApiIntegrationsAwsPushesTasksRetrieveRequest) (*AwsPushTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPushTask
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPushTask
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesTasksRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesTasksRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/{awspush_pk}/tasks/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspush_pk"+"}", url.PathEscape(parameterToString(r.awspushPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspush_pk"+"}", url.PathEscape(parameterValueToString(r.awspushPk, "awspushPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3558,9 +3541,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksRetrieveExecute(r Api
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -3586,23 +3569,23 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksRetrieveExecute(r Api
 }
 
 type ApiIntegrationsAwsPushesTasksStepsListRequest struct {
-	ctx                context.Context
-	ApiService         *IntegrationsApiService
-	awsintegrationPk   string
-	awspushPk          string
-	awspushtaskPk      string
-	fqn                *string
-	modifiedAt         *time.Time
-	modifiedAtGte      *time.Time
-	modifiedAtLte      *time.Time
-	operation          *string
-	ordering           *string
-	page               *int32
-	pageSize           *int32
-	success            *bool
-	venueId            *string
-	venueIdIcontains   *string
-	venueName          *string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	awsintegrationPk string
+	awspushPk string
+	awspushtaskPk string
+	fqn *string
+	modifiedAt *time.Time
+	modifiedAtGte *time.Time
+	modifiedAtLte *time.Time
+	operation *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	success *bool
+	venueId *string
+	venueIdIcontains *string
+	venueName *string
 	venueNameIcontains *string
 }
 
@@ -3682,85 +3665,84 @@ func (r ApiIntegrationsAwsPushesTasksStepsListRequest) Execute() (*PaginatedAwsP
 /*
 IntegrationsAwsPushesTasksStepsList Method for IntegrationsAwsPushesTasksStepsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param awspushPk
-	@param awspushtaskPk
-	@return ApiIntegrationsAwsPushesTasksStepsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param awspushPk
+ @param awspushtaskPk
+ @return ApiIntegrationsAwsPushesTasksStepsListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsList(ctx context.Context, awsintegrationPk string, awspushPk string, awspushtaskPk string) ApiIntegrationsAwsPushesTasksStepsListRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesTasksStepsList(ctx context.Context, awsintegrationPk string, awspushPk string, awspushtaskPk string) ApiIntegrationsAwsPushesTasksStepsListRequest {
 	return ApiIntegrationsAwsPushesTasksStepsListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspushPk:        awspushPk,
-		awspushtaskPk:    awspushtaskPk,
+		awspushPk: awspushPk,
+		awspushtaskPk: awspushtaskPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAwsPushTaskStepList
-func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsListExecute(r ApiIntegrationsAwsPushesTasksStepsListRequest) (*PaginatedAwsPushTaskStepList, *http.Response, error) {
+//  @return PaginatedAwsPushTaskStepList
+func (a *IntegrationsAPIService) IntegrationsAwsPushesTasksStepsListExecute(r ApiIntegrationsAwsPushesTasksStepsListRequest) (*PaginatedAwsPushTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAwsPushTaskStepList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAwsPushTaskStepList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesTasksStepsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesTasksStepsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/{awspush_pk}/tasks/{awspushtask_pk}/steps/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspush_pk"+"}", url.PathEscape(parameterToString(r.awspushPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspushtask_pk"+"}", url.PathEscape(parameterToString(r.awspushtaskPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspush_pk"+"}", url.PathEscape(parameterValueToString(r.awspushPk, "awspushPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspushtask_pk"+"}", url.PathEscape(parameterValueToString(r.awspushtaskPk, "awspushtaskPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.fqn != nil {
-		localVarQueryParams.Add("fqn", parameterToString(*r.fqn, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "fqn", r.fqn, "")
 	}
 	if r.modifiedAt != nil {
-		localVarQueryParams.Add("modified_at", parameterToString(*r.modifiedAt, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at", r.modifiedAt, "")
 	}
 	if r.modifiedAtGte != nil {
-		localVarQueryParams.Add("modified_at__gte", parameterToString(*r.modifiedAtGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__gte", r.modifiedAtGte, "")
 	}
 	if r.modifiedAtLte != nil {
-		localVarQueryParams.Add("modified_at__lte", parameterToString(*r.modifiedAtLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__lte", r.modifiedAtLte, "")
 	}
 	if r.operation != nil {
-		localVarQueryParams.Add("operation", parameterToString(*r.operation, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "operation", r.operation, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.success != nil {
-		localVarQueryParams.Add("success", parameterToString(*r.success, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "success", r.success, "")
 	}
 	if r.venueId != nil {
-		localVarQueryParams.Add("venue_id", parameterToString(*r.venueId, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_id", r.venueId, "")
 	}
 	if r.venueIdIcontains != nil {
-		localVarQueryParams.Add("venue_id__icontains", parameterToString(*r.venueIdIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_id__icontains", r.venueIdIcontains, "")
 	}
 	if r.venueName != nil {
-		localVarQueryParams.Add("venue_name", parameterToString(*r.venueName, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_name", r.venueName, "")
 	}
 	if r.venueNameIcontains != nil {
-		localVarQueryParams.Add("venue_name__icontains", parameterToString(*r.venueNameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_name__icontains", r.venueNameIcontains, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -3817,9 +3799,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsListExecute(r Ap
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -3845,12 +3827,12 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsListExecute(r Ap
 }
 
 type ApiIntegrationsAwsPushesTasksStepsRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	awspushPk        string
-	awspushtaskPk    string
-	id               string
+	awspushPk string
+	awspushtaskPk string
+	id string
 }
 
 func (r ApiIntegrationsAwsPushesTasksStepsRetrieveRequest) Execute() (*AwsPushTaskStep, *http.Response, error) {
@@ -3860,45 +3842,44 @@ func (r ApiIntegrationsAwsPushesTasksStepsRetrieveRequest) Execute() (*AwsPushTa
 /*
 IntegrationsAwsPushesTasksStepsRetrieve Method for IntegrationsAwsPushesTasksStepsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param awspushPk
-	@param awspushtaskPk
-	@param id
-	@return ApiIntegrationsAwsPushesTasksStepsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param awspushPk
+ @param awspushtaskPk
+ @param id
+ @return ApiIntegrationsAwsPushesTasksStepsRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsRetrieve(ctx context.Context, awsintegrationPk string, awspushPk string, awspushtaskPk string, id string) ApiIntegrationsAwsPushesTasksStepsRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesTasksStepsRetrieve(ctx context.Context, awsintegrationPk string, awspushPk string, awspushtaskPk string, id string) ApiIntegrationsAwsPushesTasksStepsRetrieveRequest {
 	return ApiIntegrationsAwsPushesTasksStepsRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		awspushPk:        awspushPk,
-		awspushtaskPk:    awspushtaskPk,
-		id:               id,
+		awspushPk: awspushPk,
+		awspushtaskPk: awspushtaskPk,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPushTaskStep
-func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsRetrieveExecute(r ApiIntegrationsAwsPushesTasksStepsRetrieveRequest) (*AwsPushTaskStep, *http.Response, error) {
+//  @return AwsPushTaskStep
+func (a *IntegrationsAPIService) IntegrationsAwsPushesTasksStepsRetrieveExecute(r ApiIntegrationsAwsPushesTasksStepsRetrieveRequest) (*AwsPushTaskStep, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPushTaskStep
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPushTaskStep
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesTasksStepsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesTasksStepsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/{awspush_pk}/tasks/{awspushtask_pk}/steps/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspush_pk"+"}", url.PathEscape(parameterToString(r.awspushPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"awspushtask_pk"+"}", url.PathEscape(parameterToString(r.awspushtaskPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspush_pk"+"}", url.PathEscape(parameterValueToString(r.awspushPk, "awspushPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awspushtask_pk"+"}", url.PathEscape(parameterValueToString(r.awspushtaskPk, "awspushtaskPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3959,9 +3940,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsRetrieveExecute(
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -3987,11 +3968,11 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesTasksStepsRetrieveExecute(
 }
 
 type ApiIntegrationsAwsPushesUpdateRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	awsintegrationPk string
-	id               string
-	awsPushUpdate    *AwsPushUpdate
+	id string
+	awsPushUpdate *AwsPushUpdate
 }
 
 func (r ApiIntegrationsAwsPushesUpdateRequest) AwsPushUpdate(awsPushUpdate AwsPushUpdate) ApiIntegrationsAwsPushesUpdateRequest {
@@ -4006,39 +3987,38 @@ func (r ApiIntegrationsAwsPushesUpdateRequest) Execute() (*AwsPushUpdate, *http.
 /*
 IntegrationsAwsPushesUpdate Method for IntegrationsAwsPushesUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param awsintegrationPk
-	@param id
-	@return ApiIntegrationsAwsPushesUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param awsintegrationPk
+ @param id
+ @return ApiIntegrationsAwsPushesUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsPushesUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsPushesUpdate(ctx context.Context, awsintegrationPk string, id string) ApiIntegrationsAwsPushesUpdateRequest {
 	return ApiIntegrationsAwsPushesUpdateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		awsintegrationPk: awsintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsPushUpdate
-func (a *IntegrationsApiService) IntegrationsAwsPushesUpdateExecute(r ApiIntegrationsAwsPushesUpdateRequest) (*AwsPushUpdate, *http.Response, error) {
+//  @return AwsPushUpdate
+func (a *IntegrationsAPIService) IntegrationsAwsPushesUpdateExecute(r ApiIntegrationsAwsPushesUpdateRequest) (*AwsPushUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsPushUpdate
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsPushUpdate
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsPushesUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsPushesUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{awsintegration_pk}/pushes/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterToString(r.awsintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"awsintegration_pk"+"}", url.PathEscape(parameterValueToString(r.awsintegrationPk, "awsintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -4104,9 +4084,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesUpdateExecute(r ApiIntegra
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4132,9 +4112,9 @@ func (a *IntegrationsApiService) IntegrationsAwsPushesUpdateExecute(r ApiIntegra
 }
 
 type ApiIntegrationsAwsRetrieveRequest struct {
-	ctx           context.Context
-	ApiService    *IntegrationsApiService
-	id            string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
 	refreshStatus *bool
 }
 
@@ -4151,43 +4131,42 @@ func (r ApiIntegrationsAwsRetrieveRequest) Execute() (*AwsIntegration, *http.Res
 /*
 IntegrationsAwsRetrieve Get details of an AWS Integration.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsAwsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsAwsRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsRetrieve(ctx context.Context, id string) ApiIntegrationsAwsRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsRetrieve(ctx context.Context, id string) ApiIntegrationsAwsRetrieveRequest {
 	return ApiIntegrationsAwsRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsIntegration
-func (a *IntegrationsApiService) IntegrationsAwsRetrieveExecute(r ApiIntegrationsAwsRetrieveRequest) (*AwsIntegration, *http.Response, error) {
+//  @return AwsIntegration
+func (a *IntegrationsAPIService) IntegrationsAwsRetrieveExecute(r ApiIntegrationsAwsRetrieveRequest) (*AwsIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsIntegration
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsIntegration
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.refreshStatus != nil {
-		localVarQueryParams.Add("refresh_status", parameterToString(*r.refreshStatus, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "refresh_status", r.refreshStatus, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -4244,9 +4223,9 @@ func (a *IntegrationsApiService) IntegrationsAwsRetrieveExecute(r ApiIntegration
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4272,9 +4251,9 @@ func (a *IntegrationsApiService) IntegrationsAwsRetrieveExecute(r ApiIntegration
 }
 
 type ApiIntegrationsAwsScanCreateRequest struct {
-	ctx                context.Context
-	ApiService         *IntegrationsApiService
-	id                 string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
 	awsIntegrationScan *AwsIntegrationScan
 }
 
@@ -4292,36 +4271,35 @@ IntegrationsAwsScanCreate Evaluate a potential pull pattern and understand what 
 
 Probe a region and service using a pattern matching string that can be used in pull actions.  This allows the pattern match to be checked for correctness and preview what will match during creation of the string.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsAwsScanCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsAwsScanCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsScanCreate(ctx context.Context, id string) ApiIntegrationsAwsScanCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsScanCreate(ctx context.Context, id string) ApiIntegrationsAwsScanCreateRequest {
 	return ApiIntegrationsAwsScanCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return DiscoveryResult
-func (a *IntegrationsApiService) IntegrationsAwsScanCreateExecute(r ApiIntegrationsAwsScanCreateRequest) (*DiscoveryResult, *http.Response, error) {
+//  @return DiscoveryResult
+func (a *IntegrationsAPIService) IntegrationsAwsScanCreateExecute(r ApiIntegrationsAwsScanCreateRequest) (*DiscoveryResult, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *DiscoveryResult
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *DiscoveryResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsScanCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsScanCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{id}/scan/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -4387,9 +4365,9 @@ func (a *IntegrationsApiService) IntegrationsAwsScanCreateExecute(r ApiIntegrati
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4415,9 +4393,9 @@ func (a *IntegrationsApiService) IntegrationsAwsScanCreateExecute(r ApiIntegrati
 }
 
 type ApiIntegrationsAwsUpdateRequest struct {
-	ctx            context.Context
-	ApiService     *IntegrationsApiService
-	id             string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
 	awsIntegration *AwsIntegration
 }
 
@@ -4433,36 +4411,35 @@ func (r ApiIntegrationsAwsUpdateRequest) Execute() (*AwsIntegration, *http.Respo
 /*
 IntegrationsAwsUpdate Method for IntegrationsAwsUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsAwsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsAwsUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAwsUpdate(ctx context.Context, id string) ApiIntegrationsAwsUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAwsUpdate(ctx context.Context, id string) ApiIntegrationsAwsUpdateRequest {
 	return ApiIntegrationsAwsUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AwsIntegration
-func (a *IntegrationsApiService) IntegrationsAwsUpdateExecute(r ApiIntegrationsAwsUpdateRequest) (*AwsIntegration, *http.Response, error) {
+//  @return AwsIntegration
+func (a *IntegrationsAPIService) IntegrationsAwsUpdateExecute(r ApiIntegrationsAwsUpdateRequest) (*AwsIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AwsIntegration
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AwsIntegration
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAwsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAwsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/aws/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -4528,9 +4505,9 @@ func (a *IntegrationsApiService) IntegrationsAwsUpdateExecute(r ApiIntegrationsA
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4556,8 +4533,8 @@ func (a *IntegrationsApiService) IntegrationsAwsUpdateExecute(r ApiIntegrationsA
 }
 
 type ApiIntegrationsAzureKeyVaultCreateRequest struct {
-	ctx                            context.Context
-	ApiService                     *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	azureKeyVaultIntegrationCreate *AzureKeyVaultIntegrationCreate
 }
 
@@ -4585,28 +4562,27 @@ Establishes an Azure Key Vault Integration for your CloudTruth organization.
 
 - You must then grant the CloudTruth service principal rights to access the key  vault as a Secrets Manager role (read and write access - purge is not required).
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiIntegrationsAzureKeyVaultCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiIntegrationsAzureKeyVaultCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultCreate(ctx context.Context) ApiIntegrationsAzureKeyVaultCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultCreate(ctx context.Context) ApiIntegrationsAzureKeyVaultCreateRequest {
 	return ApiIntegrationsAzureKeyVaultCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultIntegration
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultCreateExecute(r ApiIntegrationsAzureKeyVaultCreateRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
+//  @return AzureKeyVaultIntegration
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultCreateExecute(r ApiIntegrationsAzureKeyVaultCreateRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultIntegration
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultIntegration
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -4677,9 +4653,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultCreateExecute(r ApiInt
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4705,10 +4681,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultCreateExecute(r ApiInt
 }
 
 type ApiIntegrationsAzureKeyVaultDestroyRequest struct {
-	ctx        context.Context
-	ApiService *IntegrationsApiService
-	id         string
-	inUse      *string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
+	inUse *string
 }
 
 // (Optional) Desired behavior if the integration has in-use values.  - &#x60;fail&#x60; will return HTTP error 409 if there are any values using the integration. - &#x60;leave&#x60; (default) will leave values in place and future queries may fail; you can control future value query behavior with the &#x60;lookup_error&#x60; query parameter on those requests. - &#x60;remove&#x60; will remove the all values using the integration when the integration is removed.
@@ -4724,40 +4700,40 @@ func (r ApiIntegrationsAzureKeyVaultDestroyRequest) Execute() (*http.Response, e
 /*
 IntegrationsAzureKeyVaultDestroy Delete an AWS integration.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsAzureKeyVaultDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsAzureKeyVaultDestroyRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultDestroy(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultDestroyRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultDestroy(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultDestroyRequest {
 	return ApiIntegrationsAzureKeyVaultDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultDestroyExecute(r ApiIntegrationsAzureKeyVaultDestroyRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultDestroyExecute(r ApiIntegrationsAzureKeyVaultDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.inUse != nil {
-		localVarQueryParams.Add("in_use", parameterToString(*r.inUse, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "in_use", r.inUse, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -4814,9 +4790,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultDestroyExecute(r ApiIn
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -4833,13 +4809,13 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultDestroyExecute(r ApiIn
 }
 
 type ApiIntegrationsAzureKeyVaultListRequest struct {
-	ctx        context.Context
-	ApiService *IntegrationsApiService
-	ordering   *string
-	page       *int32
-	pageSize   *int32
-	tenantId   *string
-	vaultName  *string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	ordering *string
+	page *int32
+	pageSize *int32
+	tenantId *string
+	vaultName *string
 }
 
 // Which field to use when ordering the results.
@@ -4877,28 +4853,27 @@ func (r ApiIntegrationsAzureKeyVaultListRequest) Execute() (*PaginatedAzureKeyVa
 /*
 IntegrationsAzureKeyVaultList Method for IntegrationsAzureKeyVaultList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiIntegrationsAzureKeyVaultListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiIntegrationsAzureKeyVaultListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultList(ctx context.Context) ApiIntegrationsAzureKeyVaultListRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultList(ctx context.Context) ApiIntegrationsAzureKeyVaultListRequest {
 	return ApiIntegrationsAzureKeyVaultListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAzureKeyVaultIntegrationList
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultListExecute(r ApiIntegrationsAzureKeyVaultListRequest) (*PaginatedAzureKeyVaultIntegrationList, *http.Response, error) {
+//  @return PaginatedAzureKeyVaultIntegrationList
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultListExecute(r ApiIntegrationsAzureKeyVaultListRequest) (*PaginatedAzureKeyVaultIntegrationList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAzureKeyVaultIntegrationList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAzureKeyVaultIntegrationList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -4910,19 +4885,19 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultListExecute(r ApiInteg
 	localVarFormParams := url.Values{}
 
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.tenantId != nil {
-		localVarQueryParams.Add("tenant_id", parameterToString(*r.tenantId, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tenant_id", r.tenantId, "")
 	}
 	if r.vaultName != nil {
-		localVarQueryParams.Add("vault_name", parameterToString(*r.vaultName, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "vault_name", r.vaultName, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -4979,9 +4954,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultListExecute(r ApiInteg
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5007,9 +4982,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultListExecute(r ApiInteg
 }
 
 type ApiIntegrationsAzureKeyVaultPartialUpdateRequest struct {
-	ctx                             context.Context
-	ApiService                      *IntegrationsApiService
-	id                              string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
 	patchedAzureKeyVaultIntegration *PatchedAzureKeyVaultIntegration
 }
 
@@ -5025,36 +5000,35 @@ func (r ApiIntegrationsAzureKeyVaultPartialUpdateRequest) Execute() (*AzureKeyVa
 /*
 IntegrationsAzureKeyVaultPartialUpdate Method for IntegrationsAzureKeyVaultPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPartialUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPartialUpdate(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultPartialUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPartialUpdate(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultPartialUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultIntegration
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPartialUpdateExecute(r ApiIntegrationsAzureKeyVaultPartialUpdateRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
+//  @return AzureKeyVaultIntegration
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPartialUpdateExecute(r ApiIntegrationsAzureKeyVaultPartialUpdateRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultIntegration
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultIntegration
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -5117,9 +5091,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPartialUpdateExecute(r
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5145,9 +5119,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPartialUpdateExecute(r
 }
 
 type ApiIntegrationsAzureKeyVaultPullsCreateRequest struct {
-	ctx               context.Context
-	ApiService        *IntegrationsApiService
-	akvintegrationPk  string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
 	azureKeyVaultPull *AzureKeyVaultPull
 }
 
@@ -5163,36 +5137,35 @@ func (r ApiIntegrationsAzureKeyVaultPullsCreateRequest) Execute() (*AzureKeyVaul
 /*
 IntegrationsAzureKeyVaultPullsCreate Method for IntegrationsAzureKeyVaultPullsCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@return ApiIntegrationsAzureKeyVaultPullsCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @return ApiIntegrationsAzureKeyVaultPullsCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsCreate(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPullsCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsCreate(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPullsCreateRequest {
 	return ApiIntegrationsAzureKeyVaultPullsCreateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPull
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsCreateExecute(r ApiIntegrationsAzureKeyVaultPullsCreateRequest) (*AzureKeyVaultPull, *http.Response, error) {
+//  @return AzureKeyVaultPull
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsCreateExecute(r ApiIntegrationsAzureKeyVaultPullsCreateRequest) (*AzureKeyVaultPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPull
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -5258,9 +5231,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsCreateExecute(r A
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5286,10 +5259,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsCreateExecute(r A
 }
 
 type ApiIntegrationsAzureKeyVaultPullsDestroyRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	akvintegrationPk string
-	id               string
+	id string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsDestroyRequest) Execute() (*http.Response, error) {
@@ -5299,36 +5272,36 @@ func (r ApiIntegrationsAzureKeyVaultPullsDestroyRequest) Execute() (*http.Respon
 /*
 IntegrationsAzureKeyVaultPullsDestroy Method for IntegrationsAzureKeyVaultPullsDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPullsDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPullsDestroyRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsDestroy(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsDestroyRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsDestroy(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsDestroyRequest {
 	return ApiIntegrationsAzureKeyVaultPullsDestroyRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsDestroyExecute(r ApiIntegrationsAzureKeyVaultPullsDestroyRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsDestroyExecute(r ApiIntegrationsAzureKeyVaultPullsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -5389,9 +5362,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsDestroyExecute(r 
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -5408,15 +5381,15 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsDestroyExecute(r 
 }
 
 type ApiIntegrationsAzureKeyVaultPullsListRequest struct {
-	ctx                  context.Context
-	ApiService           *IntegrationsApiService
-	akvintegrationPk     string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
 	descriptionIcontains *string
-	name                 *string
-	nameIcontains        *string
-	ordering             *string
-	page                 *int32
-	pageSize             *int32
+	name *string
+	nameIcontains *string
+	ordering *string
+	page *int32
+	pageSize *int32
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsListRequest) DescriptionIcontains(descriptionIcontains string) ApiIntegrationsAzureKeyVaultPullsListRequest {
@@ -5459,58 +5432,57 @@ func (r ApiIntegrationsAzureKeyVaultPullsListRequest) Execute() (*PaginatedAzure
 /*
 IntegrationsAzureKeyVaultPullsList Method for IntegrationsAzureKeyVaultPullsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@return ApiIntegrationsAzureKeyVaultPullsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @return ApiIntegrationsAzureKeyVaultPullsListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsList(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPullsListRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsList(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPullsListRequest {
 	return ApiIntegrationsAzureKeyVaultPullsListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAzureKeyVaultPullList
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsListExecute(r ApiIntegrationsAzureKeyVaultPullsListRequest) (*PaginatedAzureKeyVaultPullList, *http.Response, error) {
+//  @return PaginatedAzureKeyVaultPullList
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsListExecute(r ApiIntegrationsAzureKeyVaultPullsListRequest) (*PaginatedAzureKeyVaultPullList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAzureKeyVaultPullList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAzureKeyVaultPullList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.descriptionIcontains != nil {
-		localVarQueryParams.Add("description__icontains", parameterToString(*r.descriptionIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description__icontains", r.descriptionIcontains, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -5567,9 +5539,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsListExecute(r Api
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5595,10 +5567,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsListExecute(r Api
 }
 
 type ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest struct {
-	ctx                      context.Context
-	ApiService               *IntegrationsApiService
-	akvintegrationPk         string
-	id                       string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
+	id string
 	patchedAzureKeyVaultPull *PatchedAzureKeyVaultPull
 }
 
@@ -5614,39 +5586,38 @@ func (r ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest) Execute() (*Azure
 /*
 IntegrationsAzureKeyVaultPullsPartialUpdate Method for IntegrationsAzureKeyVaultPullsPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsPartialUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsPartialUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPull
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsPartialUpdateExecute(r ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest) (*AzureKeyVaultPull, *http.Response, error) {
+//  @return AzureKeyVaultPull
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsPartialUpdateExecute(r ApiIntegrationsAzureKeyVaultPullsPartialUpdateRequest) (*AzureKeyVaultPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPull
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -5709,9 +5680,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsPartialUpdateExec
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5737,10 +5708,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsPartialUpdateExec
 }
 
 type ApiIntegrationsAzureKeyVaultPullsRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	akvintegrationPk string
-	id               string
+	id string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsRetrieveRequest) Execute() (*AzureKeyVaultPull, *http.Response, error) {
@@ -5750,39 +5721,38 @@ func (r ApiIntegrationsAzureKeyVaultPullsRetrieveRequest) Execute() (*AzureKeyVa
 /*
 IntegrationsAzureKeyVaultPullsRetrieve Method for IntegrationsAzureKeyVaultPullsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPullsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPullsRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsRetrieve(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsRetrieve(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPullsRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPull
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsRetrieveExecute(r ApiIntegrationsAzureKeyVaultPullsRetrieveRequest) (*AzureKeyVaultPull, *http.Response, error) {
+//  @return AzureKeyVaultPull
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsRetrieveExecute(r ApiIntegrationsAzureKeyVaultPullsRetrieveRequest) (*AzureKeyVaultPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPull
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -5843,9 +5813,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsRetrieveExecute(r
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5871,10 +5841,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsRetrieveExecute(r
 }
 
 type ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest struct {
-	ctx                                context.Context
-	ApiService                         *IntegrationsApiService
-	akvintegrationPk                   string
-	id                                 string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
+	id string
 	azureKeyVaultPullSyncActionRequest *AzureKeyVaultPullSyncActionRequest
 }
 
@@ -5892,36 +5862,36 @@ IntegrationsAzureKeyVaultPullsSyncCreate Method for IntegrationsAzureKeyVaultPul
 
 Enqueue a pull synchronization task for mapped external values accessible with this integration.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsSyncCreate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsSyncCreate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest {
 	return ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsSyncCreateExecute(r ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsSyncCreateExecute(r ApiIntegrationsAzureKeyVaultPullsSyncCreateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodPost
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsSyncCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsSyncCreate")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/{id}/sync/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -5984,9 +5954,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsSyncCreateExecute
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -6003,17 +5973,17 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsSyncCreateExecute
 }
 
 type ApiIntegrationsAzureKeyVaultPullsTasksListRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	akvintegrationPk string
-	akvpullPk        string
-	modifiedAt       *time.Time
-	modifiedAtGte    *time.Time
-	modifiedAtLte    *time.Time
-	ordering         *string
-	page             *int32
-	pageSize         *int32
-	state            *string
+	akvpullPk string
+	modifiedAt *time.Time
+	modifiedAtGte *time.Time
+	modifiedAtLte *time.Time
+	ordering *string
+	page *int32
+	pageSize *int32
+	state *string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsTasksListRequest) ModifiedAt(modifiedAt time.Time) ApiIntegrationsAzureKeyVaultPullsTasksListRequest {
@@ -6062,64 +6032,63 @@ func (r ApiIntegrationsAzureKeyVaultPullsTasksListRequest) Execute() (*Paginated
 /*
 IntegrationsAzureKeyVaultPullsTasksList Method for IntegrationsAzureKeyVaultPullsTasksList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param akvpullPk
-	@return ApiIntegrationsAzureKeyVaultPullsTasksListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param akvpullPk
+ @return ApiIntegrationsAzureKeyVaultPullsTasksListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksList(ctx context.Context, akvintegrationPk string, akvpullPk string) ApiIntegrationsAzureKeyVaultPullsTasksListRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsTasksList(ctx context.Context, akvintegrationPk string, akvpullPk string) ApiIntegrationsAzureKeyVaultPullsTasksListRequest {
 	return ApiIntegrationsAzureKeyVaultPullsTasksListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpullPk:        akvpullPk,
+		akvpullPk: akvpullPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAzureKeyVaultPullTaskList
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksListExecute(r ApiIntegrationsAzureKeyVaultPullsTasksListRequest) (*PaginatedAzureKeyVaultPullTaskList, *http.Response, error) {
+//  @return PaginatedAzureKeyVaultPullTaskList
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsTasksListExecute(r ApiIntegrationsAzureKeyVaultPullsTasksListRequest) (*PaginatedAzureKeyVaultPullTaskList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAzureKeyVaultPullTaskList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAzureKeyVaultPullTaskList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsTasksList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsTasksList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/{akvpull_pk}/tasks/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpull_pk"+"}", url.PathEscape(parameterToString(r.akvpullPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpull_pk"+"}", url.PathEscape(parameterValueToString(r.akvpullPk, "akvpullPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.modifiedAt != nil {
-		localVarQueryParams.Add("modified_at", parameterToString(*r.modifiedAt, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at", r.modifiedAt, "")
 	}
 	if r.modifiedAtGte != nil {
-		localVarQueryParams.Add("modified_at__gte", parameterToString(*r.modifiedAtGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__gte", r.modifiedAtGte, "")
 	}
 	if r.modifiedAtLte != nil {
-		localVarQueryParams.Add("modified_at__lte", parameterToString(*r.modifiedAtLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__lte", r.modifiedAtLte, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.state != nil {
-		localVarQueryParams.Add("state", parameterToString(*r.state, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "state", r.state, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -6176,9 +6145,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksListExecute(
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -6204,11 +6173,11 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksListExecute(
 }
 
 type ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	akvintegrationPk string
-	akvpullPk        string
-	id               string
+	akvpullPk string
+	id string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest) Execute() (*AzureKeyVaultPullTask, *http.Response, error) {
@@ -6218,42 +6187,41 @@ func (r ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest) Execute() (*Azure
 /*
 IntegrationsAzureKeyVaultPullsTasksRetrieve Method for IntegrationsAzureKeyVaultPullsTasksRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param akvpullPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param akvpullPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksRetrieve(ctx context.Context, akvintegrationPk string, akvpullPk string, id string) ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsTasksRetrieve(ctx context.Context, akvintegrationPk string, akvpullPk string, id string) ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpullPk:        akvpullPk,
-		id:               id,
+		akvpullPk: akvpullPk,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPullTask
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksRetrieveExecute(r ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest) (*AzureKeyVaultPullTask, *http.Response, error) {
+//  @return AzureKeyVaultPullTask
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsTasksRetrieveExecute(r ApiIntegrationsAzureKeyVaultPullsTasksRetrieveRequest) (*AzureKeyVaultPullTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPullTask
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPullTask
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsTasksRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsTasksRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/{akvpull_pk}/tasks/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpull_pk"+"}", url.PathEscape(parameterToString(r.akvpullPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpull_pk"+"}", url.PathEscape(parameterValueToString(r.akvpullPk, "akvpullPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -6314,9 +6282,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksRetrieveExec
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -6342,23 +6310,23 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksRetrieveExec
 }
 
 type ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest struct {
-	ctx                context.Context
-	ApiService         *IntegrationsApiService
-	akvintegrationPk   string
-	akvpullPk          string
-	akvpulltaskPk      string
-	fqn                *string
-	modifiedAt         *time.Time
-	modifiedAtGte      *time.Time
-	modifiedAtLte      *time.Time
-	operation          *string
-	ordering           *string
-	page               *int32
-	pageSize           *int32
-	success            *bool
-	venueId            *string
-	venueIdIcontains   *string
-	venueName          *string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
+	akvpullPk string
+	akvpulltaskPk string
+	fqn *string
+	modifiedAt *time.Time
+	modifiedAtGte *time.Time
+	modifiedAtLte *time.Time
+	operation *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	success *bool
+	venueId *string
+	venueIdIcontains *string
+	venueName *string
 	venueNameIcontains *string
 }
 
@@ -6438,85 +6406,84 @@ func (r ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest) Execute() (*Pagi
 /*
 IntegrationsAzureKeyVaultPullsTasksStepsList Method for IntegrationsAzureKeyVaultPullsTasksStepsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param akvpullPk
-	@param akvpulltaskPk
-	@return ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param akvpullPk
+ @param akvpulltaskPk
+ @return ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsList(ctx context.Context, akvintegrationPk string, akvpullPk string, akvpulltaskPk string) ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsTasksStepsList(ctx context.Context, akvintegrationPk string, akvpullPk string, akvpulltaskPk string) ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest {
 	return ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpullPk:        akvpullPk,
-		akvpulltaskPk:    akvpulltaskPk,
+		akvpullPk: akvpullPk,
+		akvpulltaskPk: akvpulltaskPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAzureKeyVaultPullTaskStepList
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsListExecute(r ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest) (*PaginatedAzureKeyVaultPullTaskStepList, *http.Response, error) {
+//  @return PaginatedAzureKeyVaultPullTaskStepList
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsTasksStepsListExecute(r ApiIntegrationsAzureKeyVaultPullsTasksStepsListRequest) (*PaginatedAzureKeyVaultPullTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAzureKeyVaultPullTaskStepList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAzureKeyVaultPullTaskStepList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsTasksStepsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsTasksStepsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/{akvpull_pk}/tasks/{akvpulltask_pk}/steps/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpull_pk"+"}", url.PathEscape(parameterToString(r.akvpullPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpulltask_pk"+"}", url.PathEscape(parameterToString(r.akvpulltaskPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpull_pk"+"}", url.PathEscape(parameterValueToString(r.akvpullPk, "akvpullPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpulltask_pk"+"}", url.PathEscape(parameterValueToString(r.akvpulltaskPk, "akvpulltaskPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.fqn != nil {
-		localVarQueryParams.Add("fqn", parameterToString(*r.fqn, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "fqn", r.fqn, "")
 	}
 	if r.modifiedAt != nil {
-		localVarQueryParams.Add("modified_at", parameterToString(*r.modifiedAt, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at", r.modifiedAt, "")
 	}
 	if r.modifiedAtGte != nil {
-		localVarQueryParams.Add("modified_at__gte", parameterToString(*r.modifiedAtGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__gte", r.modifiedAtGte, "")
 	}
 	if r.modifiedAtLte != nil {
-		localVarQueryParams.Add("modified_at__lte", parameterToString(*r.modifiedAtLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__lte", r.modifiedAtLte, "")
 	}
 	if r.operation != nil {
-		localVarQueryParams.Add("operation", parameterToString(*r.operation, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "operation", r.operation, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.success != nil {
-		localVarQueryParams.Add("success", parameterToString(*r.success, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "success", r.success, "")
 	}
 	if r.venueId != nil {
-		localVarQueryParams.Add("venue_id", parameterToString(*r.venueId, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_id", r.venueId, "")
 	}
 	if r.venueIdIcontains != nil {
-		localVarQueryParams.Add("venue_id__icontains", parameterToString(*r.venueIdIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_id__icontains", r.venueIdIcontains, "")
 	}
 	if r.venueName != nil {
-		localVarQueryParams.Add("venue_name", parameterToString(*r.venueName, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_name", r.venueName, "")
 	}
 	if r.venueNameIcontains != nil {
-		localVarQueryParams.Add("venue_name__icontains", parameterToString(*r.venueNameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_name__icontains", r.venueNameIcontains, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -6573,9 +6540,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsListExe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -6601,12 +6568,12 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsListExe
 }
 
 type ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	akvintegrationPk string
-	akvpullPk        string
-	akvpulltaskPk    string
-	id               string
+	akvpullPk string
+	akvpulltaskPk string
+	id string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest) Execute() (*AzureKeyVaultPullTaskStep, *http.Response, error) {
@@ -6616,45 +6583,44 @@ func (r ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest) Execute() (*
 /*
 IntegrationsAzureKeyVaultPullsTasksStepsRetrieve Method for IntegrationsAzureKeyVaultPullsTasksStepsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param akvpullPk
-	@param akvpulltaskPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param akvpullPk
+ @param akvpulltaskPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsRetrieve(ctx context.Context, akvintegrationPk string, akvpullPk string, akvpulltaskPk string, id string) ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsTasksStepsRetrieve(ctx context.Context, akvintegrationPk string, akvpullPk string, akvpulltaskPk string, id string) ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpullPk:        akvpullPk,
-		akvpulltaskPk:    akvpulltaskPk,
-		id:               id,
+		akvpullPk: akvpullPk,
+		akvpulltaskPk: akvpulltaskPk,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPullTaskStep
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsRetrieveExecute(r ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest) (*AzureKeyVaultPullTaskStep, *http.Response, error) {
+//  @return AzureKeyVaultPullTaskStep
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsTasksStepsRetrieveExecute(r ApiIntegrationsAzureKeyVaultPullsTasksStepsRetrieveRequest) (*AzureKeyVaultPullTaskStep, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPullTaskStep
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPullTaskStep
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsTasksStepsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsTasksStepsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/{akvpull_pk}/tasks/{akvpulltask_pk}/steps/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpull_pk"+"}", url.PathEscape(parameterToString(r.akvpullPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpulltask_pk"+"}", url.PathEscape(parameterToString(r.akvpulltaskPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpull_pk"+"}", url.PathEscape(parameterValueToString(r.akvpullPk, "akvpullPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpulltask_pk"+"}", url.PathEscape(parameterValueToString(r.akvpulltaskPk, "akvpulltaskPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -6715,9 +6681,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsRetriev
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -6743,10 +6709,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsTasksStepsRetriev
 }
 
 type ApiIntegrationsAzureKeyVaultPullsUpdateRequest struct {
-	ctx               context.Context
-	ApiService        *IntegrationsApiService
-	akvintegrationPk  string
-	id                string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
+	id string
 	azureKeyVaultPull *AzureKeyVaultPull
 }
 
@@ -6762,39 +6728,38 @@ func (r ApiIntegrationsAzureKeyVaultPullsUpdateRequest) Execute() (*AzureKeyVaul
 /*
 IntegrationsAzureKeyVaultPullsUpdate Method for IntegrationsAzureKeyVaultPullsUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPullsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPullsUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPullsUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultPullsUpdateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPull
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsUpdateExecute(r ApiIntegrationsAzureKeyVaultPullsUpdateRequest) (*AzureKeyVaultPull, *http.Response, error) {
+//  @return AzureKeyVaultPull
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPullsUpdateExecute(r ApiIntegrationsAzureKeyVaultPullsUpdateRequest) (*AzureKeyVaultPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPull
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPullsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPullsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -6860,9 +6825,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsUpdateExecute(r A
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -6888,9 +6853,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPullsUpdateExecute(r A
 }
 
 type ApiIntegrationsAzureKeyVaultPushesCreateRequest struct {
-	ctx               context.Context
-	ApiService        *IntegrationsApiService
-	akvintegrationPk  string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
 	azureKeyVaultPush *AzureKeyVaultPush
 }
 
@@ -6906,36 +6871,35 @@ func (r ApiIntegrationsAzureKeyVaultPushesCreateRequest) Execute() (*AzureKeyVau
 /*
 IntegrationsAzureKeyVaultPushesCreate Method for IntegrationsAzureKeyVaultPushesCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@return ApiIntegrationsAzureKeyVaultPushesCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @return ApiIntegrationsAzureKeyVaultPushesCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesCreate(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPushesCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesCreate(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPushesCreateRequest {
 	return ApiIntegrationsAzureKeyVaultPushesCreateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPush
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesCreateExecute(r ApiIntegrationsAzureKeyVaultPushesCreateRequest) (*AzureKeyVaultPush, *http.Response, error) {
+//  @return AzureKeyVaultPush
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesCreateExecute(r ApiIntegrationsAzureKeyVaultPushesCreateRequest) (*AzureKeyVaultPush, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPush
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPush
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -7001,9 +6965,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesCreateExecute(r 
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -7029,10 +6993,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesCreateExecute(r 
 }
 
 type ApiIntegrationsAzureKeyVaultPushesDestroyRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	akvintegrationPk string
-	id               string
+	id string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesDestroyRequest) Execute() (*http.Response, error) {
@@ -7042,36 +7006,36 @@ func (r ApiIntegrationsAzureKeyVaultPushesDestroyRequest) Execute() (*http.Respo
 /*
 IntegrationsAzureKeyVaultPushesDestroy Method for IntegrationsAzureKeyVaultPushesDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPushesDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPushesDestroyRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesDestroy(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesDestroyRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesDestroy(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesDestroyRequest {
 	return ApiIntegrationsAzureKeyVaultPushesDestroyRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesDestroyExecute(r ApiIntegrationsAzureKeyVaultPushesDestroyRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesDestroyExecute(r ApiIntegrationsAzureKeyVaultPushesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -7132,9 +7096,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesDestroyExecute(r
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -7151,18 +7115,18 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesDestroyExecute(r
 }
 
 type ApiIntegrationsAzureKeyVaultPushesListRequest struct {
-	ctx                  context.Context
-	ApiService           *IntegrationsApiService
-	akvintegrationPk     string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
 	descriptionIcontains *string
-	environment          *string
-	name                 *string
-	nameIcontains        *string
-	ordering             *string
-	page                 *int32
-	pageSize             *int32
-	project              *string
-	tag                  *string
+	environment *string
+	name *string
+	nameIcontains *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	project *string
+	tag *string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesListRequest) DescriptionIcontains(descriptionIcontains string) ApiIntegrationsAzureKeyVaultPushesListRequest {
@@ -7223,67 +7187,66 @@ func (r ApiIntegrationsAzureKeyVaultPushesListRequest) Execute() (*PaginatedAzur
 /*
 IntegrationsAzureKeyVaultPushesList Method for IntegrationsAzureKeyVaultPushesList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@return ApiIntegrationsAzureKeyVaultPushesListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @return ApiIntegrationsAzureKeyVaultPushesListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesList(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPushesListRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesList(ctx context.Context, akvintegrationPk string) ApiIntegrationsAzureKeyVaultPushesListRequest {
 	return ApiIntegrationsAzureKeyVaultPushesListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAzureKeyVaultPushList
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesListExecute(r ApiIntegrationsAzureKeyVaultPushesListRequest) (*PaginatedAzureKeyVaultPushList, *http.Response, error) {
+//  @return PaginatedAzureKeyVaultPushList
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesListExecute(r ApiIntegrationsAzureKeyVaultPushesListRequest) (*PaginatedAzureKeyVaultPushList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAzureKeyVaultPushList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAzureKeyVaultPushList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.descriptionIcontains != nil {
-		localVarQueryParams.Add("description__icontains", parameterToString(*r.descriptionIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description__icontains", r.descriptionIcontains, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.project != nil {
-		localVarQueryParams.Add("project", parameterToString(*r.project, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "project", r.project, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -7340,9 +7303,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesListExecute(r Ap
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -7368,10 +7331,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesListExecute(r Ap
 }
 
 type ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest struct {
-	ctx                            context.Context
-	ApiService                     *IntegrationsApiService
-	akvintegrationPk               string
-	id                             string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
+	id string
 	patchedAzureKeyVaultPushUpdate *PatchedAzureKeyVaultPushUpdate
 }
 
@@ -7387,39 +7350,38 @@ func (r ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest) Execute() (*Azur
 /*
 IntegrationsAzureKeyVaultPushesPartialUpdate Method for IntegrationsAzureKeyVaultPushesPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesPartialUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesPartialUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPushUpdate
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesPartialUpdateExecute(r ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest) (*AzureKeyVaultPushUpdate, *http.Response, error) {
+//  @return AzureKeyVaultPushUpdate
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesPartialUpdateExecute(r ApiIntegrationsAzureKeyVaultPushesPartialUpdateRequest) (*AzureKeyVaultPushUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPushUpdate
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPushUpdate
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -7482,9 +7444,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesPartialUpdateExe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -7510,10 +7472,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesPartialUpdateExe
 }
 
 type ApiIntegrationsAzureKeyVaultPushesRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	akvintegrationPk string
-	id               string
+	id string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesRetrieveRequest) Execute() (*AzureKeyVaultPush, *http.Response, error) {
@@ -7523,39 +7485,38 @@ func (r ApiIntegrationsAzureKeyVaultPushesRetrieveRequest) Execute() (*AzureKeyV
 /*
 IntegrationsAzureKeyVaultPushesRetrieve Method for IntegrationsAzureKeyVaultPushesRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPushesRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPushesRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesRetrieve(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesRetrieve(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPushesRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPush
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesRetrieveExecute(r ApiIntegrationsAzureKeyVaultPushesRetrieveRequest) (*AzureKeyVaultPush, *http.Response, error) {
+//  @return AzureKeyVaultPush
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesRetrieveExecute(r ApiIntegrationsAzureKeyVaultPushesRetrieveRequest) (*AzureKeyVaultPush, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPush
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPush
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -7616,9 +7577,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesRetrieveExecute(
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -7644,10 +7605,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesRetrieveExecute(
 }
 
 type ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest struct {
-	ctx               context.Context
-	ApiService        *IntegrationsApiService
-	akvintegrationPk  string
-	id                string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
+	id string
 	azureKeyVaultPush *AzureKeyVaultPush
 }
 
@@ -7665,36 +7626,36 @@ IntegrationsAzureKeyVaultPushesSyncCreate Method for IntegrationsAzureKeyVaultPu
 
 Enqueue a push synchronization task.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesSyncCreate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesSyncCreate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest {
 	return ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesSyncCreateExecute(r ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesSyncCreateExecute(r ApiIntegrationsAzureKeyVaultPushesSyncCreateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodPost
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesSyncCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesSyncCreate")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/{id}/sync/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -7760,9 +7721,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesSyncCreateExecut
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -7779,17 +7740,17 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesSyncCreateExecut
 }
 
 type ApiIntegrationsAzureKeyVaultPushesTasksListRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	akvintegrationPk string
-	akvpushPk        string
-	modifiedAt       *time.Time
-	modifiedAtGte    *time.Time
-	modifiedAtLte    *time.Time
-	ordering         *string
-	page             *int32
-	pageSize         *int32
-	state            *string
+	akvpushPk string
+	modifiedAt *time.Time
+	modifiedAtGte *time.Time
+	modifiedAtLte *time.Time
+	ordering *string
+	page *int32
+	pageSize *int32
+	state *string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesTasksListRequest) ModifiedAt(modifiedAt time.Time) ApiIntegrationsAzureKeyVaultPushesTasksListRequest {
@@ -7838,64 +7799,63 @@ func (r ApiIntegrationsAzureKeyVaultPushesTasksListRequest) Execute() (*Paginate
 /*
 IntegrationsAzureKeyVaultPushesTasksList Method for IntegrationsAzureKeyVaultPushesTasksList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param akvpushPk
-	@return ApiIntegrationsAzureKeyVaultPushesTasksListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param akvpushPk
+ @return ApiIntegrationsAzureKeyVaultPushesTasksListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksList(ctx context.Context, akvintegrationPk string, akvpushPk string) ApiIntegrationsAzureKeyVaultPushesTasksListRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesTasksList(ctx context.Context, akvintegrationPk string, akvpushPk string) ApiIntegrationsAzureKeyVaultPushesTasksListRequest {
 	return ApiIntegrationsAzureKeyVaultPushesTasksListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpushPk:        akvpushPk,
+		akvpushPk: akvpushPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAzureKeyVaultPushTaskList
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksListExecute(r ApiIntegrationsAzureKeyVaultPushesTasksListRequest) (*PaginatedAzureKeyVaultPushTaskList, *http.Response, error) {
+//  @return PaginatedAzureKeyVaultPushTaskList
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesTasksListExecute(r ApiIntegrationsAzureKeyVaultPushesTasksListRequest) (*PaginatedAzureKeyVaultPushTaskList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAzureKeyVaultPushTaskList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAzureKeyVaultPushTaskList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesTasksList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesTasksList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/{akvpush_pk}/tasks/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpush_pk"+"}", url.PathEscape(parameterToString(r.akvpushPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpush_pk"+"}", url.PathEscape(parameterValueToString(r.akvpushPk, "akvpushPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.modifiedAt != nil {
-		localVarQueryParams.Add("modified_at", parameterToString(*r.modifiedAt, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at", r.modifiedAt, "")
 	}
 	if r.modifiedAtGte != nil {
-		localVarQueryParams.Add("modified_at__gte", parameterToString(*r.modifiedAtGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__gte", r.modifiedAtGte, "")
 	}
 	if r.modifiedAtLte != nil {
-		localVarQueryParams.Add("modified_at__lte", parameterToString(*r.modifiedAtLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__lte", r.modifiedAtLte, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.state != nil {
-		localVarQueryParams.Add("state", parameterToString(*r.state, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "state", r.state, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -7952,9 +7912,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksListExecute
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -7980,11 +7940,11 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksListExecute
 }
 
 type ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	akvintegrationPk string
-	akvpushPk        string
-	id               string
+	akvpushPk string
+	id string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest) Execute() (*AzureKeyVaultPushTask, *http.Response, error) {
@@ -7994,42 +7954,41 @@ func (r ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest) Execute() (*Azur
 /*
 IntegrationsAzureKeyVaultPushesTasksRetrieve Method for IntegrationsAzureKeyVaultPushesTasksRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param akvpushPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param akvpushPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksRetrieve(ctx context.Context, akvintegrationPk string, akvpushPk string, id string) ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesTasksRetrieve(ctx context.Context, akvintegrationPk string, akvpushPk string, id string) ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpushPk:        akvpushPk,
-		id:               id,
+		akvpushPk: akvpushPk,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPushTask
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksRetrieveExecute(r ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest) (*AzureKeyVaultPushTask, *http.Response, error) {
+//  @return AzureKeyVaultPushTask
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesTasksRetrieveExecute(r ApiIntegrationsAzureKeyVaultPushesTasksRetrieveRequest) (*AzureKeyVaultPushTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPushTask
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPushTask
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesTasksRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesTasksRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/{akvpush_pk}/tasks/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpush_pk"+"}", url.PathEscape(parameterToString(r.akvpushPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpush_pk"+"}", url.PathEscape(parameterValueToString(r.akvpushPk, "akvpushPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -8090,9 +8049,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksRetrieveExe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -8118,23 +8077,23 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksRetrieveExe
 }
 
 type ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest struct {
-	ctx                context.Context
-	ApiService         *IntegrationsApiService
-	akvintegrationPk   string
-	akvpushPk          string
-	akvpushtaskPk      string
-	fqn                *string
-	modifiedAt         *time.Time
-	modifiedAtGte      *time.Time
-	modifiedAtLte      *time.Time
-	operation          *string
-	ordering           *string
-	page               *int32
-	pageSize           *int32
-	success            *bool
-	venueId            *string
-	venueIdIcontains   *string
-	venueName          *string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
+	akvpushPk string
+	akvpushtaskPk string
+	fqn *string
+	modifiedAt *time.Time
+	modifiedAtGte *time.Time
+	modifiedAtLte *time.Time
+	operation *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	success *bool
+	venueId *string
+	venueIdIcontains *string
+	venueName *string
 	venueNameIcontains *string
 }
 
@@ -8214,85 +8173,84 @@ func (r ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest) Execute() (*Pag
 /*
 IntegrationsAzureKeyVaultPushesTasksStepsList Method for IntegrationsAzureKeyVaultPushesTasksStepsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param akvpushPk
-	@param akvpushtaskPk
-	@return ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param akvpushPk
+ @param akvpushtaskPk
+ @return ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsList(ctx context.Context, akvintegrationPk string, akvpushPk string, akvpushtaskPk string) ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesTasksStepsList(ctx context.Context, akvintegrationPk string, akvpushPk string, akvpushtaskPk string) ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest {
 	return ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpushPk:        akvpushPk,
-		akvpushtaskPk:    akvpushtaskPk,
+		akvpushPk: akvpushPk,
+		akvpushtaskPk: akvpushtaskPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedAzureKeyVaultPushTaskStepList
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsListExecute(r ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest) (*PaginatedAzureKeyVaultPushTaskStepList, *http.Response, error) {
+//  @return PaginatedAzureKeyVaultPushTaskStepList
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesTasksStepsListExecute(r ApiIntegrationsAzureKeyVaultPushesTasksStepsListRequest) (*PaginatedAzureKeyVaultPushTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedAzureKeyVaultPushTaskStepList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedAzureKeyVaultPushTaskStepList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesTasksStepsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesTasksStepsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/{akvpush_pk}/tasks/{akvpushtask_pk}/steps/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpush_pk"+"}", url.PathEscape(parameterToString(r.akvpushPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpushtask_pk"+"}", url.PathEscape(parameterToString(r.akvpushtaskPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpush_pk"+"}", url.PathEscape(parameterValueToString(r.akvpushPk, "akvpushPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpushtask_pk"+"}", url.PathEscape(parameterValueToString(r.akvpushtaskPk, "akvpushtaskPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.fqn != nil {
-		localVarQueryParams.Add("fqn", parameterToString(*r.fqn, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "fqn", r.fqn, "")
 	}
 	if r.modifiedAt != nil {
-		localVarQueryParams.Add("modified_at", parameterToString(*r.modifiedAt, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at", r.modifiedAt, "")
 	}
 	if r.modifiedAtGte != nil {
-		localVarQueryParams.Add("modified_at__gte", parameterToString(*r.modifiedAtGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__gte", r.modifiedAtGte, "")
 	}
 	if r.modifiedAtLte != nil {
-		localVarQueryParams.Add("modified_at__lte", parameterToString(*r.modifiedAtLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__lte", r.modifiedAtLte, "")
 	}
 	if r.operation != nil {
-		localVarQueryParams.Add("operation", parameterToString(*r.operation, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "operation", r.operation, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.success != nil {
-		localVarQueryParams.Add("success", parameterToString(*r.success, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "success", r.success, "")
 	}
 	if r.venueId != nil {
-		localVarQueryParams.Add("venue_id", parameterToString(*r.venueId, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_id", r.venueId, "")
 	}
 	if r.venueIdIcontains != nil {
-		localVarQueryParams.Add("venue_id__icontains", parameterToString(*r.venueIdIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_id__icontains", r.venueIdIcontains, "")
 	}
 	if r.venueName != nil {
-		localVarQueryParams.Add("venue_name", parameterToString(*r.venueName, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_name", r.venueName, "")
 	}
 	if r.venueNameIcontains != nil {
-		localVarQueryParams.Add("venue_name__icontains", parameterToString(*r.venueNameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_name__icontains", r.venueNameIcontains, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -8349,9 +8307,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsListEx
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -8377,12 +8335,12 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsListEx
 }
 
 type ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest struct {
-	ctx              context.Context
-	ApiService       *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	akvintegrationPk string
-	akvpushPk        string
-	akvpushtaskPk    string
-	id               string
+	akvpushPk string
+	akvpushtaskPk string
+	id string
 }
 
 func (r ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest) Execute() (*AzureKeyVaultPushTaskStep, *http.Response, error) {
@@ -8392,45 +8350,44 @@ func (r ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest) Execute() (
 /*
 IntegrationsAzureKeyVaultPushesTasksStepsRetrieve Method for IntegrationsAzureKeyVaultPushesTasksStepsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param akvpushPk
-	@param akvpushtaskPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param akvpushPk
+ @param akvpushtaskPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsRetrieve(ctx context.Context, akvintegrationPk string, akvpushPk string, akvpushtaskPk string, id string) ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesTasksStepsRetrieve(ctx context.Context, akvintegrationPk string, akvpushPk string, akvpushtaskPk string, id string) ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		akvpushPk:        akvpushPk,
-		akvpushtaskPk:    akvpushtaskPk,
-		id:               id,
+		akvpushPk: akvpushPk,
+		akvpushtaskPk: akvpushtaskPk,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPushTaskStep
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsRetrieveExecute(r ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest) (*AzureKeyVaultPushTaskStep, *http.Response, error) {
+//  @return AzureKeyVaultPushTaskStep
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesTasksStepsRetrieveExecute(r ApiIntegrationsAzureKeyVaultPushesTasksStepsRetrieveRequest) (*AzureKeyVaultPushTaskStep, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPushTaskStep
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPushTaskStep
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesTasksStepsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesTasksStepsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/{akvpush_pk}/tasks/{akvpushtask_pk}/steps/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpush_pk"+"}", url.PathEscape(parameterToString(r.akvpushPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"akvpushtask_pk"+"}", url.PathEscape(parameterToString(r.akvpushtaskPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpush_pk"+"}", url.PathEscape(parameterValueToString(r.akvpushPk, "akvpushPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvpushtask_pk"+"}", url.PathEscape(parameterValueToString(r.akvpushtaskPk, "akvpushtaskPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -8491,9 +8448,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsRetrie
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -8519,10 +8476,10 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesTasksStepsRetrie
 }
 
 type ApiIntegrationsAzureKeyVaultPushesUpdateRequest struct {
-	ctx                     context.Context
-	ApiService              *IntegrationsApiService
-	akvintegrationPk        string
-	id                      string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	akvintegrationPk string
+	id string
 	azureKeyVaultPushUpdate *AzureKeyVaultPushUpdate
 }
 
@@ -8538,39 +8495,38 @@ func (r ApiIntegrationsAzureKeyVaultPushesUpdateRequest) Execute() (*AzureKeyVau
 /*
 IntegrationsAzureKeyVaultPushesUpdate Method for IntegrationsAzureKeyVaultPushesUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param akvintegrationPk
-	@param id
-	@return ApiIntegrationsAzureKeyVaultPushesUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param akvintegrationPk
+ @param id
+ @return ApiIntegrationsAzureKeyVaultPushesUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesUpdate(ctx context.Context, akvintegrationPk string, id string) ApiIntegrationsAzureKeyVaultPushesUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultPushesUpdateRequest{
-		ApiService:       a,
-		ctx:              ctx,
+		ApiService: a,
+		ctx: ctx,
 		akvintegrationPk: akvintegrationPk,
-		id:               id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultPushUpdate
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesUpdateExecute(r ApiIntegrationsAzureKeyVaultPushesUpdateRequest) (*AzureKeyVaultPushUpdate, *http.Response, error) {
+//  @return AzureKeyVaultPushUpdate
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultPushesUpdateExecute(r ApiIntegrationsAzureKeyVaultPushesUpdateRequest) (*AzureKeyVaultPushUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultPushUpdate
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultPushUpdate
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultPushesUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultPushesUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{akvintegration_pk}/pushes/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterToString(r.akvintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"akvintegration_pk"+"}", url.PathEscape(parameterValueToString(r.akvintegrationPk, "akvintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -8636,9 +8592,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesUpdateExecute(r 
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -8664,9 +8620,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultPushesUpdateExecute(r 
 }
 
 type ApiIntegrationsAzureKeyVaultRetrieveRequest struct {
-	ctx           context.Context
-	ApiService    *IntegrationsApiService
-	id            string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
 	refreshStatus *bool
 }
 
@@ -8683,43 +8639,42 @@ func (r ApiIntegrationsAzureKeyVaultRetrieveRequest) Execute() (*AzureKeyVaultIn
 /*
 IntegrationsAzureKeyVaultRetrieve Get details of an Azure Key Vault Integration.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsAzureKeyVaultRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsAzureKeyVaultRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultRetrieve(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultRetrieve(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultRetrieveRequest {
 	return ApiIntegrationsAzureKeyVaultRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultIntegration
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultRetrieveExecute(r ApiIntegrationsAzureKeyVaultRetrieveRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
+//  @return AzureKeyVaultIntegration
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultRetrieveExecute(r ApiIntegrationsAzureKeyVaultRetrieveRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultIntegration
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultIntegration
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.refreshStatus != nil {
-		localVarQueryParams.Add("refresh_status", parameterToString(*r.refreshStatus, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "refresh_status", r.refreshStatus, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -8776,9 +8731,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultRetrieveExecute(r ApiI
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -8804,9 +8759,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultRetrieveExecute(r ApiI
 }
 
 type ApiIntegrationsAzureKeyVaultScanCreateRequest struct {
-	ctx                          context.Context
-	ApiService                   *IntegrationsApiService
-	id                           string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
 	azureKeyVaultIntegrationScan *AzureKeyVaultIntegrationScan
 }
 
@@ -8824,36 +8779,35 @@ IntegrationsAzureKeyVaultScanCreate Evaluate a potential pull pattern and unders
 
 Probe a region and service using a pattern matching string that can be used in pull actions.  This allows the pattern match to be checked for correctness and preview what will match during creation of the string.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsAzureKeyVaultScanCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsAzureKeyVaultScanCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultScanCreate(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultScanCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultScanCreate(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultScanCreateRequest {
 	return ApiIntegrationsAzureKeyVaultScanCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return DiscoveryResult
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultScanCreateExecute(r ApiIntegrationsAzureKeyVaultScanCreateRequest) (*DiscoveryResult, *http.Response, error) {
+//  @return DiscoveryResult
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultScanCreateExecute(r ApiIntegrationsAzureKeyVaultScanCreateRequest) (*DiscoveryResult, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *DiscoveryResult
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *DiscoveryResult
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultScanCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultScanCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{id}/scan/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -8919,9 +8873,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultScanCreateExecute(r Ap
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -8947,9 +8901,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultScanCreateExecute(r Ap
 }
 
 type ApiIntegrationsAzureKeyVaultUpdateRequest struct {
-	ctx                      context.Context
-	ApiService               *IntegrationsApiService
-	id                       string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
 	azureKeyVaultIntegration *AzureKeyVaultIntegration
 }
 
@@ -8965,36 +8919,35 @@ func (r ApiIntegrationsAzureKeyVaultUpdateRequest) Execute() (*AzureKeyVaultInte
 /*
 IntegrationsAzureKeyVaultUpdate Method for IntegrationsAzureKeyVaultUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsAzureKeyVaultUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsAzureKeyVaultUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultUpdate(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultUpdate(ctx context.Context, id string) ApiIntegrationsAzureKeyVaultUpdateRequest {
 	return ApiIntegrationsAzureKeyVaultUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return AzureKeyVaultIntegration
-func (a *IntegrationsApiService) IntegrationsAzureKeyVaultUpdateExecute(r ApiIntegrationsAzureKeyVaultUpdateRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
+//  @return AzureKeyVaultIntegration
+func (a *IntegrationsAPIService) IntegrationsAzureKeyVaultUpdateExecute(r ApiIntegrationsAzureKeyVaultUpdateRequest) (*AzureKeyVaultIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *AzureKeyVaultIntegration
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AzureKeyVaultIntegration
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsAzureKeyVaultUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsAzureKeyVaultUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/azure/key_vault/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -9057,9 +9010,9 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultUpdateExecute(r ApiInt
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -9085,13 +9038,13 @@ func (a *IntegrationsApiService) IntegrationsAzureKeyVaultUpdateExecute(r ApiInt
 }
 
 type ApiIntegrationsExploreListRequest struct {
-	ctx        context.Context
-	ApiService *IntegrationsApiService
-	fqn        *string
-	jmes       *string
-	ordering   *string
-	page       *int32
-	pageSize   *int32
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	fqn *string
+	jmes *string
+	ordering *string
+	page *int32
+	pageSize *int32
 }
 
 // FQN (URL-like) for third-party integration.
@@ -9137,28 +9090,28 @@ Queries a third-party integration to retrieve the data specified by the FQN.
 
 You can start exploring by not specifying an 'fqn', which will return a list of FQNs for the existing third-party integrations. Third-party integrations can be configured via the Integrations section of the web application.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiIntegrationsExploreListRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiIntegrationsExploreListRequest
 */
-func (a *IntegrationsApiService) IntegrationsExploreList(ctx context.Context) ApiIntegrationsExploreListRequest {
+func (a *IntegrationsAPIService) IntegrationsExploreList(ctx context.Context) ApiIntegrationsExploreListRequest {
 	return ApiIntegrationsExploreListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedIntegrationNodeList
-func (a *IntegrationsApiService) IntegrationsExploreListExecute(r ApiIntegrationsExploreListRequest) (*PaginatedIntegrationNodeList, *http.Response, error) {
+//  @return PaginatedIntegrationNodeList
+func (a *IntegrationsAPIService) IntegrationsExploreListExecute(r ApiIntegrationsExploreListRequest) (*PaginatedIntegrationNodeList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedIntegrationNodeList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedIntegrationNodeList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsExploreList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsExploreList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -9170,19 +9123,19 @@ func (a *IntegrationsApiService) IntegrationsExploreListExecute(r ApiIntegration
 	localVarFormParams := url.Values{}
 
 	if r.fqn != nil {
-		localVarQueryParams.Add("fqn", parameterToString(*r.fqn, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "fqn", r.fqn, "")
 	}
 	if r.jmes != nil {
-		localVarQueryParams.Add("jmes", parameterToString(*r.jmes, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "jmes", r.jmes, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -9239,9 +9192,9 @@ func (a *IntegrationsApiService) IntegrationsExploreListExecute(r ApiIntegration
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -9267,8 +9220,8 @@ func (a *IntegrationsApiService) IntegrationsExploreListExecute(r ApiIntegration
 }
 
 type ApiIntegrationsGithubCreateRequest struct {
-	ctx                     context.Context
-	ApiService              *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	gitHubIntegrationCreate *GitHubIntegrationCreate
 }
 
@@ -9291,42 +9244,41 @@ Establishes a GitHub Integration in your CloudTruth organization.
 ### Pre-Conditions ###
 
 - The user must be an Administrator or Owner of your organization.
-- A GitHub Integration with the `installation_id` cannot
+- A GitHub Integration with the `installation_id` cannot 
 already exist in this organization.
-- The user must first install the CloudTruth GitHub Application in
-their GitHub organization and obtain the `installation_id` of the
+- The user must first install the CloudTruth GitHub Application in 
+their GitHub organization and obtain the `installation_id` of the 
 application in order to create the integration.
 
 ### Initiating the GitHub Application Installation ###
 
 - Go to `https://github.com/apps/GITHUB_APP_NAME/installations/new?state=<bearer_token>`
-- On successful installation the browser will return to
-`https://APP_URL/app_setup/github` (configured in ctops/bin/github*)
+- On successful installation the browser will return to 
+`https://APP_URL/app_setup/github` (configured in ctops/bin/github*) 
 and provide the `installation_id` in the URI.
 - POST to this api to verify and establish the integration.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiIntegrationsGithubCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiIntegrationsGithubCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubCreate(ctx context.Context) ApiIntegrationsGithubCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubCreate(ctx context.Context) ApiIntegrationsGithubCreateRequest {
 	return ApiIntegrationsGithubCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GitHubIntegration
-func (a *IntegrationsApiService) IntegrationsGithubCreateExecute(r ApiIntegrationsGithubCreateRequest) (*GitHubIntegration, *http.Response, error) {
+//  @return GitHubIntegration
+func (a *IntegrationsAPIService) IntegrationsGithubCreateExecute(r ApiIntegrationsGithubCreateRequest) (*GitHubIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GitHubIntegration
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GitHubIntegration
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -9397,9 +9349,9 @@ func (a *IntegrationsApiService) IntegrationsGithubCreateExecute(r ApiIntegratio
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -9425,10 +9377,10 @@ func (a *IntegrationsApiService) IntegrationsGithubCreateExecute(r ApiIntegratio
 }
 
 type ApiIntegrationsGithubDestroyRequest struct {
-	ctx        context.Context
-	ApiService *IntegrationsApiService
-	id         string
-	inUse      *string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
+	inUse *string
 }
 
 // (Optional) Desired behavior if the integration has in-use values.  - &#x60;fail&#x60; will return HTTP error 409 if there are any values using the integration. - &#x60;leave&#x60; (default) will leave values in place and future queries may fail; you can control future value query behavior with the &#x60;lookup_error&#x60; query parameter on those requests. - &#x60;remove&#x60; will remove the all values using the integration when the integration is removed.
@@ -9444,40 +9396,40 @@ func (r ApiIntegrationsGithubDestroyRequest) Execute() (*http.Response, error) {
 /*
 IntegrationsGithubDestroy Delete a GitHub integration.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsGithubDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsGithubDestroyRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubDestroy(ctx context.Context, id string) ApiIntegrationsGithubDestroyRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubDestroy(ctx context.Context, id string) ApiIntegrationsGithubDestroyRequest {
 	return ApiIntegrationsGithubDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsGithubDestroyExecute(r ApiIntegrationsGithubDestroyRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsGithubDestroyExecute(r ApiIntegrationsGithubDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.inUse != nil {
-		localVarQueryParams.Add("in_use", parameterToString(*r.inUse, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "in_use", r.inUse, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -9534,9 +9486,9 @@ func (a *IntegrationsApiService) IntegrationsGithubDestroyExecute(r ApiIntegrati
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -9553,12 +9505,12 @@ func (a *IntegrationsApiService) IntegrationsGithubDestroyExecute(r ApiIntegrati
 }
 
 type ApiIntegrationsGithubListRequest struct {
-	ctx                context.Context
-	ApiService         *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	ghOrganizationSlug *string
-	ordering           *string
-	page               *int32
-	pageSize           *int32
+	ordering *string
+	page *int32
+	pageSize *int32
 }
 
 func (r ApiIntegrationsGithubListRequest) GhOrganizationSlug(ghOrganizationSlug string) ApiIntegrationsGithubListRequest {
@@ -9591,28 +9543,27 @@ func (r ApiIntegrationsGithubListRequest) Execute() (*PaginatedGitHubIntegration
 /*
 IntegrationsGithubList Method for IntegrationsGithubList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiIntegrationsGithubListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiIntegrationsGithubListRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubList(ctx context.Context) ApiIntegrationsGithubListRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubList(ctx context.Context) ApiIntegrationsGithubListRequest {
 	return ApiIntegrationsGithubListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedGitHubIntegrationList
-func (a *IntegrationsApiService) IntegrationsGithubListExecute(r ApiIntegrationsGithubListRequest) (*PaginatedGitHubIntegrationList, *http.Response, error) {
+//  @return PaginatedGitHubIntegrationList
+func (a *IntegrationsAPIService) IntegrationsGithubListExecute(r ApiIntegrationsGithubListRequest) (*PaginatedGitHubIntegrationList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedGitHubIntegrationList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedGitHubIntegrationList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -9624,16 +9575,16 @@ func (a *IntegrationsApiService) IntegrationsGithubListExecute(r ApiIntegrations
 	localVarFormParams := url.Values{}
 
 	if r.ghOrganizationSlug != nil {
-		localVarQueryParams.Add("gh_organization_slug", parameterToString(*r.ghOrganizationSlug, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "gh_organization_slug", r.ghOrganizationSlug, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -9690,9 +9641,9 @@ func (a *IntegrationsApiService) IntegrationsGithubListExecute(r ApiIntegrations
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -9718,15 +9669,15 @@ func (a *IntegrationsApiService) IntegrationsGithubListExecute(r ApiIntegrations
 }
 
 type ApiIntegrationsGithubPullsListRequest struct {
-	ctx                  context.Context
-	ApiService           *IntegrationsApiService
-	githubintegrationPk  string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	githubintegrationPk string
 	descriptionIcontains *string
-	name                 *string
-	nameIcontains        *string
-	ordering             *string
-	page                 *int32
-	pageSize             *int32
+	name *string
+	nameIcontains *string
+	ordering *string
+	page *int32
+	pageSize *int32
 }
 
 func (r ApiIntegrationsGithubPullsListRequest) DescriptionIcontains(descriptionIcontains string) ApiIntegrationsGithubPullsListRequest {
@@ -9769,58 +9720,57 @@ func (r ApiIntegrationsGithubPullsListRequest) Execute() (*PaginatedGitHubPullLi
 /*
 IntegrationsGithubPullsList Method for IntegrationsGithubPullsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param githubintegrationPk
-	@return ApiIntegrationsGithubPullsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param githubintegrationPk
+ @return ApiIntegrationsGithubPullsListRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubPullsList(ctx context.Context, githubintegrationPk string) ApiIntegrationsGithubPullsListRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubPullsList(ctx context.Context, githubintegrationPk string) ApiIntegrationsGithubPullsListRequest {
 	return ApiIntegrationsGithubPullsListRequest{
-		ApiService:          a,
-		ctx:                 ctx,
+		ApiService: a,
+		ctx: ctx,
 		githubintegrationPk: githubintegrationPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedGitHubPullList
-func (a *IntegrationsApiService) IntegrationsGithubPullsListExecute(r ApiIntegrationsGithubPullsListRequest) (*PaginatedGitHubPullList, *http.Response, error) {
+//  @return PaginatedGitHubPullList
+func (a *IntegrationsAPIService) IntegrationsGithubPullsListExecute(r ApiIntegrationsGithubPullsListRequest) (*PaginatedGitHubPullList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedGitHubPullList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedGitHubPullList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubPullsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{githubintegration_pk}/pulls/"
-	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterToString(r.githubintegrationPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterValueToString(r.githubintegrationPk, "githubintegrationPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.descriptionIcontains != nil {
-		localVarQueryParams.Add("description__icontains", parameterToString(*r.descriptionIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description__icontains", r.descriptionIcontains, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -9877,9 +9827,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsListExecute(r ApiIntegra
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -9905,11 +9855,11 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsListExecute(r ApiIntegra
 }
 
 type ApiIntegrationsGithubPullsPartialUpdateRequest struct {
-	ctx                 context.Context
-	ApiService          *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	githubintegrationPk string
-	id                  string
-	patchedGitHubPull   *PatchedGitHubPull
+	id string
+	patchedGitHubPull *PatchedGitHubPull
 }
 
 func (r ApiIntegrationsGithubPullsPartialUpdateRequest) PatchedGitHubPull(patchedGitHubPull PatchedGitHubPull) ApiIntegrationsGithubPullsPartialUpdateRequest {
@@ -9924,39 +9874,38 @@ func (r ApiIntegrationsGithubPullsPartialUpdateRequest) Execute() (*GitHubPull, 
 /*
 IntegrationsGithubPullsPartialUpdate Method for IntegrationsGithubPullsPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param githubintegrationPk
-	@param id
-	@return ApiIntegrationsGithubPullsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param githubintegrationPk
+ @param id
+ @return ApiIntegrationsGithubPullsPartialUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubPullsPartialUpdate(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsPartialUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubPullsPartialUpdate(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsPartialUpdateRequest {
 	return ApiIntegrationsGithubPullsPartialUpdateRequest{
-		ApiService:          a,
-		ctx:                 ctx,
+		ApiService: a,
+		ctx: ctx,
 		githubintegrationPk: githubintegrationPk,
-		id:                  id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GitHubPull
-func (a *IntegrationsApiService) IntegrationsGithubPullsPartialUpdateExecute(r ApiIntegrationsGithubPullsPartialUpdateRequest) (*GitHubPull, *http.Response, error) {
+//  @return GitHubPull
+func (a *IntegrationsAPIService) IntegrationsGithubPullsPartialUpdateExecute(r ApiIntegrationsGithubPullsPartialUpdateRequest) (*GitHubPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GitHubPull
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GitHubPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubPullsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{githubintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterToString(r.githubintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterValueToString(r.githubintegrationPk, "githubintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -10019,9 +9968,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsPartialUpdateExecute(r A
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -10047,10 +9996,10 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsPartialUpdateExecute(r A
 }
 
 type ApiIntegrationsGithubPullsRetrieveRequest struct {
-	ctx                 context.Context
-	ApiService          *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	githubintegrationPk string
-	id                  string
+	id string
 }
 
 func (r ApiIntegrationsGithubPullsRetrieveRequest) Execute() (*GitHubPull, *http.Response, error) {
@@ -10060,39 +10009,38 @@ func (r ApiIntegrationsGithubPullsRetrieveRequest) Execute() (*GitHubPull, *http
 /*
 IntegrationsGithubPullsRetrieve Method for IntegrationsGithubPullsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param githubintegrationPk
-	@param id
-	@return ApiIntegrationsGithubPullsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param githubintegrationPk
+ @param id
+ @return ApiIntegrationsGithubPullsRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubPullsRetrieve(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubPullsRetrieve(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsRetrieveRequest {
 	return ApiIntegrationsGithubPullsRetrieveRequest{
-		ApiService:          a,
-		ctx:                 ctx,
+		ApiService: a,
+		ctx: ctx,
 		githubintegrationPk: githubintegrationPk,
-		id:                  id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GitHubPull
-func (a *IntegrationsApiService) IntegrationsGithubPullsRetrieveExecute(r ApiIntegrationsGithubPullsRetrieveRequest) (*GitHubPull, *http.Response, error) {
+//  @return GitHubPull
+func (a *IntegrationsAPIService) IntegrationsGithubPullsRetrieveExecute(r ApiIntegrationsGithubPullsRetrieveRequest) (*GitHubPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GitHubPull
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GitHubPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubPullsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{githubintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterToString(r.githubintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterValueToString(r.githubintegrationPk, "githubintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -10153,9 +10101,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsRetrieveExecute(r ApiInt
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -10181,11 +10129,11 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsRetrieveExecute(r ApiInt
 }
 
 type ApiIntegrationsGithubPullsSyncCreateRequest struct {
-	ctx                 context.Context
-	ApiService          *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	githubintegrationPk string
-	id                  string
-	gitHubPull          *GitHubPull
+	id string
+	gitHubPull *GitHubPull
 }
 
 func (r ApiIntegrationsGithubPullsSyncCreateRequest) GitHubPull(gitHubPull GitHubPull) ApiIntegrationsGithubPullsSyncCreateRequest {
@@ -10202,36 +10150,36 @@ IntegrationsGithubPullsSyncCreate Method for IntegrationsGithubPullsSyncCreate
 
 Enqueue a pull synchronization task for mapped external values accessible with this integration.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param githubintegrationPk
-	@param id
-	@return ApiIntegrationsGithubPullsSyncCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param githubintegrationPk
+ @param id
+ @return ApiIntegrationsGithubPullsSyncCreateRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubPullsSyncCreate(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsSyncCreateRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubPullsSyncCreate(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsSyncCreateRequest {
 	return ApiIntegrationsGithubPullsSyncCreateRequest{
-		ApiService:          a,
-		ctx:                 ctx,
+		ApiService: a,
+		ctx: ctx,
 		githubintegrationPk: githubintegrationPk,
-		id:                  id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *IntegrationsApiService) IntegrationsGithubPullsSyncCreateExecute(r ApiIntegrationsGithubPullsSyncCreateRequest) (*http.Response, error) {
+func (a *IntegrationsAPIService) IntegrationsGithubPullsSyncCreateExecute(r ApiIntegrationsGithubPullsSyncCreateRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodPost
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsSyncCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubPullsSyncCreate")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{githubintegration_pk}/pulls/{id}/sync/"
-	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterToString(r.githubintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterValueToString(r.githubintegrationPk, "githubintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -10297,9 +10245,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsSyncCreateExecute(r ApiI
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -10316,17 +10264,17 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsSyncCreateExecute(r ApiI
 }
 
 type ApiIntegrationsGithubPullsTasksListRequest struct {
-	ctx                 context.Context
-	ApiService          *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	githubintegrationPk string
-	githubpullPk        string
-	modifiedAt          *time.Time
-	modifiedAtGte       *time.Time
-	modifiedAtLte       *time.Time
-	ordering            *string
-	page                *int32
-	pageSize            *int32
-	state               *string
+	githubpullPk string
+	modifiedAt *time.Time
+	modifiedAtGte *time.Time
+	modifiedAtLte *time.Time
+	ordering *string
+	page *int32
+	pageSize *int32
+	state *string
 }
 
 func (r ApiIntegrationsGithubPullsTasksListRequest) ModifiedAt(modifiedAt time.Time) ApiIntegrationsGithubPullsTasksListRequest {
@@ -10375,64 +10323,63 @@ func (r ApiIntegrationsGithubPullsTasksListRequest) Execute() (*PaginatedGitHubP
 /*
 IntegrationsGithubPullsTasksList Method for IntegrationsGithubPullsTasksList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param githubintegrationPk
-	@param githubpullPk
-	@return ApiIntegrationsGithubPullsTasksListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param githubintegrationPk
+ @param githubpullPk
+ @return ApiIntegrationsGithubPullsTasksListRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubPullsTasksList(ctx context.Context, githubintegrationPk string, githubpullPk string) ApiIntegrationsGithubPullsTasksListRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubPullsTasksList(ctx context.Context, githubintegrationPk string, githubpullPk string) ApiIntegrationsGithubPullsTasksListRequest {
 	return ApiIntegrationsGithubPullsTasksListRequest{
-		ApiService:          a,
-		ctx:                 ctx,
+		ApiService: a,
+		ctx: ctx,
 		githubintegrationPk: githubintegrationPk,
-		githubpullPk:        githubpullPk,
+		githubpullPk: githubpullPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedGitHubPullTaskList
-func (a *IntegrationsApiService) IntegrationsGithubPullsTasksListExecute(r ApiIntegrationsGithubPullsTasksListRequest) (*PaginatedGitHubPullTaskList, *http.Response, error) {
+//  @return PaginatedGitHubPullTaskList
+func (a *IntegrationsAPIService) IntegrationsGithubPullsTasksListExecute(r ApiIntegrationsGithubPullsTasksListRequest) (*PaginatedGitHubPullTaskList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedGitHubPullTaskList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedGitHubPullTaskList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsTasksList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubPullsTasksList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{githubintegration_pk}/pulls/{githubpull_pk}/tasks/"
-	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterToString(r.githubintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"githubpull_pk"+"}", url.PathEscape(parameterToString(r.githubpullPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterValueToString(r.githubintegrationPk, "githubintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubpull_pk"+"}", url.PathEscape(parameterValueToString(r.githubpullPk, "githubpullPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.modifiedAt != nil {
-		localVarQueryParams.Add("modified_at", parameterToString(*r.modifiedAt, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at", r.modifiedAt, "")
 	}
 	if r.modifiedAtGte != nil {
-		localVarQueryParams.Add("modified_at__gte", parameterToString(*r.modifiedAtGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__gte", r.modifiedAtGte, "")
 	}
 	if r.modifiedAtLte != nil {
-		localVarQueryParams.Add("modified_at__lte", parameterToString(*r.modifiedAtLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__lte", r.modifiedAtLte, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.state != nil {
-		localVarQueryParams.Add("state", parameterToString(*r.state, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "state", r.state, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -10489,9 +10436,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksListExecute(r ApiIn
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -10517,11 +10464,11 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksListExecute(r ApiIn
 }
 
 type ApiIntegrationsGithubPullsTasksRetrieveRequest struct {
-	ctx                 context.Context
-	ApiService          *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	githubintegrationPk string
-	githubpullPk        string
-	id                  string
+	githubpullPk string
+	id string
 }
 
 func (r ApiIntegrationsGithubPullsTasksRetrieveRequest) Execute() (*GitHubPullTask, *http.Response, error) {
@@ -10531,42 +10478,41 @@ func (r ApiIntegrationsGithubPullsTasksRetrieveRequest) Execute() (*GitHubPullTa
 /*
 IntegrationsGithubPullsTasksRetrieve Method for IntegrationsGithubPullsTasksRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param githubintegrationPk
-	@param githubpullPk
-	@param id
-	@return ApiIntegrationsGithubPullsTasksRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param githubintegrationPk
+ @param githubpullPk
+ @param id
+ @return ApiIntegrationsGithubPullsTasksRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubPullsTasksRetrieve(ctx context.Context, githubintegrationPk string, githubpullPk string, id string) ApiIntegrationsGithubPullsTasksRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubPullsTasksRetrieve(ctx context.Context, githubintegrationPk string, githubpullPk string, id string) ApiIntegrationsGithubPullsTasksRetrieveRequest {
 	return ApiIntegrationsGithubPullsTasksRetrieveRequest{
-		ApiService:          a,
-		ctx:                 ctx,
+		ApiService: a,
+		ctx: ctx,
 		githubintegrationPk: githubintegrationPk,
-		githubpullPk:        githubpullPk,
-		id:                  id,
+		githubpullPk: githubpullPk,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GitHubPullTask
-func (a *IntegrationsApiService) IntegrationsGithubPullsTasksRetrieveExecute(r ApiIntegrationsGithubPullsTasksRetrieveRequest) (*GitHubPullTask, *http.Response, error) {
+//  @return GitHubPullTask
+func (a *IntegrationsAPIService) IntegrationsGithubPullsTasksRetrieveExecute(r ApiIntegrationsGithubPullsTasksRetrieveRequest) (*GitHubPullTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GitHubPullTask
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GitHubPullTask
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsTasksRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubPullsTasksRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{githubintegration_pk}/pulls/{githubpull_pk}/tasks/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterToString(r.githubintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"githubpull_pk"+"}", url.PathEscape(parameterToString(r.githubpullPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterValueToString(r.githubintegrationPk, "githubintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubpull_pk"+"}", url.PathEscape(parameterValueToString(r.githubpullPk, "githubpullPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -10627,9 +10573,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksRetrieveExecute(r A
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -10655,24 +10601,24 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksRetrieveExecute(r A
 }
 
 type ApiIntegrationsGithubPullsTasksStepsListRequest struct {
-	ctx                 context.Context
-	ApiService          *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	githubintegrationPk string
-	githubpullPk        string
-	githubpulltaskPk    string
-	fqn                 *string
-	modifiedAt          *time.Time
-	modifiedAtGte       *time.Time
-	modifiedAtLte       *time.Time
-	operation           *string
-	ordering            *string
-	page                *int32
-	pageSize            *int32
-	success             *bool
-	venueId             *string
-	venueIdIcontains    *string
-	venueName           *string
-	venueNameIcontains  *string
+	githubpullPk string
+	githubpulltaskPk string
+	fqn *string
+	modifiedAt *time.Time
+	modifiedAtGte *time.Time
+	modifiedAtLte *time.Time
+	operation *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	success *bool
+	venueId *string
+	venueIdIcontains *string
+	venueName *string
+	venueNameIcontains *string
 }
 
 func (r ApiIntegrationsGithubPullsTasksStepsListRequest) Fqn(fqn string) ApiIntegrationsGithubPullsTasksStepsListRequest {
@@ -10751,85 +10697,84 @@ func (r ApiIntegrationsGithubPullsTasksStepsListRequest) Execute() (*PaginatedGi
 /*
 IntegrationsGithubPullsTasksStepsList Method for IntegrationsGithubPullsTasksStepsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param githubintegrationPk
-	@param githubpullPk
-	@param githubpulltaskPk
-	@return ApiIntegrationsGithubPullsTasksStepsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param githubintegrationPk
+ @param githubpullPk
+ @param githubpulltaskPk
+ @return ApiIntegrationsGithubPullsTasksStepsListRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsList(ctx context.Context, githubintegrationPk string, githubpullPk string, githubpulltaskPk string) ApiIntegrationsGithubPullsTasksStepsListRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubPullsTasksStepsList(ctx context.Context, githubintegrationPk string, githubpullPk string, githubpulltaskPk string) ApiIntegrationsGithubPullsTasksStepsListRequest {
 	return ApiIntegrationsGithubPullsTasksStepsListRequest{
-		ApiService:          a,
-		ctx:                 ctx,
+		ApiService: a,
+		ctx: ctx,
 		githubintegrationPk: githubintegrationPk,
-		githubpullPk:        githubpullPk,
-		githubpulltaskPk:    githubpulltaskPk,
+		githubpullPk: githubpullPk,
+		githubpulltaskPk: githubpulltaskPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedGitHubPullTaskStepList
-func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsListExecute(r ApiIntegrationsGithubPullsTasksStepsListRequest) (*PaginatedGitHubPullTaskStepList, *http.Response, error) {
+//  @return PaginatedGitHubPullTaskStepList
+func (a *IntegrationsAPIService) IntegrationsGithubPullsTasksStepsListExecute(r ApiIntegrationsGithubPullsTasksStepsListRequest) (*PaginatedGitHubPullTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedGitHubPullTaskStepList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedGitHubPullTaskStepList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsTasksStepsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubPullsTasksStepsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{githubintegration_pk}/pulls/{githubpull_pk}/tasks/{githubpulltask_pk}/steps/"
-	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterToString(r.githubintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"githubpull_pk"+"}", url.PathEscape(parameterToString(r.githubpullPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"githubpulltask_pk"+"}", url.PathEscape(parameterToString(r.githubpulltaskPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterValueToString(r.githubintegrationPk, "githubintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubpull_pk"+"}", url.PathEscape(parameterValueToString(r.githubpullPk, "githubpullPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubpulltask_pk"+"}", url.PathEscape(parameterValueToString(r.githubpulltaskPk, "githubpulltaskPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.fqn != nil {
-		localVarQueryParams.Add("fqn", parameterToString(*r.fqn, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "fqn", r.fqn, "")
 	}
 	if r.modifiedAt != nil {
-		localVarQueryParams.Add("modified_at", parameterToString(*r.modifiedAt, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at", r.modifiedAt, "")
 	}
 	if r.modifiedAtGte != nil {
-		localVarQueryParams.Add("modified_at__gte", parameterToString(*r.modifiedAtGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__gte", r.modifiedAtGte, "")
 	}
 	if r.modifiedAtLte != nil {
-		localVarQueryParams.Add("modified_at__lte", parameterToString(*r.modifiedAtLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "modified_at__lte", r.modifiedAtLte, "")
 	}
 	if r.operation != nil {
-		localVarQueryParams.Add("operation", parameterToString(*r.operation, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "operation", r.operation, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.success != nil {
-		localVarQueryParams.Add("success", parameterToString(*r.success, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "success", r.success, "")
 	}
 	if r.venueId != nil {
-		localVarQueryParams.Add("venue_id", parameterToString(*r.venueId, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_id", r.venueId, "")
 	}
 	if r.venueIdIcontains != nil {
-		localVarQueryParams.Add("venue_id__icontains", parameterToString(*r.venueIdIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_id__icontains", r.venueIdIcontains, "")
 	}
 	if r.venueName != nil {
-		localVarQueryParams.Add("venue_name", parameterToString(*r.venueName, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_name", r.venueName, "")
 	}
 	if r.venueNameIcontains != nil {
-		localVarQueryParams.Add("venue_name__icontains", parameterToString(*r.venueNameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "venue_name__icontains", r.venueNameIcontains, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -10886,9 +10831,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsListExecute(r 
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -10914,12 +10859,12 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsListExecute(r 
 }
 
 type ApiIntegrationsGithubPullsTasksStepsRetrieveRequest struct {
-	ctx                 context.Context
-	ApiService          *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	githubintegrationPk string
-	githubpullPk        string
-	githubpulltaskPk    string
-	id                  string
+	githubpullPk string
+	githubpulltaskPk string
+	id string
 }
 
 func (r ApiIntegrationsGithubPullsTasksStepsRetrieveRequest) Execute() (*GitHubPullTaskStep, *http.Response, error) {
@@ -10929,45 +10874,44 @@ func (r ApiIntegrationsGithubPullsTasksStepsRetrieveRequest) Execute() (*GitHubP
 /*
 IntegrationsGithubPullsTasksStepsRetrieve Method for IntegrationsGithubPullsTasksStepsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param githubintegrationPk
-	@param githubpullPk
-	@param githubpulltaskPk
-	@param id
-	@return ApiIntegrationsGithubPullsTasksStepsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param githubintegrationPk
+ @param githubpullPk
+ @param githubpulltaskPk
+ @param id
+ @return ApiIntegrationsGithubPullsTasksStepsRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsRetrieve(ctx context.Context, githubintegrationPk string, githubpullPk string, githubpulltaskPk string, id string) ApiIntegrationsGithubPullsTasksStepsRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubPullsTasksStepsRetrieve(ctx context.Context, githubintegrationPk string, githubpullPk string, githubpulltaskPk string, id string) ApiIntegrationsGithubPullsTasksStepsRetrieveRequest {
 	return ApiIntegrationsGithubPullsTasksStepsRetrieveRequest{
-		ApiService:          a,
-		ctx:                 ctx,
+		ApiService: a,
+		ctx: ctx,
 		githubintegrationPk: githubintegrationPk,
-		githubpullPk:        githubpullPk,
-		githubpulltaskPk:    githubpulltaskPk,
-		id:                  id,
+		githubpullPk: githubpullPk,
+		githubpulltaskPk: githubpulltaskPk,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GitHubPullTaskStep
-func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsRetrieveExecute(r ApiIntegrationsGithubPullsTasksStepsRetrieveRequest) (*GitHubPullTaskStep, *http.Response, error) {
+//  @return GitHubPullTaskStep
+func (a *IntegrationsAPIService) IntegrationsGithubPullsTasksStepsRetrieveExecute(r ApiIntegrationsGithubPullsTasksStepsRetrieveRequest) (*GitHubPullTaskStep, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GitHubPullTaskStep
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GitHubPullTaskStep
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsTasksStepsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubPullsTasksStepsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{githubintegration_pk}/pulls/{githubpull_pk}/tasks/{githubpulltask_pk}/steps/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterToString(r.githubintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"githubpull_pk"+"}", url.PathEscape(parameterToString(r.githubpullPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"githubpulltask_pk"+"}", url.PathEscape(parameterToString(r.githubpulltaskPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterValueToString(r.githubintegrationPk, "githubintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubpull_pk"+"}", url.PathEscape(parameterValueToString(r.githubpullPk, "githubpullPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubpulltask_pk"+"}", url.PathEscape(parameterValueToString(r.githubpulltaskPk, "githubpulltaskPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -11028,9 +10972,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsRetrieveExecut
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -11056,11 +11000,11 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsTasksStepsRetrieveExecut
 }
 
 type ApiIntegrationsGithubPullsUpdateRequest struct {
-	ctx                 context.Context
-	ApiService          *IntegrationsApiService
+	ctx context.Context
+	ApiService *IntegrationsAPIService
 	githubintegrationPk string
-	id                  string
-	gitHubPull          *GitHubPull
+	id string
+	gitHubPull *GitHubPull
 }
 
 func (r ApiIntegrationsGithubPullsUpdateRequest) GitHubPull(gitHubPull GitHubPull) ApiIntegrationsGithubPullsUpdateRequest {
@@ -11075,39 +11019,38 @@ func (r ApiIntegrationsGithubPullsUpdateRequest) Execute() (*GitHubPull, *http.R
 /*
 IntegrationsGithubPullsUpdate Method for IntegrationsGithubPullsUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param githubintegrationPk
-	@param id
-	@return ApiIntegrationsGithubPullsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param githubintegrationPk
+ @param id
+ @return ApiIntegrationsGithubPullsUpdateRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubPullsUpdate(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsUpdateRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubPullsUpdate(ctx context.Context, githubintegrationPk string, id string) ApiIntegrationsGithubPullsUpdateRequest {
 	return ApiIntegrationsGithubPullsUpdateRequest{
-		ApiService:          a,
-		ctx:                 ctx,
+		ApiService: a,
+		ctx: ctx,
 		githubintegrationPk: githubintegrationPk,
-		id:                  id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GitHubPull
-func (a *IntegrationsApiService) IntegrationsGithubPullsUpdateExecute(r ApiIntegrationsGithubPullsUpdateRequest) (*GitHubPull, *http.Response, error) {
+//  @return GitHubPull
+func (a *IntegrationsAPIService) IntegrationsGithubPullsUpdateExecute(r ApiIntegrationsGithubPullsUpdateRequest) (*GitHubPull, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GitHubPull
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GitHubPull
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubPullsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubPullsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{githubintegration_pk}/pulls/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterToString(r.githubintegrationPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"githubintegration_pk"+"}", url.PathEscape(parameterValueToString(r.githubintegrationPk, "githubintegrationPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -11173,9 +11116,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsUpdateExecute(r ApiInteg
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -11201,9 +11144,9 @@ func (a *IntegrationsApiService) IntegrationsGithubPullsUpdateExecute(r ApiInteg
 }
 
 type ApiIntegrationsGithubRetrieveRequest struct {
-	ctx           context.Context
-	ApiService    *IntegrationsApiService
-	id            string
+	ctx context.Context
+	ApiService *IntegrationsAPIService
+	id string
 	refreshStatus *bool
 }
 
@@ -11220,43 +11163,42 @@ func (r ApiIntegrationsGithubRetrieveRequest) Execute() (*GitHubIntegration, *ht
 /*
 IntegrationsGithubRetrieve Get details of a GitHub Integration.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiIntegrationsGithubRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiIntegrationsGithubRetrieveRequest
 */
-func (a *IntegrationsApiService) IntegrationsGithubRetrieve(ctx context.Context, id string) ApiIntegrationsGithubRetrieveRequest {
+func (a *IntegrationsAPIService) IntegrationsGithubRetrieve(ctx context.Context, id string) ApiIntegrationsGithubRetrieveRequest {
 	return ApiIntegrationsGithubRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GitHubIntegration
-func (a *IntegrationsApiService) IntegrationsGithubRetrieveExecute(r ApiIntegrationsGithubRetrieveRequest) (*GitHubIntegration, *http.Response, error) {
+//  @return GitHubIntegration
+func (a *IntegrationsAPIService) IntegrationsGithubRetrieveExecute(r ApiIntegrationsGithubRetrieveRequest) (*GitHubIntegration, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GitHubIntegration
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GitHubIntegration
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsApiService.IntegrationsGithubRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IntegrationsAPIService.IntegrationsGithubRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/integrations/github/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.refreshStatus != nil {
-		localVarQueryParams.Add("refresh_status", parameterToString(*r.refreshStatus, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "refresh_status", r.refreshStatus, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -11313,9 +11255,9 @@ func (a *IntegrationsApiService) IntegrationsGithubRetrieveExecute(r ApiIntegrat
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

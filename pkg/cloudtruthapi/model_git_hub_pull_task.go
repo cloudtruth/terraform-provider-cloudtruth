@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the GitHubPullTask type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GitHubPullTask{}
+
 // GitHubPullTask Pull task for a GitHub integration.
 type GitHubPullTask struct {
 	Url string `json:"url"`
@@ -25,14 +28,13 @@ type GitHubPullTask struct {
 	Reason NullableString `json:"reason,omitempty"`
 	// Indicates task steps were only simulated, not actually performed.
 	DryRun *bool `json:"dry_run,omitempty"`
-	// The current state of this task.
-	State NullableStateEnum `json:"state,omitempty"`
+	State *StateEnum `json:"state,omitempty"`
 	// If an error occurs early during processing, before attempting to process values, this code may be helpful in determining the problem.
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// If an error occurs early during processing, before attempting to process values, this detail may be helpful in determining the problem.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt   time.Time      `json:"created_at"`
-	ModifiedAt  time.Time      `json:"modified_at"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 }
 
 // NewGitHubPullTask instantiates a new GitHubPullTask object
@@ -106,7 +108,7 @@ func (o *GitHubPullTask) SetId(v string) {
 
 // GetReason returns the Reason field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *GitHubPullTask) GetReason() string {
-	if o == nil || o.Reason.Get() == nil {
+	if o == nil || IsNil(o.Reason.Get()) {
 		var ret string
 		return ret
 	}
@@ -136,7 +138,6 @@ func (o *GitHubPullTask) HasReason() bool {
 func (o *GitHubPullTask) SetReason(v string) {
 	o.Reason.Set(&v)
 }
-
 // SetReasonNil sets the value for Reason to be an explicit nil
 func (o *GitHubPullTask) SetReasonNil() {
 	o.Reason.Set(nil)
@@ -149,7 +150,7 @@ func (o *GitHubPullTask) UnsetReason() {
 
 // GetDryRun returns the DryRun field value if set, zero value otherwise.
 func (o *GitHubPullTask) GetDryRun() bool {
-	if o == nil || o.DryRun == nil {
+	if o == nil || IsNil(o.DryRun) {
 		var ret bool
 		return ret
 	}
@@ -159,7 +160,7 @@ func (o *GitHubPullTask) GetDryRun() bool {
 // GetDryRunOk returns a tuple with the DryRun field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GitHubPullTask) GetDryRunOk() (*bool, bool) {
-	if o == nil || o.DryRun == nil {
+	if o == nil || IsNil(o.DryRun) {
 		return nil, false
 	}
 	return o.DryRun, true
@@ -167,7 +168,7 @@ func (o *GitHubPullTask) GetDryRunOk() (*bool, bool) {
 
 // HasDryRun returns a boolean if a field has been set.
 func (o *GitHubPullTask) HasDryRun() bool {
-	if o != nil && o.DryRun != nil {
+	if o != nil && !IsNil(o.DryRun) {
 		return true
 	}
 
@@ -179,52 +180,41 @@ func (o *GitHubPullTask) SetDryRun(v bool) {
 	o.DryRun = &v
 }
 
-// GetState returns the State field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetState returns the State field value if set, zero value otherwise.
 func (o *GitHubPullTask) GetState() StateEnum {
-	if o == nil || o.State.Get() == nil {
+	if o == nil || IsNil(o.State) {
 		var ret StateEnum
 		return ret
 	}
-	return *o.State.Get()
+	return *o.State
 }
 
 // GetStateOk returns a tuple with the State field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *GitHubPullTask) GetStateOk() (*StateEnum, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.State) {
 		return nil, false
 	}
-	return o.State.Get(), o.State.IsSet()
+	return o.State, true
 }
 
 // HasState returns a boolean if a field has been set.
 func (o *GitHubPullTask) HasState() bool {
-	if o != nil && o.State.IsSet() {
+	if o != nil && !IsNil(o.State) {
 		return true
 	}
 
 	return false
 }
 
-// SetState gets a reference to the given NullableStateEnum and assigns it to the State field.
+// SetState gets a reference to the given StateEnum and assigns it to the State field.
 func (o *GitHubPullTask) SetState(v StateEnum) {
-	o.State.Set(&v)
-}
-
-// SetStateNil sets the value for State to be an explicit nil
-func (o *GitHubPullTask) SetStateNil() {
-	o.State.Set(nil)
-}
-
-// UnsetState ensures that no value is present for State, not even an explicit nil
-func (o *GitHubPullTask) UnsetState() {
-	o.State.Unset()
+	o.State = &v
 }
 
 // GetErrorCode returns the ErrorCode field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *GitHubPullTask) GetErrorCode() string {
-	if o == nil || o.ErrorCode.Get() == nil {
+	if o == nil || IsNil(o.ErrorCode.Get()) {
 		var ret string
 		return ret
 	}
@@ -254,7 +244,6 @@ func (o *GitHubPullTask) HasErrorCode() bool {
 func (o *GitHubPullTask) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
-
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *GitHubPullTask) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -267,7 +256,7 @@ func (o *GitHubPullTask) UnsetErrorCode() {
 
 // GetErrorDetail returns the ErrorDetail field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *GitHubPullTask) GetErrorDetail() string {
-	if o == nil || o.ErrorDetail.Get() == nil {
+	if o == nil || IsNil(o.ErrorDetail.Get()) {
 		var ret string
 		return ret
 	}
@@ -297,7 +286,6 @@ func (o *GitHubPullTask) HasErrorDetail() bool {
 func (o *GitHubPullTask) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
-
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *GitHubPullTask) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -357,21 +345,25 @@ func (o *GitHubPullTask) SetModifiedAt(v time.Time) {
 }
 
 func (o GitHubPullTask) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o GitHubPullTask) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
 	if o.Reason.IsSet() {
 		toSerialize["reason"] = o.Reason.Get()
 	}
-	if o.DryRun != nil {
+	if !IsNil(o.DryRun) {
 		toSerialize["dry_run"] = o.DryRun
 	}
-	if o.State.IsSet() {
-		toSerialize["state"] = o.State.Get()
+	if !IsNil(o.State) {
+		toSerialize["state"] = o.State
 	}
 	if o.ErrorCode.IsSet() {
 		toSerialize["error_code"] = o.ErrorCode.Get()
@@ -379,13 +371,9 @@ func (o GitHubPullTask) MarshalJSON() ([]byte, error) {
 	if o.ErrorDetail.IsSet() {
 		toSerialize["error_detail"] = o.ErrorDetail.Get()
 	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableGitHubPullTask struct {
@@ -423,3 +411,5 @@ func (v *NullableGitHubPullTask) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

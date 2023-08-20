@@ -15,22 +15,25 @@ import (
 	"encoding/json"
 )
 
+// checks if the BackupParameterValue type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BackupParameterValue{}
+
 // BackupParameterValue Parameter value data at a point in time.
 type BackupParameterValue struct {
-	External    NullableBackupParameterValueExternal `json:"external"`
-	Environment string                               `json:"environment"`
-	Evaluated   bool                                 `json:"evaluated"`
-	Source      NullableString                       `json:"source,omitempty"`
-	Project     NullableString                       `json:"project,omitempty"`
-	Value       NullableString                       `json:"value,omitempty"`
-	Raw         NullableString                       `json:"raw,omitempty"`
+	External NullableBackupExternalReference `json:"external"`
+	Environment string `json:"environment"`
+	Evaluated bool `json:"evaluated"`
+	Source NullableString `json:"source,omitempty"`
+	Project NullableString `json:"project,omitempty"`
+	Value NullableString `json:"value,omitempty"`
+	Raw NullableString `json:"raw,omitempty"`
 }
 
 // NewBackupParameterValue instantiates a new BackupParameterValue object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewBackupParameterValue(external NullableBackupParameterValueExternal, environment string, evaluated bool) *BackupParameterValue {
+func NewBackupParameterValue(external NullableBackupExternalReference, environment string, evaluated bool) *BackupParameterValue {
 	this := BackupParameterValue{}
 	this.External = external
 	this.Environment = environment
@@ -47,10 +50,10 @@ func NewBackupParameterValueWithDefaults() *BackupParameterValue {
 }
 
 // GetExternal returns the External field value
-// If the value is explicit nil, the zero value for BackupParameterValueExternal will be returned
-func (o *BackupParameterValue) GetExternal() BackupParameterValueExternal {
+// If the value is explicit nil, the zero value for BackupExternalReference will be returned
+func (o *BackupParameterValue) GetExternal() BackupExternalReference {
 	if o == nil || o.External.Get() == nil {
-		var ret BackupParameterValueExternal
+		var ret BackupExternalReference
 		return ret
 	}
 
@@ -60,7 +63,7 @@ func (o *BackupParameterValue) GetExternal() BackupParameterValueExternal {
 // GetExternalOk returns a tuple with the External field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *BackupParameterValue) GetExternalOk() (*BackupParameterValueExternal, bool) {
+func (o *BackupParameterValue) GetExternalOk() (*BackupExternalReference, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -68,7 +71,7 @@ func (o *BackupParameterValue) GetExternalOk() (*BackupParameterValueExternal, b
 }
 
 // SetExternal sets field value
-func (o *BackupParameterValue) SetExternal(v BackupParameterValueExternal) {
+func (o *BackupParameterValue) SetExternal(v BackupExternalReference) {
 	o.External.Set(&v)
 }
 
@@ -122,7 +125,7 @@ func (o *BackupParameterValue) SetEvaluated(v bool) {
 
 // GetSource returns the Source field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *BackupParameterValue) GetSource() string {
-	if o == nil || o.Source.Get() == nil {
+	if o == nil || IsNil(o.Source.Get()) {
 		var ret string
 		return ret
 	}
@@ -152,7 +155,6 @@ func (o *BackupParameterValue) HasSource() bool {
 func (o *BackupParameterValue) SetSource(v string) {
 	o.Source.Set(&v)
 }
-
 // SetSourceNil sets the value for Source to be an explicit nil
 func (o *BackupParameterValue) SetSourceNil() {
 	o.Source.Set(nil)
@@ -165,7 +167,7 @@ func (o *BackupParameterValue) UnsetSource() {
 
 // GetProject returns the Project field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *BackupParameterValue) GetProject() string {
-	if o == nil || o.Project.Get() == nil {
+	if o == nil || IsNil(o.Project.Get()) {
 		var ret string
 		return ret
 	}
@@ -195,7 +197,6 @@ func (o *BackupParameterValue) HasProject() bool {
 func (o *BackupParameterValue) SetProject(v string) {
 	o.Project.Set(&v)
 }
-
 // SetProjectNil sets the value for Project to be an explicit nil
 func (o *BackupParameterValue) SetProjectNil() {
 	o.Project.Set(nil)
@@ -208,7 +209,7 @@ func (o *BackupParameterValue) UnsetProject() {
 
 // GetValue returns the Value field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *BackupParameterValue) GetValue() string {
-	if o == nil || o.Value.Get() == nil {
+	if o == nil || IsNil(o.Value.Get()) {
 		var ret string
 		return ret
 	}
@@ -238,7 +239,6 @@ func (o *BackupParameterValue) HasValue() bool {
 func (o *BackupParameterValue) SetValue(v string) {
 	o.Value.Set(&v)
 }
-
 // SetValueNil sets the value for Value to be an explicit nil
 func (o *BackupParameterValue) SetValueNil() {
 	o.Value.Set(nil)
@@ -251,7 +251,7 @@ func (o *BackupParameterValue) UnsetValue() {
 
 // GetRaw returns the Raw field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *BackupParameterValue) GetRaw() string {
-	if o == nil || o.Raw.Get() == nil {
+	if o == nil || IsNil(o.Raw.Get()) {
 		var ret string
 		return ret
 	}
@@ -281,7 +281,6 @@ func (o *BackupParameterValue) HasRaw() bool {
 func (o *BackupParameterValue) SetRaw(v string) {
 	o.Raw.Set(&v)
 }
-
 // SetRawNil sets the value for Raw to be an explicit nil
 func (o *BackupParameterValue) SetRawNil() {
 	o.Raw.Set(nil)
@@ -293,16 +292,18 @@ func (o *BackupParameterValue) UnsetRaw() {
 }
 
 func (o BackupParameterValue) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o BackupParameterValue) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["external"] = o.External.Get()
-	}
-	if true {
-		toSerialize["environment"] = o.Environment
-	}
-	if true {
-		toSerialize["evaluated"] = o.Evaluated
-	}
+	toSerialize["external"] = o.External.Get()
+	toSerialize["environment"] = o.Environment
+	toSerialize["evaluated"] = o.Evaluated
 	if o.Source.IsSet() {
 		toSerialize["source"] = o.Source.Get()
 	}
@@ -315,7 +316,7 @@ func (o BackupParameterValue) MarshalJSON() ([]byte, error) {
 	if o.Raw.IsSet() {
 		toSerialize["raw"] = o.Raw.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableBackupParameterValue struct {
@@ -353,3 +354,5 @@ func (v *NullableBackupParameterValue) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

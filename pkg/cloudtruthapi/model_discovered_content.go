@@ -15,13 +15,16 @@ import (
 	"encoding/json"
 )
 
+// checks if the DiscoveredContent type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DiscoveredContent{}
+
 // DiscoveredContent struct for DiscoveredContent
 type DiscoveredContent struct {
-	VenueId         string `json:"venue_id"`
-	VenueName       string `json:"venue_name"`
+	VenueId string `json:"venue_id"`
+	VenueName string `json:"venue_name"`
 	EnvironmentName string `json:"environment_name"`
-	ProjectName     string `json:"project_name"`
-	ParameterName   string `json:"parameter_name"`
+	ProjectName string `json:"project_name"`
+	ParameterName string `json:"parameter_name"`
 }
 
 // NewDiscoveredContent instantiates a new DiscoveredContent object
@@ -167,23 +170,21 @@ func (o *DiscoveredContent) SetParameterName(v string) {
 }
 
 func (o DiscoveredContent) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["venue_id"] = o.VenueId
-	}
-	if true {
-		toSerialize["venue_name"] = o.VenueName
-	}
-	if true {
-		toSerialize["environment_name"] = o.EnvironmentName
-	}
-	if true {
-		toSerialize["project_name"] = o.ProjectName
-	}
-	if true {
-		toSerialize["parameter_name"] = o.ParameterName
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DiscoveredContent) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["venue_id"] = o.VenueId
+	toSerialize["venue_name"] = o.VenueName
+	toSerialize["environment_name"] = o.EnvironmentName
+	toSerialize["project_name"] = o.ProjectName
+	toSerialize["parameter_name"] = o.ParameterName
+	return toSerialize, nil
 }
 
 type NullableDiscoveredContent struct {
@@ -221,3 +222,5 @@ func (v *NullableDiscoveredContent) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

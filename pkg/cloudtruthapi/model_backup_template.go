@@ -15,10 +15,13 @@ import (
 	"encoding/json"
 )
 
+// checks if the BackupTemplate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BackupTemplate{}
+
 // BackupTemplate Template data at a given point in time.
 type BackupTemplate struct {
-	Name        string         `json:"name"`
-	Text        string         `json:"text"`
+	Name string `json:"name"`
+	Text string `json:"text"`
 	Description NullableString `json:"description"`
 }
 
@@ -117,17 +120,19 @@ func (o *BackupTemplate) SetDescription(v string) {
 }
 
 func (o BackupTemplate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["text"] = o.Text
-	}
-	if true {
-		toSerialize["description"] = o.Description.Get()
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o BackupTemplate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	toSerialize["text"] = o.Text
+	toSerialize["description"] = o.Description.Get()
+	return toSerialize, nil
 }
 
 type NullableBackupTemplate struct {
@@ -165,3 +170,5 @@ func (v *NullableBackupTemplate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the AzureKeyVaultIntegrationScan type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AzureKeyVaultIntegrationScan{}
+
 // AzureKeyVaultIntegrationScan struct for AzureKeyVaultIntegrationScan
 type AzureKeyVaultIntegrationScan struct {
 	// Defines a pattern matching string that contains either mustache or regular expression syntax (with named capture groups) that locate the environment, project, and parameter name of the content you are looking for.  If you are using mustache pattern matching, use:    - ``{{ environment }}`` to identify the environment name   - ``{{ parameter }}`` to identify the parameter name   - ``{{ project }}`` to identify the project name  If you are using a regular expression, use Python syntax with named capture groups that locate the `environment`, `project`, and `parameter`.
@@ -66,11 +69,17 @@ func (o *AzureKeyVaultIntegrationScan) SetResource(v string) {
 }
 
 func (o AzureKeyVaultIntegrationScan) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["resource"] = o.Resource.Get()
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AzureKeyVaultIntegrationScan) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["resource"] = o.Resource.Get()
+	return toSerialize, nil
 }
 
 type NullableAzureKeyVaultIntegrationScan struct {
@@ -108,3 +117,5 @@ func (v *NullableAzureKeyVaultIntegrationScan) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

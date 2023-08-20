@@ -68,7 +68,7 @@ func resourceEnvironmentCreate(ctx context.Context, d *schema.ResourceData, meta
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		env, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
+		env, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsCreate(ctx).EnvironmentCreate(*envCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceEnvironmentCreate: error creating env %s", envName), r, err)
 		}
@@ -112,7 +112,7 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		env, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsRetrieve(ctx, envID).Execute()
+		env, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsRetrieve(ctx, envID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceEnvironmentRead: error reading environment %s", envName), r, err)
 		}
@@ -166,7 +166,7 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsPartialUpdate(ctx,
+			_, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsPartialUpdate(ctx,
 				envID).PatchedEnvironment(patchedEnv).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceEnvironmentUpdate: error updating environment %s", envName), r, err)
@@ -191,7 +191,7 @@ func resourceEnvironmentDelete(ctx context.Context, d *schema.ResourceData, meta
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsDestroy(ctx, envID).Execute()
+		r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsDestroy(ctx, envID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceEnvironmentDelete: error destroying environment %s", envName), r, err)
 		}

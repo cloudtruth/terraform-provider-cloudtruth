@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the TemplatePreviewCreateRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TemplatePreviewCreateRequest{}
+
 // TemplatePreviewCreateRequest struct for TemplatePreviewCreateRequest
 type TemplatePreviewCreateRequest struct {
 	// The template body to instantiate on request, instantiated on response.
@@ -64,11 +67,17 @@ func (o *TemplatePreviewCreateRequest) SetBody(v string) {
 }
 
 func (o TemplatePreviewCreateRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["body"] = o.Body
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TemplatePreviewCreateRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["body"] = o.Body
+	return toSerialize, nil
 }
 
 type NullableTemplatePreviewCreateRequest struct {
@@ -106,3 +115,5 @@ func (v *NullableTemplatePreviewCreateRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -16,12 +16,15 @@ import (
 	"time"
 )
 
+// checks if the BackupDataSnapshot type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BackupDataSnapshot{}
+
 // BackupDataSnapshot Environment, parameter-type, and project (including parameters and values) data at a point in time.
 type BackupDataSnapshot struct {
-	Environments map[string]BackupEnvironment   `json:"environments"`
-	Types        map[string]BackupParameterType `json:"types"`
-	Projects     map[string]BackupProject       `json:"projects"`
-	Timestamp    time.Time                      `json:"timestamp"`
+	Environments map[string]BackupEnvironment `json:"environments"`
+	Types map[string]BackupParameterType `json:"types"`
+	Projects map[string]BackupProject `json:"projects"`
+	Timestamp time.Time `json:"timestamp"`
 }
 
 // NewBackupDataSnapshot instantiates a new BackupDataSnapshot object
@@ -142,20 +145,20 @@ func (o *BackupDataSnapshot) SetTimestamp(v time.Time) {
 }
 
 func (o BackupDataSnapshot) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["environments"] = o.Environments
-	}
-	if true {
-		toSerialize["types"] = o.Types
-	}
-	if true {
-		toSerialize["projects"] = o.Projects
-	}
-	if true {
-		toSerialize["timestamp"] = o.Timestamp
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o BackupDataSnapshot) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["environments"] = o.Environments
+	toSerialize["types"] = o.Types
+	toSerialize["projects"] = o.Projects
+	toSerialize["timestamp"] = o.Timestamp
+	return toSerialize, nil
 }
 
 type NullableBackupDataSnapshot struct {
@@ -193,3 +196,5 @@ func (v *NullableBackupDataSnapshot) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

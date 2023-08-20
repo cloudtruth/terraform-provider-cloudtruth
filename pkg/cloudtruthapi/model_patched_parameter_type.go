@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the PatchedParameterType type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedParameterType{}
+
 // PatchedParameterType struct for PatchedParameterType
 type PatchedParameterType struct {
 	Url *string `json:"url,omitempty"`
@@ -31,8 +34,8 @@ type PatchedParameterType struct {
 	Parent NullableString `json:"parent,omitempty"`
 	// Name of the parent ParameterType (if any).
 	ParentName NullableString `json:"parent_name,omitempty"`
-	CreatedAt  *time.Time     `json:"created_at,omitempty"`
-	ModifiedAt *time.Time     `json:"modified_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 }
 
 // NewPatchedParameterType instantiates a new PatchedParameterType object
@@ -54,7 +57,7 @@ func NewPatchedParameterTypeWithDefaults() *PatchedParameterType {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedParameterType) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -64,7 +67,7 @@ func (o *PatchedParameterType) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterType) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -72,7 +75,7 @@ func (o *PatchedParameterType) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedParameterType) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -86,7 +89,7 @@ func (o *PatchedParameterType) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedParameterType) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -96,7 +99,7 @@ func (o *PatchedParameterType) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterType) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -104,7 +107,7 @@ func (o *PatchedParameterType) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedParameterType) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -118,7 +121,7 @@ func (o *PatchedParameterType) SetId(v string) {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *PatchedParameterType) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -128,7 +131,7 @@ func (o *PatchedParameterType) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterType) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -136,7 +139,7 @@ func (o *PatchedParameterType) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *PatchedParameterType) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -150,7 +153,7 @@ func (o *PatchedParameterType) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *PatchedParameterType) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -160,7 +163,7 @@ func (o *PatchedParameterType) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterType) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -168,7 +171,7 @@ func (o *PatchedParameterType) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *PatchedParameterType) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -182,7 +185,7 @@ func (o *PatchedParameterType) SetDescription(v string) {
 
 // GetRules returns the Rules field value if set, zero value otherwise.
 func (o *PatchedParameterType) GetRules() []ParameterTypeRule {
-	if o == nil || o.Rules == nil {
+	if o == nil || IsNil(o.Rules) {
 		var ret []ParameterTypeRule
 		return ret
 	}
@@ -192,7 +195,7 @@ func (o *PatchedParameterType) GetRules() []ParameterTypeRule {
 // GetRulesOk returns a tuple with the Rules field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterType) GetRulesOk() ([]ParameterTypeRule, bool) {
-	if o == nil || o.Rules == nil {
+	if o == nil || IsNil(o.Rules) {
 		return nil, false
 	}
 	return o.Rules, true
@@ -200,7 +203,7 @@ func (o *PatchedParameterType) GetRulesOk() ([]ParameterTypeRule, bool) {
 
 // HasRules returns a boolean if a field has been set.
 func (o *PatchedParameterType) HasRules() bool {
-	if o != nil && o.Rules != nil {
+	if o != nil && !IsNil(o.Rules) {
 		return true
 	}
 
@@ -214,7 +217,7 @@ func (o *PatchedParameterType) SetRules(v []ParameterTypeRule) {
 
 // GetParent returns the Parent field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedParameterType) GetParent() string {
-	if o == nil || o.Parent.Get() == nil {
+	if o == nil || IsNil(o.Parent.Get()) {
 		var ret string
 		return ret
 	}
@@ -244,7 +247,6 @@ func (o *PatchedParameterType) HasParent() bool {
 func (o *PatchedParameterType) SetParent(v string) {
 	o.Parent.Set(&v)
 }
-
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *PatchedParameterType) SetParentNil() {
 	o.Parent.Set(nil)
@@ -257,7 +259,7 @@ func (o *PatchedParameterType) UnsetParent() {
 
 // GetParentName returns the ParentName field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedParameterType) GetParentName() string {
-	if o == nil || o.ParentName.Get() == nil {
+	if o == nil || IsNil(o.ParentName.Get()) {
 		var ret string
 		return ret
 	}
@@ -287,7 +289,6 @@ func (o *PatchedParameterType) HasParentName() bool {
 func (o *PatchedParameterType) SetParentName(v string) {
 	o.ParentName.Set(&v)
 }
-
 // SetParentNameNil sets the value for ParentName to be an explicit nil
 func (o *PatchedParameterType) SetParentNameNil() {
 	o.ParentName.Set(nil)
@@ -300,7 +301,7 @@ func (o *PatchedParameterType) UnsetParentName() {
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedParameterType) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -310,7 +311,7 @@ func (o *PatchedParameterType) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterType) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -318,7 +319,7 @@ func (o *PatchedParameterType) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *PatchedParameterType) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -332,7 +333,7 @@ func (o *PatchedParameterType) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *PatchedParameterType) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -342,7 +343,7 @@ func (o *PatchedParameterType) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameterType) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -350,7 +351,7 @@ func (o *PatchedParameterType) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedParameterType) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -363,20 +364,28 @@ func (o *PatchedParameterType) SetModifiedAt(v time.Time) {
 }
 
 func (o PatchedParameterType) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PatchedParameterType) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
+	if !IsNil(o.Url) {
 		toSerialize["url"] = o.Url
 	}
-	if o.Id != nil {
+	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
-	if o.Name != nil {
+	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
-	if o.Description != nil {
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.Rules != nil {
+	if !IsNil(o.Rules) {
 		toSerialize["rules"] = o.Rules
 	}
 	if o.Parent.IsSet() {
@@ -385,13 +394,13 @@ func (o PatchedParameterType) MarshalJSON() ([]byte, error) {
 	if o.ParentName.IsSet() {
 		toSerialize["parent_name"] = o.ParentName.Get()
 	}
-	if o.CreatedAt != nil {
+	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
-	if o.ModifiedAt != nil {
+	if !IsNil(o.ModifiedAt) {
 		toSerialize["modified_at"] = o.ModifiedAt
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePatchedParameterType struct {
@@ -429,3 +438,5 @@ func (v *NullablePatchedParameterType) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

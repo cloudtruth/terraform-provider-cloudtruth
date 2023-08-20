@@ -125,7 +125,7 @@ func resourceParameterCreate(ctx context.Context, d *schema.ResourceData, meta a
 		var r *http.Response
 		var err error
 		paramCreate := paramCreateConfig(d, paramTypeName)
-		parameter, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersCreate(ctx,
+		parameter, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersCreate(ctx,
 			*projID).ParameterCreate(*paramCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterCreate: error creating parameter %s", paramName), r, err)
@@ -174,7 +174,7 @@ func addRuleToParam(ctx context.Context, c *cloudTruthClient, paramID, projectID
 	var paramRule *cloudtruthapi.ParameterRule
 	var r *http.Response
 	for retryCount < ruleOperationRetries {
-		paramRule, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRulesCreate(ctx, paramID, projectID).ParameterRuleCreate(createTypeRule).Execute()
+		paramRule, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersRulesCreate(ctx, paramID, projectID).ParameterRuleCreate(createTypeRule).Execute()
 		if r.StatusCode >= 500 {
 			tflog.Debug(ctx, fmt.Sprintf("addRuleToParam: %s", err))
 			apiError = err
@@ -255,7 +255,7 @@ func resourceParameterRead(ctx context.Context, d *schema.ResourceData, meta any
 	var param *cloudtruthapi.Parameter
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
-		param, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(ctx, paramID, *projID).Execute()
+		param, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersRetrieve(ctx, paramID, *projID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterRead: error looking up parameter with ID %s", paramID), r, err)
 		}
@@ -340,7 +340,7 @@ func updateParameter(ctx context.Context, paramID, projID string, d *schema.Reso
 	var err error
 	if hasParamChange {
 		// The caller handles retries
-		_, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersPartialUpdate(ctx, paramID, projID).
+		_, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersPartialUpdate(ctx, paramID, projID).
 			PatchedParameter(patchedParam).Execute()
 		if err != nil {
 			return r, err
@@ -376,7 +376,7 @@ func updateParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID,
 
 	var r *http.Response
 	for retryCount < ruleOperationRetries {
-		ruleUpdateRequest = c.openAPIClient.ProjectsApi.ProjectsParametersRulesUpdate(ctx, ruleID, paramID, projID).ParameterRule(*paramRule)
+		ruleUpdateRequest = c.openAPIClient.ProjectsAPI.ProjectsParametersRulesUpdate(ctx, ruleID, paramID, projID).ParameterRule(*paramRule)
 		_, r, err = ruleUpdateRequest.Execute()
 		if r.StatusCode >= 500 {
 			tflog.Debug(ctx, fmt.Sprintf("updateParameterRule: error updating rule %s: %+v", ruleName, err))
@@ -402,7 +402,7 @@ func deleteParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID 
 	var apiError, err error
 
 	for retryCount < ruleOperationRetries {
-		ruleDestroyRequest = c.openAPIClient.ProjectsApi.ProjectsParametersRulesDestroy(ctx, ruleID, paramID, projID)
+		ruleDestroyRequest = c.openAPIClient.ProjectsAPI.ProjectsParametersRulesDestroy(ctx, ruleID, paramID, projID)
 		r, err = ruleDestroyRequest.Execute()
 		if r.StatusCode >= 500 {
 			tflog.Debug(ctx, fmt.Sprintf("deleteParameterRule: error deleting rule %s: %+v", ruleName, err))
@@ -470,7 +470,7 @@ func resourceParameterDelete(ctx context.Context, d *schema.ResourceData, meta a
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.ProjectsApi.ProjectsParametersDestroy(ctx, d.Id(), *projID).Execute()
+		r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersDestroy(ctx, d.Id(), *projID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterDelete: error deleting parameter %s", paramName), r, err)
 		}

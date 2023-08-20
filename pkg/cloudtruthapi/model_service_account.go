@@ -16,15 +16,18 @@ import (
 	"time"
 )
 
+// checks if the ServiceAccount type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceAccount{}
+
 // ServiceAccount struct for ServiceAccount
 type ServiceAccount struct {
-	Url  string                    `json:"url"`
-	Id   string                    `json:"id"`
-	User PatchedServiceAccountUser `json:"user"`
+	Url string `json:"url"`
+	Id string `json:"id"`
+	User User `json:"user"`
 	// An optional description of the process or system using the service account.
-	Description *string   `json:"description,omitempty"`
-	CreatedAt   time.Time `json:"created_at"`
-	ModifiedAt  time.Time `json:"modified_at"`
+	Description *string `json:"description,omitempty"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
 	LastUsedAt NullableTime `json:"last_used_at"`
 }
@@ -33,7 +36,7 @@ type ServiceAccount struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewServiceAccount(url string, id string, user PatchedServiceAccountUser, createdAt time.Time, modifiedAt time.Time, lastUsedAt NullableTime) *ServiceAccount {
+func NewServiceAccount(url string, id string, user User, createdAt time.Time, modifiedAt time.Time, lastUsedAt NullableTime) *ServiceAccount {
 	this := ServiceAccount{}
 	this.Url = url
 	this.Id = id
@@ -101,9 +104,9 @@ func (o *ServiceAccount) SetId(v string) {
 }
 
 // GetUser returns the User field value
-func (o *ServiceAccount) GetUser() PatchedServiceAccountUser {
+func (o *ServiceAccount) GetUser() User {
 	if o == nil {
-		var ret PatchedServiceAccountUser
+		var ret User
 		return ret
 	}
 
@@ -112,7 +115,7 @@ func (o *ServiceAccount) GetUser() PatchedServiceAccountUser {
 
 // GetUserOk returns a tuple with the User field value
 // and a boolean to check if the value has been set.
-func (o *ServiceAccount) GetUserOk() (*PatchedServiceAccountUser, bool) {
+func (o *ServiceAccount) GetUserOk() (*User, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -120,13 +123,13 @@ func (o *ServiceAccount) GetUserOk() (*PatchedServiceAccountUser, bool) {
 }
 
 // SetUser sets field value
-func (o *ServiceAccount) SetUser(v PatchedServiceAccountUser) {
+func (o *ServiceAccount) SetUser(v User) {
 	o.User = v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *ServiceAccount) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -136,7 +139,7 @@ func (o *ServiceAccount) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceAccount) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -144,7 +147,7 @@ func (o *ServiceAccount) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *ServiceAccount) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -231,29 +234,25 @@ func (o *ServiceAccount) SetLastUsedAt(v time.Time) {
 }
 
 func (o ServiceAccount) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["user"] = o.User
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["last_used_at"] = o.LastUsedAt.Get()
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ServiceAccount) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["user"] = o.User
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["last_used_at"] = o.LastUsedAt.Get()
+	return toSerialize, nil
 }
 
 type NullableServiceAccount struct {
@@ -291,3 +290,5 @@ func (v *NullableServiceAccount) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

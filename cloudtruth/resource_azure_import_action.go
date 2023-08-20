@@ -96,7 +96,7 @@ func resourceAzureImportActionCreate(ctx context.Context, d *schema.ResourceData
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		azureImport, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPullsCreate(ctx, *azureIntegrationID).AzureKeyVaultPull(*importActionCreate).Execute()
+		azureImport, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultPullsCreate(ctx, *azureIntegrationID).AzureKeyVaultPull(*importActionCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAzureImportActionCreate: error creating Azure import action %s", importActionName), r, err)
 		}
@@ -158,7 +158,7 @@ func resourceAzureImportActionRead(ctx context.Context, d *schema.ResourceData, 
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		azureKeyVaultPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPullsRetrieve(ctx, azureIntegrationID, importActionID).Execute()
+		azureKeyVaultPull, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultPullsRetrieve(ctx, azureIntegrationID, importActionID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAzureImportActionRead: error reading Azure import action %s", importActionName), r, err)
 		}
@@ -216,7 +216,7 @@ func resourceAzureImportActionUpdate(ctx context.Context, d *schema.ResourceData
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPullsPartialUpdate(ctx, azureIntegrationID,
+			_, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultPullsPartialUpdate(ctx, azureIntegrationID,
 				importActionID).PatchedAzureKeyVaultPull(patchedAzureKeyVaultPull).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceAzureImportActionUpdate: error updating Azure import action %s", importActionName), r, err)
@@ -243,7 +243,7 @@ func resourceAzureImportActionDelete(ctx context.Context, d *schema.ResourceData
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPullsDestroy(ctx, azureIntegrationID, importActionID).Execute()
+		r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultPullsDestroy(ctx, azureIntegrationID, importActionID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAzureImportActionDelete: error destroying Azure import action %s", importActionName), r, err)
 		}

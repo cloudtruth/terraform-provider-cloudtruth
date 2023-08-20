@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the AuditTrailSummary type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AuditTrailSummary{}
+
 // AuditTrailSummary struct for AuditTrailSummary
 type AuditTrailSummary struct {
 	// The earliest audit record timestamp available.
@@ -148,20 +151,20 @@ func (o *AuditTrailSummary) SetTotal(v int32) {
 }
 
 func (o AuditTrailSummary) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["earliest"] = o.Earliest.Get()
-	}
-	if true {
-		toSerialize["max_days"] = o.MaxDays
-	}
-	if true {
-		toSerialize["max_records"] = o.MaxRecords
-	}
-	if true {
-		toSerialize["total"] = o.Total
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AuditTrailSummary) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["earliest"] = o.Earliest.Get()
+	toSerialize["max_days"] = o.MaxDays
+	toSerialize["max_records"] = o.MaxRecords
+	toSerialize["total"] = o.Total
+	return toSerialize, nil
 }
 
 type NullableAuditTrailSummary struct {
@@ -199,3 +202,5 @@ func (v *NullableAuditTrailSummary) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

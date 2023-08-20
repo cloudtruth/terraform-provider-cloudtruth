@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the PatchedMembership type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedMembership{}
+
 // PatchedMembership struct for PatchedMembership
 type PatchedMembership struct {
 	Url *string `json:"url,omitempty"`
@@ -25,10 +28,9 @@ type PatchedMembership struct {
 	User *string `json:"user,omitempty"`
 	// The organization that the user is a member of.
 	Organization *string `json:"organization,omitempty"`
-	// The role that the user has in the organization.
-	Role       NullableRoleEnum `json:"role,omitempty"`
-	CreatedAt  *time.Time       `json:"created_at,omitempty"`
-	ModifiedAt *time.Time       `json:"modified_at,omitempty"`
+	Role *RoleEnum `json:"role,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 }
 
 // NewPatchedMembership instantiates a new PatchedMembership object
@@ -50,7 +52,7 @@ func NewPatchedMembershipWithDefaults() *PatchedMembership {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedMembership) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -60,7 +62,7 @@ func (o *PatchedMembership) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedMembership) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -68,7 +70,7 @@ func (o *PatchedMembership) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedMembership) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -82,7 +84,7 @@ func (o *PatchedMembership) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedMembership) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -92,7 +94,7 @@ func (o *PatchedMembership) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedMembership) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -100,7 +102,7 @@ func (o *PatchedMembership) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedMembership) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -114,7 +116,7 @@ func (o *PatchedMembership) SetId(v string) {
 
 // GetUser returns the User field value if set, zero value otherwise.
 func (o *PatchedMembership) GetUser() string {
-	if o == nil || o.User == nil {
+	if o == nil || IsNil(o.User) {
 		var ret string
 		return ret
 	}
@@ -124,7 +126,7 @@ func (o *PatchedMembership) GetUser() string {
 // GetUserOk returns a tuple with the User field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedMembership) GetUserOk() (*string, bool) {
-	if o == nil || o.User == nil {
+	if o == nil || IsNil(o.User) {
 		return nil, false
 	}
 	return o.User, true
@@ -132,7 +134,7 @@ func (o *PatchedMembership) GetUserOk() (*string, bool) {
 
 // HasUser returns a boolean if a field has been set.
 func (o *PatchedMembership) HasUser() bool {
-	if o != nil && o.User != nil {
+	if o != nil && !IsNil(o.User) {
 		return true
 	}
 
@@ -146,7 +148,7 @@ func (o *PatchedMembership) SetUser(v string) {
 
 // GetOrganization returns the Organization field value if set, zero value otherwise.
 func (o *PatchedMembership) GetOrganization() string {
-	if o == nil || o.Organization == nil {
+	if o == nil || IsNil(o.Organization) {
 		var ret string
 		return ret
 	}
@@ -156,7 +158,7 @@ func (o *PatchedMembership) GetOrganization() string {
 // GetOrganizationOk returns a tuple with the Organization field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedMembership) GetOrganizationOk() (*string, bool) {
-	if o == nil || o.Organization == nil {
+	if o == nil || IsNil(o.Organization) {
 		return nil, false
 	}
 	return o.Organization, true
@@ -164,7 +166,7 @@ func (o *PatchedMembership) GetOrganizationOk() (*string, bool) {
 
 // HasOrganization returns a boolean if a field has been set.
 func (o *PatchedMembership) HasOrganization() bool {
-	if o != nil && o.Organization != nil {
+	if o != nil && !IsNil(o.Organization) {
 		return true
 	}
 
@@ -176,52 +178,41 @@ func (o *PatchedMembership) SetOrganization(v string) {
 	o.Organization = &v
 }
 
-// GetRole returns the Role field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetRole returns the Role field value if set, zero value otherwise.
 func (o *PatchedMembership) GetRole() RoleEnum {
-	if o == nil || o.Role.Get() == nil {
+	if o == nil || IsNil(o.Role) {
 		var ret RoleEnum
 		return ret
 	}
-	return *o.Role.Get()
+	return *o.Role
 }
 
 // GetRoleOk returns a tuple with the Role field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PatchedMembership) GetRoleOk() (*RoleEnum, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Role) {
 		return nil, false
 	}
-	return o.Role.Get(), o.Role.IsSet()
+	return o.Role, true
 }
 
 // HasRole returns a boolean if a field has been set.
 func (o *PatchedMembership) HasRole() bool {
-	if o != nil && o.Role.IsSet() {
+	if o != nil && !IsNil(o.Role) {
 		return true
 	}
 
 	return false
 }
 
-// SetRole gets a reference to the given NullableRoleEnum and assigns it to the Role field.
+// SetRole gets a reference to the given RoleEnum and assigns it to the Role field.
 func (o *PatchedMembership) SetRole(v RoleEnum) {
-	o.Role.Set(&v)
-}
-
-// SetRoleNil sets the value for Role to be an explicit nil
-func (o *PatchedMembership) SetRoleNil() {
-	o.Role.Set(nil)
-}
-
-// UnsetRole ensures that no value is present for Role, not even an explicit nil
-func (o *PatchedMembership) UnsetRole() {
-	o.Role.Unset()
+	o.Role = &v
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedMembership) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -231,7 +222,7 @@ func (o *PatchedMembership) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedMembership) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -239,7 +230,7 @@ func (o *PatchedMembership) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *PatchedMembership) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -253,7 +244,7 @@ func (o *PatchedMembership) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *PatchedMembership) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -263,7 +254,7 @@ func (o *PatchedMembership) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedMembership) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -271,7 +262,7 @@ func (o *PatchedMembership) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedMembership) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -284,29 +275,37 @@ func (o *PatchedMembership) SetModifiedAt(v time.Time) {
 }
 
 func (o PatchedMembership) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
-		toSerialize["url"] = o.Url
-	}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if o.User != nil {
-		toSerialize["user"] = o.User
-	}
-	if o.Organization != nil {
-		toSerialize["organization"] = o.Organization
-	}
-	if o.Role.IsSet() {
-		toSerialize["role"] = o.Role.Get()
-	}
-	if o.CreatedAt != nil {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if o.ModifiedAt != nil {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PatchedMembership) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Url) {
+		toSerialize["url"] = o.Url
+	}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	if !IsNil(o.User) {
+		toSerialize["user"] = o.User
+	}
+	if !IsNil(o.Organization) {
+		toSerialize["organization"] = o.Organization
+	}
+	if !IsNil(o.Role) {
+		toSerialize["role"] = o.Role
+	}
+	if !IsNil(o.CreatedAt) {
+		toSerialize["created_at"] = o.CreatedAt
+	}
+	if !IsNil(o.ModifiedAt) {
+		toSerialize["modified_at"] = o.ModifiedAt
+	}
+	return toSerialize, nil
 }
 
 type NullablePatchedMembership struct {
@@ -344,3 +343,5 @@ func (v *NullablePatchedMembership) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

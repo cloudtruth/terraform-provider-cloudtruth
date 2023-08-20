@@ -21,25 +21,25 @@ type ObjectTypeEnum string
 
 // List of ObjectTypeEnum
 const (
-	OBJECTTYPEENUM_AWS_INTEGRATION     ObjectTypeEnum = "AwsIntegration"
-	OBJECTTYPEENUM_ENVIRONMENT         ObjectTypeEnum = "Environment"
+	OBJECTTYPEENUM_AWS_INTEGRATION ObjectTypeEnum = "AwsIntegration"
+	OBJECTTYPEENUM_ENVIRONMENT ObjectTypeEnum = "Environment"
 	OBJECTTYPEENUM_GIT_HUB_INTEGRATION ObjectTypeEnum = "GitHubIntegration"
-	OBJECTTYPEENUM_GRANT               ObjectTypeEnum = "Grant"
-	OBJECTTYPEENUM_INVITATION          ObjectTypeEnum = "Invitation"
-	OBJECTTYPEENUM_MEMBERSHIP          ObjectTypeEnum = "Membership"
-	OBJECTTYPEENUM_ORGANIZATION        ObjectTypeEnum = "Organization"
-	OBJECTTYPEENUM_PARAMETER           ObjectTypeEnum = "Parameter"
-	OBJECTTYPEENUM_PARAMETER_RULE      ObjectTypeEnum = "ParameterRule"
-	OBJECTTYPEENUM_PARAMETER_TYPE      ObjectTypeEnum = "ParameterType"
+	OBJECTTYPEENUM_GRANT ObjectTypeEnum = "Grant"
+	OBJECTTYPEENUM_INVITATION ObjectTypeEnum = "Invitation"
+	OBJECTTYPEENUM_MEMBERSHIP ObjectTypeEnum = "Membership"
+	OBJECTTYPEENUM_ORGANIZATION ObjectTypeEnum = "Organization"
+	OBJECTTYPEENUM_PARAMETER ObjectTypeEnum = "Parameter"
+	OBJECTTYPEENUM_PARAMETER_RULE ObjectTypeEnum = "ParameterRule"
+	OBJECTTYPEENUM_PARAMETER_TYPE ObjectTypeEnum = "ParameterType"
 	OBJECTTYPEENUM_PARAMETER_TYPE_RULE ObjectTypeEnum = "ParameterTypeRule"
-	OBJECTTYPEENUM_PROJECT             ObjectTypeEnum = "Project"
-	OBJECTTYPEENUM_PULL                ObjectTypeEnum = "Pull"
-	OBJECTTYPEENUM_PUSH                ObjectTypeEnum = "Push"
-	OBJECTTYPEENUM_SERVICE_ACCOUNT     ObjectTypeEnum = "ServiceAccount"
-	OBJECTTYPEENUM_TAG                 ObjectTypeEnum = "Tag"
-	OBJECTTYPEENUM_TASK                ObjectTypeEnum = "Task"
-	OBJECTTYPEENUM_TEMPLATE            ObjectTypeEnum = "Template"
-	OBJECTTYPEENUM_VALUE               ObjectTypeEnum = "Value"
+	OBJECTTYPEENUM_PROJECT ObjectTypeEnum = "Project"
+	OBJECTTYPEENUM_PULL ObjectTypeEnum = "Pull"
+	OBJECTTYPEENUM_PUSH ObjectTypeEnum = "Push"
+	OBJECTTYPEENUM_SERVICE_ACCOUNT ObjectTypeEnum = "ServiceAccount"
+	OBJECTTYPEENUM_TAG ObjectTypeEnum = "Tag"
+	OBJECTTYPEENUM_TASK ObjectTypeEnum = "Task"
+	OBJECTTYPEENUM_TEMPLATE ObjectTypeEnum = "Template"
+	OBJECTTYPEENUM_VALUE ObjectTypeEnum = "Value"
 )
 
 // All allowed values of ObjectTypeEnum enum
@@ -143,3 +143,4 @@ func (v *NullableObjectTypeEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+

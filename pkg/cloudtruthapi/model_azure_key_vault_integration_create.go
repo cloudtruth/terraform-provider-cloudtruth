@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the AzureKeyVaultIntegrationCreate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AzureKeyVaultIntegrationCreate{}
+
 // AzureKeyVaultIntegrationCreate struct for AzureKeyVaultIntegrationCreate
 type AzureKeyVaultIntegrationCreate struct {
 	// An optional description for the integration.
@@ -48,7 +51,7 @@ func NewAzureKeyVaultIntegrationCreateWithDefaults() *AzureKeyVaultIntegrationCr
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *AzureKeyVaultIntegrationCreate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -58,7 +61,7 @@ func (o *AzureKeyVaultIntegrationCreate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AzureKeyVaultIntegrationCreate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -66,7 +69,7 @@ func (o *AzureKeyVaultIntegrationCreate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *AzureKeyVaultIntegrationCreate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -80,7 +83,7 @@ func (o *AzureKeyVaultIntegrationCreate) SetDescription(v string) {
 
 // GetWritable returns the Writable field value if set, zero value otherwise.
 func (o *AzureKeyVaultIntegrationCreate) GetWritable() bool {
-	if o == nil || o.Writable == nil {
+	if o == nil || IsNil(o.Writable) {
 		var ret bool
 		return ret
 	}
@@ -90,7 +93,7 @@ func (o *AzureKeyVaultIntegrationCreate) GetWritable() bool {
 // GetWritableOk returns a tuple with the Writable field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AzureKeyVaultIntegrationCreate) GetWritableOk() (*bool, bool) {
-	if o == nil || o.Writable == nil {
+	if o == nil || IsNil(o.Writable) {
 		return nil, false
 	}
 	return o.Writable, true
@@ -98,7 +101,7 @@ func (o *AzureKeyVaultIntegrationCreate) GetWritableOk() (*bool, bool) {
 
 // HasWritable returns a boolean if a field has been set.
 func (o *AzureKeyVaultIntegrationCreate) HasWritable() bool {
-	if o != nil && o.Writable != nil {
+	if o != nil && !IsNil(o.Writable) {
 		return true
 	}
 
@@ -159,20 +162,24 @@ func (o *AzureKeyVaultIntegrationCreate) SetTenantId(v string) {
 }
 
 func (o AzureKeyVaultIntegrationCreate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Writable != nil {
-		toSerialize["writable"] = o.Writable
-	}
-	if true {
-		toSerialize["vault_name"] = o.VaultName
-	}
-	if true {
-		toSerialize["tenant_id"] = o.TenantId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AzureKeyVaultIntegrationCreate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Writable) {
+		toSerialize["writable"] = o.Writable
+	}
+	toSerialize["vault_name"] = o.VaultName
+	toSerialize["tenant_id"] = o.TenantId
+	return toSerialize, nil
 }
 
 type NullableAzureKeyVaultIntegrationCreate struct {
@@ -210,3 +217,5 @@ func (v *NullableAzureKeyVaultIntegrationCreate) UnmarshalJSON(src []byte) error
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

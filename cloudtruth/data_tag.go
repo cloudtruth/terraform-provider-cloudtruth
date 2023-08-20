@@ -71,7 +71,7 @@ func dataCloudTruthTagRead(ctx context.Context, d *schema.ResourceData, meta any
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		if searchByName {
-			tagList, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsList(ctx, *envID).Name(nameOrID).Execute()
+			tagList, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsTagsList(ctx, *envID).Name(nameOrID).Execute()
 			// There should only be one tag per environment
 			if tagList.GetCount() != 1 {
 				err := fmt.Errorf("expected 1 value for tag %s, found %d instead",
@@ -81,7 +81,7 @@ func dataCloudTruthTagRead(ctx context.Context, d *schema.ResourceData, meta any
 			tag = &tagList.GetResults()[0]
 			tagID = tag.GetId()
 		} else {
-			tag, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsRetrieve(ctx, *envID, tagID).Execute()
+			tag, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsTagsRetrieve(ctx, *envID, tagID).Execute()
 		}
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("dataCloudTruthTagRead: error reading tag %s", nameOrID), r, err)

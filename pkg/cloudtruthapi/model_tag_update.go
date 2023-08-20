@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the TagUpdate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TagUpdate{}
+
 // TagUpdate Details for updating a tag.
 type TagUpdate struct {
 	// A unique identifier for the tag.
@@ -97,7 +100,7 @@ func (o *TagUpdate) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *TagUpdate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -107,7 +110,7 @@ func (o *TagUpdate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TagUpdate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -115,7 +118,7 @@ func (o *TagUpdate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *TagUpdate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -129,7 +132,7 @@ func (o *TagUpdate) SetDescription(v string) {
 
 // GetTimestamp returns the Timestamp field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *TagUpdate) GetTimestamp() time.Time {
-	if o == nil || o.Timestamp.Get() == nil {
+	if o == nil || IsNil(o.Timestamp.Get()) {
 		var ret time.Time
 		return ret
 	}
@@ -159,7 +162,6 @@ func (o *TagUpdate) HasTimestamp() bool {
 func (o *TagUpdate) SetTimestamp(v time.Time) {
 	o.Timestamp.Set(&v)
 }
-
 // SetTimestampNil sets the value for Timestamp to be an explicit nil
 func (o *TagUpdate) SetTimestampNil() {
 	o.Timestamp.Set(nil)
@@ -171,20 +173,24 @@ func (o *TagUpdate) UnsetTimestamp() {
 }
 
 func (o TagUpdate) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o TagUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
 	if o.Timestamp.IsSet() {
 		toSerialize["timestamp"] = o.Timestamp.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableTagUpdate struct {
@@ -222,3 +228,5 @@ func (v *NullableTagUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -21,9 +21,9 @@ type AwsServiceEnum string
 
 // List of AwsServiceEnum
 const (
-	AWSSERVICEENUM_S3             AwsServiceEnum = "s3"
+	AWSSERVICEENUM_S3 AwsServiceEnum = "s3"
 	AWSSERVICEENUM_SECRETSMANAGER AwsServiceEnum = "secretsmanager"
-	AWSSERVICEENUM_SSM            AwsServiceEnum = "ssm"
+	AWSSERVICEENUM_SSM AwsServiceEnum = "ssm"
 )
 
 // All allowed values of AwsServiceEnum enum
@@ -111,3 +111,4 @@ func (v *NullableAwsServiceEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+

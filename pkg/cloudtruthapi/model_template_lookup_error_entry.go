@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the TemplateLookupErrorEntry type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TemplateLookupErrorEntry{}
+
 // TemplateLookupErrorEntry struct for TemplateLookupErrorEntry
 type TemplateLookupErrorEntry struct {
 	// The parameter id.
@@ -145,20 +148,20 @@ func (o *TemplateLookupErrorEntry) SetErrorDetail(v string) {
 }
 
 func (o TemplateLookupErrorEntry) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["parameter_id"] = o.ParameterId
-	}
-	if true {
-		toSerialize["parameter_name"] = o.ParameterName
-	}
-	if true {
-		toSerialize["error_code"] = o.ErrorCode
-	}
-	if true {
-		toSerialize["error_detail"] = o.ErrorDetail
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TemplateLookupErrorEntry) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["parameter_id"] = o.ParameterId
+	toSerialize["parameter_name"] = o.ParameterName
+	toSerialize["error_code"] = o.ErrorCode
+	toSerialize["error_detail"] = o.ErrorDetail
+	return toSerialize, nil
 }
 
 type NullableTemplateLookupErrorEntry struct {
@@ -196,3 +199,5 @@ func (v *NullableTemplateLookupErrorEntry) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

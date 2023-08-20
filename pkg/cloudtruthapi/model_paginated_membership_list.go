@@ -15,12 +15,15 @@ import (
 	"encoding/json"
 )
 
+// checks if the PaginatedMembershipList type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PaginatedMembershipList{}
+
 // PaginatedMembershipList struct for PaginatedMembershipList
 type PaginatedMembershipList struct {
-	Count    *int32         `json:"count,omitempty"`
-	Next     NullableString `json:"next,omitempty"`
+	Count *int32 `json:"count,omitempty"`
+	Next NullableString `json:"next,omitempty"`
 	Previous NullableString `json:"previous,omitempty"`
-	Results  []Membership   `json:"results,omitempty"`
+	Results []Membership `json:"results,omitempty"`
 }
 
 // NewPaginatedMembershipList instantiates a new PaginatedMembershipList object
@@ -42,7 +45,7 @@ func NewPaginatedMembershipListWithDefaults() *PaginatedMembershipList {
 
 // GetCount returns the Count field value if set, zero value otherwise.
 func (o *PaginatedMembershipList) GetCount() int32 {
-	if o == nil || o.Count == nil {
+	if o == nil || IsNil(o.Count) {
 		var ret int32
 		return ret
 	}
@@ -52,7 +55,7 @@ func (o *PaginatedMembershipList) GetCount() int32 {
 // GetCountOk returns a tuple with the Count field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PaginatedMembershipList) GetCountOk() (*int32, bool) {
-	if o == nil || o.Count == nil {
+	if o == nil || IsNil(o.Count) {
 		return nil, false
 	}
 	return o.Count, true
@@ -60,7 +63,7 @@ func (o *PaginatedMembershipList) GetCountOk() (*int32, bool) {
 
 // HasCount returns a boolean if a field has been set.
 func (o *PaginatedMembershipList) HasCount() bool {
-	if o != nil && o.Count != nil {
+	if o != nil && !IsNil(o.Count) {
 		return true
 	}
 
@@ -74,7 +77,7 @@ func (o *PaginatedMembershipList) SetCount(v int32) {
 
 // GetNext returns the Next field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PaginatedMembershipList) GetNext() string {
-	if o == nil || o.Next.Get() == nil {
+	if o == nil || IsNil(o.Next.Get()) {
 		var ret string
 		return ret
 	}
@@ -104,7 +107,6 @@ func (o *PaginatedMembershipList) HasNext() bool {
 func (o *PaginatedMembershipList) SetNext(v string) {
 	o.Next.Set(&v)
 }
-
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedMembershipList) SetNextNil() {
 	o.Next.Set(nil)
@@ -117,7 +119,7 @@ func (o *PaginatedMembershipList) UnsetNext() {
 
 // GetPrevious returns the Previous field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PaginatedMembershipList) GetPrevious() string {
-	if o == nil || o.Previous.Get() == nil {
+	if o == nil || IsNil(o.Previous.Get()) {
 		var ret string
 		return ret
 	}
@@ -147,7 +149,6 @@ func (o *PaginatedMembershipList) HasPrevious() bool {
 func (o *PaginatedMembershipList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
-
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedMembershipList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -160,7 +161,7 @@ func (o *PaginatedMembershipList) UnsetPrevious() {
 
 // GetResults returns the Results field value if set, zero value otherwise.
 func (o *PaginatedMembershipList) GetResults() []Membership {
-	if o == nil || o.Results == nil {
+	if o == nil || IsNil(o.Results) {
 		var ret []Membership
 		return ret
 	}
@@ -170,7 +171,7 @@ func (o *PaginatedMembershipList) GetResults() []Membership {
 // GetResultsOk returns a tuple with the Results field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PaginatedMembershipList) GetResultsOk() ([]Membership, bool) {
-	if o == nil || o.Results == nil {
+	if o == nil || IsNil(o.Results) {
 		return nil, false
 	}
 	return o.Results, true
@@ -178,7 +179,7 @@ func (o *PaginatedMembershipList) GetResultsOk() ([]Membership, bool) {
 
 // HasResults returns a boolean if a field has been set.
 func (o *PaginatedMembershipList) HasResults() bool {
-	if o != nil && o.Results != nil {
+	if o != nil && !IsNil(o.Results) {
 		return true
 	}
 
@@ -191,8 +192,16 @@ func (o *PaginatedMembershipList) SetResults(v []Membership) {
 }
 
 func (o PaginatedMembershipList) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PaginatedMembershipList) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Count != nil {
+	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
 	if o.Next.IsSet() {
@@ -201,10 +210,10 @@ func (o PaginatedMembershipList) MarshalJSON() ([]byte, error) {
 	if o.Previous.IsSet() {
 		toSerialize["previous"] = o.Previous.Get()
 	}
-	if o.Results != nil {
+	if !IsNil(o.Results) {
 		toSerialize["results"] = o.Results
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePaginatedMembershipList struct {
@@ -242,3 +251,5 @@ func (v *NullablePaginatedMembershipList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

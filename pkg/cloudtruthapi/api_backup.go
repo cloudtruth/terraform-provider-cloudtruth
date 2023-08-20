@@ -14,17 +14,18 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 )
 
-// BackupApiService BackupApi service
-type BackupApiService service
+
+// BackupAPIService BackupAPI service
+type BackupAPIService service
 
 type ApiBackupSnapshotCreateRequest struct {
-	ctx        context.Context
-	ApiService *BackupApiService
+	ctx context.Context
+	ApiService *BackupAPIService
 }
 
 func (r ApiBackupSnapshotCreateRequest) Execute() (*BackupDataSnapshot, *http.Response, error) {
@@ -34,28 +35,27 @@ func (r ApiBackupSnapshotCreateRequest) Execute() (*BackupDataSnapshot, *http.Re
 /*
 BackupSnapshotCreate Get a snapshot of all Projects with parameters
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiBackupSnapshotCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiBackupSnapshotCreateRequest
 */
-func (a *BackupApiService) BackupSnapshotCreate(ctx context.Context) ApiBackupSnapshotCreateRequest {
+func (a *BackupAPIService) BackupSnapshotCreate(ctx context.Context) ApiBackupSnapshotCreateRequest {
 	return ApiBackupSnapshotCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return BackupDataSnapshot
-func (a *BackupApiService) BackupSnapshotCreateExecute(r ApiBackupSnapshotCreateRequest) (*BackupDataSnapshot, *http.Response, error) {
+//  @return BackupDataSnapshot
+func (a *BackupAPIService) BackupSnapshotCreateExecute(r ApiBackupSnapshotCreateRequest) (*BackupDataSnapshot, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *BackupDataSnapshot
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *BackupDataSnapshot
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BackupApiService.BackupSnapshotCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BackupAPIService.BackupSnapshotCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -121,9 +121,9 @@ func (a *BackupApiService) BackupSnapshotCreateExecute(r ApiBackupSnapshotCreate
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

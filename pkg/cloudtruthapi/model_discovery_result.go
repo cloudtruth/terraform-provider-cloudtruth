@@ -15,10 +15,13 @@ import (
 	"encoding/json"
 )
 
+// checks if the DiscoveryResult type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &DiscoveryResult{}
+
 // DiscoveryResult struct for DiscoveryResult
 type DiscoveryResult struct {
 	Matched map[string]DiscoveredContent `json:"matched"`
-	Skipped map[string]string            `json:"skipped"`
+	Skipped map[string]string `json:"skipped"`
 }
 
 // NewDiscoveryResult instantiates a new DiscoveryResult object
@@ -89,14 +92,18 @@ func (o *DiscoveryResult) SetSkipped(v map[string]string) {
 }
 
 func (o DiscoveryResult) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["matched"] = o.Matched
-	}
-	if true {
-		toSerialize["skipped"] = o.Skipped
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o DiscoveryResult) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["matched"] = o.Matched
+	toSerialize["skipped"] = o.Skipped
+	return toSerialize, nil
 }
 
 type NullableDiscoveryResult struct {
@@ -134,3 +141,5 @@ func (v *NullableDiscoveryResult) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

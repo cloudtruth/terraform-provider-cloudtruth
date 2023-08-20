@@ -14,24 +14,25 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 )
 
-// UtilsApiService UtilsApi service
-type UtilsApiService service
+
+// UtilsAPIService UtilsAPI service
+type UtilsAPIService service
 
 type ApiUtilsGeneratePasswordCreateRequest struct {
-	ctx                       context.Context
-	ApiService                *UtilsApiService
-	length                    *int32
+	ctx context.Context
+	ApiService *UtilsAPIService
+	length *int32
 	requireHardwareGeneration *bool
-	requireLowercase          *bool
-	requireNumbers            *bool
-	requireSpaces             *bool
-	requireSymbols            *bool
-	requireUppercase          *bool
+	requireLowercase *bool
+	requireNumbers *bool
+	requireSpaces *bool
+	requireSymbols *bool
+	requireUppercase *bool
 }
 
 // The length of the password to generate.  Minimum of 8, maximum of 4095.
@@ -85,28 +86,27 @@ UtilsGeneratePasswordCreate Get a randomly generated password using AWS Secrets 
 
 Endpoint for accessing utility functions
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUtilsGeneratePasswordCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiUtilsGeneratePasswordCreateRequest
 */
-func (a *UtilsApiService) UtilsGeneratePasswordCreate(ctx context.Context) ApiUtilsGeneratePasswordCreateRequest {
+func (a *UtilsAPIService) UtilsGeneratePasswordCreate(ctx context.Context) ApiUtilsGeneratePasswordCreateRequest {
 	return ApiUtilsGeneratePasswordCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GeneratedPasswordResponse
-func (a *UtilsApiService) UtilsGeneratePasswordCreateExecute(r ApiUtilsGeneratePasswordCreateRequest) (*GeneratedPasswordResponse, *http.Response, error) {
+//  @return GeneratedPasswordResponse
+func (a *UtilsAPIService) UtilsGeneratePasswordCreateExecute(r ApiUtilsGeneratePasswordCreateRequest) (*GeneratedPasswordResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GeneratedPasswordResponse
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GeneratedPasswordResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UtilsApiService.UtilsGeneratePasswordCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UtilsAPIService.UtilsGeneratePasswordCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -120,24 +120,24 @@ func (a *UtilsApiService) UtilsGeneratePasswordCreateExecute(r ApiUtilsGenerateP
 		return localVarReturnValue, nil, reportError("length is required and must be specified")
 	}
 
-	localVarQueryParams.Add("length", parameterToString(*r.length, ""))
+	parameterAddToHeaderOrQuery(localVarQueryParams, "length", r.length, "")
 	if r.requireHardwareGeneration != nil {
-		localVarQueryParams.Add("require_hardware_generation", parameterToString(*r.requireHardwareGeneration, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "require_hardware_generation", r.requireHardwareGeneration, "")
 	}
 	if r.requireLowercase != nil {
-		localVarQueryParams.Add("require_lowercase", parameterToString(*r.requireLowercase, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "require_lowercase", r.requireLowercase, "")
 	}
 	if r.requireNumbers != nil {
-		localVarQueryParams.Add("require_numbers", parameterToString(*r.requireNumbers, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "require_numbers", r.requireNumbers, "")
 	}
 	if r.requireSpaces != nil {
-		localVarQueryParams.Add("require_spaces", parameterToString(*r.requireSpaces, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "require_spaces", r.requireSpaces, "")
 	}
 	if r.requireSymbols != nil {
-		localVarQueryParams.Add("require_symbols", parameterToString(*r.requireSymbols, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "require_symbols", r.requireSymbols, "")
 	}
 	if r.requireUppercase != nil {
-		localVarQueryParams.Add("require_uppercase", parameterToString(*r.requireUppercase, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "require_uppercase", r.requireUppercase, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -194,9 +194,9 @@ func (a *UtilsApiService) UtilsGeneratePasswordCreateExecute(r ApiUtilsGenerateP
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

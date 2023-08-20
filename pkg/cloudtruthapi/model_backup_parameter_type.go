@@ -15,12 +15,15 @@ import (
 	"encoding/json"
 )
 
+// checks if the BackupParameterType type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BackupParameterType{}
+
 // BackupParameterType Parameter type (and rule) data at a point in time.
 type BackupParameterType struct {
-	Rules       map[string]BackupParameterRule `json:"rules"`
-	Name        string                         `json:"name"`
-	Parent      string                         `json:"parent"`
-	Description NullableString                 `json:"description,omitempty"`
+	Rules map[string]BackupParameterRule `json:"rules"`
+	Name string `json:"name"`
+	Parent string `json:"parent"`
+	Description NullableString `json:"description,omitempty"`
 }
 
 // NewBackupParameterType instantiates a new BackupParameterType object
@@ -117,7 +120,7 @@ func (o *BackupParameterType) SetParent(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *BackupParameterType) GetDescription() string {
-	if o == nil || o.Description.Get() == nil {
+	if o == nil || IsNil(o.Description.Get()) {
 		var ret string
 		return ret
 	}
@@ -147,7 +150,6 @@ func (o *BackupParameterType) HasDescription() bool {
 func (o *BackupParameterType) SetDescription(v string) {
 	o.Description.Set(&v)
 }
-
 // SetDescriptionNil sets the value for Description to be an explicit nil
 func (o *BackupParameterType) SetDescriptionNil() {
 	o.Description.Set(nil)
@@ -159,20 +161,22 @@ func (o *BackupParameterType) UnsetDescription() {
 }
 
 func (o BackupParameterType) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o BackupParameterType) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["rules"] = o.Rules
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["parent"] = o.Parent
-	}
+	toSerialize["rules"] = o.Rules
+	toSerialize["name"] = o.Name
+	toSerialize["parent"] = o.Parent
 	if o.Description.IsSet() {
 		toSerialize["description"] = o.Description.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableBackupParameterType struct {
@@ -210,3 +214,5 @@ func (v *NullableBackupParameterType) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

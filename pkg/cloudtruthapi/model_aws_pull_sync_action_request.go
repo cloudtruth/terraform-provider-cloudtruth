@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the AwsPullSyncActionRequest type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AwsPullSyncActionRequest{}
+
 // AwsPullSyncActionRequest struct for AwsPullSyncActionRequest
 type AwsPullSyncActionRequest struct {
 	// Allows you to set the dry_run flag on the pull action before triggering a sync.
@@ -40,7 +43,7 @@ func NewAwsPullSyncActionRequestWithDefaults() *AwsPullSyncActionRequest {
 
 // GetDryRun returns the DryRun field value if set, zero value otherwise.
 func (o *AwsPullSyncActionRequest) GetDryRun() bool {
-	if o == nil || o.DryRun == nil {
+	if o == nil || IsNil(o.DryRun) {
 		var ret bool
 		return ret
 	}
@@ -50,7 +53,7 @@ func (o *AwsPullSyncActionRequest) GetDryRun() bool {
 // GetDryRunOk returns a tuple with the DryRun field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AwsPullSyncActionRequest) GetDryRunOk() (*bool, bool) {
-	if o == nil || o.DryRun == nil {
+	if o == nil || IsNil(o.DryRun) {
 		return nil, false
 	}
 	return o.DryRun, true
@@ -58,7 +61,7 @@ func (o *AwsPullSyncActionRequest) GetDryRunOk() (*bool, bool) {
 
 // HasDryRun returns a boolean if a field has been set.
 func (o *AwsPullSyncActionRequest) HasDryRun() bool {
-	if o != nil && o.DryRun != nil {
+	if o != nil && !IsNil(o.DryRun) {
 		return true
 	}
 
@@ -71,11 +74,19 @@ func (o *AwsPullSyncActionRequest) SetDryRun(v bool) {
 }
 
 func (o AwsPullSyncActionRequest) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.DryRun != nil {
-		toSerialize["dry_run"] = o.DryRun
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AwsPullSyncActionRequest) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.DryRun) {
+		toSerialize["dry_run"] = o.DryRun
+	}
+	return toSerialize, nil
 }
 
 type NullableAwsPullSyncActionRequest struct {
@@ -113,3 +124,5 @@ func (v *NullableAwsPullSyncActionRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+
