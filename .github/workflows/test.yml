@@ -5,9 +5,6 @@ on:
   schedule:
      - cron: '0 13 * * *'
 
-env:
-  GO_VERSION: 1.21
-
 jobs:
   build:
     name: Build and lint
@@ -17,7 +14,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: $GO_VERSION
+        go-version: '>=1.21.0'
         check-latest: true
         cache: false
       id: go
@@ -48,7 +45,7 @@ jobs:
     steps:
       - uses: actions/setup-go@v4
         with:
-          go-version: $GO_VERSION
+          go-version: '>=1.21.0'
           check-latest: true
           cache: false
       - uses: actions/checkout@v3
@@ -75,7 +72,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: $GO_VERSION
+        go-version: '>=1.21.0'
         check-latest: true
         cache: false
       id: go
