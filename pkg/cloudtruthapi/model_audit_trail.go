@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the AuditTrail type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AuditTrail{}
+
 // AuditTrail struct for AuditTrail
 type AuditTrail struct {
 	Url string `json:"url"`
@@ -27,18 +30,17 @@ type AuditTrail struct {
 	ObjectId string `json:"object_id"`
 	// The name of the object associated with the action, if applicable.
 	ObjectName string `json:"object_name"`
-	// The type of object associated with the action.
-	ObjectType NullableObjectTypeEnum `json:"object_type"`
+	ObjectType ObjectTypeEnum `json:"object_type"`
 	// The timestamp of the activity that was audited.
-	Timestamp time.Time      `json:"timestamp"`
-	User      AuditTrailUser `json:"user"`
+	Timestamp time.Time `json:"timestamp"`
+	User AuditTrailUser `json:"user"`
 }
 
 // NewAuditTrail instantiates a new AuditTrail object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAuditTrail(url string, id string, action string, objectId string, objectName string, objectType NullableObjectTypeEnum, timestamp time.Time, user AuditTrailUser) *AuditTrail {
+func NewAuditTrail(url string, id string, action string, objectId string, objectName string, objectType ObjectTypeEnum, timestamp time.Time, user AuditTrailUser) *AuditTrail {
 	this := AuditTrail{}
 	this.Url = url
 	this.Id = id
@@ -180,29 +182,27 @@ func (o *AuditTrail) SetObjectName(v string) {
 }
 
 // GetObjectType returns the ObjectType field value
-// If the value is explicit nil, the zero value for ObjectTypeEnum will be returned
 func (o *AuditTrail) GetObjectType() ObjectTypeEnum {
-	if o == nil || o.ObjectType.Get() == nil {
+	if o == nil {
 		var ret ObjectTypeEnum
 		return ret
 	}
 
-	return *o.ObjectType.Get()
+	return o.ObjectType
 }
 
 // GetObjectTypeOk returns a tuple with the ObjectType field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *AuditTrail) GetObjectTypeOk() (*ObjectTypeEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.ObjectType.Get(), o.ObjectType.IsSet()
+	return &o.ObjectType, true
 }
 
 // SetObjectType sets field value
 func (o *AuditTrail) SetObjectType(v ObjectTypeEnum) {
-	o.ObjectType.Set(&v)
+	o.ObjectType = v
 }
 
 // GetTimestamp returns the Timestamp field value
@@ -254,32 +254,24 @@ func (o *AuditTrail) SetUser(v AuditTrailUser) {
 }
 
 func (o AuditTrail) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["action"] = o.Action
-	}
-	if true {
-		toSerialize["object_id"] = o.ObjectId
-	}
-	if true {
-		toSerialize["object_name"] = o.ObjectName
-	}
-	if true {
-		toSerialize["object_type"] = o.ObjectType.Get()
-	}
-	if true {
-		toSerialize["timestamp"] = o.Timestamp
-	}
-	if true {
-		toSerialize["user"] = o.User
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o AuditTrail) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["action"] = o.Action
+	toSerialize["object_id"] = o.ObjectId
+	toSerialize["object_name"] = o.ObjectName
+	toSerialize["object_type"] = o.ObjectType
+	toSerialize["timestamp"] = o.Timestamp
+	toSerialize["user"] = o.User
+	return toSerialize, nil
 }
 
 type NullableAuditTrail struct {
@@ -317,3 +309,5 @@ func (v *NullableAuditTrail) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the PatchedTagUpdate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedTagUpdate{}
+
 // PatchedTagUpdate Details for updating a tag.
 type PatchedTagUpdate struct {
 	// A unique identifier for the tag.
@@ -47,7 +50,7 @@ func NewPatchedTagUpdateWithDefaults() *PatchedTagUpdate {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedTagUpdate) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -57,7 +60,7 @@ func (o *PatchedTagUpdate) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTagUpdate) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -65,7 +68,7 @@ func (o *PatchedTagUpdate) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedTagUpdate) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -79,7 +82,7 @@ func (o *PatchedTagUpdate) SetId(v string) {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *PatchedTagUpdate) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -89,7 +92,7 @@ func (o *PatchedTagUpdate) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTagUpdate) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -97,7 +100,7 @@ func (o *PatchedTagUpdate) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *PatchedTagUpdate) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -111,7 +114,7 @@ func (o *PatchedTagUpdate) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *PatchedTagUpdate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -121,7 +124,7 @@ func (o *PatchedTagUpdate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedTagUpdate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -129,7 +132,7 @@ func (o *PatchedTagUpdate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *PatchedTagUpdate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -143,7 +146,7 @@ func (o *PatchedTagUpdate) SetDescription(v string) {
 
 // GetTimestamp returns the Timestamp field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedTagUpdate) GetTimestamp() time.Time {
-	if o == nil || o.Timestamp.Get() == nil {
+	if o == nil || IsNil(o.Timestamp.Get()) {
 		var ret time.Time
 		return ret
 	}
@@ -173,7 +176,6 @@ func (o *PatchedTagUpdate) HasTimestamp() bool {
 func (o *PatchedTagUpdate) SetTimestamp(v time.Time) {
 	o.Timestamp.Set(&v)
 }
-
 // SetTimestampNil sets the value for Timestamp to be an explicit nil
 func (o *PatchedTagUpdate) SetTimestampNil() {
 	o.Timestamp.Set(nil)
@@ -185,20 +187,28 @@ func (o *PatchedTagUpdate) UnsetTimestamp() {
 }
 
 func (o PatchedTagUpdate) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PatchedTagUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Id != nil {
+	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
-	if o.Name != nil {
+	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
-	if o.Description != nil {
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
 	if o.Timestamp.IsSet() {
 		toSerialize["timestamp"] = o.Timestamp.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePatchedTagUpdate struct {
@@ -236,3 +246,5 @@ func (v *NullablePatchedTagUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

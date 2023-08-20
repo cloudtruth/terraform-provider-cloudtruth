@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ValueCreate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ValueCreate{}
+
 // ValueCreate A value for a parameter in a given environment.
 type ValueCreate struct {
 	// The environment this value is set in.
@@ -75,7 +78,7 @@ func (o *ValueCreate) SetEnvironment(v string) {
 
 // GetExternal returns the External field value if set, zero value otherwise.
 func (o *ValueCreate) GetExternal() bool {
-	if o == nil || o.External == nil {
+	if o == nil || IsNil(o.External) {
 		var ret bool
 		return ret
 	}
@@ -85,7 +88,7 @@ func (o *ValueCreate) GetExternal() bool {
 // GetExternalOk returns a tuple with the External field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ValueCreate) GetExternalOk() (*bool, bool) {
-	if o == nil || o.External == nil {
+	if o == nil || IsNil(o.External) {
 		return nil, false
 	}
 	return o.External, true
@@ -93,7 +96,7 @@ func (o *ValueCreate) GetExternalOk() (*bool, bool) {
 
 // HasExternal returns a boolean if a field has been set.
 func (o *ValueCreate) HasExternal() bool {
-	if o != nil && o.External != nil {
+	if o != nil && !IsNil(o.External) {
 		return true
 	}
 
@@ -107,7 +110,7 @@ func (o *ValueCreate) SetExternal(v bool) {
 
 // GetExternalFqn returns the ExternalFqn field value if set, zero value otherwise.
 func (o *ValueCreate) GetExternalFqn() string {
-	if o == nil || o.ExternalFqn == nil {
+	if o == nil || IsNil(o.ExternalFqn) {
 		var ret string
 		return ret
 	}
@@ -117,7 +120,7 @@ func (o *ValueCreate) GetExternalFqn() string {
 // GetExternalFqnOk returns a tuple with the ExternalFqn field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ValueCreate) GetExternalFqnOk() (*string, bool) {
-	if o == nil || o.ExternalFqn == nil {
+	if o == nil || IsNil(o.ExternalFqn) {
 		return nil, false
 	}
 	return o.ExternalFqn, true
@@ -125,7 +128,7 @@ func (o *ValueCreate) GetExternalFqnOk() (*string, bool) {
 
 // HasExternalFqn returns a boolean if a field has been set.
 func (o *ValueCreate) HasExternalFqn() bool {
-	if o != nil && o.ExternalFqn != nil {
+	if o != nil && !IsNil(o.ExternalFqn) {
 		return true
 	}
 
@@ -139,7 +142,7 @@ func (o *ValueCreate) SetExternalFqn(v string) {
 
 // GetExternalFilter returns the ExternalFilter field value if set, zero value otherwise.
 func (o *ValueCreate) GetExternalFilter() string {
-	if o == nil || o.ExternalFilter == nil {
+	if o == nil || IsNil(o.ExternalFilter) {
 		var ret string
 		return ret
 	}
@@ -149,7 +152,7 @@ func (o *ValueCreate) GetExternalFilter() string {
 // GetExternalFilterOk returns a tuple with the ExternalFilter field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ValueCreate) GetExternalFilterOk() (*string, bool) {
-	if o == nil || o.ExternalFilter == nil {
+	if o == nil || IsNil(o.ExternalFilter) {
 		return nil, false
 	}
 	return o.ExternalFilter, true
@@ -157,7 +160,7 @@ func (o *ValueCreate) GetExternalFilterOk() (*string, bool) {
 
 // HasExternalFilter returns a boolean if a field has been set.
 func (o *ValueCreate) HasExternalFilter() bool {
-	if o != nil && o.ExternalFilter != nil {
+	if o != nil && !IsNil(o.ExternalFilter) {
 		return true
 	}
 
@@ -171,7 +174,7 @@ func (o *ValueCreate) SetExternalFilter(v string) {
 
 // GetInternalValue returns the InternalValue field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *ValueCreate) GetInternalValue() string {
-	if o == nil || o.InternalValue.Get() == nil {
+	if o == nil || IsNil(o.InternalValue.Get()) {
 		var ret string
 		return ret
 	}
@@ -201,7 +204,6 @@ func (o *ValueCreate) HasInternalValue() bool {
 func (o *ValueCreate) SetInternalValue(v string) {
 	o.InternalValue.Set(&v)
 }
-
 // SetInternalValueNil sets the value for InternalValue to be an explicit nil
 func (o *ValueCreate) SetInternalValueNil() {
 	o.InternalValue.Set(nil)
@@ -214,7 +216,7 @@ func (o *ValueCreate) UnsetInternalValue() {
 
 // GetInterpolated returns the Interpolated field value if set, zero value otherwise.
 func (o *ValueCreate) GetInterpolated() bool {
-	if o == nil || o.Interpolated == nil {
+	if o == nil || IsNil(o.Interpolated) {
 		var ret bool
 		return ret
 	}
@@ -224,7 +226,7 @@ func (o *ValueCreate) GetInterpolated() bool {
 // GetInterpolatedOk returns a tuple with the Interpolated field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ValueCreate) GetInterpolatedOk() (*bool, bool) {
-	if o == nil || o.Interpolated == nil {
+	if o == nil || IsNil(o.Interpolated) {
 		return nil, false
 	}
 	return o.Interpolated, true
@@ -232,7 +234,7 @@ func (o *ValueCreate) GetInterpolatedOk() (*bool, bool) {
 
 // HasInterpolated returns a boolean if a field has been set.
 func (o *ValueCreate) HasInterpolated() bool {
-	if o != nil && o.Interpolated != nil {
+	if o != nil && !IsNil(o.Interpolated) {
 		return true
 	}
 
@@ -245,26 +247,32 @@ func (o *ValueCreate) SetInterpolated(v bool) {
 }
 
 func (o ValueCreate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["environment"] = o.Environment
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
-	if o.External != nil {
+	return json.Marshal(toSerialize)
+}
+
+func (o ValueCreate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["environment"] = o.Environment
+	if !IsNil(o.External) {
 		toSerialize["external"] = o.External
 	}
-	if o.ExternalFqn != nil {
+	if !IsNil(o.ExternalFqn) {
 		toSerialize["external_fqn"] = o.ExternalFqn
 	}
-	if o.ExternalFilter != nil {
+	if !IsNil(o.ExternalFilter) {
 		toSerialize["external_filter"] = o.ExternalFilter
 	}
 	if o.InternalValue.IsSet() {
 		toSerialize["internal_value"] = o.InternalValue.Get()
 	}
-	if o.Interpolated != nil {
+	if !IsNil(o.Interpolated) {
 		toSerialize["interpolated"] = o.Interpolated
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableValueCreate struct {
@@ -302,3 +310,5 @@ func (v *NullableValueCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

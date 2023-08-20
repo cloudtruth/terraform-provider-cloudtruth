@@ -16,13 +16,16 @@ import (
 	"time"
 )
 
+// checks if the ParameterTimeline type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ParameterTimeline{}
+
 // ParameterTimeline struct for ParameterTimeline
 type ParameterTimeline struct {
 	// The number of records in this response.
 	Count int32 `json:"count"`
 	// If present, additional history can be retrieved using this timestamp in the next call for the as_of query parameter value.
-	NextAsOf *time.Time               `json:"next_as_of,omitempty"`
-	Results  []ParameterTimelineEntry `json:"results"`
+	NextAsOf *time.Time `json:"next_as_of,omitempty"`
+	Results []ParameterTimelineEntry `json:"results"`
 }
 
 // NewParameterTimeline instantiates a new ParameterTimeline object
@@ -70,7 +73,7 @@ func (o *ParameterTimeline) SetCount(v int32) {
 
 // GetNextAsOf returns the NextAsOf field value if set, zero value otherwise.
 func (o *ParameterTimeline) GetNextAsOf() time.Time {
-	if o == nil || o.NextAsOf == nil {
+	if o == nil || IsNil(o.NextAsOf) {
 		var ret time.Time
 		return ret
 	}
@@ -80,7 +83,7 @@ func (o *ParameterTimeline) GetNextAsOf() time.Time {
 // GetNextAsOfOk returns a tuple with the NextAsOf field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ParameterTimeline) GetNextAsOfOk() (*time.Time, bool) {
-	if o == nil || o.NextAsOf == nil {
+	if o == nil || IsNil(o.NextAsOf) {
 		return nil, false
 	}
 	return o.NextAsOf, true
@@ -88,7 +91,7 @@ func (o *ParameterTimeline) GetNextAsOfOk() (*time.Time, bool) {
 
 // HasNextAsOf returns a boolean if a field has been set.
 func (o *ParameterTimeline) HasNextAsOf() bool {
-	if o != nil && o.NextAsOf != nil {
+	if o != nil && !IsNil(o.NextAsOf) {
 		return true
 	}
 
@@ -125,17 +128,21 @@ func (o *ParameterTimeline) SetResults(v []ParameterTimelineEntry) {
 }
 
 func (o ParameterTimeline) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["count"] = o.Count
-	}
-	if o.NextAsOf != nil {
-		toSerialize["next_as_of"] = o.NextAsOf
-	}
-	if true {
-		toSerialize["results"] = o.Results
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ParameterTimeline) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["count"] = o.Count
+	if !IsNil(o.NextAsOf) {
+		toSerialize["next_as_of"] = o.NextAsOf
+	}
+	toSerialize["results"] = o.Results
+	return toSerialize, nil
 }
 
 type NullableParameterTimeline struct {
@@ -173,3 +180,5 @@ func (v *NullableParameterTimeline) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

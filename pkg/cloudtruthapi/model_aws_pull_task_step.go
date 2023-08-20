@@ -16,12 +16,14 @@ import (
 	"time"
 )
 
+// checks if the AwsPullTaskStep type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AwsPullTaskStep{}
+
 // AwsPullTaskStep Pull task step for an AWS integration.
 type AwsPullTaskStep struct {
 	Url string `json:"url"`
 	// Unique identifier for a task step.
 	Id string `json:"id"`
-	// The operation performed, if any.  When the operation is an update, there may be additional details in the success_detail field to describe the change.  When the project is filled in but the environment and parameterare not, the operation is on the project.  When the environmentis filled in but the project and parameter are not, the operationis on the environment.  When the project and parameter are filledin but the environment is not, the operation is on the parameter.When all three are filled in, the operation is on the value ofthe parameter of the project in the specified environment.
 	Operation NullableOperationEnum `json:"operation,omitempty"`
 	// Indicates if the operation was successful.
 	Success bool `json:"success"`
@@ -57,8 +59,8 @@ type AwsPullTaskStep struct {
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// Details on the error that occurred during processing.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt   time.Time      `json:"created_at"`
-	ModifiedAt  time.Time      `json:"modified_at"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 }
 
 // NewAwsPullTaskStep instantiates a new AwsPullTaskStep object
@@ -136,7 +138,7 @@ func (o *AwsPullTaskStep) SetId(v string) {
 
 // GetOperation returns the Operation field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetOperation() OperationEnum {
-	if o == nil || o.Operation.Get() == nil {
+	if o == nil || IsNil(o.Operation.Get()) {
 		var ret OperationEnum
 		return ret
 	}
@@ -166,7 +168,6 @@ func (o *AwsPullTaskStep) HasOperation() bool {
 func (o *AwsPullTaskStep) SetOperation(v OperationEnum) {
 	o.Operation.Set(&v)
 }
-
 // SetOperationNil sets the value for Operation to be an explicit nil
 func (o *AwsPullTaskStep) SetOperationNil() {
 	o.Operation.Set(nil)
@@ -203,7 +204,7 @@ func (o *AwsPullTaskStep) SetSuccess(v bool) {
 
 // GetSuccessDetail returns the SuccessDetail field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetSuccessDetail() string {
-	if o == nil || o.SuccessDetail.Get() == nil {
+	if o == nil || IsNil(o.SuccessDetail.Get()) {
 		var ret string
 		return ret
 	}
@@ -233,7 +234,6 @@ func (o *AwsPullTaskStep) HasSuccessDetail() bool {
 func (o *AwsPullTaskStep) SetSuccessDetail(v string) {
 	o.SuccessDetail.Set(&v)
 }
-
 // SetSuccessDetailNil sets the value for SuccessDetail to be an explicit nil
 func (o *AwsPullTaskStep) SetSuccessDetailNil() {
 	o.SuccessDetail.Set(nil)
@@ -246,7 +246,7 @@ func (o *AwsPullTaskStep) UnsetSuccessDetail() {
 
 // GetFqn returns the Fqn field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetFqn() string {
-	if o == nil || o.Fqn.Get() == nil {
+	if o == nil || IsNil(o.Fqn.Get()) {
 		var ret string
 		return ret
 	}
@@ -276,7 +276,6 @@ func (o *AwsPullTaskStep) HasFqn() bool {
 func (o *AwsPullTaskStep) SetFqn(v string) {
 	o.Fqn.Set(&v)
 }
-
 // SetFqnNil sets the value for Fqn to be an explicit nil
 func (o *AwsPullTaskStep) SetFqnNil() {
 	o.Fqn.Set(nil)
@@ -315,7 +314,7 @@ func (o *AwsPullTaskStep) SetEnvironment(v string) {
 
 // GetEnvironmentId returns the EnvironmentId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetEnvironmentId() string {
-	if o == nil || o.EnvironmentId.Get() == nil {
+	if o == nil || IsNil(o.EnvironmentId.Get()) {
 		var ret string
 		return ret
 	}
@@ -345,7 +344,6 @@ func (o *AwsPullTaskStep) HasEnvironmentId() bool {
 func (o *AwsPullTaskStep) SetEnvironmentId(v string) {
 	o.EnvironmentId.Set(&v)
 }
-
 // SetEnvironmentIdNil sets the value for EnvironmentId to be an explicit nil
 func (o *AwsPullTaskStep) SetEnvironmentIdNil() {
 	o.EnvironmentId.Set(nil)
@@ -358,7 +356,7 @@ func (o *AwsPullTaskStep) UnsetEnvironmentId() {
 
 // GetEnvironmentName returns the EnvironmentName field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetEnvironmentName() string {
-	if o == nil || o.EnvironmentName.Get() == nil {
+	if o == nil || IsNil(o.EnvironmentName.Get()) {
 		var ret string
 		return ret
 	}
@@ -388,7 +386,6 @@ func (o *AwsPullTaskStep) HasEnvironmentName() bool {
 func (o *AwsPullTaskStep) SetEnvironmentName(v string) {
 	o.EnvironmentName.Set(&v)
 }
-
 // SetEnvironmentNameNil sets the value for EnvironmentName to be an explicit nil
 func (o *AwsPullTaskStep) SetEnvironmentNameNil() {
 	o.EnvironmentName.Set(nil)
@@ -427,7 +424,7 @@ func (o *AwsPullTaskStep) SetProject(v string) {
 
 // GetProjectId returns the ProjectId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetProjectId() string {
-	if o == nil || o.ProjectId.Get() == nil {
+	if o == nil || IsNil(o.ProjectId.Get()) {
 		var ret string
 		return ret
 	}
@@ -457,7 +454,6 @@ func (o *AwsPullTaskStep) HasProjectId() bool {
 func (o *AwsPullTaskStep) SetProjectId(v string) {
 	o.ProjectId.Set(&v)
 }
-
 // SetProjectIdNil sets the value for ProjectId to be an explicit nil
 func (o *AwsPullTaskStep) SetProjectIdNil() {
 	o.ProjectId.Set(nil)
@@ -470,7 +466,7 @@ func (o *AwsPullTaskStep) UnsetProjectId() {
 
 // GetProjectName returns the ProjectName field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetProjectName() string {
-	if o == nil || o.ProjectName.Get() == nil {
+	if o == nil || IsNil(o.ProjectName.Get()) {
 		var ret string
 		return ret
 	}
@@ -500,7 +496,6 @@ func (o *AwsPullTaskStep) HasProjectName() bool {
 func (o *AwsPullTaskStep) SetProjectName(v string) {
 	o.ProjectName.Set(&v)
 }
-
 // SetProjectNameNil sets the value for ProjectName to be an explicit nil
 func (o *AwsPullTaskStep) SetProjectNameNil() {
 	o.ProjectName.Set(nil)
@@ -539,7 +534,7 @@ func (o *AwsPullTaskStep) SetParameter(v string) {
 
 // GetParameterId returns the ParameterId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetParameterId() string {
-	if o == nil || o.ParameterId.Get() == nil {
+	if o == nil || IsNil(o.ParameterId.Get()) {
 		var ret string
 		return ret
 	}
@@ -569,7 +564,6 @@ func (o *AwsPullTaskStep) HasParameterId() bool {
 func (o *AwsPullTaskStep) SetParameterId(v string) {
 	o.ParameterId.Set(&v)
 }
-
 // SetParameterIdNil sets the value for ParameterId to be an explicit nil
 func (o *AwsPullTaskStep) SetParameterIdNil() {
 	o.ParameterId.Set(nil)
@@ -582,7 +576,7 @@ func (o *AwsPullTaskStep) UnsetParameterId() {
 
 // GetParameterName returns the ParameterName field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetParameterName() string {
-	if o == nil || o.ParameterName.Get() == nil {
+	if o == nil || IsNil(o.ParameterName.Get()) {
 		var ret string
 		return ret
 	}
@@ -612,7 +606,6 @@ func (o *AwsPullTaskStep) HasParameterName() bool {
 func (o *AwsPullTaskStep) SetParameterName(v string) {
 	o.ParameterName.Set(&v)
 }
-
 // SetParameterNameNil sets the value for ParameterName to be an explicit nil
 func (o *AwsPullTaskStep) SetParameterNameNil() {
 	o.ParameterName.Set(nil)
@@ -625,7 +618,7 @@ func (o *AwsPullTaskStep) UnsetParameterName() {
 
 // GetVenueId returns the VenueId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetVenueId() string {
-	if o == nil || o.VenueId.Get() == nil {
+	if o == nil || IsNil(o.VenueId.Get()) {
 		var ret string
 		return ret
 	}
@@ -655,7 +648,6 @@ func (o *AwsPullTaskStep) HasVenueId() bool {
 func (o *AwsPullTaskStep) SetVenueId(v string) {
 	o.VenueId.Set(&v)
 }
-
 // SetVenueIdNil sets the value for VenueId to be an explicit nil
 func (o *AwsPullTaskStep) SetVenueIdNil() {
 	o.VenueId.Set(nil)
@@ -668,7 +660,7 @@ func (o *AwsPullTaskStep) UnsetVenueId() {
 
 // GetVenueName returns the VenueName field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetVenueName() string {
-	if o == nil || o.VenueName.Get() == nil {
+	if o == nil || IsNil(o.VenueName.Get()) {
 		var ret string
 		return ret
 	}
@@ -698,7 +690,6 @@ func (o *AwsPullTaskStep) HasVenueName() bool {
 func (o *AwsPullTaskStep) SetVenueName(v string) {
 	o.VenueName.Set(&v)
 }
-
 // SetVenueNameNil sets the value for VenueName to be an explicit nil
 func (o *AwsPullTaskStep) SetVenueNameNil() {
 	o.VenueName.Set(nil)
@@ -711,7 +702,7 @@ func (o *AwsPullTaskStep) UnsetVenueName() {
 
 // GetSummary returns the Summary field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetSummary() string {
-	if o == nil || o.Summary.Get() == nil {
+	if o == nil || IsNil(o.Summary.Get()) {
 		var ret string
 		return ret
 	}
@@ -741,7 +732,6 @@ func (o *AwsPullTaskStep) HasSummary() bool {
 func (o *AwsPullTaskStep) SetSummary(v string) {
 	o.Summary.Set(&v)
 }
-
 // SetSummaryNil sets the value for Summary to be an explicit nil
 func (o *AwsPullTaskStep) SetSummaryNil() {
 	o.Summary.Set(nil)
@@ -754,7 +744,7 @@ func (o *AwsPullTaskStep) UnsetSummary() {
 
 // GetErrorCode returns the ErrorCode field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetErrorCode() string {
-	if o == nil || o.ErrorCode.Get() == nil {
+	if o == nil || IsNil(o.ErrorCode.Get()) {
 		var ret string
 		return ret
 	}
@@ -784,7 +774,6 @@ func (o *AwsPullTaskStep) HasErrorCode() bool {
 func (o *AwsPullTaskStep) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
-
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *AwsPullTaskStep) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -797,7 +786,7 @@ func (o *AwsPullTaskStep) UnsetErrorCode() {
 
 // GetErrorDetail returns the ErrorDetail field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsPullTaskStep) GetErrorDetail() string {
-	if o == nil || o.ErrorDetail.Get() == nil {
+	if o == nil || IsNil(o.ErrorDetail.Get()) {
 		var ret string
 		return ret
 	}
@@ -827,7 +816,6 @@ func (o *AwsPullTaskStep) HasErrorDetail() bool {
 func (o *AwsPullTaskStep) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
-
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *AwsPullTaskStep) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -887,46 +875,42 @@ func (o *AwsPullTaskStep) SetModifiedAt(v time.Time) {
 }
 
 func (o AwsPullTaskStep) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o AwsPullTaskStep) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
 	if o.Operation.IsSet() {
 		toSerialize["operation"] = o.Operation.Get()
 	}
-	if true {
-		toSerialize["success"] = o.Success
-	}
+	toSerialize["success"] = o.Success
 	if o.SuccessDetail.IsSet() {
 		toSerialize["success_detail"] = o.SuccessDetail.Get()
 	}
 	if o.Fqn.IsSet() {
 		toSerialize["fqn"] = o.Fqn.Get()
 	}
-	if true {
-		toSerialize["environment"] = o.Environment.Get()
-	}
+	toSerialize["environment"] = o.Environment.Get()
 	if o.EnvironmentId.IsSet() {
 		toSerialize["environment_id"] = o.EnvironmentId.Get()
 	}
 	if o.EnvironmentName.IsSet() {
 		toSerialize["environment_name"] = o.EnvironmentName.Get()
 	}
-	if true {
-		toSerialize["project"] = o.Project.Get()
-	}
+	toSerialize["project"] = o.Project.Get()
 	if o.ProjectId.IsSet() {
 		toSerialize["project_id"] = o.ProjectId.Get()
 	}
 	if o.ProjectName.IsSet() {
 		toSerialize["project_name"] = o.ProjectName.Get()
 	}
-	if true {
-		toSerialize["parameter"] = o.Parameter.Get()
-	}
+	toSerialize["parameter"] = o.Parameter.Get()
 	if o.ParameterId.IsSet() {
 		toSerialize["parameter_id"] = o.ParameterId.Get()
 	}
@@ -948,13 +932,9 @@ func (o AwsPullTaskStep) MarshalJSON() ([]byte, error) {
 	if o.ErrorDetail.IsSet() {
 		toSerialize["error_detail"] = o.ErrorDetail.Get()
 	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableAwsPullTaskStep struct {
@@ -992,3 +972,5 @@ func (v *NullableAwsPullTaskStep) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

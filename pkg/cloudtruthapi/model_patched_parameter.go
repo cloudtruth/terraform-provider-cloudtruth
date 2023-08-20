@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the PatchedParameter type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedParameter{}
+
 // PatchedParameter A single parameter inside of a project.
 type PatchedParameter struct {
 	Url *string `json:"url,omitempty"`
@@ -39,12 +42,12 @@ type PatchedParameter struct {
 	ReferencingTemplates []string `json:"referencing_templates,omitempty"`
 	// Dynamic values that reference this Parameter.
 	ReferencingValues []string `json:"referencing_values,omitempty"`
-	//              This dictionary has keys that correspond to environment urls, and values             that correspond to the effective value for this parameter in that environment.             Each parameter has an effective value in every environment based on             project dependencies and environment inheritance.              The effective value is found by looking (within the keyed environment) up             the project dependencies by parameter name.  If a value is not found, the             parent environment is consulted with the same logic to locate a value.  It             is possible for there to be a `null` value record for an environment, which             means there is no value set; it is also possible for there to be a value record             with a `value` of `null`, which means the value was explicitly set to `null`.              If the value's parameter does not match the enclosing parameter (holding the             values array) then that value is flowing in through project dependencies.             Clients must recognize this in case the user asks to modify the value; in this             case the client must POST a new Value to the current parameter to override the             value coming in from the project dependency.              If the Value.environment matches the key, then it is an explicit value set for             that environment.  If they differ, the value was obtained from a parent             environment (directly or indirectly).  If the value is None then no value has             ever been set in any environment for this parameter within all the project             dependencies.
-	Values *map[string]ParameterValuesValue `json:"values,omitempty"`
+	//              This dictionary has keys that correspond to environment urls, and values             that correspond to the effective value for this parameter in that environment.             Each parameter has an effective value in every environment based on             project dependencies and environment inheritance.              The effective value is found by looking (within the keyed environment) up             the project dependencies by parameter name.  If a value is not found, the             parent environment is consulted with the same logic to locate a value.  It             is possible for there to be a `null` value record for an environment, which             means there is no value set; it is also possible for there to be a value record             with a `value` of `null`, which means the value was explicitly set to `null`.              If the value's parameter does not match the enclosing parameter (holding the             values array) then that value is flowing in through project dependencies.             Clients must recognize this in case the user asks to modify the value; in this             case the client must POST a new Value to the current parameter to override the             value coming in from the project dependency.              If the Value.environment matches the key, then it is an explicit value set for             that environment.  If they differ, the value was obtained from a parent             environment (directly or indirectly).  If the value is None then no value has             ever been set in any environment for this parameter within all the project             dependencies.         
+	Values map[string]Value `json:"values,omitempty"`
 	// If this parameter's project depends on another project which provides a parameter of the same name, this parameter overrides the one provided by the dependee.  You can use this field to determine if there will be side-effects the user should know about when deleting a parameter.  Deleting a parameter that overrides another one due to an identical name will uncover the one from the dependee project.
-	Overrides  NullableString `json:"overrides,omitempty"`
-	CreatedAt  *time.Time     `json:"created_at,omitempty"`
-	ModifiedAt *time.Time     `json:"modified_at,omitempty"`
+	Overrides NullableString `json:"overrides,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 }
 
 // NewPatchedParameter instantiates a new PatchedParameter object
@@ -70,7 +73,7 @@ func NewPatchedParameterWithDefaults() *PatchedParameter {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedParameter) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -80,7 +83,7 @@ func (o *PatchedParameter) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -88,7 +91,7 @@ func (o *PatchedParameter) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedParameter) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -102,7 +105,7 @@ func (o *PatchedParameter) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedParameter) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -112,7 +115,7 @@ func (o *PatchedParameter) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -120,7 +123,7 @@ func (o *PatchedParameter) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedParameter) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -134,7 +137,7 @@ func (o *PatchedParameter) SetId(v string) {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *PatchedParameter) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -144,7 +147,7 @@ func (o *PatchedParameter) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -152,7 +155,7 @@ func (o *PatchedParameter) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *PatchedParameter) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -166,7 +169,7 @@ func (o *PatchedParameter) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *PatchedParameter) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -176,7 +179,7 @@ func (o *PatchedParameter) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -184,7 +187,7 @@ func (o *PatchedParameter) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *PatchedParameter) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -198,7 +201,7 @@ func (o *PatchedParameter) SetDescription(v string) {
 
 // GetSecret returns the Secret field value if set, zero value otherwise.
 func (o *PatchedParameter) GetSecret() bool {
-	if o == nil || o.Secret == nil {
+	if o == nil || IsNil(o.Secret) {
 		var ret bool
 		return ret
 	}
@@ -208,7 +211,7 @@ func (o *PatchedParameter) GetSecret() bool {
 // GetSecretOk returns a tuple with the Secret field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetSecretOk() (*bool, bool) {
-	if o == nil || o.Secret == nil {
+	if o == nil || IsNil(o.Secret) {
 		return nil, false
 	}
 	return o.Secret, true
@@ -216,7 +219,7 @@ func (o *PatchedParameter) GetSecretOk() (*bool, bool) {
 
 // HasSecret returns a boolean if a field has been set.
 func (o *PatchedParameter) HasSecret() bool {
-	if o != nil && o.Secret != nil {
+	if o != nil && !IsNil(o.Secret) {
 		return true
 	}
 
@@ -230,7 +233,7 @@ func (o *PatchedParameter) SetSecret(v bool) {
 
 // GetType returns the Type field value if set, zero value otherwise.
 func (o *PatchedParameter) GetType() string {
-	if o == nil || o.Type == nil {
+	if o == nil || IsNil(o.Type) {
 		var ret string
 		return ret
 	}
@@ -240,7 +243,7 @@ func (o *PatchedParameter) GetType() string {
 // GetTypeOk returns a tuple with the Type field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetTypeOk() (*string, bool) {
-	if o == nil || o.Type == nil {
+	if o == nil || IsNil(o.Type) {
 		return nil, false
 	}
 	return o.Type, true
@@ -248,7 +251,7 @@ func (o *PatchedParameter) GetTypeOk() (*string, bool) {
 
 // HasType returns a boolean if a field has been set.
 func (o *PatchedParameter) HasType() bool {
-	if o != nil && o.Type != nil {
+	if o != nil && !IsNil(o.Type) {
 		return true
 	}
 
@@ -262,7 +265,7 @@ func (o *PatchedParameter) SetType(v string) {
 
 // GetRules returns the Rules field value if set, zero value otherwise.
 func (o *PatchedParameter) GetRules() []ParameterRule {
-	if o == nil || o.Rules == nil {
+	if o == nil || IsNil(o.Rules) {
 		var ret []ParameterRule
 		return ret
 	}
@@ -272,7 +275,7 @@ func (o *PatchedParameter) GetRules() []ParameterRule {
 // GetRulesOk returns a tuple with the Rules field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetRulesOk() ([]ParameterRule, bool) {
-	if o == nil || o.Rules == nil {
+	if o == nil || IsNil(o.Rules) {
 		return nil, false
 	}
 	return o.Rules, true
@@ -280,7 +283,7 @@ func (o *PatchedParameter) GetRulesOk() ([]ParameterRule, bool) {
 
 // HasRules returns a boolean if a field has been set.
 func (o *PatchedParameter) HasRules() bool {
-	if o != nil && o.Rules != nil {
+	if o != nil && !IsNil(o.Rules) {
 		return true
 	}
 
@@ -294,7 +297,7 @@ func (o *PatchedParameter) SetRules(v []ParameterRule) {
 
 // GetProject returns the Project field value if set, zero value otherwise.
 func (o *PatchedParameter) GetProject() string {
-	if o == nil || o.Project == nil {
+	if o == nil || IsNil(o.Project) {
 		var ret string
 		return ret
 	}
@@ -304,7 +307,7 @@ func (o *PatchedParameter) GetProject() string {
 // GetProjectOk returns a tuple with the Project field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetProjectOk() (*string, bool) {
-	if o == nil || o.Project == nil {
+	if o == nil || IsNil(o.Project) {
 		return nil, false
 	}
 	return o.Project, true
@@ -312,7 +315,7 @@ func (o *PatchedParameter) GetProjectOk() (*string, bool) {
 
 // HasProject returns a boolean if a field has been set.
 func (o *PatchedParameter) HasProject() bool {
-	if o != nil && o.Project != nil {
+	if o != nil && !IsNil(o.Project) {
 		return true
 	}
 
@@ -326,7 +329,7 @@ func (o *PatchedParameter) SetProject(v string) {
 
 // GetProjectName returns the ProjectName field value if set, zero value otherwise.
 func (o *PatchedParameter) GetProjectName() string {
-	if o == nil || o.ProjectName == nil {
+	if o == nil || IsNil(o.ProjectName) {
 		var ret string
 		return ret
 	}
@@ -336,7 +339,7 @@ func (o *PatchedParameter) GetProjectName() string {
 // GetProjectNameOk returns a tuple with the ProjectName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetProjectNameOk() (*string, bool) {
-	if o == nil || o.ProjectName == nil {
+	if o == nil || IsNil(o.ProjectName) {
 		return nil, false
 	}
 	return o.ProjectName, true
@@ -344,7 +347,7 @@ func (o *PatchedParameter) GetProjectNameOk() (*string, bool) {
 
 // HasProjectName returns a boolean if a field has been set.
 func (o *PatchedParameter) HasProjectName() bool {
-	if o != nil && o.ProjectName != nil {
+	if o != nil && !IsNil(o.ProjectName) {
 		return true
 	}
 
@@ -358,7 +361,7 @@ func (o *PatchedParameter) SetProjectName(v string) {
 
 // GetReferencingTemplates returns the ReferencingTemplates field value if set, zero value otherwise.
 func (o *PatchedParameter) GetReferencingTemplates() []string {
-	if o == nil || o.ReferencingTemplates == nil {
+	if o == nil || IsNil(o.ReferencingTemplates) {
 		var ret []string
 		return ret
 	}
@@ -368,7 +371,7 @@ func (o *PatchedParameter) GetReferencingTemplates() []string {
 // GetReferencingTemplatesOk returns a tuple with the ReferencingTemplates field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetReferencingTemplatesOk() ([]string, bool) {
-	if o == nil || o.ReferencingTemplates == nil {
+	if o == nil || IsNil(o.ReferencingTemplates) {
 		return nil, false
 	}
 	return o.ReferencingTemplates, true
@@ -376,7 +379,7 @@ func (o *PatchedParameter) GetReferencingTemplatesOk() ([]string, bool) {
 
 // HasReferencingTemplates returns a boolean if a field has been set.
 func (o *PatchedParameter) HasReferencingTemplates() bool {
-	if o != nil && o.ReferencingTemplates != nil {
+	if o != nil && !IsNil(o.ReferencingTemplates) {
 		return true
 	}
 
@@ -390,7 +393,7 @@ func (o *PatchedParameter) SetReferencingTemplates(v []string) {
 
 // GetReferencingValues returns the ReferencingValues field value if set, zero value otherwise.
 func (o *PatchedParameter) GetReferencingValues() []string {
-	if o == nil || o.ReferencingValues == nil {
+	if o == nil || IsNil(o.ReferencingValues) {
 		var ret []string
 		return ret
 	}
@@ -400,7 +403,7 @@ func (o *PatchedParameter) GetReferencingValues() []string {
 // GetReferencingValuesOk returns a tuple with the ReferencingValues field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetReferencingValuesOk() ([]string, bool) {
-	if o == nil || o.ReferencingValues == nil {
+	if o == nil || IsNil(o.ReferencingValues) {
 		return nil, false
 	}
 	return o.ReferencingValues, true
@@ -408,7 +411,7 @@ func (o *PatchedParameter) GetReferencingValuesOk() ([]string, bool) {
 
 // HasReferencingValues returns a boolean if a field has been set.
 func (o *PatchedParameter) HasReferencingValues() bool {
-	if o != nil && o.ReferencingValues != nil {
+	if o != nil && !IsNil(o.ReferencingValues) {
 		return true
 	}
 
@@ -421,40 +424,40 @@ func (o *PatchedParameter) SetReferencingValues(v []string) {
 }
 
 // GetValues returns the Values field value if set, zero value otherwise.
-func (o *PatchedParameter) GetValues() map[string]ParameterValuesValue {
-	if o == nil || o.Values == nil {
-		var ret map[string]ParameterValuesValue
+func (o *PatchedParameter) GetValues() map[string]Value {
+	if o == nil || IsNil(o.Values) {
+		var ret map[string]Value
 		return ret
 	}
-	return *o.Values
+	return o.Values
 }
 
 // GetValuesOk returns a tuple with the Values field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedParameter) GetValuesOk() (*map[string]ParameterValuesValue, bool) {
-	if o == nil || o.Values == nil {
-		return nil, false
+func (o *PatchedParameter) GetValuesOk() (map[string]Value, bool) {
+	if o == nil || IsNil(o.Values) {
+		return map[string]Value{}, false
 	}
 	return o.Values, true
 }
 
 // HasValues returns a boolean if a field has been set.
 func (o *PatchedParameter) HasValues() bool {
-	if o != nil && o.Values != nil {
+	if o != nil && !IsNil(o.Values) {
 		return true
 	}
 
 	return false
 }
 
-// SetValues gets a reference to the given map[string]ParameterValuesValue and assigns it to the Values field.
-func (o *PatchedParameter) SetValues(v map[string]ParameterValuesValue) {
-	o.Values = &v
+// SetValues gets a reference to the given map[string]Value and assigns it to the Values field.
+func (o *PatchedParameter) SetValues(v map[string]Value) {
+	o.Values = v
 }
 
 // GetOverrides returns the Overrides field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedParameter) GetOverrides() string {
-	if o == nil || o.Overrides.Get() == nil {
+	if o == nil || IsNil(o.Overrides.Get()) {
 		var ret string
 		return ret
 	}
@@ -484,7 +487,6 @@ func (o *PatchedParameter) HasOverrides() bool {
 func (o *PatchedParameter) SetOverrides(v string) {
 	o.Overrides.Set(&v)
 }
-
 // SetOverridesNil sets the value for Overrides to be an explicit nil
 func (o *PatchedParameter) SetOverridesNil() {
 	o.Overrides.Set(nil)
@@ -497,7 +499,7 @@ func (o *PatchedParameter) UnsetOverrides() {
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedParameter) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -507,7 +509,7 @@ func (o *PatchedParameter) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -515,7 +517,7 @@ func (o *PatchedParameter) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *PatchedParameter) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -529,7 +531,7 @@ func (o *PatchedParameter) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *PatchedParameter) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -539,7 +541,7 @@ func (o *PatchedParameter) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedParameter) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -547,7 +549,7 @@ func (o *PatchedParameter) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedParameter) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -560,53 +562,61 @@ func (o *PatchedParameter) SetModifiedAt(v time.Time) {
 }
 
 func (o PatchedParameter) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PatchedParameter) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
+	if !IsNil(o.Url) {
 		toSerialize["url"] = o.Url
 	}
-	if o.Id != nil {
+	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
-	if o.Name != nil {
+	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
-	if o.Description != nil {
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.Secret != nil {
+	if !IsNil(o.Secret) {
 		toSerialize["secret"] = o.Secret
 	}
-	if o.Type != nil {
+	if !IsNil(o.Type) {
 		toSerialize["type"] = o.Type
 	}
-	if o.Rules != nil {
+	if !IsNil(o.Rules) {
 		toSerialize["rules"] = o.Rules
 	}
-	if o.Project != nil {
+	if !IsNil(o.Project) {
 		toSerialize["project"] = o.Project
 	}
-	if o.ProjectName != nil {
+	if !IsNil(o.ProjectName) {
 		toSerialize["project_name"] = o.ProjectName
 	}
-	if o.ReferencingTemplates != nil {
+	if !IsNil(o.ReferencingTemplates) {
 		toSerialize["referencing_templates"] = o.ReferencingTemplates
 	}
-	if o.ReferencingValues != nil {
+	if !IsNil(o.ReferencingValues) {
 		toSerialize["referencing_values"] = o.ReferencingValues
 	}
-	if o.Values != nil {
+	if !IsNil(o.Values) {
 		toSerialize["values"] = o.Values
 	}
 	if o.Overrides.IsSet() {
 		toSerialize["overrides"] = o.Overrides.Get()
 	}
-	if o.CreatedAt != nil {
+	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
-	if o.ModifiedAt != nil {
+	if !IsNil(o.ModifiedAt) {
 		toSerialize["modified_at"] = o.ModifiedAt
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePatchedParameter struct {
@@ -644,3 +654,5 @@ func (v *NullablePatchedParameter) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

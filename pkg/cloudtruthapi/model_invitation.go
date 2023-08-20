@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the Invitation type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Invitation{}
+
 // Invitation struct for Invitation
 type Invitation struct {
 	Url string `json:"url"`
@@ -22,8 +25,7 @@ type Invitation struct {
 	Id string `json:"id"`
 	// The email address of the user to be invited.
 	Email string `json:"email"`
-	// The role that the user will have in the organization, should the user accept.
-	Role NullableRoleEnum `json:"role"`
+	Role RoleEnum `json:"role"`
 	// The user that created the invitation.
 	Inviter string `json:"inviter"`
 	// The name of the user that created the invitation.
@@ -42,7 +44,7 @@ type Invitation struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewInvitation(url string, id string, email string, role NullableRoleEnum, inviter string, inviterName string, state string, stateDetail string, membership NullableString, organization string) *Invitation {
+func NewInvitation(url string, id string, email string, role RoleEnum, inviter string, inviterName string, state string, stateDetail string, membership NullableString, organization string) *Invitation {
 	this := Invitation{}
 	this.Url = url
 	this.Id = id
@@ -138,29 +140,27 @@ func (o *Invitation) SetEmail(v string) {
 }
 
 // GetRole returns the Role field value
-// If the value is explicit nil, the zero value for RoleEnum will be returned
 func (o *Invitation) GetRole() RoleEnum {
-	if o == nil || o.Role.Get() == nil {
+	if o == nil {
 		var ret RoleEnum
 		return ret
 	}
 
-	return *o.Role.Get()
+	return o.Role
 }
 
 // GetRoleOk returns a tuple with the Role field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Invitation) GetRoleOk() (*RoleEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Role.Get(), o.Role.IsSet()
+	return &o.Role, true
 }
 
 // SetRole sets field value
 func (o *Invitation) SetRole(v RoleEnum) {
-	o.Role.Set(&v)
+	o.Role = v
 }
 
 // GetInviter returns the Inviter field value
@@ -310,38 +310,26 @@ func (o *Invitation) SetOrganization(v string) {
 }
 
 func (o Invitation) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["email"] = o.Email
-	}
-	if true {
-		toSerialize["role"] = o.Role.Get()
-	}
-	if true {
-		toSerialize["inviter"] = o.Inviter
-	}
-	if true {
-		toSerialize["inviter_name"] = o.InviterName
-	}
-	if true {
-		toSerialize["state"] = o.State
-	}
-	if true {
-		toSerialize["state_detail"] = o.StateDetail
-	}
-	if true {
-		toSerialize["membership"] = o.Membership.Get()
-	}
-	if true {
-		toSerialize["organization"] = o.Organization
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Invitation) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["email"] = o.Email
+	toSerialize["role"] = o.Role
+	toSerialize["inviter"] = o.Inviter
+	toSerialize["inviter_name"] = o.InviterName
+	toSerialize["state"] = o.State
+	toSerialize["state_detail"] = o.StateDetail
+	toSerialize["membership"] = o.Membership.Get()
+	toSerialize["organization"] = o.Organization
+	return toSerialize, nil
 }
 
 type NullableInvitation struct {
@@ -379,3 +367,5 @@ func (v *NullableInvitation) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -106,7 +106,7 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		paramListResp, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(paramName).Execute()
+		paramListResp, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(paramName).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterValueCreate: error looking up parameter %s", paramName), r, err)
 		}
@@ -129,7 +129,7 @@ func resourceParameterValueCreate(ctx context.Context, d *schema.ResourceData, m
 	retryError = retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		value, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx, paramListResp.GetResults()[0].GetId(),
+		value, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersValuesCreate(ctx, paramListResp.GetResults()[0].GetId(),
 			*projID).ValueCreate(*valueCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterValueCreate: error creating the value for parameter %s in the %s environment",
@@ -214,7 +214,7 @@ func paramValueImportHelper(ctx context.Context, d *schema.ResourceData, meta an
 	for retryCount < importRetries {
 		var param *cloudtruthapi.Parameter
 		var r *http.Response
-		param, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersRetrieve(ctx, *paramID, *projID).Execute()
+		param, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersRetrieve(ctx, *paramID, *projID).Execute()
 		if (r == nil) || (r.StatusCode >= 400 && r.StatusCode < 500) {
 			apiError = err
 			break
@@ -289,7 +289,7 @@ func updateParameterValue(ctx context.Context, paramID, paramValueID, projID str
 		}
 		var r *http.Response
 		var value *cloudtruthapi.Value
-		value, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesCreate(ctx, paramID, *projID).
+		value, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersValuesCreate(ctx, paramID, *projID).
 			ValueCreate(*valueCreate).Execute()
 		if err != nil {
 			return r, err
@@ -298,7 +298,7 @@ func updateParameterValue(ctx context.Context, paramID, paramValueID, projID str
 		d.SetId(value.GetId())
 
 		// Delete the value in the old env, it's not orphaned in TF
-		r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(ctx, paramValueID,
+		r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersValuesDestroy(ctx, paramValueID,
 			paramID, *projID).Execute()
 		if err != nil {
 			return r, nil
@@ -308,7 +308,7 @@ func updateParameterValue(ctx context.Context, paramID, paramValueID, projID str
 		var err error
 		if hasParamValueChange {
 			// No retry logic here, the caller handles that
-			_, r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
+			_, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
 				projID).Value(*updateValue).Execute()
 			if err != nil {
 				return r, err
@@ -364,7 +364,7 @@ func resourceParameterValueDelete(ctx context.Context, d *schema.ResourceData, m
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.ProjectsApi.ProjectsParametersValuesDestroy(ctx, paramValueID,
+		r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersValuesDestroy(ctx, paramValueID,
 			paramID, *projID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceParameterValueDelete: error deleting the value from parameter %s in the %s environment",

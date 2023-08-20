@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the TagReadUsage type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TagReadUsage{}
+
 // TagReadUsage The read usage details of a tag.
 type TagReadUsage struct {
 	// The last time a configuration was retrieved with this tag.
@@ -73,7 +76,7 @@ func (o *TagReadUsage) SetLastRead(v time.Time) {
 
 // GetLastReadBy returns the LastReadBy field value if set, zero value otherwise.
 func (o *TagReadUsage) GetLastReadBy() string {
-	if o == nil || o.LastReadBy == nil {
+	if o == nil || IsNil(o.LastReadBy) {
 		var ret string
 		return ret
 	}
@@ -83,7 +86,7 @@ func (o *TagReadUsage) GetLastReadBy() string {
 // GetLastReadByOk returns a tuple with the LastReadBy field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TagReadUsage) GetLastReadByOk() (*string, bool) {
-	if o == nil || o.LastReadBy == nil {
+	if o == nil || IsNil(o.LastReadBy) {
 		return nil, false
 	}
 	return o.LastReadBy, true
@@ -91,7 +94,7 @@ func (o *TagReadUsage) GetLastReadByOk() (*string, bool) {
 
 // HasLastReadBy returns a boolean if a field has been set.
 func (o *TagReadUsage) HasLastReadBy() bool {
-	if o != nil && o.LastReadBy != nil {
+	if o != nil && !IsNil(o.LastReadBy) {
 		return true
 	}
 
@@ -128,17 +131,21 @@ func (o *TagReadUsage) SetTotalReads(v int32) {
 }
 
 func (o TagReadUsage) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["last_read"] = o.LastRead.Get()
-	}
-	if o.LastReadBy != nil {
-		toSerialize["last_read_by"] = o.LastReadBy
-	}
-	if true {
-		toSerialize["total_reads"] = o.TotalReads
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TagReadUsage) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["last_read"] = o.LastRead.Get()
+	if !IsNil(o.LastReadBy) {
+		toSerialize["last_read_by"] = o.LastReadBy
+	}
+	toSerialize["total_reads"] = o.TotalReads
+	return toSerialize, nil
 }
 
 type NullableTagReadUsage struct {
@@ -176,3 +183,5 @@ func (v *NullableTagReadUsage) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

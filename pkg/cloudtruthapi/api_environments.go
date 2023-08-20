@@ -14,19 +14,20 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 )
 
-// EnvironmentsApiService EnvironmentsApi service
-type EnvironmentsApiService service
+
+// EnvironmentsAPIService EnvironmentsAPI service
+type EnvironmentsAPIService service
 
 type ApiEnvironmentsCreateRequest struct {
-	ctx               context.Context
-	ApiService        *EnvironmentsApiService
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
 	environmentCreate *EnvironmentCreate
 }
 
@@ -42,28 +43,27 @@ func (r ApiEnvironmentsCreateRequest) Execute() (*Environment, *http.Response, e
 /*
 EnvironmentsCreate Method for EnvironmentsCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiEnvironmentsCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiEnvironmentsCreateRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsCreate(ctx context.Context) ApiEnvironmentsCreateRequest {
+func (a *EnvironmentsAPIService) EnvironmentsCreate(ctx context.Context) ApiEnvironmentsCreateRequest {
 	return ApiEnvironmentsCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Environment
-func (a *EnvironmentsApiService) EnvironmentsCreateExecute(r ApiEnvironmentsCreateRequest) (*Environment, *http.Response, error) {
+//  @return Environment
+func (a *EnvironmentsAPIService) EnvironmentsCreateExecute(r ApiEnvironmentsCreateRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Environment
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Environment
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -134,9 +134,9 @@ func (a *EnvironmentsApiService) EnvironmentsCreateExecute(r ApiEnvironmentsCrea
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -162,9 +162,9 @@ func (a *EnvironmentsApiService) EnvironmentsCreateExecute(r ApiEnvironmentsCrea
 }
 
 type ApiEnvironmentsDestroyRequest struct {
-	ctx        context.Context
-	ApiService *EnvironmentsApiService
-	id         string
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
+	id string
 }
 
 func (r ApiEnvironmentsDestroyRequest) Execute() (*http.Response, error) {
@@ -174,33 +174,33 @@ func (r ApiEnvironmentsDestroyRequest) Execute() (*http.Response, error) {
 /*
 EnvironmentsDestroy Method for EnvironmentsDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiEnvironmentsDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiEnvironmentsDestroyRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsDestroy(ctx context.Context, id string) ApiEnvironmentsDestroyRequest {
+func (a *EnvironmentsAPIService) EnvironmentsDestroy(ctx context.Context, id string) ApiEnvironmentsDestroyRequest {
 	return ApiEnvironmentsDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *EnvironmentsApiService) EnvironmentsDestroyExecute(r ApiEnvironmentsDestroyRequest) (*http.Response, error) {
+func (a *EnvironmentsAPIService) EnvironmentsDestroyExecute(r ApiEnvironmentsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -261,9 +261,9 @@ func (a *EnvironmentsApiService) EnvironmentsDestroyExecute(r ApiEnvironmentsDes
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -280,16 +280,16 @@ func (a *EnvironmentsApiService) EnvironmentsDestroyExecute(r ApiEnvironmentsDes
 }
 
 type ApiEnvironmentsListRequest struct {
-	ctx                  context.Context
-	ApiService           *EnvironmentsApiService
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
 	descriptionIcontains *string
-	name                 *string
-	nameIcontains        *string
-	ordering             *string
-	page                 *int32
-	pageSize             *int32
-	parentName           *string
-	parentNameIcontains  *string
+	name *string
+	nameIcontains *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	parentName *string
+	parentNameIcontains *string
 }
 
 func (r ApiEnvironmentsListRequest) DescriptionIcontains(descriptionIcontains string) ApiEnvironmentsListRequest {
@@ -342,28 +342,27 @@ func (r ApiEnvironmentsListRequest) Execute() (*PaginatedEnvironmentList, *http.
 /*
 EnvironmentsList Method for EnvironmentsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiEnvironmentsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiEnvironmentsListRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsList(ctx context.Context) ApiEnvironmentsListRequest {
+func (a *EnvironmentsAPIService) EnvironmentsList(ctx context.Context) ApiEnvironmentsListRequest {
 	return ApiEnvironmentsListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedEnvironmentList
-func (a *EnvironmentsApiService) EnvironmentsListExecute(r ApiEnvironmentsListRequest) (*PaginatedEnvironmentList, *http.Response, error) {
+//  @return PaginatedEnvironmentList
+func (a *EnvironmentsAPIService) EnvironmentsListExecute(r ApiEnvironmentsListRequest) (*PaginatedEnvironmentList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedEnvironmentList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedEnvironmentList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -375,28 +374,28 @@ func (a *EnvironmentsApiService) EnvironmentsListExecute(r ApiEnvironmentsListRe
 	localVarFormParams := url.Values{}
 
 	if r.descriptionIcontains != nil {
-		localVarQueryParams.Add("description__icontains", parameterToString(*r.descriptionIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description__icontains", r.descriptionIcontains, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.parentName != nil {
-		localVarQueryParams.Add("parent__name", parameterToString(*r.parentName, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "parent__name", r.parentName, "")
 	}
 	if r.parentNameIcontains != nil {
-		localVarQueryParams.Add("parent__name__icontains", parameterToString(*r.parentNameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "parent__name__icontains", r.parentNameIcontains, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -453,9 +452,9 @@ func (a *EnvironmentsApiService) EnvironmentsListExecute(r ApiEnvironmentsListRe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -481,9 +480,9 @@ func (a *EnvironmentsApiService) EnvironmentsListExecute(r ApiEnvironmentsListRe
 }
 
 type ApiEnvironmentsPartialUpdateRequest struct {
-	ctx                context.Context
-	ApiService         *EnvironmentsApiService
-	id                 string
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
+	id string
 	patchedEnvironment *PatchedEnvironment
 }
 
@@ -499,36 +498,35 @@ func (r ApiEnvironmentsPartialUpdateRequest) Execute() (*Environment, *http.Resp
 /*
 EnvironmentsPartialUpdate Method for EnvironmentsPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiEnvironmentsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiEnvironmentsPartialUpdateRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsPartialUpdate(ctx context.Context, id string) ApiEnvironmentsPartialUpdateRequest {
+func (a *EnvironmentsAPIService) EnvironmentsPartialUpdate(ctx context.Context, id string) ApiEnvironmentsPartialUpdateRequest {
 	return ApiEnvironmentsPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Environment
-func (a *EnvironmentsApiService) EnvironmentsPartialUpdateExecute(r ApiEnvironmentsPartialUpdateRequest) (*Environment, *http.Response, error) {
+//  @return Environment
+func (a *EnvironmentsAPIService) EnvironmentsPartialUpdateExecute(r ApiEnvironmentsPartialUpdateRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Environment
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Environment
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -591,9 +589,9 @@ func (a *EnvironmentsApiService) EnvironmentsPartialUpdateExecute(r ApiEnvironme
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -619,12 +617,12 @@ func (a *EnvironmentsApiService) EnvironmentsPartialUpdateExecute(r ApiEnvironme
 }
 
 type ApiEnvironmentsPushesListRequest struct {
-	ctx           context.Context
-	ApiService    *EnvironmentsApiService
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
 	environmentPk string
-	ordering      *string
-	page          *int32
-	pageSize      *int32
+	ordering *string
+	page *int32
+	pageSize *int32
 }
 
 // Which field to use when ordering the results.
@@ -654,49 +652,48 @@ EnvironmentsPushesList List push operations.
 
 The push operations that this environment was involved in.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param environmentPk
-	@return ApiEnvironmentsPushesListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param environmentPk
+ @return ApiEnvironmentsPushesListRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsPushesList(ctx context.Context, environmentPk string) ApiEnvironmentsPushesListRequest {
+func (a *EnvironmentsAPIService) EnvironmentsPushesList(ctx context.Context, environmentPk string) ApiEnvironmentsPushesListRequest {
 	return ApiEnvironmentsPushesListRequest{
-		ApiService:    a,
-		ctx:           ctx,
+		ApiService: a,
+		ctx: ctx,
 		environmentPk: environmentPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedTaskStepList
-func (a *EnvironmentsApiService) EnvironmentsPushesListExecute(r ApiEnvironmentsPushesListRequest) (*PaginatedTaskStepList, *http.Response, error) {
+//  @return PaginatedTaskStepList
+func (a *EnvironmentsAPIService) EnvironmentsPushesListExecute(r ApiEnvironmentsPushesListRequest) (*PaginatedTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedTaskStepList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedTaskStepList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsPushesList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsPushesList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{environment_pk}/pushes/"
-	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterToString(r.environmentPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterValueToString(r.environmentPk, "environmentPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -753,9 +750,9 @@ func (a *EnvironmentsApiService) EnvironmentsPushesListExecute(r ApiEnvironments
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -781,9 +778,9 @@ func (a *EnvironmentsApiService) EnvironmentsPushesListExecute(r ApiEnvironments
 }
 
 type ApiEnvironmentsRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *EnvironmentsApiService
-	id         string
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
+	id string
 }
 
 func (r ApiEnvironmentsRetrieveRequest) Execute() (*Environment, *http.Response, error) {
@@ -793,36 +790,35 @@ func (r ApiEnvironmentsRetrieveRequest) Execute() (*Environment, *http.Response,
 /*
 EnvironmentsRetrieve Method for EnvironmentsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiEnvironmentsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiEnvironmentsRetrieveRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsRetrieve(ctx context.Context, id string) ApiEnvironmentsRetrieveRequest {
+func (a *EnvironmentsAPIService) EnvironmentsRetrieve(ctx context.Context, id string) ApiEnvironmentsRetrieveRequest {
 	return ApiEnvironmentsRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Environment
-func (a *EnvironmentsApiService) EnvironmentsRetrieveExecute(r ApiEnvironmentsRetrieveRequest) (*Environment, *http.Response, error) {
+//  @return Environment
+func (a *EnvironmentsAPIService) EnvironmentsRetrieveExecute(r ApiEnvironmentsRetrieveRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Environment
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Environment
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -883,9 +879,9 @@ func (a *EnvironmentsApiService) EnvironmentsRetrieveExecute(r ApiEnvironmentsRe
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -911,10 +907,10 @@ func (a *EnvironmentsApiService) EnvironmentsRetrieveExecute(r ApiEnvironmentsRe
 }
 
 type ApiEnvironmentsTagsCreateRequest struct {
-	ctx           context.Context
-	ApiService    *EnvironmentsApiService
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
 	environmentPk string
-	tagCreate     *TagCreate
+	tagCreate *TagCreate
 }
 
 func (r ApiEnvironmentsTagsCreateRequest) TagCreate(tagCreate TagCreate) ApiEnvironmentsTagsCreateRequest {
@@ -934,36 +930,35 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param environmentPk
-	@return ApiEnvironmentsTagsCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param environmentPk
+ @return ApiEnvironmentsTagsCreateRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsTagsCreate(ctx context.Context, environmentPk string) ApiEnvironmentsTagsCreateRequest {
+func (a *EnvironmentsAPIService) EnvironmentsTagsCreate(ctx context.Context, environmentPk string) ApiEnvironmentsTagsCreateRequest {
 	return ApiEnvironmentsTagsCreateRequest{
-		ApiService:    a,
-		ctx:           ctx,
+		ApiService: a,
+		ctx: ctx,
 		environmentPk: environmentPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Tag
-func (a *EnvironmentsApiService) EnvironmentsTagsCreateExecute(r ApiEnvironmentsTagsCreateRequest) (*Tag, *http.Response, error) {
+//  @return Tag
+func (a *EnvironmentsAPIService) EnvironmentsTagsCreateExecute(r ApiEnvironmentsTagsCreateRequest) (*Tag, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Tag
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Tag
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{environment_pk}/tags/"
-	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterToString(r.environmentPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterValueToString(r.environmentPk, "environmentPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1029,9 +1024,9 @@ func (a *EnvironmentsApiService) EnvironmentsTagsCreateExecute(r ApiEnvironments
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1057,10 +1052,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsCreateExecute(r ApiEnvironments
 }
 
 type ApiEnvironmentsTagsDestroyRequest struct {
-	ctx           context.Context
-	ApiService    *EnvironmentsApiService
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
 	environmentPk string
-	id            string
+	id string
 }
 
 func (r ApiEnvironmentsTagsDestroyRequest) Execute() (*http.Response, error) {
@@ -1075,36 +1070,36 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param environmentPk
-	@param id
-	@return ApiEnvironmentsTagsDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param environmentPk
+ @param id
+ @return ApiEnvironmentsTagsDestroyRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsTagsDestroy(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsDestroyRequest {
+func (a *EnvironmentsAPIService) EnvironmentsTagsDestroy(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsDestroyRequest {
 	return ApiEnvironmentsTagsDestroyRequest{
-		ApiService:    a,
-		ctx:           ctx,
+		ApiService: a,
+		ctx: ctx,
 		environmentPk: environmentPk,
-		id:            id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *EnvironmentsApiService) EnvironmentsTagsDestroyExecute(r ApiEnvironmentsTagsDestroyRequest) (*http.Response, error) {
+func (a *EnvironmentsAPIService) EnvironmentsTagsDestroyExecute(r ApiEnvironmentsTagsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{environment_pk}/tags/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterToString(r.environmentPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterValueToString(r.environmentPk, "environmentPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1165,9 +1160,9 @@ func (a *EnvironmentsApiService) EnvironmentsTagsDestroyExecute(r ApiEnvironment
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -1184,18 +1179,18 @@ func (a *EnvironmentsApiService) EnvironmentsTagsDestroyExecute(r ApiEnvironment
 }
 
 type ApiEnvironmentsTagsListRequest struct {
-	ctx                  context.Context
-	ApiService           *EnvironmentsApiService
-	environmentPk        string
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
+	environmentPk string
 	descriptionIcontains *string
-	name                 *string
-	nameIcontains        *string
-	ordering             *string
-	page                 *int32
-	pageSize             *int32
-	timestamp            *time.Time
-	timestampGte         *time.Time
-	timestampLte         *time.Time
+	name *string
+	nameIcontains *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	timestamp *time.Time
+	timestampGte *time.Time
+	timestampLte *time.Time
 }
 
 func (r ApiEnvironmentsTagsListRequest) DescriptionIcontains(descriptionIcontains string) ApiEnvironmentsTagsListRequest {
@@ -1258,67 +1253,66 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param environmentPk
-	@return ApiEnvironmentsTagsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param environmentPk
+ @return ApiEnvironmentsTagsListRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsTagsList(ctx context.Context, environmentPk string) ApiEnvironmentsTagsListRequest {
+func (a *EnvironmentsAPIService) EnvironmentsTagsList(ctx context.Context, environmentPk string) ApiEnvironmentsTagsListRequest {
 	return ApiEnvironmentsTagsListRequest{
-		ApiService:    a,
-		ctx:           ctx,
+		ApiService: a,
+		ctx: ctx,
 		environmentPk: environmentPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedTagList
-func (a *EnvironmentsApiService) EnvironmentsTagsListExecute(r ApiEnvironmentsTagsListRequest) (*PaginatedTagList, *http.Response, error) {
+//  @return PaginatedTagList
+func (a *EnvironmentsAPIService) EnvironmentsTagsListExecute(r ApiEnvironmentsTagsListRequest) (*PaginatedTagList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedTagList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedTagList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{environment_pk}/tags/"
-	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterToString(r.environmentPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterValueToString(r.environmentPk, "environmentPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.descriptionIcontains != nil {
-		localVarQueryParams.Add("description__icontains", parameterToString(*r.descriptionIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description__icontains", r.descriptionIcontains, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.timestamp != nil {
-		localVarQueryParams.Add("timestamp", parameterToString(*r.timestamp, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "timestamp", r.timestamp, "")
 	}
 	if r.timestampGte != nil {
-		localVarQueryParams.Add("timestamp__gte", parameterToString(*r.timestampGte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "timestamp__gte", r.timestampGte, "")
 	}
 	if r.timestampLte != nil {
-		localVarQueryParams.Add("timestamp__lte", parameterToString(*r.timestampLte, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "timestamp__lte", r.timestampLte, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1375,9 +1369,9 @@ func (a *EnvironmentsApiService) EnvironmentsTagsListExecute(r ApiEnvironmentsTa
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1403,10 +1397,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsListExecute(r ApiEnvironmentsTa
 }
 
 type ApiEnvironmentsTagsPartialUpdateRequest struct {
-	ctx              context.Context
-	ApiService       *EnvironmentsApiService
-	environmentPk    string
-	id               string
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
+	environmentPk string
+	id string
 	patchedTagUpdate *PatchedTagUpdate
 }
 
@@ -1427,39 +1421,38 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param environmentPk
-	@param id
-	@return ApiEnvironmentsTagsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param environmentPk
+ @param id
+ @return ApiEnvironmentsTagsPartialUpdateRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdate(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsPartialUpdateRequest {
+func (a *EnvironmentsAPIService) EnvironmentsTagsPartialUpdate(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsPartialUpdateRequest {
 	return ApiEnvironmentsTagsPartialUpdateRequest{
-		ApiService:    a,
-		ctx:           ctx,
+		ApiService: a,
+		ctx: ctx,
 		environmentPk: environmentPk,
-		id:            id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return TagUpdate
-func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdateExecute(r ApiEnvironmentsTagsPartialUpdateRequest) (*TagUpdate, *http.Response, error) {
+//  @return TagUpdate
+func (a *EnvironmentsAPIService) EnvironmentsTagsPartialUpdateExecute(r ApiEnvironmentsTagsPartialUpdateRequest) (*TagUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *TagUpdate
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *TagUpdate
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{environment_pk}/tags/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterToString(r.environmentPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterValueToString(r.environmentPk, "environmentPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1522,9 +1515,9 @@ func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdateExecute(r ApiEnvir
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1550,10 +1543,10 @@ func (a *EnvironmentsApiService) EnvironmentsTagsPartialUpdateExecute(r ApiEnvir
 }
 
 type ApiEnvironmentsTagsRetrieveRequest struct {
-	ctx           context.Context
-	ApiService    *EnvironmentsApiService
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
 	environmentPk string
-	id            string
+	id string
 }
 
 func (r ApiEnvironmentsTagsRetrieveRequest) Execute() (*Tag, *http.Response, error) {
@@ -1568,39 +1561,38 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param environmentPk
-	@param id
-	@return ApiEnvironmentsTagsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param environmentPk
+ @param id
+ @return ApiEnvironmentsTagsRetrieveRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsTagsRetrieve(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsRetrieveRequest {
+func (a *EnvironmentsAPIService) EnvironmentsTagsRetrieve(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsRetrieveRequest {
 	return ApiEnvironmentsTagsRetrieveRequest{
-		ApiService:    a,
-		ctx:           ctx,
+		ApiService: a,
+		ctx: ctx,
 		environmentPk: environmentPk,
-		id:            id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Tag
-func (a *EnvironmentsApiService) EnvironmentsTagsRetrieveExecute(r ApiEnvironmentsTagsRetrieveRequest) (*Tag, *http.Response, error) {
+//  @return Tag
+func (a *EnvironmentsAPIService) EnvironmentsTagsRetrieveExecute(r ApiEnvironmentsTagsRetrieveRequest) (*Tag, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Tag
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Tag
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{environment_pk}/tags/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterToString(r.environmentPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterValueToString(r.environmentPk, "environmentPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1661,9 +1653,9 @@ func (a *EnvironmentsApiService) EnvironmentsTagsRetrieveExecute(r ApiEnvironmen
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1689,11 +1681,11 @@ func (a *EnvironmentsApiService) EnvironmentsTagsRetrieveExecute(r ApiEnvironmen
 }
 
 type ApiEnvironmentsTagsUpdateRequest struct {
-	ctx           context.Context
-	ApiService    *EnvironmentsApiService
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
 	environmentPk string
-	id            string
-	tagUpdate     *TagUpdate
+	id string
+	tagUpdate *TagUpdate
 }
 
 func (r ApiEnvironmentsTagsUpdateRequest) TagUpdate(tagUpdate TagUpdate) ApiEnvironmentsTagsUpdateRequest {
@@ -1713,39 +1705,38 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param environmentPk
-	@param id
-	@return ApiEnvironmentsTagsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param environmentPk
+ @param id
+ @return ApiEnvironmentsTagsUpdateRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsTagsUpdate(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsUpdateRequest {
+func (a *EnvironmentsAPIService) EnvironmentsTagsUpdate(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsUpdateRequest {
 	return ApiEnvironmentsTagsUpdateRequest{
-		ApiService:    a,
-		ctx:           ctx,
+		ApiService: a,
+		ctx: ctx,
 		environmentPk: environmentPk,
-		id:            id,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return TagUpdate
-func (a *EnvironmentsApiService) EnvironmentsTagsUpdateExecute(r ApiEnvironmentsTagsUpdateRequest) (*TagUpdate, *http.Response, error) {
+//  @return TagUpdate
+func (a *EnvironmentsAPIService) EnvironmentsTagsUpdateExecute(r ApiEnvironmentsTagsUpdateRequest) (*TagUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *TagUpdate
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *TagUpdate
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsTagsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{environment_pk}/tags/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterToString(r.environmentPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"environment_pk"+"}", url.PathEscape(parameterValueToString(r.environmentPk, "environmentPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1811,9 +1802,9 @@ func (a *EnvironmentsApiService) EnvironmentsTagsUpdateExecute(r ApiEnvironments
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1839,9 +1830,9 @@ func (a *EnvironmentsApiService) EnvironmentsTagsUpdateExecute(r ApiEnvironments
 }
 
 type ApiEnvironmentsUpdateRequest struct {
-	ctx         context.Context
-	ApiService  *EnvironmentsApiService
-	id          string
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
+	id string
 	environment *Environment
 }
 
@@ -1857,36 +1848,35 @@ func (r ApiEnvironmentsUpdateRequest) Execute() (*Environment, *http.Response, e
 /*
 EnvironmentsUpdate Method for EnvironmentsUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiEnvironmentsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiEnvironmentsUpdateRequest
 */
-func (a *EnvironmentsApiService) EnvironmentsUpdate(ctx context.Context, id string) ApiEnvironmentsUpdateRequest {
+func (a *EnvironmentsAPIService) EnvironmentsUpdate(ctx context.Context, id string) ApiEnvironmentsUpdateRequest {
 	return ApiEnvironmentsUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Environment
-func (a *EnvironmentsApiService) EnvironmentsUpdateExecute(r ApiEnvironmentsUpdateRequest) (*Environment, *http.Response, error) {
+//  @return Environment
+func (a *EnvironmentsAPIService) EnvironmentsUpdateExecute(r ApiEnvironmentsUpdateRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Environment
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Environment
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsApiService.EnvironmentsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/environments/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1952,9 +1942,9 @@ func (a *EnvironmentsApiService) EnvironmentsUpdateExecute(r ApiEnvironmentsUpda
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

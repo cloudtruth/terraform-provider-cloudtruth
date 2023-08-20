@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the TemplateCreate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TemplateCreate{}
+
 // TemplateCreate A parameter template in a given project, optionally instantiated against an environment.
 type TemplateCreate struct {
 	// The template name.
@@ -69,7 +72,7 @@ func (o *TemplateCreate) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *TemplateCreate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -79,7 +82,7 @@ func (o *TemplateCreate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TemplateCreate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -87,7 +90,7 @@ func (o *TemplateCreate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *TemplateCreate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -101,7 +104,7 @@ func (o *TemplateCreate) SetDescription(v string) {
 
 // GetBody returns the Body field value if set, zero value otherwise.
 func (o *TemplateCreate) GetBody() string {
-	if o == nil || o.Body == nil {
+	if o == nil || IsNil(o.Body) {
 		var ret string
 		return ret
 	}
@@ -111,7 +114,7 @@ func (o *TemplateCreate) GetBody() string {
 // GetBodyOk returns a tuple with the Body field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TemplateCreate) GetBodyOk() (*string, bool) {
-	if o == nil || o.Body == nil {
+	if o == nil || IsNil(o.Body) {
 		return nil, false
 	}
 	return o.Body, true
@@ -119,7 +122,7 @@ func (o *TemplateCreate) GetBodyOk() (*string, bool) {
 
 // HasBody returns a boolean if a field has been set.
 func (o *TemplateCreate) HasBody() bool {
-	if o != nil && o.Body != nil {
+	if o != nil && !IsNil(o.Body) {
 		return true
 	}
 
@@ -132,17 +135,23 @@ func (o *TemplateCreate) SetBody(v string) {
 }
 
 func (o TemplateCreate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Body != nil {
-		toSerialize["body"] = o.Body
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TemplateCreate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Body) {
+		toSerialize["body"] = o.Body
+	}
+	return toSerialize, nil
 }
 
 type NullableTemplateCreate struct {
@@ -180,3 +189,5 @@ func (v *NullableTemplateCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

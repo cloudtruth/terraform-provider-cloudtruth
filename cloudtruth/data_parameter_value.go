@@ -81,7 +81,7 @@ func dataCloudTruthParameterValueRead(ctx context.Context, d *schema.ResourceDat
 	paramName := d.Get("parameter_name").(string)
 
 	// Handle as_of and tag filters
-	paramListRequest := c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(paramName)
+	paramListRequest := c.openAPIClient.ProjectsAPI.ProjectsParametersList(ctx, *projID).Environment(*envID).Name(paramName)
 	filteredParamListRequest, err := parseParamListFilters(paramListRequest, d)
 	if err != nil {
 		return diag.FromErr(err)
@@ -189,7 +189,7 @@ func dataCloudTruthParameterValuesRead(ctx context.Context, d *schema.ResourceDa
 	paramsMap := make(map[string]any)
 	var pageNum int32 = 0
 	for {
-		paramListRequest = c.openAPIClient.ProjectsApi.ProjectsParametersList(ctx, *projID).Environment(environment)
+		paramListRequest = c.openAPIClient.ProjectsAPI.ProjectsParametersList(ctx, *projID).Environment(environment)
 		if pageNum > 0 {
 			paramListRequest = paramListRequest.Page(pageNum)
 		}

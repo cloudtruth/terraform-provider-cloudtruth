@@ -152,7 +152,7 @@ func resourceAzurePushActionCreate(ctx context.Context, d *schema.ResourceData, 
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		azurePush, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPushesCreate(ctx, *azureIntegrationID).AzureKeyVaultPush(*pushActionCreate).Execute()
+		azurePush, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultPushesCreate(ctx, *azureIntegrationID).AzureKeyVaultPush(*pushActionCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAzurePushActionCreate: error creating Azure push action %s", pushActionName), r, err)
 		}
@@ -182,7 +182,7 @@ func resourceAzurePushActionRead(ctx context.Context, d *schema.ResourceData, me
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		azurePush, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPushesRetrieve(ctx, azureIntegrationID, pushActionID).Execute()
+		azurePush, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultPushesRetrieve(ctx, azureIntegrationID, pushActionID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAzurePushActionRead: error reading Azure push action %s", pushActionName), r, err)
 		}
@@ -303,7 +303,7 @@ func resourceAzurePushActionUpdate(ctx context.Context, d *schema.ResourceData, 
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPushesPartialUpdate(ctx, azureIntegrationID,
+			_, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultPushesPartialUpdate(ctx, azureIntegrationID,
 				pushActionID).PatchedAzureKeyVaultPushUpdate(patchedAzurePush).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceAzurePushActionUpdate: error updating Azure push action %s", pushActionName), r, err)
@@ -329,7 +329,7 @@ func resourceAzurePushActionDelete(ctx context.Context, d *schema.ResourceData, 
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultPushesDestroy(ctx, azureIntegrationID, pushActionID).Execute()
+		r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultPushesDestroy(ctx, azureIntegrationID, pushActionID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAzurePushActionDelete: error destroying Azure push action %s", pushActionName), r, err)
 		}

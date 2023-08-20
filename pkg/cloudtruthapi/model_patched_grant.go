@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the PatchedGrant type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedGrant{}
+
 // PatchedGrant struct for PatchedGrant
 type PatchedGrant struct {
 	Url *string `json:"url,omitempty"`
@@ -25,10 +28,9 @@ type PatchedGrant struct {
 	Principal *string `json:"principal,omitempty"`
 	// The URI of a scope for the grant; this must reference a project or environment.
 	Scope *string `json:"scope,omitempty"`
-	// The role that the principal has in the given scope.
-	Role       NullableRoleEnum `json:"role,omitempty"`
-	CreatedAt  *time.Time       `json:"created_at,omitempty"`
-	ModifiedAt *time.Time       `json:"modified_at,omitempty"`
+	Role *RoleEnum `json:"role,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 }
 
 // NewPatchedGrant instantiates a new PatchedGrant object
@@ -50,7 +52,7 @@ func NewPatchedGrantWithDefaults() *PatchedGrant {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedGrant) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -60,7 +62,7 @@ func (o *PatchedGrant) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGrant) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -68,7 +70,7 @@ func (o *PatchedGrant) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedGrant) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -82,7 +84,7 @@ func (o *PatchedGrant) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedGrant) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -92,7 +94,7 @@ func (o *PatchedGrant) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGrant) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -100,7 +102,7 @@ func (o *PatchedGrant) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedGrant) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -114,7 +116,7 @@ func (o *PatchedGrant) SetId(v string) {
 
 // GetPrincipal returns the Principal field value if set, zero value otherwise.
 func (o *PatchedGrant) GetPrincipal() string {
-	if o == nil || o.Principal == nil {
+	if o == nil || IsNil(o.Principal) {
 		var ret string
 		return ret
 	}
@@ -124,7 +126,7 @@ func (o *PatchedGrant) GetPrincipal() string {
 // GetPrincipalOk returns a tuple with the Principal field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGrant) GetPrincipalOk() (*string, bool) {
-	if o == nil || o.Principal == nil {
+	if o == nil || IsNil(o.Principal) {
 		return nil, false
 	}
 	return o.Principal, true
@@ -132,7 +134,7 @@ func (o *PatchedGrant) GetPrincipalOk() (*string, bool) {
 
 // HasPrincipal returns a boolean if a field has been set.
 func (o *PatchedGrant) HasPrincipal() bool {
-	if o != nil && o.Principal != nil {
+	if o != nil && !IsNil(o.Principal) {
 		return true
 	}
 
@@ -146,7 +148,7 @@ func (o *PatchedGrant) SetPrincipal(v string) {
 
 // GetScope returns the Scope field value if set, zero value otherwise.
 func (o *PatchedGrant) GetScope() string {
-	if o == nil || o.Scope == nil {
+	if o == nil || IsNil(o.Scope) {
 		var ret string
 		return ret
 	}
@@ -156,7 +158,7 @@ func (o *PatchedGrant) GetScope() string {
 // GetScopeOk returns a tuple with the Scope field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGrant) GetScopeOk() (*string, bool) {
-	if o == nil || o.Scope == nil {
+	if o == nil || IsNil(o.Scope) {
 		return nil, false
 	}
 	return o.Scope, true
@@ -164,7 +166,7 @@ func (o *PatchedGrant) GetScopeOk() (*string, bool) {
 
 // HasScope returns a boolean if a field has been set.
 func (o *PatchedGrant) HasScope() bool {
-	if o != nil && o.Scope != nil {
+	if o != nil && !IsNil(o.Scope) {
 		return true
 	}
 
@@ -176,52 +178,41 @@ func (o *PatchedGrant) SetScope(v string) {
 	o.Scope = &v
 }
 
-// GetRole returns the Role field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetRole returns the Role field value if set, zero value otherwise.
 func (o *PatchedGrant) GetRole() RoleEnum {
-	if o == nil || o.Role.Get() == nil {
+	if o == nil || IsNil(o.Role) {
 		var ret RoleEnum
 		return ret
 	}
-	return *o.Role.Get()
+	return *o.Role
 }
 
 // GetRoleOk returns a tuple with the Role field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PatchedGrant) GetRoleOk() (*RoleEnum, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Role) {
 		return nil, false
 	}
-	return o.Role.Get(), o.Role.IsSet()
+	return o.Role, true
 }
 
 // HasRole returns a boolean if a field has been set.
 func (o *PatchedGrant) HasRole() bool {
-	if o != nil && o.Role.IsSet() {
+	if o != nil && !IsNil(o.Role) {
 		return true
 	}
 
 	return false
 }
 
-// SetRole gets a reference to the given NullableRoleEnum and assigns it to the Role field.
+// SetRole gets a reference to the given RoleEnum and assigns it to the Role field.
 func (o *PatchedGrant) SetRole(v RoleEnum) {
-	o.Role.Set(&v)
-}
-
-// SetRoleNil sets the value for Role to be an explicit nil
-func (o *PatchedGrant) SetRoleNil() {
-	o.Role.Set(nil)
-}
-
-// UnsetRole ensures that no value is present for Role, not even an explicit nil
-func (o *PatchedGrant) UnsetRole() {
-	o.Role.Unset()
+	o.Role = &v
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedGrant) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -231,7 +222,7 @@ func (o *PatchedGrant) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGrant) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -239,7 +230,7 @@ func (o *PatchedGrant) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *PatchedGrant) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -253,7 +244,7 @@ func (o *PatchedGrant) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *PatchedGrant) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -263,7 +254,7 @@ func (o *PatchedGrant) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedGrant) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -271,7 +262,7 @@ func (o *PatchedGrant) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedGrant) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -284,29 +275,37 @@ func (o *PatchedGrant) SetModifiedAt(v time.Time) {
 }
 
 func (o PatchedGrant) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
-		toSerialize["url"] = o.Url
-	}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if o.Principal != nil {
-		toSerialize["principal"] = o.Principal
-	}
-	if o.Scope != nil {
-		toSerialize["scope"] = o.Scope
-	}
-	if o.Role.IsSet() {
-		toSerialize["role"] = o.Role.Get()
-	}
-	if o.CreatedAt != nil {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if o.ModifiedAt != nil {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PatchedGrant) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Url) {
+		toSerialize["url"] = o.Url
+	}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	if !IsNil(o.Principal) {
+		toSerialize["principal"] = o.Principal
+	}
+	if !IsNil(o.Scope) {
+		toSerialize["scope"] = o.Scope
+	}
+	if !IsNil(o.Role) {
+		toSerialize["role"] = o.Role
+	}
+	if !IsNil(o.CreatedAt) {
+		toSerialize["created_at"] = o.CreatedAt
+	}
+	if !IsNil(o.ModifiedAt) {
+		toSerialize["modified_at"] = o.ModifiedAt
+	}
+	return toSerialize, nil
 }
 
 type NullablePatchedGrant struct {
@@ -344,3 +343,5 @@ func (v *NullablePatchedGrant) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

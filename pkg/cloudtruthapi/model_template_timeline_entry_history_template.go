@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the TemplateTimelineEntryHistoryTemplate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TemplateTimelineEntryHistoryTemplate{}
+
 // TemplateTimelineEntryHistoryTemplate The template record as it was when archived for history.
 type TemplateTimelineEntryHistoryTemplate struct {
 	// A unique identifier for the parameter.
@@ -96,7 +99,7 @@ func (o *TemplateTimelineEntryHistoryTemplate) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *TemplateTimelineEntryHistoryTemplate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -106,7 +109,7 @@ func (o *TemplateTimelineEntryHistoryTemplate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TemplateTimelineEntryHistoryTemplate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -114,7 +117,7 @@ func (o *TemplateTimelineEntryHistoryTemplate) GetDescriptionOk() (*string, bool
 
 // HasDescription returns a boolean if a field has been set.
 func (o *TemplateTimelineEntryHistoryTemplate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -128,7 +131,7 @@ func (o *TemplateTimelineEntryHistoryTemplate) SetDescription(v string) {
 
 // GetBody returns the Body field value if set, zero value otherwise.
 func (o *TemplateTimelineEntryHistoryTemplate) GetBody() string {
-	if o == nil || o.Body == nil {
+	if o == nil || IsNil(o.Body) {
 		var ret string
 		return ret
 	}
@@ -138,7 +141,7 @@ func (o *TemplateTimelineEntryHistoryTemplate) GetBody() string {
 // GetBodyOk returns a tuple with the Body field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TemplateTimelineEntryHistoryTemplate) GetBodyOk() (*string, bool) {
-	if o == nil || o.Body == nil {
+	if o == nil || IsNil(o.Body) {
 		return nil, false
 	}
 	return o.Body, true
@@ -146,7 +149,7 @@ func (o *TemplateTimelineEntryHistoryTemplate) GetBodyOk() (*string, bool) {
 
 // HasBody returns a boolean if a field has been set.
 func (o *TemplateTimelineEntryHistoryTemplate) HasBody() bool {
-	if o != nil && o.Body != nil {
+	if o != nil && !IsNil(o.Body) {
 		return true
 	}
 
@@ -159,20 +162,24 @@ func (o *TemplateTimelineEntryHistoryTemplate) SetBody(v string) {
 }
 
 func (o TemplateTimelineEntryHistoryTemplate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Body != nil {
-		toSerialize["body"] = o.Body
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TemplateTimelineEntryHistoryTemplate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Body) {
+		toSerialize["body"] = o.Body
+	}
+	return toSerialize, nil
 }
 
 type NullableTemplateTimelineEntryHistoryTemplate struct {
@@ -210,3 +217,5 @@ func (v *NullableTemplateTimelineEntryHistoryTemplate) UnmarshalJSON(src []byte)
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

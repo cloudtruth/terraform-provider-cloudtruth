@@ -15,9 +15,12 @@ import (
 	"encoding/json"
 )
 
+// checks if the BackupParameterRule type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BackupParameterRule{}
+
 // BackupParameterRule Rule that is applied to a parameter or parameter-type at a point in time.
 type BackupParameterRule struct {
-	RuleType   string `json:"rule_type"`
+	RuleType string `json:"rule_type"`
 	Constraint string `json:"constraint"`
 }
 
@@ -89,14 +92,18 @@ func (o *BackupParameterRule) SetConstraint(v string) {
 }
 
 func (o BackupParameterRule) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["rule_type"] = o.RuleType
-	}
-	if true {
-		toSerialize["constraint"] = o.Constraint
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o BackupParameterRule) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["rule_type"] = o.RuleType
+	toSerialize["constraint"] = o.Constraint
+	return toSerialize, nil
 }
 
 type NullableBackupParameterRule struct {
@@ -134,3 +141,5 @@ func (v *NullableBackupParameterRule) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

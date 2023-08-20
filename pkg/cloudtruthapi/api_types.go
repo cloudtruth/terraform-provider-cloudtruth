@@ -14,18 +14,19 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
 )
 
-// TypesApiService TypesApi service
-type TypesApiService service
+
+// TypesAPIService TypesAPI service
+type TypesAPIService service
 
 type ApiTypesCreateRequest struct {
-	ctx                 context.Context
-	ApiService          *TypesApiService
+	ctx context.Context
+	ApiService *TypesAPIService
 	parameterTypeCreate *ParameterTypeCreate
 }
 
@@ -41,28 +42,27 @@ func (r ApiTypesCreateRequest) Execute() (*ParameterType, *http.Response, error)
 /*
 TypesCreate Method for TypesCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTypesCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiTypesCreateRequest
 */
-func (a *TypesApiService) TypesCreate(ctx context.Context) ApiTypesCreateRequest {
+func (a *TypesAPIService) TypesCreate(ctx context.Context) ApiTypesCreateRequest {
 	return ApiTypesCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterType
-func (a *TypesApiService) TypesCreateExecute(r ApiTypesCreateRequest) (*ParameterType, *http.Response, error) {
+//  @return ParameterType
+func (a *TypesAPIService) TypesCreateExecute(r ApiTypesCreateRequest) (*ParameterType, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterType
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterType
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -133,9 +133,9 @@ func (a *TypesApiService) TypesCreateExecute(r ApiTypesCreateRequest) (*Paramete
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -161,9 +161,9 @@ func (a *TypesApiService) TypesCreateExecute(r ApiTypesCreateRequest) (*Paramete
 }
 
 type ApiTypesDestroyRequest struct {
-	ctx        context.Context
-	ApiService *TypesApiService
-	id         string
+	ctx context.Context
+	ApiService *TypesAPIService
+	id string
 }
 
 func (r ApiTypesDestroyRequest) Execute() (*http.Response, error) {
@@ -173,33 +173,33 @@ func (r ApiTypesDestroyRequest) Execute() (*http.Response, error) {
 /*
 TypesDestroy Method for TypesDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiTypesDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiTypesDestroyRequest
 */
-func (a *TypesApiService) TypesDestroy(ctx context.Context, id string) ApiTypesDestroyRequest {
+func (a *TypesAPIService) TypesDestroy(ctx context.Context, id string) ApiTypesDestroyRequest {
 	return ApiTypesDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *TypesApiService) TypesDestroyExecute(r ApiTypesDestroyRequest) (*http.Response, error) {
+func (a *TypesAPIService) TypesDestroyExecute(r ApiTypesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/types/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -260,9 +260,9 @@ func (a *TypesApiService) TypesDestroyExecute(r ApiTypesDestroyRequest) (*http.R
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -279,16 +279,16 @@ func (a *TypesApiService) TypesDestroyExecute(r ApiTypesDestroyRequest) (*http.R
 }
 
 type ApiTypesListRequest struct {
-	ctx                  context.Context
-	ApiService           *TypesApiService
+	ctx context.Context
+	ApiService *TypesAPIService
 	descriptionIcontains *string
-	nameIcontains        *string
-	nameIexact           *string
-	ordering             *string
-	page                 *int32
-	pageSize             *int32
-	parentNameIcontains  *string
-	parentNameIexact     *string
+	nameIcontains *string
+	nameIexact *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	parentNameIcontains *string
+	parentNameIexact *string
 }
 
 func (r ApiTypesListRequest) DescriptionIcontains(descriptionIcontains string) ApiTypesListRequest {
@@ -341,28 +341,27 @@ func (r ApiTypesListRequest) Execute() (*PaginatedParameterTypeList, *http.Respo
 /*
 TypesList Method for TypesList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTypesListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiTypesListRequest
 */
-func (a *TypesApiService) TypesList(ctx context.Context) ApiTypesListRequest {
+func (a *TypesAPIService) TypesList(ctx context.Context) ApiTypesListRequest {
 	return ApiTypesListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedParameterTypeList
-func (a *TypesApiService) TypesListExecute(r ApiTypesListRequest) (*PaginatedParameterTypeList, *http.Response, error) {
+//  @return PaginatedParameterTypeList
+func (a *TypesAPIService) TypesListExecute(r ApiTypesListRequest) (*PaginatedParameterTypeList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedParameterTypeList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedParameterTypeList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -374,28 +373,28 @@ func (a *TypesApiService) TypesListExecute(r ApiTypesListRequest) (*PaginatedPar
 	localVarFormParams := url.Values{}
 
 	if r.descriptionIcontains != nil {
-		localVarQueryParams.Add("description__icontains", parameterToString(*r.descriptionIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description__icontains", r.descriptionIcontains, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.nameIexact != nil {
-		localVarQueryParams.Add("name__iexact", parameterToString(*r.nameIexact, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__iexact", r.nameIexact, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.parentNameIcontains != nil {
-		localVarQueryParams.Add("parent__name__icontains", parameterToString(*r.parentNameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "parent__name__icontains", r.parentNameIcontains, "")
 	}
 	if r.parentNameIexact != nil {
-		localVarQueryParams.Add("parent__name__iexact", parameterToString(*r.parentNameIexact, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "parent__name__iexact", r.parentNameIexact, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -452,9 +451,9 @@ func (a *TypesApiService) TypesListExecute(r ApiTypesListRequest) (*PaginatedPar
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -480,9 +479,9 @@ func (a *TypesApiService) TypesListExecute(r ApiTypesListRequest) (*PaginatedPar
 }
 
 type ApiTypesPartialUpdateRequest struct {
-	ctx                  context.Context
-	ApiService           *TypesApiService
-	id                   string
+	ctx context.Context
+	ApiService *TypesAPIService
+	id string
 	patchedParameterType *PatchedParameterType
 }
 
@@ -498,36 +497,35 @@ func (r ApiTypesPartialUpdateRequest) Execute() (*ParameterType, *http.Response,
 /*
 TypesPartialUpdate Method for TypesPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiTypesPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiTypesPartialUpdateRequest
 */
-func (a *TypesApiService) TypesPartialUpdate(ctx context.Context, id string) ApiTypesPartialUpdateRequest {
+func (a *TypesAPIService) TypesPartialUpdate(ctx context.Context, id string) ApiTypesPartialUpdateRequest {
 	return ApiTypesPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterType
-func (a *TypesApiService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateRequest) (*ParameterType, *http.Response, error) {
+//  @return ParameterType
+func (a *TypesAPIService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateRequest) (*ParameterType, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterType
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterType
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/types/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -590,9 +588,9 @@ func (a *TypesApiService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateReque
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -618,9 +616,9 @@ func (a *TypesApiService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateReque
 }
 
 type ApiTypesRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *TypesApiService
-	id         string
+	ctx context.Context
+	ApiService *TypesAPIService
+	id string
 }
 
 func (r ApiTypesRetrieveRequest) Execute() (*ParameterType, *http.Response, error) {
@@ -630,36 +628,35 @@ func (r ApiTypesRetrieveRequest) Execute() (*ParameterType, *http.Response, erro
 /*
 TypesRetrieve Method for TypesRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiTypesRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiTypesRetrieveRequest
 */
-func (a *TypesApiService) TypesRetrieve(ctx context.Context, id string) ApiTypesRetrieveRequest {
+func (a *TypesAPIService) TypesRetrieve(ctx context.Context, id string) ApiTypesRetrieveRequest {
 	return ApiTypesRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterType
-func (a *TypesApiService) TypesRetrieveExecute(r ApiTypesRetrieveRequest) (*ParameterType, *http.Response, error) {
+//  @return ParameterType
+func (a *TypesAPIService) TypesRetrieveExecute(r ApiTypesRetrieveRequest) (*ParameterType, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterType
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterType
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/types/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -720,9 +717,9 @@ func (a *TypesApiService) TypesRetrieveExecute(r ApiTypesRetrieveRequest) (*Para
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -748,9 +745,9 @@ func (a *TypesApiService) TypesRetrieveExecute(r ApiTypesRetrieveRequest) (*Para
 }
 
 type ApiTypesRulesCreateRequest struct {
-	ctx                     context.Context
-	ApiService              *TypesApiService
-	parametertypePk         string
+	ctx context.Context
+	ApiService *TypesAPIService
+	parametertypePk string
 	parameterTypeRuleCreate *ParameterTypeRuleCreate
 }
 
@@ -766,36 +763,35 @@ func (r ApiTypesRulesCreateRequest) Execute() (*ParameterTypeRule, *http.Respons
 /*
 TypesRulesCreate Method for TypesRulesCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param parametertypePk The parameter type id.
-	@return ApiTypesRulesCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param parametertypePk The parameter type id.
+ @return ApiTypesRulesCreateRequest
 */
-func (a *TypesApiService) TypesRulesCreate(ctx context.Context, parametertypePk string) ApiTypesRulesCreateRequest {
+func (a *TypesAPIService) TypesRulesCreate(ctx context.Context, parametertypePk string) ApiTypesRulesCreateRequest {
 	return ApiTypesRulesCreateRequest{
-		ApiService:      a,
-		ctx:             ctx,
+		ApiService: a,
+		ctx: ctx,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterTypeRule
-func (a *TypesApiService) TypesRulesCreateExecute(r ApiTypesRulesCreateRequest) (*ParameterTypeRule, *http.Response, error) {
+//  @return ParameterTypeRule
+func (a *TypesAPIService) TypesRulesCreateExecute(r ApiTypesRulesCreateRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterTypeRule
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterTypeRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/types/{parametertype_pk}/rules/"
-	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterToString(r.parametertypePk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterValueToString(r.parametertypePk, "parametertypePk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -861,9 +857,9 @@ func (a *TypesApiService) TypesRulesCreateExecute(r ApiTypesRulesCreateRequest) 
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -889,9 +885,9 @@ func (a *TypesApiService) TypesRulesCreateExecute(r ApiTypesRulesCreateRequest) 
 }
 
 type ApiTypesRulesDestroyRequest struct {
-	ctx             context.Context
-	ApiService      *TypesApiService
-	id              string
+	ctx context.Context
+	ApiService *TypesAPIService
+	id string
 	parametertypePk string
 }
 
@@ -902,36 +898,36 @@ func (r ApiTypesRulesDestroyRequest) Execute() (*http.Response, error) {
 /*
 TypesRulesDestroy Method for TypesRulesDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A UUID string identifying this parameter type rule.
-	@param parametertypePk The parameter type id.
-	@return ApiTypesRulesDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A UUID string identifying this parameter type rule.
+ @param parametertypePk The parameter type id.
+ @return ApiTypesRulesDestroyRequest
 */
-func (a *TypesApiService) TypesRulesDestroy(ctx context.Context, id string, parametertypePk string) ApiTypesRulesDestroyRequest {
+func (a *TypesAPIService) TypesRulesDestroy(ctx context.Context, id string, parametertypePk string) ApiTypesRulesDestroyRequest {
 	return ApiTypesRulesDestroyRequest{
-		ApiService:      a,
-		ctx:             ctx,
-		id:              id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-func (a *TypesApiService) TypesRulesDestroyExecute(r ApiTypesRulesDestroyRequest) (*http.Response, error) {
+func (a *TypesAPIService) TypesRulesDestroyExecute(r ApiTypesRulesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/types/{parametertype_pk}/rules/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterToString(r.parametertypePk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterValueToString(r.parametertypePk, "parametertypePk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -992,9 +988,9 @@ func (a *TypesApiService) TypesRulesDestroyExecute(r ApiTypesRulesDestroyRequest
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -1011,13 +1007,13 @@ func (a *TypesApiService) TypesRulesDestroyExecute(r ApiTypesRulesDestroyRequest
 }
 
 type ApiTypesRulesListRequest struct {
-	ctx             context.Context
-	ApiService      *TypesApiService
+	ctx context.Context
+	ApiService *TypesAPIService
 	parametertypePk string
-	ordering        *string
-	page            *int32
-	pageSize        *int32
-	type_           *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	type_ *string
 }
 
 // Which field to use when ordering the results.
@@ -1050,52 +1046,51 @@ func (r ApiTypesRulesListRequest) Execute() (*PaginatedParameterTypeRuleList, *h
 /*
 TypesRulesList Method for TypesRulesList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param parametertypePk The parameter type id.
-	@return ApiTypesRulesListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param parametertypePk The parameter type id.
+ @return ApiTypesRulesListRequest
 */
-func (a *TypesApiService) TypesRulesList(ctx context.Context, parametertypePk string) ApiTypesRulesListRequest {
+func (a *TypesAPIService) TypesRulesList(ctx context.Context, parametertypePk string) ApiTypesRulesListRequest {
 	return ApiTypesRulesListRequest{
-		ApiService:      a,
-		ctx:             ctx,
+		ApiService: a,
+		ctx: ctx,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedParameterTypeRuleList
-func (a *TypesApiService) TypesRulesListExecute(r ApiTypesRulesListRequest) (*PaginatedParameterTypeRuleList, *http.Response, error) {
+//  @return PaginatedParameterTypeRuleList
+func (a *TypesAPIService) TypesRulesListExecute(r ApiTypesRulesListRequest) (*PaginatedParameterTypeRuleList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedParameterTypeRuleList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedParameterTypeRuleList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/types/{parametertype_pk}/rules/"
-	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterToString(r.parametertypePk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterValueToString(r.parametertypePk, "parametertypePk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.type_ != nil {
-		localVarQueryParams.Add("type", parameterToString(*r.type_, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "type", r.type_, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1152,9 +1147,9 @@ func (a *TypesApiService) TypesRulesListExecute(r ApiTypesRulesListRequest) (*Pa
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1180,10 +1175,10 @@ func (a *TypesApiService) TypesRulesListExecute(r ApiTypesRulesListRequest) (*Pa
 }
 
 type ApiTypesRulesPartialUpdateRequest struct {
-	ctx                      context.Context
-	ApiService               *TypesApiService
-	id                       string
-	parametertypePk          string
+	ctx context.Context
+	ApiService *TypesAPIService
+	id string
+	parametertypePk string
 	patchedParameterTypeRule *PatchedParameterTypeRule
 }
 
@@ -1199,39 +1194,38 @@ func (r ApiTypesRulesPartialUpdateRequest) Execute() (*ParameterTypeRule, *http.
 /*
 TypesRulesPartialUpdate Method for TypesRulesPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A UUID string identifying this parameter type rule.
-	@param parametertypePk The parameter type id.
-	@return ApiTypesRulesPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A UUID string identifying this parameter type rule.
+ @param parametertypePk The parameter type id.
+ @return ApiTypesRulesPartialUpdateRequest
 */
-func (a *TypesApiService) TypesRulesPartialUpdate(ctx context.Context, id string, parametertypePk string) ApiTypesRulesPartialUpdateRequest {
+func (a *TypesAPIService) TypesRulesPartialUpdate(ctx context.Context, id string, parametertypePk string) ApiTypesRulesPartialUpdateRequest {
 	return ApiTypesRulesPartialUpdateRequest{
-		ApiService:      a,
-		ctx:             ctx,
-		id:              id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterTypeRule
-func (a *TypesApiService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialUpdateRequest) (*ParameterTypeRule, *http.Response, error) {
+//  @return ParameterTypeRule
+func (a *TypesAPIService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialUpdateRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterTypeRule
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterTypeRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/types/{parametertype_pk}/rules/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterToString(r.parametertypePk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterValueToString(r.parametertypePk, "parametertypePk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1294,9 +1288,9 @@ func (a *TypesApiService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialU
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1322,9 +1316,9 @@ func (a *TypesApiService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialU
 }
 
 type ApiTypesRulesRetrieveRequest struct {
-	ctx             context.Context
-	ApiService      *TypesApiService
-	id              string
+	ctx context.Context
+	ApiService *TypesAPIService
+	id string
 	parametertypePk string
 }
 
@@ -1335,39 +1329,38 @@ func (r ApiTypesRulesRetrieveRequest) Execute() (*ParameterTypeRule, *http.Respo
 /*
 TypesRulesRetrieve Method for TypesRulesRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A UUID string identifying this parameter type rule.
-	@param parametertypePk The parameter type id.
-	@return ApiTypesRulesRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A UUID string identifying this parameter type rule.
+ @param parametertypePk The parameter type id.
+ @return ApiTypesRulesRetrieveRequest
 */
-func (a *TypesApiService) TypesRulesRetrieve(ctx context.Context, id string, parametertypePk string) ApiTypesRulesRetrieveRequest {
+func (a *TypesAPIService) TypesRulesRetrieve(ctx context.Context, id string, parametertypePk string) ApiTypesRulesRetrieveRequest {
 	return ApiTypesRulesRetrieveRequest{
-		ApiService:      a,
-		ctx:             ctx,
-		id:              id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterTypeRule
-func (a *TypesApiService) TypesRulesRetrieveExecute(r ApiTypesRulesRetrieveRequest) (*ParameterTypeRule, *http.Response, error) {
+//  @return ParameterTypeRule
+func (a *TypesAPIService) TypesRulesRetrieveExecute(r ApiTypesRulesRetrieveRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterTypeRule
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterTypeRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/types/{parametertype_pk}/rules/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterToString(r.parametertypePk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterValueToString(r.parametertypePk, "parametertypePk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1428,9 +1421,9 @@ func (a *TypesApiService) TypesRulesRetrieveExecute(r ApiTypesRulesRetrieveReque
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1456,10 +1449,10 @@ func (a *TypesApiService) TypesRulesRetrieveExecute(r ApiTypesRulesRetrieveReque
 }
 
 type ApiTypesRulesUpdateRequest struct {
-	ctx               context.Context
-	ApiService        *TypesApiService
-	id                string
-	parametertypePk   string
+	ctx context.Context
+	ApiService *TypesAPIService
+	id string
+	parametertypePk string
 	parameterTypeRule *ParameterTypeRule
 }
 
@@ -1475,39 +1468,38 @@ func (r ApiTypesRulesUpdateRequest) Execute() (*ParameterTypeRule, *http.Respons
 /*
 TypesRulesUpdate Method for TypesRulesUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A UUID string identifying this parameter type rule.
-	@param parametertypePk The parameter type id.
-	@return ApiTypesRulesUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A UUID string identifying this parameter type rule.
+ @param parametertypePk The parameter type id.
+ @return ApiTypesRulesUpdateRequest
 */
-func (a *TypesApiService) TypesRulesUpdate(ctx context.Context, id string, parametertypePk string) ApiTypesRulesUpdateRequest {
+func (a *TypesAPIService) TypesRulesUpdate(ctx context.Context, id string, parametertypePk string) ApiTypesRulesUpdateRequest {
 	return ApiTypesRulesUpdateRequest{
-		ApiService:      a,
-		ctx:             ctx,
-		id:              id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterTypeRule
-func (a *TypesApiService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) (*ParameterTypeRule, *http.Response, error) {
+//  @return ParameterTypeRule
+func (a *TypesAPIService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterTypeRule
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterTypeRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesRulesUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/types/{parametertype_pk}/rules/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterToString(r.parametertypePk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parametertype_pk"+"}", url.PathEscape(parameterValueToString(r.parametertypePk, "parametertypePk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1573,9 +1565,9 @@ func (a *TypesApiService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) 
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1601,9 +1593,9 @@ func (a *TypesApiService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) 
 }
 
 type ApiTypesUpdateRequest struct {
-	ctx           context.Context
-	ApiService    *TypesApiService
-	id            string
+	ctx context.Context
+	ApiService *TypesAPIService
+	id string
 	parameterType *ParameterType
 }
 
@@ -1619,36 +1611,35 @@ func (r ApiTypesUpdateRequest) Execute() (*ParameterType, *http.Response, error)
 /*
 TypesUpdate Method for TypesUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiTypesUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiTypesUpdateRequest
 */
-func (a *TypesApiService) TypesUpdate(ctx context.Context, id string) ApiTypesUpdateRequest {
+func (a *TypesAPIService) TypesUpdate(ctx context.Context, id string) ApiTypesUpdateRequest {
 	return ApiTypesUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterType
-func (a *TypesApiService) TypesUpdateExecute(r ApiTypesUpdateRequest) (*ParameterType, *http.Response, error) {
+//  @return ParameterType
+func (a *TypesAPIService) TypesUpdateExecute(r ApiTypesUpdateRequest) (*ParameterType, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterType
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterType
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesApiService.TypesUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/types/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1714,9 +1705,9 @@ func (a *TypesApiService) TypesUpdateExecute(r ApiTypesUpdateRequest) (*Paramete
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

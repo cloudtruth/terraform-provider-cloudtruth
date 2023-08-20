@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the Membership type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Membership{}
+
 // Membership struct for Membership
 type Membership struct {
 	Url string `json:"url"`
@@ -25,17 +28,16 @@ type Membership struct {
 	User string `json:"user"`
 	// The organization that the user is a member of.
 	Organization string `json:"organization"`
-	// The role that the user has in the organization.
-	Role       NullableRoleEnum `json:"role"`
-	CreatedAt  time.Time        `json:"created_at"`
-	ModifiedAt time.Time        `json:"modified_at"`
+	Role RoleEnum `json:"role"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 }
 
 // NewMembership instantiates a new Membership object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMembership(url string, id string, user string, organization string, role NullableRoleEnum, createdAt time.Time, modifiedAt time.Time) *Membership {
+func NewMembership(url string, id string, user string, organization string, role RoleEnum, createdAt time.Time, modifiedAt time.Time) *Membership {
 	this := Membership{}
 	this.Url = url
 	this.Id = id
@@ -152,29 +154,27 @@ func (o *Membership) SetOrganization(v string) {
 }
 
 // GetRole returns the Role field value
-// If the value is explicit nil, the zero value for RoleEnum will be returned
 func (o *Membership) GetRole() RoleEnum {
-	if o == nil || o.Role.Get() == nil {
+	if o == nil {
 		var ret RoleEnum
 		return ret
 	}
 
-	return *o.Role.Get()
+	return o.Role
 }
 
 // GetRoleOk returns a tuple with the Role field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Membership) GetRoleOk() (*RoleEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Role.Get(), o.Role.IsSet()
+	return &o.Role, true
 }
 
 // SetRole sets field value
 func (o *Membership) SetRole(v RoleEnum) {
-	o.Role.Set(&v)
+	o.Role = v
 }
 
 // GetCreatedAt returns the CreatedAt field value
@@ -226,29 +226,23 @@ func (o *Membership) SetModifiedAt(v time.Time) {
 }
 
 func (o Membership) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["user"] = o.User
-	}
-	if true {
-		toSerialize["organization"] = o.Organization
-	}
-	if true {
-		toSerialize["role"] = o.Role.Get()
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Membership) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["user"] = o.User
+	toSerialize["organization"] = o.Organization
+	toSerialize["role"] = o.Role
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableMembership struct {
@@ -286,3 +280,5 @@ func (v *NullableMembership) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

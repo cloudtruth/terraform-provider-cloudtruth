@@ -106,7 +106,7 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		parameterType, r, err = c.openAPIClient.TypesApi.TypesCreate(ctx).ParameterTypeCreate(*typeCreate).Execute()
+		parameterType, r, err = c.openAPIClient.TypesAPI.TypesCreate(ctx).ParameterTypeCreate(*typeCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTypeCreate: error creating type %s", typeName), r, err)
 		}
@@ -157,7 +157,7 @@ func addRuleToType(ctx context.Context, c *cloudTruthClient, typeID string, base
 	var r *http.Response
 	retryCount := 0
 	for retryCount < ruleOperationRetries {
-		typeRule, r, err = c.openAPIClient.TypesApi.TypesRulesCreate(ctx, typeID).ParameterTypeRuleCreate(createTypeRule).Execute()
+		typeRule, r, err = c.openAPIClient.TypesAPI.TypesRulesCreate(ctx, typeID).ParameterTypeRuleCreate(createTypeRule).Execute()
 		if r.StatusCode >= 500 {
 			apiError = err
 			retryCount++
@@ -187,7 +187,7 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		parameterType, r, err = c.openAPIClient.TypesApi.TypesRetrieve(ctx, typeID).Execute()
+		parameterType, r, err = c.openAPIClient.TypesAPI.TypesRetrieve(ctx, typeID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTypeRead: error reading type %s", typeName), r, err)
 		}
@@ -289,7 +289,7 @@ func updateTypeRule(ctx context.Context, paramID, ruleName, ruleID, baseParamTyp
 
 	var r *http.Response
 	for retryCount < ruleOperationRetries {
-		ruleUpdateRequest = c.openAPIClient.TypesApi.TypesRulesUpdate(ctx, ruleID, paramID).ParameterTypeRule(*paramTypeRule)
+		ruleUpdateRequest = c.openAPIClient.TypesAPI.TypesRulesUpdate(ctx, ruleID, paramID).ParameterTypeRule(*paramTypeRule)
 		_, r, err = ruleUpdateRequest.Execute()
 		if r.StatusCode >= 500 {
 			tflog.Debug(ctx, fmt.Sprintf("updateTypeRule: error updating rule %s: %+v", ruleName, err))
@@ -315,7 +315,7 @@ func deleteTypeRule(ctx context.Context, paramID, ruleName, ruleID string, c *cl
 	var apiError, err error
 
 	for retryCount < ruleOperationRetries {
-		ruleDestroyRequest = c.openAPIClient.TypesApi.TypesRulesDestroy(ctx, ruleID, paramID)
+		ruleDestroyRequest = c.openAPIClient.TypesAPI.TypesRulesDestroy(ctx, ruleID, paramID)
 		r, err = ruleDestroyRequest.Execute()
 		if r.StatusCode >= 500 {
 			tflog.Debug(ctx, fmt.Sprintf("deleteTypeRule: error deleting rule %s: %+v", ruleName, err))
@@ -350,7 +350,7 @@ func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) d
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.TypesApi.TypesPartialUpdate(ctx, typeID).PatchedParameterType(*patchedTypeUpdate).Execute()
+			_, r, err = c.openAPIClient.TypesAPI.TypesPartialUpdate(ctx, typeID).PatchedParameterType(*patchedTypeUpdate).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceTypeUpdate: error updating type %s", typeName), r, err)
 			}
@@ -387,7 +387,7 @@ func resourceTypeDelete(ctx context.Context, d *schema.ResourceData, meta any) d
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.TypesApi.TypesDestroy(ctx, typeID).Execute()
+		r, err = c.openAPIClient.TypesAPI.TypesDestroy(ctx, typeID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceTypeDelete: error deleting type %s", typeName), r, err)
 		}

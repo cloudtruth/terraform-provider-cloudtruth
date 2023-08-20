@@ -32,7 +32,7 @@ func lookupAWSIntegration(ctx context.Context, intName string, c *cloudTruthClie
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		integrations, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsList(ctx).AwsAccountId(awsAccountID).AwsRoleName(role).Execute()
+		integrations, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsList(ctx).AwsAccountId(awsAccountID).AwsRoleName(role).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("lookupAWSIntegration: error looking up AWS integration %s", intName), r, err)
 		}
@@ -69,7 +69,7 @@ func lookupAzureIntegration(ctx context.Context, intName string, c *cloudTruthCl
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		integrations, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAzureKeyVaultList(ctx).VaultName(vaultName).TenantId(tenantID).Execute()
+		integrations, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultList(ctx).VaultName(vaultName).TenantId(tenantID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("lookupAzureIntegration: error looking up Azure integration %s", intName), r, err)
 		}
@@ -142,7 +142,7 @@ func lookupEnvTag(ctx context.Context, d *schema.ResourceData, c *cloudTruthClie
 	var tagList *cloudtruthapi.PaginatedTagList
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
-		tagList, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsList(ctx, *envID).Name(tagName).Execute()
+		tagList, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsTagsList(ctx, *envID).Name(tagName).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("lookupEnvTag: error looking up tag %s", tagName), r, err)
 		}
@@ -181,7 +181,7 @@ func getTags(ctx context.Context, tags []string, meta any) ([]string, error) {
 		var r *http.Response
 		retryCount := 0
 		for retryCount < actionRetries {
-			tag, r, err = c.openAPIClient.EnvironmentsApi.EnvironmentsTagsRetrieve(ctx, envID, tagID).Execute()
+			tag, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsTagsRetrieve(ctx, envID, tagID).Execute()
 			if r.StatusCode >= 500 {
 				apiError = err
 				retryCount++

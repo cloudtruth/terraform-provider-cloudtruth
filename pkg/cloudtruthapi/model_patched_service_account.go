@@ -16,15 +16,18 @@ import (
 	"time"
 )
 
+// checks if the PatchedServiceAccount type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedServiceAccount{}
+
 // PatchedServiceAccount struct for PatchedServiceAccount
 type PatchedServiceAccount struct {
-	Url  *string                    `json:"url,omitempty"`
-	Id   *string                    `json:"id,omitempty"`
-	User *PatchedServiceAccountUser `json:"user,omitempty"`
+	Url *string `json:"url,omitempty"`
+	Id *string `json:"id,omitempty"`
+	User *User `json:"user,omitempty"`
 	// An optional description of the process or system using the service account.
-	Description *string    `json:"description,omitempty"`
-	CreatedAt   *time.Time `json:"created_at,omitempty"`
-	ModifiedAt  *time.Time `json:"modified_at,omitempty"`
+	Description *string `json:"description,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
 	LastUsedAt NullableTime `json:"last_used_at,omitempty"`
 }
@@ -48,7 +51,7 @@ func NewPatchedServiceAccountWithDefaults() *PatchedServiceAccount {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedServiceAccount) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -58,7 +61,7 @@ func (o *PatchedServiceAccount) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedServiceAccount) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -66,7 +69,7 @@ func (o *PatchedServiceAccount) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedServiceAccount) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -80,7 +83,7 @@ func (o *PatchedServiceAccount) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedServiceAccount) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -90,7 +93,7 @@ func (o *PatchedServiceAccount) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedServiceAccount) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -98,7 +101,7 @@ func (o *PatchedServiceAccount) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedServiceAccount) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -111,9 +114,9 @@ func (o *PatchedServiceAccount) SetId(v string) {
 }
 
 // GetUser returns the User field value if set, zero value otherwise.
-func (o *PatchedServiceAccount) GetUser() PatchedServiceAccountUser {
-	if o == nil || o.User == nil {
-		var ret PatchedServiceAccountUser
+func (o *PatchedServiceAccount) GetUser() User {
+	if o == nil || IsNil(o.User) {
+		var ret User
 		return ret
 	}
 	return *o.User
@@ -121,8 +124,8 @@ func (o *PatchedServiceAccount) GetUser() PatchedServiceAccountUser {
 
 // GetUserOk returns a tuple with the User field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedServiceAccount) GetUserOk() (*PatchedServiceAccountUser, bool) {
-	if o == nil || o.User == nil {
+func (o *PatchedServiceAccount) GetUserOk() (*User, bool) {
+	if o == nil || IsNil(o.User) {
 		return nil, false
 	}
 	return o.User, true
@@ -130,21 +133,21 @@ func (o *PatchedServiceAccount) GetUserOk() (*PatchedServiceAccountUser, bool) {
 
 // HasUser returns a boolean if a field has been set.
 func (o *PatchedServiceAccount) HasUser() bool {
-	if o != nil && o.User != nil {
+	if o != nil && !IsNil(o.User) {
 		return true
 	}
 
 	return false
 }
 
-// SetUser gets a reference to the given PatchedServiceAccountUser and assigns it to the User field.
-func (o *PatchedServiceAccount) SetUser(v PatchedServiceAccountUser) {
+// SetUser gets a reference to the given User and assigns it to the User field.
+func (o *PatchedServiceAccount) SetUser(v User) {
 	o.User = &v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *PatchedServiceAccount) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -154,7 +157,7 @@ func (o *PatchedServiceAccount) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedServiceAccount) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -162,7 +165,7 @@ func (o *PatchedServiceAccount) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *PatchedServiceAccount) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -176,7 +179,7 @@ func (o *PatchedServiceAccount) SetDescription(v string) {
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedServiceAccount) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -186,7 +189,7 @@ func (o *PatchedServiceAccount) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedServiceAccount) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -194,7 +197,7 @@ func (o *PatchedServiceAccount) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *PatchedServiceAccount) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -208,7 +211,7 @@ func (o *PatchedServiceAccount) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *PatchedServiceAccount) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -218,7 +221,7 @@ func (o *PatchedServiceAccount) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedServiceAccount) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -226,7 +229,7 @@ func (o *PatchedServiceAccount) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedServiceAccount) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -240,7 +243,7 @@ func (o *PatchedServiceAccount) SetModifiedAt(v time.Time) {
 
 // GetLastUsedAt returns the LastUsedAt field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedServiceAccount) GetLastUsedAt() time.Time {
-	if o == nil || o.LastUsedAt.Get() == nil {
+	if o == nil || IsNil(o.LastUsedAt.Get()) {
 		var ret time.Time
 		return ret
 	}
@@ -270,7 +273,6 @@ func (o *PatchedServiceAccount) HasLastUsedAt() bool {
 func (o *PatchedServiceAccount) SetLastUsedAt(v time.Time) {
 	o.LastUsedAt.Set(&v)
 }
-
 // SetLastUsedAtNil sets the value for LastUsedAt to be an explicit nil
 func (o *PatchedServiceAccount) SetLastUsedAtNil() {
 	o.LastUsedAt.Set(nil)
@@ -282,29 +284,37 @@ func (o *PatchedServiceAccount) UnsetLastUsedAt() {
 }
 
 func (o PatchedServiceAccount) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PatchedServiceAccount) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
+	if !IsNil(o.Url) {
 		toSerialize["url"] = o.Url
 	}
-	if o.Id != nil {
+	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
-	if o.User != nil {
+	if !IsNil(o.User) {
 		toSerialize["user"] = o.User
 	}
-	if o.Description != nil {
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.CreatedAt != nil {
+	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
-	if o.ModifiedAt != nil {
+	if !IsNil(o.ModifiedAt) {
 		toSerialize["modified_at"] = o.ModifiedAt
 	}
 	if o.LastUsedAt.IsSet() {
 		toSerialize["last_used_at"] = o.LastUsedAt.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePatchedServiceAccount struct {
@@ -342,3 +352,5 @@ func (v *NullablePatchedServiceAccount) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

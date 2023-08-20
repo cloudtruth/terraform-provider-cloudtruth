@@ -115,7 +115,7 @@ func resourceAWSImportActionCreate(ctx context.Context, d *schema.ResourceData, 
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		awsPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsCreate(ctx, *awsIntegrationID).AwsPull(*importActionCreate).Execute()
+		awsPull, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPullsCreate(ctx, *awsIntegrationID).AwsPull(*importActionCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSImportActionCreate: error creating AWS import action %s", importActionName), r, err)
 		}
@@ -179,7 +179,7 @@ func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, me
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		awsPull, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsRetrieve(ctx, awsIntegrationID, importActionID).Execute()
+		awsPull, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPullsRetrieve(ctx, awsIntegrationID, importActionID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSImportActionRead: error reading AWS import action %s", importActionName), r, err)
 		}
@@ -239,7 +239,7 @@ func resourceAWSImportActionUpdate(ctx context.Context, d *schema.ResourceData, 
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsPartialUpdate(ctx, awsIntegrationID,
+			_, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPullsPartialUpdate(ctx, awsIntegrationID,
 				importActionID).PatchedAwsPull(patchedAWSPull).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceAWSImportActionUpdate: error updating AWS import action %s", importActionName), r, err)
@@ -265,7 +265,7 @@ func resourceAWSImportActionDelete(ctx context.Context, d *schema.ResourceData, 
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.IntegrationsApi.IntegrationsAwsPullsDestroy(ctx, awsIntegrationID, importActionID).Execute()
+		r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPullsDestroy(ctx, awsIntegrationID, importActionID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceAWSImportActionDelete: error destroying AWS import action %s", importActionName), r, err)
 		}

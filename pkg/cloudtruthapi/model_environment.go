@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the Environment type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Environment{}
+
 // Environment struct for Environment
 type Environment struct {
 	Url string `json:"url"`
@@ -31,10 +34,9 @@ type Environment struct {
 	Children []string `json:"children"`
 	// Indicates if access control is being enforced through grants.
 	AccessControlled *bool `json:"access_controlled,omitempty"`
-	// Your role in the environment, if the environment is access-controlled.
-	Role       NullableRoleEnum `json:"role"`
-	CreatedAt  time.Time        `json:"created_at"`
-	ModifiedAt time.Time        `json:"modified_at"`
+	Role NullableRoleEnum `json:"role"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 }
 
 // NewEnvironment instantiates a new Environment object
@@ -135,7 +137,7 @@ func (o *Environment) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *Environment) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -145,7 +147,7 @@ func (o *Environment) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Environment) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -153,7 +155,7 @@ func (o *Environment) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *Environment) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -167,7 +169,7 @@ func (o *Environment) SetDescription(v string) {
 
 // GetParent returns the Parent field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Environment) GetParent() string {
-	if o == nil || o.Parent.Get() == nil {
+	if o == nil || IsNil(o.Parent.Get()) {
 		var ret string
 		return ret
 	}
@@ -197,7 +199,6 @@ func (o *Environment) HasParent() bool {
 func (o *Environment) SetParent(v string) {
 	o.Parent.Set(&v)
 }
-
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *Environment) SetParentNil() {
 	o.Parent.Set(nil)
@@ -234,7 +235,7 @@ func (o *Environment) SetChildren(v []string) {
 
 // GetAccessControlled returns the AccessControlled field value if set, zero value otherwise.
 func (o *Environment) GetAccessControlled() bool {
-	if o == nil || o.AccessControlled == nil {
+	if o == nil || IsNil(o.AccessControlled) {
 		var ret bool
 		return ret
 	}
@@ -244,7 +245,7 @@ func (o *Environment) GetAccessControlled() bool {
 // GetAccessControlledOk returns a tuple with the AccessControlled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Environment) GetAccessControlledOk() (*bool, bool) {
-	if o == nil || o.AccessControlled == nil {
+	if o == nil || IsNil(o.AccessControlled) {
 		return nil, false
 	}
 	return o.AccessControlled, true
@@ -252,7 +253,7 @@ func (o *Environment) GetAccessControlledOk() (*bool, bool) {
 
 // HasAccessControlled returns a boolean if a field has been set.
 func (o *Environment) HasAccessControlled() bool {
-	if o != nil && o.AccessControlled != nil {
+	if o != nil && !IsNil(o.AccessControlled) {
 		return true
 	}
 
@@ -339,38 +340,32 @@ func (o *Environment) SetModifiedAt(v time.Time) {
 }
 
 func (o Environment) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o Environment) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
 	if o.Parent.IsSet() {
 		toSerialize["parent"] = o.Parent.Get()
 	}
-	if true {
-		toSerialize["children"] = o.Children
-	}
-	if o.AccessControlled != nil {
+	toSerialize["children"] = o.Children
+	if !IsNil(o.AccessControlled) {
 		toSerialize["access_controlled"] = o.AccessControlled
 	}
-	if true {
-		toSerialize["role"] = o.Role.Get()
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["role"] = o.Role.Get()
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableEnvironment struct {
@@ -408,3 +403,5 @@ func (v *NullableEnvironment) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -15,19 +15,21 @@ import (
 	"encoding/json"
 )
 
+// checks if the MembershipCreate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &MembershipCreate{}
+
 // MembershipCreate struct for MembershipCreate
 type MembershipCreate struct {
 	// The user of the membership.
 	User string `json:"user"`
-	// The role that the user has in the organization.
-	Role NullableRoleEnum `json:"role"`
+	Role RoleEnum `json:"role"`
 }
 
 // NewMembershipCreate instantiates a new MembershipCreate object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMembershipCreate(user string, role NullableRoleEnum) *MembershipCreate {
+func NewMembershipCreate(user string, role RoleEnum) *MembershipCreate {
 	this := MembershipCreate{}
 	this.User = user
 	this.Role = role
@@ -67,40 +69,42 @@ func (o *MembershipCreate) SetUser(v string) {
 }
 
 // GetRole returns the Role field value
-// If the value is explicit nil, the zero value for RoleEnum will be returned
 func (o *MembershipCreate) GetRole() RoleEnum {
-	if o == nil || o.Role.Get() == nil {
+	if o == nil {
 		var ret RoleEnum
 		return ret
 	}
 
-	return *o.Role.Get()
+	return o.Role
 }
 
 // GetRoleOk returns a tuple with the Role field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *MembershipCreate) GetRoleOk() (*RoleEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Role.Get(), o.Role.IsSet()
+	return &o.Role, true
 }
 
 // SetRole sets field value
 func (o *MembershipCreate) SetRole(v RoleEnum) {
-	o.Role.Set(&v)
+	o.Role = v
 }
 
 func (o MembershipCreate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["user"] = o.User
-	}
-	if true {
-		toSerialize["role"] = o.Role.Get()
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o MembershipCreate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["user"] = o.User
+	toSerialize["role"] = o.Role
+	return toSerialize, nil
 }
 
 type NullableMembershipCreate struct {
@@ -138,3 +142,5 @@ func (v *NullableMembershipCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

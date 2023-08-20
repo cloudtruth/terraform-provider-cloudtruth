@@ -83,7 +83,7 @@ func resourceGroupCreate(ctx context.Context, d *schema.ResourceData, meta any) 
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		group, r, err = c.openAPIClient.GroupsApi.GroupsCreate(ctx).Group(*groupCreate).Execute()
+		group, r, err = c.openAPIClient.GroupsAPI.GroupsCreate(ctx).Group(*groupCreate).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceGroupCreate: error creating group %s", groupName), r, err)
 		}
@@ -112,7 +112,7 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutRead), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		group, r, err = c.openAPIClient.GroupsApi.GroupsRetrieve(ctx, groupID).Execute()
+		group, r, err = c.openAPIClient.GroupsAPI.GroupsRetrieve(ctx, groupID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceGroupRead: error reading group %s", groupName), r, err)
 		}
@@ -174,7 +174,7 @@ func resourceGroupUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.GroupsApi.GroupsPartialUpdate(ctx, groupID).PatchedGroup(patchedGroup).Execute()
+			_, r, err = c.openAPIClient.GroupsAPI.GroupsPartialUpdate(ctx, groupID).PatchedGroup(patchedGroup).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceGroupUpdate: error updating group %s", groupName), r, err)
 			}
@@ -197,7 +197,7 @@ func resourceGroupDelete(ctx context.Context, d *schema.ResourceData, meta any) 
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 		var r *http.Response
 		var err error
-		r, err = c.openAPIClient.GroupsApi.GroupsDestroy(ctx, groupID).Execute()
+		r, err = c.openAPIClient.GroupsAPI.GroupsDestroy(ctx, groupID).Execute()
 		if err != nil {
 			return handleAPIError(fmt.Sprintf("resourceGroupDelete: error destroying group %s", groupName), r, err)
 		}

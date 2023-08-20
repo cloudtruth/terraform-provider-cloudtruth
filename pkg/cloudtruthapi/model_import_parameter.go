@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the ImportParameter type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ImportParameter{}
+
 // ImportParameter Describes an imported parameter.
 type ImportParameter struct {
 	// Project name
@@ -98,7 +101,7 @@ func (o *ImportParameter) SetProjectName(v string) {
 
 // GetProjectId returns the ProjectId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *ImportParameter) GetProjectId() string {
-	if o == nil || o.ProjectId.Get() == nil {
+	if o == nil || IsNil(o.ProjectId.Get()) {
 		var ret string
 		return ret
 	}
@@ -128,7 +131,6 @@ func (o *ImportParameter) HasProjectId() bool {
 func (o *ImportParameter) SetProjectId(v string) {
 	o.ProjectId.Set(&v)
 }
-
 // SetProjectIdNil sets the value for ProjectId to be an explicit nil
 func (o *ImportParameter) SetProjectIdNil() {
 	o.ProjectId.Set(nil)
@@ -165,7 +167,7 @@ func (o *ImportParameter) SetEnvironmentName(v string) {
 
 // GetEnvironmentId returns the EnvironmentId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *ImportParameter) GetEnvironmentId() string {
-	if o == nil || o.EnvironmentId.Get() == nil {
+	if o == nil || IsNil(o.EnvironmentId.Get()) {
 		var ret string
 		return ret
 	}
@@ -195,7 +197,6 @@ func (o *ImportParameter) HasEnvironmentId() bool {
 func (o *ImportParameter) SetEnvironmentId(v string) {
 	o.EnvironmentId.Set(&v)
 }
-
 // SetEnvironmentIdNil sets the value for EnvironmentId to be an explicit nil
 func (o *ImportParameter) SetEnvironmentIdNil() {
 	o.EnvironmentId.Set(nil)
@@ -232,7 +233,7 @@ func (o *ImportParameter) SetParameterName(v string) {
 
 // GetParameterId returns the ParameterId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *ImportParameter) GetParameterId() string {
-	if o == nil || o.ParameterId.Get() == nil {
+	if o == nil || IsNil(o.ParameterId.Get()) {
 		var ret string
 		return ret
 	}
@@ -262,7 +263,6 @@ func (o *ImportParameter) HasParameterId() bool {
 func (o *ImportParameter) SetParameterId(v string) {
 	o.ParameterId.Set(&v)
 }
-
 // SetParameterIdNil sets the value for ParameterId to be an explicit nil
 func (o *ImportParameter) SetParameterIdNil() {
 	o.ParameterId.Set(nil)
@@ -275,7 +275,7 @@ func (o *ImportParameter) UnsetParameterId() {
 
 // GetSecret returns the Secret field value if set, zero value otherwise.
 func (o *ImportParameter) GetSecret() bool {
-	if o == nil || o.Secret == nil {
+	if o == nil || IsNil(o.Secret) {
 		var ret bool
 		return ret
 	}
@@ -285,7 +285,7 @@ func (o *ImportParameter) GetSecret() bool {
 // GetSecretOk returns a tuple with the Secret field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ImportParameter) GetSecretOk() (*bool, bool) {
-	if o == nil || o.Secret == nil {
+	if o == nil || IsNil(o.Secret) {
 		return nil, false
 	}
 	return o.Secret, true
@@ -293,7 +293,7 @@ func (o *ImportParameter) GetSecretOk() (*bool, bool) {
 
 // HasSecret returns a boolean if a field has been set.
 func (o *ImportParameter) HasSecret() bool {
-	if o != nil && o.Secret != nil {
+	if o != nil && !IsNil(o.Secret) {
 		return true
 	}
 
@@ -331,7 +331,7 @@ func (o *ImportParameter) SetValue(v string) {
 
 // GetValueId returns the ValueId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *ImportParameter) GetValueId() string {
-	if o == nil || o.ValueId.Get() == nil {
+	if o == nil || IsNil(o.ValueId.Get()) {
 		var ret string
 		return ret
 	}
@@ -361,7 +361,6 @@ func (o *ImportParameter) HasValueId() bool {
 func (o *ImportParameter) SetValueId(v string) {
 	o.ValueId.Set(&v)
 }
-
 // SetValueIdNil sets the value for ValueId to be an explicit nil
 func (o *ImportParameter) SetValueIdNil() {
 	o.ValueId.Set(nil)
@@ -449,44 +448,38 @@ func (o *ImportParameter) SetAction(v string) {
 }
 
 func (o ImportParameter) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["project_name"] = o.ProjectName
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
+	return json.Marshal(toSerialize)
+}
+
+func (o ImportParameter) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["project_name"] = o.ProjectName
 	if o.ProjectId.IsSet() {
 		toSerialize["project_id"] = o.ProjectId.Get()
 	}
-	if true {
-		toSerialize["environment_name"] = o.EnvironmentName
-	}
+	toSerialize["environment_name"] = o.EnvironmentName
 	if o.EnvironmentId.IsSet() {
 		toSerialize["environment_id"] = o.EnvironmentId.Get()
 	}
-	if true {
-		toSerialize["parameter_name"] = o.ParameterName
-	}
+	toSerialize["parameter_name"] = o.ParameterName
 	if o.ParameterId.IsSet() {
 		toSerialize["parameter_id"] = o.ParameterId.Get()
 	}
-	if o.Secret != nil {
+	if !IsNil(o.Secret) {
 		toSerialize["secret"] = o.Secret
 	}
-	if true {
-		toSerialize["value"] = o.Value
-	}
+	toSerialize["value"] = o.Value
 	if o.ValueId.IsSet() {
 		toSerialize["value_id"] = o.ValueId.Get()
 	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt.Get()
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt.Get()
-	}
-	if true {
-		toSerialize["action"] = o.Action
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["created_at"] = o.CreatedAt.Get()
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
+	toSerialize["action"] = o.Action
+	return toSerialize, nil
 }
 
 type NullableImportParameter struct {
@@ -524,3 +517,5 @@ func (v *NullableImportParameter) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

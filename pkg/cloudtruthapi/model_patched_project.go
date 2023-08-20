@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the PatchedProject type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedProject{}
+
 // PatchedProject struct for PatchedProject
 type PatchedProject struct {
 	Url *string `json:"url,omitempty"`
@@ -31,13 +34,12 @@ type PatchedProject struct {
 	DependsOn NullableString `json:"depends_on,omitempty"`
 	// Indicates if access control is being enforced through grants.
 	AccessControlled *bool `json:"access_controlled,omitempty"`
-	// Your role in the project, if the project is access-controlled.
 	Role NullableRoleEnum `json:"role,omitempty"`
 	// Deprecated. Only shows pushes for aws integrations in /api/v1/.
 	Pushes []AwsPush `json:"pushes,omitempty"`
 	// Push actions associated with the project.
-	PushUrls   []string   `json:"push_urls,omitempty"`
-	CreatedAt  *time.Time `json:"created_at,omitempty"`
+	PushUrls []string `json:"push_urls,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 	ModifiedAt *time.Time `json:"modified_at,omitempty"`
 }
 
@@ -60,7 +62,7 @@ func NewPatchedProjectWithDefaults() *PatchedProject {
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedProject) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -70,7 +72,7 @@ func (o *PatchedProject) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedProject) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -78,7 +80,7 @@ func (o *PatchedProject) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedProject) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -92,7 +94,7 @@ func (o *PatchedProject) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedProject) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -102,7 +104,7 @@ func (o *PatchedProject) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedProject) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -110,7 +112,7 @@ func (o *PatchedProject) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedProject) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -124,7 +126,7 @@ func (o *PatchedProject) SetId(v string) {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *PatchedProject) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -134,7 +136,7 @@ func (o *PatchedProject) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedProject) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -142,7 +144,7 @@ func (o *PatchedProject) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *PatchedProject) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -156,7 +158,7 @@ func (o *PatchedProject) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *PatchedProject) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -166,7 +168,7 @@ func (o *PatchedProject) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedProject) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -174,7 +176,7 @@ func (o *PatchedProject) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *PatchedProject) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -188,7 +190,7 @@ func (o *PatchedProject) SetDescription(v string) {
 
 // GetDependents returns the Dependents field value if set, zero value otherwise.
 func (o *PatchedProject) GetDependents() []string {
-	if o == nil || o.Dependents == nil {
+	if o == nil || IsNil(o.Dependents) {
 		var ret []string
 		return ret
 	}
@@ -198,7 +200,7 @@ func (o *PatchedProject) GetDependents() []string {
 // GetDependentsOk returns a tuple with the Dependents field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedProject) GetDependentsOk() ([]string, bool) {
-	if o == nil || o.Dependents == nil {
+	if o == nil || IsNil(o.Dependents) {
 		return nil, false
 	}
 	return o.Dependents, true
@@ -206,7 +208,7 @@ func (o *PatchedProject) GetDependentsOk() ([]string, bool) {
 
 // HasDependents returns a boolean if a field has been set.
 func (o *PatchedProject) HasDependents() bool {
-	if o != nil && o.Dependents != nil {
+	if o != nil && !IsNil(o.Dependents) {
 		return true
 	}
 
@@ -220,7 +222,7 @@ func (o *PatchedProject) SetDependents(v []string) {
 
 // GetDependsOn returns the DependsOn field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedProject) GetDependsOn() string {
-	if o == nil || o.DependsOn.Get() == nil {
+	if o == nil || IsNil(o.DependsOn.Get()) {
 		var ret string
 		return ret
 	}
@@ -250,7 +252,6 @@ func (o *PatchedProject) HasDependsOn() bool {
 func (o *PatchedProject) SetDependsOn(v string) {
 	o.DependsOn.Set(&v)
 }
-
 // SetDependsOnNil sets the value for DependsOn to be an explicit nil
 func (o *PatchedProject) SetDependsOnNil() {
 	o.DependsOn.Set(nil)
@@ -263,7 +264,7 @@ func (o *PatchedProject) UnsetDependsOn() {
 
 // GetAccessControlled returns the AccessControlled field value if set, zero value otherwise.
 func (o *PatchedProject) GetAccessControlled() bool {
-	if o == nil || o.AccessControlled == nil {
+	if o == nil || IsNil(o.AccessControlled) {
 		var ret bool
 		return ret
 	}
@@ -273,7 +274,7 @@ func (o *PatchedProject) GetAccessControlled() bool {
 // GetAccessControlledOk returns a tuple with the AccessControlled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedProject) GetAccessControlledOk() (*bool, bool) {
-	if o == nil || o.AccessControlled == nil {
+	if o == nil || IsNil(o.AccessControlled) {
 		return nil, false
 	}
 	return o.AccessControlled, true
@@ -281,7 +282,7 @@ func (o *PatchedProject) GetAccessControlledOk() (*bool, bool) {
 
 // HasAccessControlled returns a boolean if a field has been set.
 func (o *PatchedProject) HasAccessControlled() bool {
-	if o != nil && o.AccessControlled != nil {
+	if o != nil && !IsNil(o.AccessControlled) {
 		return true
 	}
 
@@ -295,7 +296,7 @@ func (o *PatchedProject) SetAccessControlled(v bool) {
 
 // GetRole returns the Role field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedProject) GetRole() RoleEnum {
-	if o == nil || o.Role.Get() == nil {
+	if o == nil || IsNil(o.Role.Get()) {
 		var ret RoleEnum
 		return ret
 	}
@@ -325,7 +326,6 @@ func (o *PatchedProject) HasRole() bool {
 func (o *PatchedProject) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
-
 // SetRoleNil sets the value for Role to be an explicit nil
 func (o *PatchedProject) SetRoleNil() {
 	o.Role.Set(nil)
@@ -338,7 +338,7 @@ func (o *PatchedProject) UnsetRole() {
 
 // GetPushes returns the Pushes field value if set, zero value otherwise.
 func (o *PatchedProject) GetPushes() []AwsPush {
-	if o == nil || o.Pushes == nil {
+	if o == nil || IsNil(o.Pushes) {
 		var ret []AwsPush
 		return ret
 	}
@@ -348,7 +348,7 @@ func (o *PatchedProject) GetPushes() []AwsPush {
 // GetPushesOk returns a tuple with the Pushes field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedProject) GetPushesOk() ([]AwsPush, bool) {
-	if o == nil || o.Pushes == nil {
+	if o == nil || IsNil(o.Pushes) {
 		return nil, false
 	}
 	return o.Pushes, true
@@ -356,7 +356,7 @@ func (o *PatchedProject) GetPushesOk() ([]AwsPush, bool) {
 
 // HasPushes returns a boolean if a field has been set.
 func (o *PatchedProject) HasPushes() bool {
-	if o != nil && o.Pushes != nil {
+	if o != nil && !IsNil(o.Pushes) {
 		return true
 	}
 
@@ -370,7 +370,7 @@ func (o *PatchedProject) SetPushes(v []AwsPush) {
 
 // GetPushUrls returns the PushUrls field value if set, zero value otherwise.
 func (o *PatchedProject) GetPushUrls() []string {
-	if o == nil || o.PushUrls == nil {
+	if o == nil || IsNil(o.PushUrls) {
 		var ret []string
 		return ret
 	}
@@ -380,7 +380,7 @@ func (o *PatchedProject) GetPushUrls() []string {
 // GetPushUrlsOk returns a tuple with the PushUrls field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedProject) GetPushUrlsOk() ([]string, bool) {
-	if o == nil || o.PushUrls == nil {
+	if o == nil || IsNil(o.PushUrls) {
 		return nil, false
 	}
 	return o.PushUrls, true
@@ -388,7 +388,7 @@ func (o *PatchedProject) GetPushUrlsOk() ([]string, bool) {
 
 // HasPushUrls returns a boolean if a field has been set.
 func (o *PatchedProject) HasPushUrls() bool {
-	if o != nil && o.PushUrls != nil {
+	if o != nil && !IsNil(o.PushUrls) {
 		return true
 	}
 
@@ -402,7 +402,7 @@ func (o *PatchedProject) SetPushUrls(v []string) {
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedProject) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -412,7 +412,7 @@ func (o *PatchedProject) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedProject) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -420,7 +420,7 @@ func (o *PatchedProject) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *PatchedProject) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -434,7 +434,7 @@ func (o *PatchedProject) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *PatchedProject) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -444,7 +444,7 @@ func (o *PatchedProject) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedProject) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -452,7 +452,7 @@ func (o *PatchedProject) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedProject) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -465,44 +465,52 @@ func (o *PatchedProject) SetModifiedAt(v time.Time) {
 }
 
 func (o PatchedProject) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PatchedProject) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
+	if !IsNil(o.Url) {
 		toSerialize["url"] = o.Url
 	}
-	if o.Id != nil {
+	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
-	if o.Name != nil {
+	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
-	if o.Description != nil {
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.Dependents != nil {
+	if !IsNil(o.Dependents) {
 		toSerialize["dependents"] = o.Dependents
 	}
 	if o.DependsOn.IsSet() {
 		toSerialize["depends_on"] = o.DependsOn.Get()
 	}
-	if o.AccessControlled != nil {
+	if !IsNil(o.AccessControlled) {
 		toSerialize["access_controlled"] = o.AccessControlled
 	}
 	if o.Role.IsSet() {
 		toSerialize["role"] = o.Role.Get()
 	}
-	if o.Pushes != nil {
+	if !IsNil(o.Pushes) {
 		toSerialize["pushes"] = o.Pushes
 	}
-	if o.PushUrls != nil {
+	if !IsNil(o.PushUrls) {
 		toSerialize["push_urls"] = o.PushUrls
 	}
-	if o.CreatedAt != nil {
+	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
-	if o.ModifiedAt != nil {
+	if !IsNil(o.ModifiedAt) {
 		toSerialize["modified_at"] = o.ModifiedAt
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePatchedProject struct {
@@ -540,3 +548,5 @@ func (v *NullablePatchedProject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

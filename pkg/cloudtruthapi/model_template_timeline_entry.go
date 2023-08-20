@@ -16,12 +16,15 @@ import (
 	"time"
 )
 
+// checks if the TemplateTimelineEntry type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TemplateTimelineEntry{}
+
 // TemplateTimelineEntry Details about a single change.
 type TemplateTimelineEntry struct {
-	HistoryDate time.Time               `json:"history_date"`
-	HistoryType NullableHistoryTypeEnum `json:"history_type"`
+	HistoryDate time.Time `json:"history_date"`
+	HistoryType HistoryTypeEnum `json:"history_type"`
 	// The unique identifier of a user.
-	HistoryUser     NullableString                       `json:"history_user,omitempty"`
+	HistoryUser NullableString `json:"history_user,omitempty"`
 	HistoryTemplate TemplateTimelineEntryHistoryTemplate `json:"history_template"`
 }
 
@@ -29,7 +32,7 @@ type TemplateTimelineEntry struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTemplateTimelineEntry(historyDate time.Time, historyType NullableHistoryTypeEnum, historyTemplate TemplateTimelineEntryHistoryTemplate) *TemplateTimelineEntry {
+func NewTemplateTimelineEntry(historyDate time.Time, historyType HistoryTypeEnum, historyTemplate TemplateTimelineEntryHistoryTemplate) *TemplateTimelineEntry {
 	this := TemplateTimelineEntry{}
 	this.HistoryDate = historyDate
 	this.HistoryType = historyType
@@ -70,34 +73,32 @@ func (o *TemplateTimelineEntry) SetHistoryDate(v time.Time) {
 }
 
 // GetHistoryType returns the HistoryType field value
-// If the value is explicit nil, the zero value for HistoryTypeEnum will be returned
 func (o *TemplateTimelineEntry) GetHistoryType() HistoryTypeEnum {
-	if o == nil || o.HistoryType.Get() == nil {
+	if o == nil {
 		var ret HistoryTypeEnum
 		return ret
 	}
 
-	return *o.HistoryType.Get()
+	return o.HistoryType
 }
 
 // GetHistoryTypeOk returns a tuple with the HistoryType field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TemplateTimelineEntry) GetHistoryTypeOk() (*HistoryTypeEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.HistoryType.Get(), o.HistoryType.IsSet()
+	return &o.HistoryType, true
 }
 
 // SetHistoryType sets field value
 func (o *TemplateTimelineEntry) SetHistoryType(v HistoryTypeEnum) {
-	o.HistoryType.Set(&v)
+	o.HistoryType = v
 }
 
 // GetHistoryUser returns the HistoryUser field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *TemplateTimelineEntry) GetHistoryUser() string {
-	if o == nil || o.HistoryUser.Get() == nil {
+	if o == nil || IsNil(o.HistoryUser.Get()) {
 		var ret string
 		return ret
 	}
@@ -127,7 +128,6 @@ func (o *TemplateTimelineEntry) HasHistoryUser() bool {
 func (o *TemplateTimelineEntry) SetHistoryUser(v string) {
 	o.HistoryUser.Set(&v)
 }
-
 // SetHistoryUserNil sets the value for HistoryUser to be an explicit nil
 func (o *TemplateTimelineEntry) SetHistoryUserNil() {
 	o.HistoryUser.Set(nil)
@@ -163,20 +163,22 @@ func (o *TemplateTimelineEntry) SetHistoryTemplate(v TemplateTimelineEntryHistor
 }
 
 func (o TemplateTimelineEntry) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o TemplateTimelineEntry) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["history_date"] = o.HistoryDate
-	}
-	if true {
-		toSerialize["history_type"] = o.HistoryType.Get()
-	}
+	toSerialize["history_date"] = o.HistoryDate
+	toSerialize["history_type"] = o.HistoryType
 	if o.HistoryUser.IsSet() {
 		toSerialize["history_user"] = o.HistoryUser.Get()
 	}
-	if true {
-		toSerialize["history_template"] = o.HistoryTemplate
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["history_template"] = o.HistoryTemplate
+	return toSerialize, nil
 }
 
 type NullableTemplateTimelineEntry struct {
@@ -214,3 +216,5 @@ func (v *NullableTemplateTimelineEntry) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

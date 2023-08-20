@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the GitHubPull type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GitHubPull{}
+
 // GitHubPull Pull actions can be configured to get configuration and secrets from integrations on demand.
 type GitHubPull struct {
 	Url string `json:"url"`
@@ -24,10 +27,10 @@ type GitHubPull struct {
 	// The action name.
 	Name string `json:"name"`
 	// The optional description for the action.
-	Description *string                      `json:"description,omitempty"`
-	LatestTask  NullableGitHubPullLatestTask `json:"latest_task"`
-	CreatedAt   time.Time                    `json:"created_at"`
-	ModifiedAt  time.Time                    `json:"modified_at"`
+	Description *string `json:"description,omitempty"`
+	LatestTask NullableGitHubPullLatestTask `json:"latest_task"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 	// Allow the pull to create environments.  Any automatically created environments will be children of the `default` environment.  If an environment needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
 	CreateEnvironments *bool `json:"create_environments,omitempty"`
 	// Allow the pull to create projects.  If a project needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
@@ -36,15 +39,14 @@ type GitHubPull struct {
 	DryRun *bool `json:"dry_run,omitempty"`
 	// Values being managed by a mapped pull.
 	MappedValues []Value `json:"mapped_values"`
-	// The pull mode used.  A pattern pull uses a pattern-matching resource string with mustache-style markers to identify the project, parameter, and environment names, or with a Python regular expression that uses named capture groups that define the same three concepts.  A mapped pull uses a specific resource and JMESpath expression to deliver a value to a specific project, parameter, and environment.  This leverages external value linkages made in the value editor, and there is one mapped pull per integration provided by the system so that you can trigger external value pull synchronizations.
-	Mode NullableModeEnum `json:"mode"`
+	Mode ModeEnum `json:"mode"`
 }
 
 // NewGitHubPull instantiates a new GitHubPull object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGitHubPull(url string, id string, name string, latestTask NullableGitHubPullLatestTask, createdAt time.Time, modifiedAt time.Time, mappedValues []Value, mode NullableModeEnum) *GitHubPull {
+func NewGitHubPull(url string, id string, name string, latestTask NullableGitHubPullLatestTask, createdAt time.Time, modifiedAt time.Time, mappedValues []Value, mode ModeEnum) *GitHubPull {
 	this := GitHubPull{}
 	this.Url = url
 	this.Id = id
@@ -139,7 +141,7 @@ func (o *GitHubPull) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *GitHubPull) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -149,7 +151,7 @@ func (o *GitHubPull) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GitHubPull) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -157,7 +159,7 @@ func (o *GitHubPull) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *GitHubPull) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -245,7 +247,7 @@ func (o *GitHubPull) SetModifiedAt(v time.Time) {
 
 // GetCreateEnvironments returns the CreateEnvironments field value if set, zero value otherwise.
 func (o *GitHubPull) GetCreateEnvironments() bool {
-	if o == nil || o.CreateEnvironments == nil {
+	if o == nil || IsNil(o.CreateEnvironments) {
 		var ret bool
 		return ret
 	}
@@ -255,7 +257,7 @@ func (o *GitHubPull) GetCreateEnvironments() bool {
 // GetCreateEnvironmentsOk returns a tuple with the CreateEnvironments field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GitHubPull) GetCreateEnvironmentsOk() (*bool, bool) {
-	if o == nil || o.CreateEnvironments == nil {
+	if o == nil || IsNil(o.CreateEnvironments) {
 		return nil, false
 	}
 	return o.CreateEnvironments, true
@@ -263,7 +265,7 @@ func (o *GitHubPull) GetCreateEnvironmentsOk() (*bool, bool) {
 
 // HasCreateEnvironments returns a boolean if a field has been set.
 func (o *GitHubPull) HasCreateEnvironments() bool {
-	if o != nil && o.CreateEnvironments != nil {
+	if o != nil && !IsNil(o.CreateEnvironments) {
 		return true
 	}
 
@@ -277,7 +279,7 @@ func (o *GitHubPull) SetCreateEnvironments(v bool) {
 
 // GetCreateProjects returns the CreateProjects field value if set, zero value otherwise.
 func (o *GitHubPull) GetCreateProjects() bool {
-	if o == nil || o.CreateProjects == nil {
+	if o == nil || IsNil(o.CreateProjects) {
 		var ret bool
 		return ret
 	}
@@ -287,7 +289,7 @@ func (o *GitHubPull) GetCreateProjects() bool {
 // GetCreateProjectsOk returns a tuple with the CreateProjects field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GitHubPull) GetCreateProjectsOk() (*bool, bool) {
-	if o == nil || o.CreateProjects == nil {
+	if o == nil || IsNil(o.CreateProjects) {
 		return nil, false
 	}
 	return o.CreateProjects, true
@@ -295,7 +297,7 @@ func (o *GitHubPull) GetCreateProjectsOk() (*bool, bool) {
 
 // HasCreateProjects returns a boolean if a field has been set.
 func (o *GitHubPull) HasCreateProjects() bool {
-	if o != nil && o.CreateProjects != nil {
+	if o != nil && !IsNil(o.CreateProjects) {
 		return true
 	}
 
@@ -309,7 +311,7 @@ func (o *GitHubPull) SetCreateProjects(v bool) {
 
 // GetDryRun returns the DryRun field value if set, zero value otherwise.
 func (o *GitHubPull) GetDryRun() bool {
-	if o == nil || o.DryRun == nil {
+	if o == nil || IsNil(o.DryRun) {
 		var ret bool
 		return ret
 	}
@@ -319,7 +321,7 @@ func (o *GitHubPull) GetDryRun() bool {
 // GetDryRunOk returns a tuple with the DryRun field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GitHubPull) GetDryRunOk() (*bool, bool) {
-	if o == nil || o.DryRun == nil {
+	if o == nil || IsNil(o.DryRun) {
 		return nil, false
 	}
 	return o.DryRun, true
@@ -327,7 +329,7 @@ func (o *GitHubPull) GetDryRunOk() (*bool, bool) {
 
 // HasDryRun returns a boolean if a field has been set.
 func (o *GitHubPull) HasDryRun() bool {
-	if o != nil && o.DryRun != nil {
+	if o != nil && !IsNil(o.DryRun) {
 		return true
 	}
 
@@ -364,70 +366,60 @@ func (o *GitHubPull) SetMappedValues(v []Value) {
 }
 
 // GetMode returns the Mode field value
-// If the value is explicit nil, the zero value for ModeEnum will be returned
 func (o *GitHubPull) GetMode() ModeEnum {
-	if o == nil || o.Mode.Get() == nil {
+	if o == nil {
 		var ret ModeEnum
 		return ret
 	}
 
-	return *o.Mode.Get()
+	return o.Mode
 }
 
 // GetModeOk returns a tuple with the Mode field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *GitHubPull) GetModeOk() (*ModeEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Mode.Get(), o.Mode.IsSet()
+	return &o.Mode, true
 }
 
 // SetMode sets field value
 func (o *GitHubPull) SetMode(v ModeEnum) {
-	o.Mode.Set(&v)
+	o.Mode = v
 }
 
 func (o GitHubPull) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["latest_task"] = o.LatestTask.Get()
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
-	}
-	if o.CreateEnvironments != nil {
-		toSerialize["create_environments"] = o.CreateEnvironments
-	}
-	if o.CreateProjects != nil {
-		toSerialize["create_projects"] = o.CreateProjects
-	}
-	if o.DryRun != nil {
-		toSerialize["dry_run"] = o.DryRun
-	}
-	if true {
-		toSerialize["mapped_values"] = o.MappedValues
-	}
-	if true {
-		toSerialize["mode"] = o.Mode.Get()
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o GitHubPull) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["latest_task"] = o.LatestTask.Get()
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	if !IsNil(o.CreateEnvironments) {
+		toSerialize["create_environments"] = o.CreateEnvironments
+	}
+	if !IsNil(o.CreateProjects) {
+		toSerialize["create_projects"] = o.CreateProjects
+	}
+	if !IsNil(o.DryRun) {
+		toSerialize["dry_run"] = o.DryRun
+	}
+	toSerialize["mapped_values"] = o.MappedValues
+	toSerialize["mode"] = o.Mode
+	return toSerialize, nil
 }
 
 type NullableGitHubPull struct {
@@ -465,3 +457,5 @@ func (v *NullableGitHubPull) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

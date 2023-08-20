@@ -15,9 +15,12 @@ import (
 	"encoding/json"
 )
 
+// checks if the BackupExternalReference type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BackupExternalReference{}
+
 // BackupExternalReference External reference data at a point in time.
 type BackupExternalReference struct {
-	Fqn      string         `json:"fqn"`
+	Fqn string `json:"fqn"`
 	JmesPath NullableString `json:"jmes_path,omitempty"`
 }
 
@@ -65,7 +68,7 @@ func (o *BackupExternalReference) SetFqn(v string) {
 
 // GetJmesPath returns the JmesPath field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *BackupExternalReference) GetJmesPath() string {
-	if o == nil || o.JmesPath.Get() == nil {
+	if o == nil || IsNil(o.JmesPath.Get()) {
 		var ret string
 		return ret
 	}
@@ -95,7 +98,6 @@ func (o *BackupExternalReference) HasJmesPath() bool {
 func (o *BackupExternalReference) SetJmesPath(v string) {
 	o.JmesPath.Set(&v)
 }
-
 // SetJmesPathNil sets the value for JmesPath to be an explicit nil
 func (o *BackupExternalReference) SetJmesPathNil() {
 	o.JmesPath.Set(nil)
@@ -107,14 +109,20 @@ func (o *BackupExternalReference) UnsetJmesPath() {
 }
 
 func (o BackupExternalReference) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["fqn"] = o.Fqn
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
+	return json.Marshal(toSerialize)
+}
+
+func (o BackupExternalReference) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["fqn"] = o.Fqn
 	if o.JmesPath.IsSet() {
 		toSerialize["jmes_path"] = o.JmesPath.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableBackupExternalReference struct {
@@ -152,3 +160,5 @@ func (v *NullableBackupExternalReference) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

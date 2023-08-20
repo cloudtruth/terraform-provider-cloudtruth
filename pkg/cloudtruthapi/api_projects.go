@@ -14,19 +14,20 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 )
 
-// ProjectsApiService ProjectsApi service
-type ProjectsApiService service
+
+// ProjectsAPIService ProjectsAPI service
+type ProjectsAPIService service
 
 type ApiProjectsCreateRequest struct {
-	ctx           context.Context
-	ApiService    *ProjectsApiService
+	ctx context.Context
+	ApiService *ProjectsAPIService
 	projectCreate *ProjectCreate
 }
 
@@ -42,28 +43,27 @@ func (r ApiProjectsCreateRequest) Execute() (*Project, *http.Response, error) {
 /*
 ProjectsCreate Method for ProjectsCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiProjectsCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiProjectsCreateRequest
 */
-func (a *ProjectsApiService) ProjectsCreate(ctx context.Context) ApiProjectsCreateRequest {
+func (a *ProjectsAPIService) ProjectsCreate(ctx context.Context) ApiProjectsCreateRequest {
 	return ApiProjectsCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Project
-func (a *ProjectsApiService) ProjectsCreateExecute(r ApiProjectsCreateRequest) (*Project, *http.Response, error) {
+//  @return Project
+func (a *ProjectsAPIService) ProjectsCreateExecute(r ApiProjectsCreateRequest) (*Project, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Project
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Project
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -134,9 +134,9 @@ func (a *ProjectsApiService) ProjectsCreateExecute(r ApiProjectsCreateRequest) (
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -162,9 +162,9 @@ func (a *ProjectsApiService) ProjectsCreateExecute(r ApiProjectsCreateRequest) (
 }
 
 type ApiProjectsDestroyRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsApiService
-	id         string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
 }
 
 func (r ApiProjectsDestroyRequest) Execute() (*http.Response, error) {
@@ -174,33 +174,33 @@ func (r ApiProjectsDestroyRequest) Execute() (*http.Response, error) {
 /*
 ProjectsDestroy Method for ProjectsDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiProjectsDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiProjectsDestroyRequest
 */
-func (a *ProjectsApiService) ProjectsDestroy(ctx context.Context, id string) ApiProjectsDestroyRequest {
+func (a *ProjectsAPIService) ProjectsDestroy(ctx context.Context, id string) ApiProjectsDestroyRequest {
 	return ApiProjectsDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *ProjectsApiService) ProjectsDestroyExecute(r ApiProjectsDestroyRequest) (*http.Response, error) {
+func (a *ProjectsAPIService) ProjectsDestroyExecute(r ApiProjectsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -261,9 +261,9 @@ func (a *ProjectsApiService) ProjectsDestroyExecute(r ApiProjectsDestroyRequest)
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -280,14 +280,14 @@ func (a *ProjectsApiService) ProjectsDestroyExecute(r ApiProjectsDestroyRequest)
 }
 
 type ApiProjectsListRequest struct {
-	ctx                  context.Context
-	ApiService           *ProjectsApiService
+	ctx context.Context
+	ApiService *ProjectsAPIService
 	descriptionIcontains *string
-	name                 *string
-	nameIcontains        *string
-	ordering             *string
-	page                 *int32
-	pageSize             *int32
+	name *string
+	nameIcontains *string
+	ordering *string
+	page *int32
+	pageSize *int32
 }
 
 func (r ApiProjectsListRequest) DescriptionIcontains(descriptionIcontains string) ApiProjectsListRequest {
@@ -330,28 +330,27 @@ func (r ApiProjectsListRequest) Execute() (*PaginatedProjectList, *http.Response
 /*
 ProjectsList Method for ProjectsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiProjectsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiProjectsListRequest
 */
-func (a *ProjectsApiService) ProjectsList(ctx context.Context) ApiProjectsListRequest {
+func (a *ProjectsAPIService) ProjectsList(ctx context.Context) ApiProjectsListRequest {
 	return ApiProjectsListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedProjectList
-func (a *ProjectsApiService) ProjectsListExecute(r ApiProjectsListRequest) (*PaginatedProjectList, *http.Response, error) {
+//  @return PaginatedProjectList
+func (a *ProjectsAPIService) ProjectsListExecute(r ApiProjectsListRequest) (*PaginatedProjectList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedProjectList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedProjectList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -363,22 +362,22 @@ func (a *ProjectsApiService) ProjectsListExecute(r ApiProjectsListRequest) (*Pag
 	localVarFormParams := url.Values{}
 
 	if r.descriptionIcontains != nil {
-		localVarQueryParams.Add("description__icontains", parameterToString(*r.descriptionIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description__icontains", r.descriptionIcontains, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -435,9 +434,9 @@ func (a *ProjectsApiService) ProjectsListExecute(r ApiProjectsListRequest) (*Pag
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -463,20 +462,20 @@ func (a *ProjectsApiService) ProjectsListExecute(r ApiProjectsListRequest) (*Pag
 }
 
 type ApiProjectsParameterExportListRequest struct {
-	ctx            context.Context
-	ApiService     *ProjectsApiService
-	projectPk      string
-	asOf           *time.Time
-	contains       *string
-	endswith       *string
-	environment    *string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	projectPk string
+	asOf *time.Time
+	contains *string
+	endswith *string
+	environment *string
 	explicitExport *bool
-	maskSecrets    *bool
-	ordering       *string
-	output         *string
-	startswith     *string
-	tag            *string
-	wrap           *bool
+	maskSecrets *bool
+	ordering *string
+	output *string
+	startswith *string
+	tag *string
+	wrap *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -560,73 +559,72 @@ will be in a quoted string).  Note that capitalization is the only name coercion
 that will be performed on parameter names, names that are invalid for a given
 format will be omitted.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param projectPk
-	@return ApiProjectsParameterExportListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param projectPk
+ @return ApiProjectsParameterExportListRequest
 */
-func (a *ProjectsApiService) ProjectsParameterExportList(ctx context.Context, projectPk string) ApiProjectsParameterExportListRequest {
+func (a *ProjectsAPIService) ProjectsParameterExportList(ctx context.Context, projectPk string) ApiProjectsParameterExportListRequest {
 	return ApiProjectsParameterExportListRequest{
 		ApiService: a,
-		ctx:        ctx,
-		projectPk:  projectPk,
+		ctx: ctx,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterExport
-func (a *ProjectsApiService) ProjectsParameterExportListExecute(r ApiProjectsParameterExportListRequest) (*ParameterExport, *http.Response, error) {
+//  @return ParameterExport
+func (a *ProjectsAPIService) ProjectsParameterExportListExecute(r ApiProjectsParameterExportListRequest) (*ParameterExport, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterExport
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterExport
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParameterExportList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParameterExportList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameter-export/"
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.contains != nil {
-		localVarQueryParams.Add("contains", parameterToString(*r.contains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "contains", r.contains, "")
 	}
 	if r.endswith != nil {
-		localVarQueryParams.Add("endswith", parameterToString(*r.endswith, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "endswith", r.endswith, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.explicitExport != nil {
-		localVarQueryParams.Add("explicit_export", parameterToString(*r.explicitExport, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "explicit_export", r.explicitExport, "")
 	}
 	if r.maskSecrets != nil {
-		localVarQueryParams.Add("mask_secrets", parameterToString(*r.maskSecrets, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.output != nil {
-		localVarQueryParams.Add("output", parameterToString(*r.output, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "output", r.output, "")
 	}
 	if r.startswith != nil {
-		localVarQueryParams.Add("startswith", parameterToString(*r.startswith, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "startswith", r.startswith, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	if r.wrap != nil {
-		localVarQueryParams.Add("wrap", parameterToString(*r.wrap, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -683,9 +681,9 @@ func (a *ProjectsApiService) ProjectsParameterExportListExecute(r ApiProjectsPar
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -702,7 +700,8 @@ func (a *ProjectsApiService) ProjectsParameterExportListExecute(r ApiProjectsPar
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -720,9 +719,9 @@ func (a *ProjectsApiService) ProjectsParameterExportListExecute(r ApiProjectsPar
 }
 
 type ApiProjectsParametersCreateRequest struct {
-	ctx             context.Context
-	ApiService      *ProjectsApiService
-	projectPk       string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	projectPk string
 	parameterCreate *ParameterCreate
 }
 
@@ -738,36 +737,35 @@ func (r ApiProjectsParametersCreateRequest) Execute() (*Parameter, *http.Respons
 /*
 ProjectsParametersCreate Method for ProjectsParametersCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param projectPk
-	@return ApiProjectsParametersCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param projectPk
+ @return ApiProjectsParametersCreateRequest
 */
-func (a *ProjectsApiService) ProjectsParametersCreate(ctx context.Context, projectPk string) ApiProjectsParametersCreateRequest {
+func (a *ProjectsAPIService) ProjectsParametersCreate(ctx context.Context, projectPk string) ApiProjectsParametersCreateRequest {
 	return ApiProjectsParametersCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		projectPk:  projectPk,
+		ctx: ctx,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Parameter
-func (a *ProjectsApiService) ProjectsParametersCreateExecute(r ApiProjectsParametersCreateRequest) (*Parameter, *http.Response, error) {
+//  @return Parameter
+func (a *ProjectsAPIService) ProjectsParametersCreateExecute(r ApiProjectsParametersCreateRequest) (*Parameter, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Parameter
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Parameter
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/"
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -833,9 +831,9 @@ func (a *ProjectsApiService) ProjectsParametersCreateExecute(r ApiProjectsParame
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -861,10 +859,10 @@ func (a *ProjectsApiService) ProjectsParametersCreateExecute(r ApiProjectsParame
 }
 
 type ApiProjectsParametersDestroyRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsApiService
-	id         string
-	projectPk  string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
 }
 
 func (r ApiProjectsParametersDestroyRequest) Execute() (*http.Response, error) {
@@ -874,36 +872,36 @@ func (r ApiProjectsParametersDestroyRequest) Execute() (*http.Response, error) {
 /*
 ProjectsParametersDestroy Method for ProjectsParametersDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param projectPk
-	@return ApiProjectsParametersDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsParametersDestroyRequest
 */
-func (a *ProjectsApiService) ProjectsParametersDestroy(ctx context.Context, id string, projectPk string) ApiProjectsParametersDestroyRequest {
+func (a *ProjectsAPIService) ProjectsParametersDestroy(ctx context.Context, id string, projectPk string) ApiProjectsParametersDestroyRequest {
 	return ApiProjectsParametersDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		projectPk:  projectPk,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-func (a *ProjectsApiService) ProjectsParametersDestroyExecute(r ApiProjectsParametersDestroyRequest) (*http.Response, error) {
+func (a *ProjectsAPIService) ProjectsParametersDestroyExecute(r ApiProjectsParametersDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -964,9 +962,9 @@ func (a *ProjectsApiService) ProjectsParametersDestroyExecute(r ApiProjectsParam
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -983,29 +981,29 @@ func (a *ProjectsApiService) ProjectsParametersDestroyExecute(r ApiProjectsParam
 }
 
 type ApiProjectsParametersDualityListRequest struct {
-	ctx             context.Context
-	ApiService      *ProjectsApiService
-	projectPk       string
-	difference      *bool
-	environment     *string
-	evaluate        *bool
-	maskSecrets     *bool
-	name            *string
-	nameContains    *string
-	nameIcontains   *string
-	nameIexact      *string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	projectPk string
+	difference *bool
+	environment *string
+	evaluate *bool
+	maskSecrets *bool
+	name *string
+	nameContains *string
+	nameIcontains *string
+	nameIexact *string
 	nameIstartswith *string
-	nameStartswith  *string
-	ordering        *string
-	page            *int32
-	pageSize        *int32
-	secret          *bool
-	t1AsOf          *time.Time
-	t1Tag           *string
-	t2AsOf          *time.Time
-	t2Tag           *string
-	values          *bool
-	wrap            *bool
+	nameStartswith *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	secret *bool
+	t1AsOf *time.Time
+	t1Tag *string
+	t2AsOf *time.Time
+	t2Tag *string
+	values *bool
+	wrap *bool
 }
 
 // Compare the values at &#x60;t1&#x60; and &#x60;t2&#x60; and if they are the same, omit the parameter from the result.
@@ -1138,100 +1136,99 @@ entry.
 If t1 is not specified then it will point to a time in the past where
 nothing existed.  If t2 is not specified then it is assumed to be "now".
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param projectPk
-	@return ApiProjectsParametersDualityListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param projectPk
+ @return ApiProjectsParametersDualityListRequest
 */
-func (a *ProjectsApiService) ProjectsParametersDualityList(ctx context.Context, projectPk string) ApiProjectsParametersDualityListRequest {
+func (a *ProjectsAPIService) ProjectsParametersDualityList(ctx context.Context, projectPk string) ApiProjectsParametersDualityListRequest {
 	return ApiProjectsParametersDualityListRequest{
 		ApiService: a,
-		ctx:        ctx,
-		projectPk:  projectPk,
+		ctx: ctx,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedParameterDualityList
-func (a *ProjectsApiService) ProjectsParametersDualityListExecute(r ApiProjectsParametersDualityListRequest) (*PaginatedParameterDualityList, *http.Response, error) {
+//  @return PaginatedParameterDualityList
+func (a *ProjectsAPIService) ProjectsParametersDualityListExecute(r ApiProjectsParametersDualityListRequest) (*PaginatedParameterDualityList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedParameterDualityList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedParameterDualityList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersDualityList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersDualityList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/duality/"
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.difference != nil {
-		localVarQueryParams.Add("difference", parameterToString(*r.difference, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "difference", r.difference, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	if r.maskSecrets != nil {
-		localVarQueryParams.Add("mask_secrets", parameterToString(*r.maskSecrets, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.nameContains != nil {
-		localVarQueryParams.Add("name__contains", parameterToString(*r.nameContains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__contains", r.nameContains, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.nameIexact != nil {
-		localVarQueryParams.Add("name__iexact", parameterToString(*r.nameIexact, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__iexact", r.nameIexact, "")
 	}
 	if r.nameIstartswith != nil {
-		localVarQueryParams.Add("name__istartswith", parameterToString(*r.nameIstartswith, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__istartswith", r.nameIstartswith, "")
 	}
 	if r.nameStartswith != nil {
-		localVarQueryParams.Add("name__startswith", parameterToString(*r.nameStartswith, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__startswith", r.nameStartswith, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.secret != nil {
-		localVarQueryParams.Add("secret", parameterToString(*r.secret, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "secret", r.secret, "")
 	}
 	if r.t1AsOf != nil {
-		localVarQueryParams.Add("t1_as_of", parameterToString(*r.t1AsOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "t1_as_of", r.t1AsOf, "")
 	}
 	if r.t1Tag != nil {
-		localVarQueryParams.Add("t1_tag", parameterToString(*r.t1Tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "t1_tag", r.t1Tag, "")
 	}
 	if r.t2AsOf != nil {
-		localVarQueryParams.Add("t2_as_of", parameterToString(*r.t2AsOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "t2_as_of", r.t2AsOf, "")
 	}
 	if r.t2Tag != nil {
-		localVarQueryParams.Add("t2_tag", parameterToString(*r.t2Tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "t2_tag", r.t2Tag, "")
 	}
 	if r.values != nil {
-		localVarQueryParams.Add("values", parameterToString(*r.values, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "values", r.values, "")
 	}
 	if r.wrap != nil {
-		localVarQueryParams.Add("wrap", parameterToString(*r.wrap, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1288,9 +1285,9 @@ func (a *ProjectsApiService) ProjectsParametersDualityListExecute(r ApiProjectsP
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1316,35 +1313,35 @@ func (a *ProjectsApiService) ProjectsParametersDualityListExecute(r ApiProjectsP
 }
 
 type ApiProjectsParametersListRequest struct {
-	ctx                    context.Context
-	ApiService             *ProjectsApiService
-	projectPk              string
-	asOf                   *time.Time
-	descriptionIcontains   *string
-	difference             *string
-	environment            *string
-	evaluate               *bool
-	idIn                   *[]string
-	maskSecrets            *bool
-	name                   *string
-	nameContains           *string
-	nameIcontains          *string
-	nameIexact             *string
-	nameIstartswith        *string
-	nameStartswith         *string
-	ordering               *string
-	page                   *int32
-	pageSize               *int32
-	projectName            *string
-	projectNameContains    *string
-	projectNameIcontains   *string
-	projectNameIexact      *string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	projectPk string
+	asOf *time.Time
+	descriptionIcontains *string
+	difference *string
+	environment *string
+	evaluate *bool
+	idIn *[]string
+	maskSecrets *bool
+	name *string
+	nameContains *string
+	nameIcontains *string
+	nameIexact *string
+	nameIstartswith *string
+	nameStartswith *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	projectName *string
+	projectNameContains *string
+	projectNameIcontains *string
+	projectNameIexact *string
 	projectNameIstartswith *string
-	projectNameStartswith  *string
-	secret                 *bool
-	tag                    *string
-	values                 *bool
-	wrap                   *bool
+	projectNameStartswith *string
+	secret *bool
+	tag *string
+	values *bool
+	wrap *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -1496,118 +1493,117 @@ func (r ApiProjectsParametersListRequest) Execute() (*PaginatedParameterList, *h
 /*
 ProjectsParametersList Method for ProjectsParametersList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param projectPk
-	@return ApiProjectsParametersListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param projectPk
+ @return ApiProjectsParametersListRequest
 */
-func (a *ProjectsApiService) ProjectsParametersList(ctx context.Context, projectPk string) ApiProjectsParametersListRequest {
+func (a *ProjectsAPIService) ProjectsParametersList(ctx context.Context, projectPk string) ApiProjectsParametersListRequest {
 	return ApiProjectsParametersListRequest{
 		ApiService: a,
-		ctx:        ctx,
-		projectPk:  projectPk,
+		ctx: ctx,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedParameterList
-func (a *ProjectsApiService) ProjectsParametersListExecute(r ApiProjectsParametersListRequest) (*PaginatedParameterList, *http.Response, error) {
+//  @return PaginatedParameterList
+func (a *ProjectsAPIService) ProjectsParametersListExecute(r ApiProjectsParametersListRequest) (*PaginatedParameterList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedParameterList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedParameterList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/"
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.descriptionIcontains != nil {
-		localVarQueryParams.Add("description__icontains", parameterToString(*r.descriptionIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "description__icontains", r.descriptionIcontains, "")
 	}
 	if r.difference != nil {
-		localVarQueryParams.Add("difference", parameterToString(*r.difference, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "difference", r.difference, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	if r.idIn != nil {
-		localVarQueryParams.Add("id__in", parameterToString(*r.idIn, "csv"))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "id__in", r.idIn, "csv")
 	}
 	if r.maskSecrets != nil {
-		localVarQueryParams.Add("mask_secrets", parameterToString(*r.maskSecrets, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.nameContains != nil {
-		localVarQueryParams.Add("name__contains", parameterToString(*r.nameContains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__contains", r.nameContains, "")
 	}
 	if r.nameIcontains != nil {
-		localVarQueryParams.Add("name__icontains", parameterToString(*r.nameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__icontains", r.nameIcontains, "")
 	}
 	if r.nameIexact != nil {
-		localVarQueryParams.Add("name__iexact", parameterToString(*r.nameIexact, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__iexact", r.nameIexact, "")
 	}
 	if r.nameIstartswith != nil {
-		localVarQueryParams.Add("name__istartswith", parameterToString(*r.nameIstartswith, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__istartswith", r.nameIstartswith, "")
 	}
 	if r.nameStartswith != nil {
-		localVarQueryParams.Add("name__startswith", parameterToString(*r.nameStartswith, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name__startswith", r.nameStartswith, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.projectName != nil {
-		localVarQueryParams.Add("project__name", parameterToString(*r.projectName, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name", r.projectName, "")
 	}
 	if r.projectNameContains != nil {
-		localVarQueryParams.Add("project__name__contains", parameterToString(*r.projectNameContains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name__contains", r.projectNameContains, "")
 	}
 	if r.projectNameIcontains != nil {
-		localVarQueryParams.Add("project__name__icontains", parameterToString(*r.projectNameIcontains, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name__icontains", r.projectNameIcontains, "")
 	}
 	if r.projectNameIexact != nil {
-		localVarQueryParams.Add("project__name__iexact", parameterToString(*r.projectNameIexact, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name__iexact", r.projectNameIexact, "")
 	}
 	if r.projectNameIstartswith != nil {
-		localVarQueryParams.Add("project__name__istartswith", parameterToString(*r.projectNameIstartswith, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name__istartswith", r.projectNameIstartswith, "")
 	}
 	if r.projectNameStartswith != nil {
-		localVarQueryParams.Add("project__name__startswith", parameterToString(*r.projectNameStartswith, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name__startswith", r.projectNameStartswith, "")
 	}
 	if r.secret != nil {
-		localVarQueryParams.Add("secret", parameterToString(*r.secret, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "secret", r.secret, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	if r.values != nil {
-		localVarQueryParams.Add("values", parameterToString(*r.values, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "values", r.values, "")
 	}
 	if r.wrap != nil {
-		localVarQueryParams.Add("wrap", parameterToString(*r.wrap, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1664,9 +1660,9 @@ func (a *ProjectsApiService) ProjectsParametersListExecute(r ApiProjectsParamete
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1692,10 +1688,10 @@ func (a *ProjectsApiService) ProjectsParametersListExecute(r ApiProjectsParamete
 }
 
 type ApiProjectsParametersPartialUpdateRequest struct {
-	ctx              context.Context
-	ApiService       *ProjectsApiService
-	id               string
-	projectPk        string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
 	patchedParameter *PatchedParameter
 }
 
@@ -1711,39 +1707,38 @@ func (r ApiProjectsParametersPartialUpdateRequest) Execute() (*Parameter, *http.
 /*
 ProjectsParametersPartialUpdate Method for ProjectsParametersPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param projectPk
-	@return ApiProjectsParametersPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsParametersPartialUpdateRequest
 */
-func (a *ProjectsApiService) ProjectsParametersPartialUpdate(ctx context.Context, id string, projectPk string) ApiProjectsParametersPartialUpdateRequest {
+func (a *ProjectsAPIService) ProjectsParametersPartialUpdate(ctx context.Context, id string, projectPk string) ApiProjectsParametersPartialUpdateRequest {
 	return ApiProjectsParametersPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		projectPk:  projectPk,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Parameter
-func (a *ProjectsApiService) ProjectsParametersPartialUpdateExecute(r ApiProjectsParametersPartialUpdateRequest) (*Parameter, *http.Response, error) {
+//  @return Parameter
+func (a *ProjectsAPIService) ProjectsParametersPartialUpdateExecute(r ApiProjectsParametersPartialUpdateRequest) (*Parameter, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Parameter
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Parameter
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1806,9 +1801,9 @@ func (a *ProjectsApiService) ProjectsParametersPartialUpdateExecute(r ApiProject
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -1834,15 +1829,15 @@ func (a *ProjectsApiService) ProjectsParametersPartialUpdateExecute(r ApiProject
 }
 
 type ApiProjectsParametersPushesListRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
+	ctx context.Context
+	ApiService *ProjectsAPIService
 	parameterPk string
-	projectPk   string
-	asOf        *time.Time
-	ordering    *string
-	page        *int32
-	pageSize    *int32
-	tag         *string
+	projectPk string
+	asOf *time.Time
+	ordering *string
+	page *int32
+	pageSize *int32
+	tag *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -1884,58 +1879,57 @@ ProjectsParametersPushesList List push operations.
 
 The push operations that this parameter was involved in.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param parameterPk
-	@param projectPk
-	@return ApiProjectsParametersPushesListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param parameterPk
+ @param projectPk
+ @return ApiProjectsParametersPushesListRequest
 */
-func (a *ProjectsApiService) ProjectsParametersPushesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersPushesListRequest {
+func (a *ProjectsAPIService) ProjectsParametersPushesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersPushesListRequest {
 	return ApiProjectsParametersPushesListRequest{
-		ApiService:  a,
-		ctx:         ctx,
+		ApiService: a,
+		ctx: ctx,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedTaskStepList
-func (a *ProjectsApiService) ProjectsParametersPushesListExecute(r ApiProjectsParametersPushesListRequest) (*PaginatedTaskStepList, *http.Response, error) {
+//  @return PaginatedTaskStepList
+func (a *ProjectsAPIService) ProjectsParametersPushesListExecute(r ApiProjectsParametersPushesListRequest) (*PaginatedTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedTaskStepList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedTaskStepList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersPushesList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersPushesList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/pushes/"
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1992,9 +1986,9 @@ func (a *ProjectsApiService) ProjectsParametersPushesListExecute(r ApiProjectsPa
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2020,17 +2014,17 @@ func (a *ProjectsApiService) ProjectsParametersPushesListExecute(r ApiProjectsPa
 }
 
 type ApiProjectsParametersRetrieveRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
-	id          string
-	projectPk   string
-	asOf        *time.Time
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
+	asOf *time.Time
 	environment *string
-	evaluate    *bool
+	evaluate *bool
 	maskSecrets *bool
-	tag         *string
-	values      *bool
-	wrap        *bool
+	tag *string
+	values *bool
+	wrap *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -2082,64 +2076,63 @@ func (r ApiProjectsParametersRetrieveRequest) Execute() (*Parameter, *http.Respo
 /*
 ProjectsParametersRetrieve Method for ProjectsParametersRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param projectPk
-	@return ApiProjectsParametersRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsParametersRetrieveRequest
 */
-func (a *ProjectsApiService) ProjectsParametersRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsParametersRetrieveRequest {
+func (a *ProjectsAPIService) ProjectsParametersRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsParametersRetrieveRequest {
 	return ApiProjectsParametersRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		projectPk:  projectPk,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Parameter
-func (a *ProjectsApiService) ProjectsParametersRetrieveExecute(r ApiProjectsParametersRetrieveRequest) (*Parameter, *http.Response, error) {
+//  @return Parameter
+func (a *ProjectsAPIService) ProjectsParametersRetrieveExecute(r ApiProjectsParametersRetrieveRequest) (*Parameter, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Parameter
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Parameter
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	if r.maskSecrets != nil {
-		localVarQueryParams.Add("mask_secrets", parameterToString(*r.maskSecrets, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	if r.values != nil {
-		localVarQueryParams.Add("values", parameterToString(*r.values, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "values", r.values, "")
 	}
 	if r.wrap != nil {
-		localVarQueryParams.Add("wrap", parameterToString(*r.wrap, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -2196,9 +2189,9 @@ func (a *ProjectsApiService) ProjectsParametersRetrieveExecute(r ApiProjectsPara
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2224,10 +2217,10 @@ func (a *ProjectsApiService) ProjectsParametersRetrieveExecute(r ApiProjectsPara
 }
 
 type ApiProjectsParametersRulesCreateRequest struct {
-	ctx                 context.Context
-	ApiService          *ProjectsApiService
-	parameterPk         string
-	projectPk           string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	parameterPk string
+	projectPk string
 	parameterRuleCreate *ParameterRuleCreate
 }
 
@@ -2243,39 +2236,38 @@ func (r ApiProjectsParametersRulesCreateRequest) Execute() (*ParameterRule, *htt
 /*
 ProjectsParametersRulesCreate Method for ProjectsParametersRulesCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersRulesCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersRulesCreateRequest
 */
-func (a *ProjectsApiService) ProjectsParametersRulesCreate(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersRulesCreateRequest {
+func (a *ProjectsAPIService) ProjectsParametersRulesCreate(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersRulesCreateRequest {
 	return ApiProjectsParametersRulesCreateRequest{
-		ApiService:  a,
-		ctx:         ctx,
+		ApiService: a,
+		ctx: ctx,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterRule
-func (a *ProjectsApiService) ProjectsParametersRulesCreateExecute(r ApiProjectsParametersRulesCreateRequest) (*ParameterRule, *http.Response, error) {
+//  @return ParameterRule
+func (a *ProjectsAPIService) ProjectsParametersRulesCreateExecute(r ApiProjectsParametersRulesCreateRequest) (*ParameterRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterRule
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersRulesCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/rules/"
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2341,9 +2333,9 @@ func (a *ProjectsApiService) ProjectsParametersRulesCreateExecute(r ApiProjectsP
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2369,11 +2361,11 @@ func (a *ProjectsApiService) ProjectsParametersRulesCreateExecute(r ApiProjectsP
 }
 
 type ApiProjectsParametersRulesDestroyRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
-	id          string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
 	parameterPk string
-	projectPk   string
+	projectPk string
 }
 
 func (r ApiProjectsParametersRulesDestroyRequest) Execute() (*http.Response, error) {
@@ -2383,39 +2375,39 @@ func (r ApiProjectsParametersRulesDestroyRequest) Execute() (*http.Response, err
 /*
 ProjectsParametersRulesDestroy Method for ProjectsParametersRulesDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A UUID string identifying this parameter rule.
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersRulesDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A UUID string identifying this parameter rule.
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersRulesDestroyRequest
 */
-func (a *ProjectsApiService) ProjectsParametersRulesDestroy(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesDestroyRequest {
+func (a *ProjectsAPIService) ProjectsParametersRulesDestroy(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesDestroyRequest {
 	return ApiProjectsParametersRulesDestroyRequest{
-		ApiService:  a,
-		ctx:         ctx,
-		id:          id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-func (a *ProjectsApiService) ProjectsParametersRulesDestroyExecute(r ApiProjectsParametersRulesDestroyRequest) (*http.Response, error) {
+func (a *ProjectsAPIService) ProjectsParametersRulesDestroyExecute(r ApiProjectsParametersRulesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersRulesDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/rules/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2476,9 +2468,9 @@ func (a *ProjectsApiService) ProjectsParametersRulesDestroyExecute(r ApiProjects
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -2495,14 +2487,14 @@ func (a *ProjectsApiService) ProjectsParametersRulesDestroyExecute(r ApiProjects
 }
 
 type ApiProjectsParametersRulesListRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
+	ctx context.Context
+	ApiService *ProjectsAPIService
 	parameterPk string
-	projectPk   string
-	ordering    *string
-	page        *int32
-	pageSize    *int32
-	type_       *string
+	projectPk string
+	ordering *string
+	page *int32
+	pageSize *int32
+	type_ *string
 }
 
 // Which field to use when ordering the results.
@@ -2535,55 +2527,54 @@ func (r ApiProjectsParametersRulesListRequest) Execute() (*PaginatedParameterRul
 /*
 ProjectsParametersRulesList Method for ProjectsParametersRulesList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersRulesListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersRulesListRequest
 */
-func (a *ProjectsApiService) ProjectsParametersRulesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersRulesListRequest {
+func (a *ProjectsAPIService) ProjectsParametersRulesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersRulesListRequest {
 	return ApiProjectsParametersRulesListRequest{
-		ApiService:  a,
-		ctx:         ctx,
+		ApiService: a,
+		ctx: ctx,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedParameterRuleList
-func (a *ProjectsApiService) ProjectsParametersRulesListExecute(r ApiProjectsParametersRulesListRequest) (*PaginatedParameterRuleList, *http.Response, error) {
+//  @return PaginatedParameterRuleList
+func (a *ProjectsAPIService) ProjectsParametersRulesListExecute(r ApiProjectsParametersRulesListRequest) (*PaginatedParameterRuleList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedParameterRuleList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedParameterRuleList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersRulesList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/rules/"
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.type_ != nil {
-		localVarQueryParams.Add("type", parameterToString(*r.type_, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "type", r.type_, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -2640,9 +2631,9 @@ func (a *ProjectsApiService) ProjectsParametersRulesListExecute(r ApiProjectsPar
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2668,11 +2659,11 @@ func (a *ProjectsApiService) ProjectsParametersRulesListExecute(r ApiProjectsPar
 }
 
 type ApiProjectsParametersRulesPartialUpdateRequest struct {
-	ctx                  context.Context
-	ApiService           *ProjectsApiService
-	id                   string
-	parameterPk          string
-	projectPk            string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	parameterPk string
+	projectPk string
 	patchedParameterRule *PatchedParameterRule
 }
 
@@ -2688,42 +2679,41 @@ func (r ApiProjectsParametersRulesPartialUpdateRequest) Execute() (*ParameterRul
 /*
 ProjectsParametersRulesPartialUpdate Method for ProjectsParametersRulesPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A UUID string identifying this parameter rule.
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersRulesPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A UUID string identifying this parameter rule.
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersRulesPartialUpdateRequest
 */
-func (a *ProjectsApiService) ProjectsParametersRulesPartialUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesPartialUpdateRequest {
+func (a *ProjectsAPIService) ProjectsParametersRulesPartialUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesPartialUpdateRequest {
 	return ApiProjectsParametersRulesPartialUpdateRequest{
-		ApiService:  a,
-		ctx:         ctx,
-		id:          id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterRule
-func (a *ProjectsApiService) ProjectsParametersRulesPartialUpdateExecute(r ApiProjectsParametersRulesPartialUpdateRequest) (*ParameterRule, *http.Response, error) {
+//  @return ParameterRule
+func (a *ProjectsAPIService) ProjectsParametersRulesPartialUpdateExecute(r ApiProjectsParametersRulesPartialUpdateRequest) (*ParameterRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterRule
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersRulesPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/rules/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2786,9 +2776,9 @@ func (a *ProjectsApiService) ProjectsParametersRulesPartialUpdateExecute(r ApiPr
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2814,11 +2804,11 @@ func (a *ProjectsApiService) ProjectsParametersRulesPartialUpdateExecute(r ApiPr
 }
 
 type ApiProjectsParametersRulesRetrieveRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
-	id          string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
 	parameterPk string
-	projectPk   string
+	projectPk string
 }
 
 func (r ApiProjectsParametersRulesRetrieveRequest) Execute() (*ParameterRule, *http.Response, error) {
@@ -2828,42 +2818,41 @@ func (r ApiProjectsParametersRulesRetrieveRequest) Execute() (*ParameterRule, *h
 /*
 ProjectsParametersRulesRetrieve Method for ProjectsParametersRulesRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A UUID string identifying this parameter rule.
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersRulesRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A UUID string identifying this parameter rule.
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersRulesRetrieveRequest
 */
-func (a *ProjectsApiService) ProjectsParametersRulesRetrieve(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesRetrieveRequest {
+func (a *ProjectsAPIService) ProjectsParametersRulesRetrieve(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesRetrieveRequest {
 	return ApiProjectsParametersRulesRetrieveRequest{
-		ApiService:  a,
-		ctx:         ctx,
-		id:          id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterRule
-func (a *ProjectsApiService) ProjectsParametersRulesRetrieveExecute(r ApiProjectsParametersRulesRetrieveRequest) (*ParameterRule, *http.Response, error) {
+//  @return ParameterRule
+func (a *ProjectsAPIService) ProjectsParametersRulesRetrieveExecute(r ApiProjectsParametersRulesRetrieveRequest) (*ParameterRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterRule
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersRulesRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/rules/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -2924,9 +2913,9 @@ func (a *ProjectsApiService) ProjectsParametersRulesRetrieveExecute(r ApiProject
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -2952,11 +2941,11 @@ func (a *ProjectsApiService) ProjectsParametersRulesRetrieveExecute(r ApiProject
 }
 
 type ApiProjectsParametersRulesUpdateRequest struct {
-	ctx           context.Context
-	ApiService    *ProjectsApiService
-	id            string
-	parameterPk   string
-	projectPk     string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	parameterPk string
+	projectPk string
 	parameterRule *ParameterRule
 }
 
@@ -2972,42 +2961,41 @@ func (r ApiProjectsParametersRulesUpdateRequest) Execute() (*ParameterRule, *htt
 /*
 ProjectsParametersRulesUpdate Method for ProjectsParametersRulesUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A UUID string identifying this parameter rule.
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersRulesUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A UUID string identifying this parameter rule.
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersRulesUpdateRequest
 */
-func (a *ProjectsApiService) ProjectsParametersRulesUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesUpdateRequest {
+func (a *ProjectsAPIService) ProjectsParametersRulesUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesUpdateRequest {
 	return ApiProjectsParametersRulesUpdateRequest{
-		ApiService:  a,
-		ctx:         ctx,
-		id:          id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterRule
-func (a *ProjectsApiService) ProjectsParametersRulesUpdateExecute(r ApiProjectsParametersRulesUpdateRequest) (*ParameterRule, *http.Response, error) {
+//  @return ParameterRule
+func (a *ProjectsAPIService) ProjectsParametersRulesUpdateExecute(r ApiProjectsParametersRulesUpdateRequest) (*ParameterRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterRule
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterRule
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersRulesUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/rules/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3073,9 +3061,9 @@ func (a *ProjectsApiService) ProjectsParametersRulesUpdateExecute(r ApiProjectsP
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -3101,12 +3089,12 @@ func (a *ProjectsApiService) ProjectsParametersRulesUpdateExecute(r ApiProjectsP
 }
 
 type ApiProjectsParametersTimelineRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsApiService
-	id         string
-	projectPk  string
-	asOf       *time.Time
-	tag        *string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
+	asOf *time.Time
+	tag *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -3133,49 +3121,48 @@ Summary information about how a parameter has changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the parameter itself, including rules and values, is included.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param projectPk
-	@return ApiProjectsParametersTimelineRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsParametersTimelineRetrieveRequest
 */
-func (a *ProjectsApiService) ProjectsParametersTimelineRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsParametersTimelineRetrieveRequest {
+func (a *ProjectsAPIService) ProjectsParametersTimelineRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsParametersTimelineRetrieveRequest {
 	return ApiProjectsParametersTimelineRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		projectPk:  projectPk,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterTimeline
-func (a *ProjectsApiService) ProjectsParametersTimelineRetrieveExecute(r ApiProjectsParametersTimelineRetrieveRequest) (*ParameterTimeline, *http.Response, error) {
+//  @return ParameterTimeline
+func (a *ProjectsAPIService) ProjectsParametersTimelineRetrieveExecute(r ApiProjectsParametersTimelineRetrieveRequest) (*ParameterTimeline, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterTimeline
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterTimeline
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersTimelineRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersTimelineRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{id}/timeline/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -3232,9 +3219,9 @@ func (a *ProjectsApiService) ProjectsParametersTimelineRetrieveExecute(r ApiProj
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -3260,11 +3247,11 @@ func (a *ProjectsApiService) ProjectsParametersTimelineRetrieveExecute(r ApiProj
 }
 
 type ApiProjectsParametersTimelinesRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsApiService
-	projectPk  string
-	asOf       *time.Time
-	tag        *string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	projectPk string
+	asOf *time.Time
+	tag *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -3291,46 +3278,45 @@ Information about how the parameters of a project have changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the project's parameters, including rules and values, is included.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param projectPk
-	@return ApiProjectsParametersTimelinesRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param projectPk
+ @return ApiProjectsParametersTimelinesRetrieveRequest
 */
-func (a *ProjectsApiService) ProjectsParametersTimelinesRetrieve(ctx context.Context, projectPk string) ApiProjectsParametersTimelinesRetrieveRequest {
+func (a *ProjectsAPIService) ProjectsParametersTimelinesRetrieve(ctx context.Context, projectPk string) ApiProjectsParametersTimelinesRetrieveRequest {
 	return ApiProjectsParametersTimelinesRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		projectPk:  projectPk,
+		ctx: ctx,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ParameterTimeline
-func (a *ProjectsApiService) ProjectsParametersTimelinesRetrieveExecute(r ApiProjectsParametersTimelinesRetrieveRequest) (*ParameterTimeline, *http.Response, error) {
+//  @return ParameterTimeline
+func (a *ProjectsAPIService) ProjectsParametersTimelinesRetrieveExecute(r ApiProjectsParametersTimelinesRetrieveRequest) (*ParameterTimeline, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ParameterTimeline
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ParameterTimeline
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersTimelinesRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersTimelinesRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/timelines/"
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -3387,9 +3373,9 @@ func (a *ProjectsApiService) ProjectsParametersTimelinesRetrieveExecute(r ApiPro
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -3415,11 +3401,11 @@ func (a *ProjectsApiService) ProjectsParametersTimelinesRetrieveExecute(r ApiPro
 }
 
 type ApiProjectsParametersUpdateRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsApiService
-	id         string
-	projectPk  string
-	parameter  *Parameter
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
+	parameter *Parameter
 }
 
 func (r ApiProjectsParametersUpdateRequest) Parameter(parameter Parameter) ApiProjectsParametersUpdateRequest {
@@ -3434,39 +3420,38 @@ func (r ApiProjectsParametersUpdateRequest) Execute() (*Parameter, *http.Respons
 /*
 ProjectsParametersUpdate Method for ProjectsParametersUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param projectPk
-	@return ApiProjectsParametersUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsParametersUpdateRequest
 */
-func (a *ProjectsApiService) ProjectsParametersUpdate(ctx context.Context, id string, projectPk string) ApiProjectsParametersUpdateRequest {
+func (a *ProjectsAPIService) ProjectsParametersUpdate(ctx context.Context, id string, projectPk string) ApiProjectsParametersUpdateRequest {
 	return ApiProjectsParametersUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		projectPk:  projectPk,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Parameter
-func (a *ProjectsApiService) ProjectsParametersUpdateExecute(r ApiProjectsParametersUpdateRequest) (*Parameter, *http.Response, error) {
+//  @return Parameter
+func (a *ProjectsAPIService) ProjectsParametersUpdateExecute(r ApiProjectsParametersUpdateRequest) (*Parameter, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Parameter
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Parameter
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3532,9 +3517,9 @@ func (a *ProjectsApiService) ProjectsParametersUpdateExecute(r ApiProjectsParame
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -3560,13 +3545,13 @@ func (a *ProjectsApiService) ProjectsParametersUpdateExecute(r ApiProjectsParame
 }
 
 type ApiProjectsParametersValuesCreateRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
+	ctx context.Context
+	ApiService *ProjectsAPIService
 	parameterPk string
-	projectPk   string
+	projectPk string
 	valueCreate *ValueCreate
-	evaluate    *bool
-	wrap        *bool
+	evaluate *bool
+	wrap *bool
 }
 
 func (r ApiProjectsParametersValuesCreateRequest) ValueCreate(valueCreate ValueCreate) ApiProjectsParametersValuesCreateRequest {
@@ -3580,7 +3565,7 @@ func (r ApiProjectsParametersValuesCreateRequest) Evaluate(evaluate bool) ApiPro
 	return r
 }
 
-// Indicates the &#x60;internal_value&#x60; is a wrapped secret. For more information on secret wrapping, see the documentation.
+// Indicates the &#x60;internal_value&#x60; is a wrapped secret. For more information on secret wrapping, see the documentation. 
 func (r ApiProjectsParametersValuesCreateRequest) Wrap(wrap bool) ApiProjectsParametersValuesCreateRequest {
 	r.wrap = &wrap
 	return r
@@ -3595,39 +3580,38 @@ ProjectsParametersValuesCreate Set a value.
 
 Set the value of a parameter in an environment.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersValuesCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersValuesCreateRequest
 */
-func (a *ProjectsApiService) ProjectsParametersValuesCreate(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersValuesCreateRequest {
+func (a *ProjectsAPIService) ProjectsParametersValuesCreate(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersValuesCreateRequest {
 	return ApiProjectsParametersValuesCreateRequest{
-		ApiService:  a,
-		ctx:         ctx,
+		ApiService: a,
+		ctx: ctx,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Value
-func (a *ProjectsApiService) ProjectsParametersValuesCreateExecute(r ApiProjectsParametersValuesCreateRequest) (*Value, *http.Response, error) {
+//  @return Value
+func (a *ProjectsAPIService) ProjectsParametersValuesCreateExecute(r ApiProjectsParametersValuesCreateRequest) (*Value, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Value
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Value
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersValuesCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/values/"
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -3637,10 +3621,10 @@ func (a *ProjectsApiService) ProjectsParametersValuesCreateExecute(r ApiProjects
 	}
 
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	if r.wrap != nil {
-		localVarQueryParams.Add("wrap", parameterToString(*r.wrap, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -3699,9 +3683,9 @@ func (a *ProjectsApiService) ProjectsParametersValuesCreateExecute(r ApiProjects
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -3727,12 +3711,12 @@ func (a *ProjectsApiService) ProjectsParametersValuesCreateExecute(r ApiProjects
 }
 
 type ApiProjectsParametersValuesDestroyRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
-	id          string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
 	parameterPk string
-	projectPk   string
-	evaluate    *bool
+	projectPk string
+	evaluate *bool
 }
 
 // If &#x60;true&#x60;, runs template evaluation on this parameter.  If &#x60;false&#x60;, returns the value&#39;s template. No effect on values that are not interpolated.
@@ -3750,46 +3734,46 @@ ProjectsParametersValuesDestroy Destroy a value.
 
 Destroy the value of a parameter in an environment.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersValuesDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersValuesDestroyRequest
 */
-func (a *ProjectsApiService) ProjectsParametersValuesDestroy(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesDestroyRequest {
+func (a *ProjectsAPIService) ProjectsParametersValuesDestroy(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesDestroyRequest {
 	return ApiProjectsParametersValuesDestroyRequest{
-		ApiService:  a,
-		ctx:         ctx,
-		id:          id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-func (a *ProjectsApiService) ProjectsParametersValuesDestroyExecute(r ApiProjectsParametersValuesDestroyRequest) (*http.Response, error) {
+func (a *ProjectsAPIService) ProjectsParametersValuesDestroyExecute(r ApiProjectsParametersValuesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersValuesDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/values/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -3846,9 +3830,9 @@ func (a *ProjectsApiService) ProjectsParametersValuesDestroyExecute(r ApiProject
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -3865,20 +3849,20 @@ func (a *ProjectsApiService) ProjectsParametersValuesDestroyExecute(r ApiProject
 }
 
 type ApiProjectsParametersValuesListRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
+	ctx context.Context
+	ApiService *ProjectsAPIService
 	parameterPk string
-	projectPk   string
-	asOf        *time.Time
+	projectPk string
+	asOf *time.Time
 	environment *string
-	evaluate    *bool
-	exclude     *string
-	include     *string
+	evaluate *bool
+	exclude *string
+	include *string
 	maskSecrets *bool
-	page        *int32
-	pageSize    *int32
-	tag         *string
-	wrap        *bool
+	page *int32
+	pageSize *int32
+	tag *string
+	wrap *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -3935,7 +3919,7 @@ func (r ApiProjectsParametersValuesListRequest) Tag(tag string) ApiProjectsParam
 	return r
 }
 
-// For writes, indicates &#x60;internal_value&#x60; is wrapped; for reads, indicates &#x60;value&#x60; is wrapped. For more information on secret wrapping, see the documentation.
+// For writes, indicates &#x60;internal_value&#x60; is wrapped; for reads, indicates &#x60;value&#x60; is wrapped. For more information on secret wrapping, see the documentation. 
 func (r ApiProjectsParametersValuesListRequest) Wrap(wrap bool) ApiProjectsParametersValuesListRequest {
 	r.wrap = &wrap
 	return r
@@ -3948,78 +3932,78 @@ func (r ApiProjectsParametersValuesListRequest) Execute() (*PaginatedValueList, 
 /*
 ProjectsParametersValuesList Retrieve values.
 
-	       Retrieve previously set values of a parameter in one or all environments.
-	       To see all the _effective_ values for a parameter across every environment,
-	       use the Parameters API (see the `values` field).
 
+        Retrieve previously set values of a parameter in one or all environments.
+        To see all the _effective_ values for a parameter across every environment,
+        use the Parameters API (see the `values` field).
+    
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersValuesListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersValuesListRequest
 */
-func (a *ProjectsApiService) ProjectsParametersValuesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersValuesListRequest {
+func (a *ProjectsAPIService) ProjectsParametersValuesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersValuesListRequest {
 	return ApiProjectsParametersValuesListRequest{
-		ApiService:  a,
-		ctx:         ctx,
+		ApiService: a,
+		ctx: ctx,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedValueList
-func (a *ProjectsApiService) ProjectsParametersValuesListExecute(r ApiProjectsParametersValuesListRequest) (*PaginatedValueList, *http.Response, error) {
+//  @return PaginatedValueList
+func (a *ProjectsAPIService) ProjectsParametersValuesListExecute(r ApiProjectsParametersValuesListRequest) (*PaginatedValueList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedValueList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedValueList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersValuesList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/values/"
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	if r.exclude != nil {
-		localVarQueryParams.Add("exclude", parameterToString(*r.exclude, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "exclude", r.exclude, "")
 	}
 	if r.include != nil {
-		localVarQueryParams.Add("include", parameterToString(*r.include, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include", r.include, "")
 	}
 	if r.maskSecrets != nil {
-		localVarQueryParams.Add("mask_secrets", parameterToString(*r.maskSecrets, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	if r.wrap != nil {
-		localVarQueryParams.Add("wrap", parameterToString(*r.wrap, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -4076,9 +4060,9 @@ func (a *ProjectsApiService) ProjectsParametersValuesListExecute(r ApiProjectsPa
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4104,13 +4088,13 @@ func (a *ProjectsApiService) ProjectsParametersValuesListExecute(r ApiProjectsPa
 }
 
 type ApiProjectsParametersValuesPartialUpdateRequest struct {
-	ctx          context.Context
-	ApiService   *ProjectsApiService
-	id           string
-	parameterPk  string
-	projectPk    string
-	evaluate     *bool
-	wrap         *bool
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	parameterPk string
+	projectPk string
+	evaluate *bool
+	wrap *bool
 	patchedValue *PatchedValue
 }
 
@@ -4120,7 +4104,7 @@ func (r ApiProjectsParametersValuesPartialUpdateRequest) Evaluate(evaluate bool)
 	return r
 }
 
-// Indicates the &#x60;internal_value&#x60; is a wrapped secret. For more information on secret wrapping, see the documentation.
+// Indicates the &#x60;internal_value&#x60; is a wrapped secret. For more information on secret wrapping, see the documentation. 
 func (r ApiProjectsParametersValuesPartialUpdateRequest) Wrap(wrap bool) ApiProjectsParametersValuesPartialUpdateRequest {
 	r.wrap = &wrap
 	return r
@@ -4140,52 +4124,51 @@ ProjectsParametersValuesPartialUpdate Update a value.
 
 Update the value of a parameter in an environment.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersValuesPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersValuesPartialUpdateRequest
 */
-func (a *ProjectsApiService) ProjectsParametersValuesPartialUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesPartialUpdateRequest {
+func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesPartialUpdateRequest {
 	return ApiProjectsParametersValuesPartialUpdateRequest{
-		ApiService:  a,
-		ctx:         ctx,
-		id:          id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Value
-func (a *ProjectsApiService) ProjectsParametersValuesPartialUpdateExecute(r ApiProjectsParametersValuesPartialUpdateRequest) (*Value, *http.Response, error) {
+//  @return Value
+func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdateExecute(r ApiProjectsParametersValuesPartialUpdateRequest) (*Value, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Value
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Value
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersValuesPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/values/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	if r.wrap != nil {
-		localVarQueryParams.Add("wrap", parameterToString(*r.wrap, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -4244,9 +4227,9 @@ func (a *ProjectsApiService) ProjectsParametersValuesPartialUpdateExecute(r ApiP
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4272,18 +4255,18 @@ func (a *ProjectsApiService) ProjectsParametersValuesPartialUpdateExecute(r ApiP
 }
 
 type ApiProjectsParametersValuesRetrieveRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
-	id          string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
 	parameterPk string
-	projectPk   string
-	asOf        *time.Time
-	evaluate    *bool
-	exclude     *string
-	include     *string
+	projectPk string
+	asOf *time.Time
+	evaluate *bool
+	exclude *string
+	include *string
 	maskSecrets *bool
-	tag         *string
-	wrap        *bool
+	tag *string
+	wrap *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -4322,7 +4305,7 @@ func (r ApiProjectsParametersValuesRetrieveRequest) Tag(tag string) ApiProjectsP
 	return r
 }
 
-// For writes, indicates &#x60;internal_value&#x60; is wrapped; for reads, indicates &#x60;value&#x60; is wrapped. For more information on secret wrapping, see the documentation.
+// For writes, indicates &#x60;internal_value&#x60; is wrapped; for reads, indicates &#x60;value&#x60; is wrapped. For more information on secret wrapping, see the documentation. 
 func (r ApiProjectsParametersValuesRetrieveRequest) Wrap(wrap bool) ApiProjectsParametersValuesRetrieveRequest {
 	r.wrap = &wrap
 	return r
@@ -4337,67 +4320,66 @@ ProjectsParametersValuesRetrieve Retrieve a value.
 
 Retrieve the value of a parameter in an environment.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersValuesRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersValuesRetrieveRequest
 */
-func (a *ProjectsApiService) ProjectsParametersValuesRetrieve(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesRetrieveRequest {
+func (a *ProjectsAPIService) ProjectsParametersValuesRetrieve(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesRetrieveRequest {
 	return ApiProjectsParametersValuesRetrieveRequest{
-		ApiService:  a,
-		ctx:         ctx,
-		id:          id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Value
-func (a *ProjectsApiService) ProjectsParametersValuesRetrieveExecute(r ApiProjectsParametersValuesRetrieveRequest) (*Value, *http.Response, error) {
+//  @return Value
+func (a *ProjectsAPIService) ProjectsParametersValuesRetrieveExecute(r ApiProjectsParametersValuesRetrieveRequest) (*Value, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Value
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Value
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersValuesRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/values/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	if r.exclude != nil {
-		localVarQueryParams.Add("exclude", parameterToString(*r.exclude, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "exclude", r.exclude, "")
 	}
 	if r.include != nil {
-		localVarQueryParams.Add("include", parameterToString(*r.include, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "include", r.include, "")
 	}
 	if r.maskSecrets != nil {
-		localVarQueryParams.Add("mask_secrets", parameterToString(*r.maskSecrets, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	if r.wrap != nil {
-		localVarQueryParams.Add("wrap", parameterToString(*r.wrap, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -4454,9 +4436,9 @@ func (a *ProjectsApiService) ProjectsParametersValuesRetrieveExecute(r ApiProjec
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4482,14 +4464,14 @@ func (a *ProjectsApiService) ProjectsParametersValuesRetrieveExecute(r ApiProjec
 }
 
 type ApiProjectsParametersValuesUpdateRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
-	id          string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
 	parameterPk string
-	projectPk   string
-	evaluate    *bool
-	wrap        *bool
-	value       *Value
+	projectPk string
+	evaluate *bool
+	wrap *bool
+	value *Value
 }
 
 // If &#x60;true&#x60;, runs template evaluation on this parameter.  If &#x60;false&#x60;, returns the value&#39;s template. No effect on values that are not interpolated.
@@ -4498,7 +4480,7 @@ func (r ApiProjectsParametersValuesUpdateRequest) Evaluate(evaluate bool) ApiPro
 	return r
 }
 
-// Indicates the &#x60;internal_value&#x60; is a wrapped secret. For more information on secret wrapping, see the documentation.
+// Indicates the &#x60;internal_value&#x60; is a wrapped secret. For more information on secret wrapping, see the documentation. 
 func (r ApiProjectsParametersValuesUpdateRequest) Wrap(wrap bool) ApiProjectsParametersValuesUpdateRequest {
 	r.wrap = &wrap
 	return r
@@ -4518,52 +4500,51 @@ ProjectsParametersValuesUpdate Update a value.
 
 Update the value of a parameter in an environment.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param parameterPk The parameter id.
-	@param projectPk The project id.
-	@return ApiProjectsParametersValuesUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param parameterPk The parameter id.
+ @param projectPk The project id.
+ @return ApiProjectsParametersValuesUpdateRequest
 */
-func (a *ProjectsApiService) ProjectsParametersValuesUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesUpdateRequest {
+func (a *ProjectsAPIService) ProjectsParametersValuesUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesUpdateRequest {
 	return ApiProjectsParametersValuesUpdateRequest{
-		ApiService:  a,
-		ctx:         ctx,
-		id:          id,
+		ApiService: a,
+		ctx: ctx,
+		id: id,
 		parameterPk: parameterPk,
-		projectPk:   projectPk,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Value
-func (a *ProjectsApiService) ProjectsParametersValuesUpdateExecute(r ApiProjectsParametersValuesUpdateRequest) (*Value, *http.Response, error) {
+//  @return Value
+func (a *ProjectsAPIService) ProjectsParametersValuesUpdateExecute(r ApiProjectsParametersValuesUpdateRequest) (*Value, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Value
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Value
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsParametersValuesUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{parameter_pk}/values/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterToString(r.parameterPk, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"parameter_pk"+"}", url.PathEscape(parameterValueToString(r.parameterPk, "parameterPk")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	if r.wrap != nil {
-		localVarQueryParams.Add("wrap", parameterToString(*r.wrap, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -4622,9 +4603,9 @@ func (a *ProjectsApiService) ProjectsParametersValuesUpdateExecute(r ApiProjects
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4650,9 +4631,9 @@ func (a *ProjectsApiService) ProjectsParametersValuesUpdateExecute(r ApiProjects
 }
 
 type ApiProjectsPartialUpdateRequest struct {
-	ctx            context.Context
-	ApiService     *ProjectsApiService
-	id             string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
 	patchedProject *PatchedProject
 }
 
@@ -4668,36 +4649,35 @@ func (r ApiProjectsPartialUpdateRequest) Execute() (*Project, *http.Response, er
 /*
 ProjectsPartialUpdate Method for ProjectsPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiProjectsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiProjectsPartialUpdateRequest
 */
-func (a *ProjectsApiService) ProjectsPartialUpdate(ctx context.Context, id string) ApiProjectsPartialUpdateRequest {
+func (a *ProjectsAPIService) ProjectsPartialUpdate(ctx context.Context, id string) ApiProjectsPartialUpdateRequest {
 	return ApiProjectsPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Project
-func (a *ProjectsApiService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUpdateRequest) (*Project, *http.Response, error) {
+//  @return Project
+func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUpdateRequest) (*Project, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Project
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Project
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -4760,9 +4740,9 @@ func (a *ProjectsApiService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUp
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4788,9 +4768,9 @@ func (a *ProjectsApiService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUp
 }
 
 type ApiProjectsRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsApiService
-	id         string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
 }
 
 func (r ApiProjectsRetrieveRequest) Execute() (*Project, *http.Response, error) {
@@ -4800,36 +4780,35 @@ func (r ApiProjectsRetrieveRequest) Execute() (*Project, *http.Response, error) 
 /*
 ProjectsRetrieve Method for ProjectsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiProjectsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiProjectsRetrieveRequest
 */
-func (a *ProjectsApiService) ProjectsRetrieve(ctx context.Context, id string) ApiProjectsRetrieveRequest {
+func (a *ProjectsAPIService) ProjectsRetrieve(ctx context.Context, id string) ApiProjectsRetrieveRequest {
 	return ApiProjectsRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Project
-func (a *ProjectsApiService) ProjectsRetrieveExecute(r ApiProjectsRetrieveRequest) (*Project, *http.Response, error) {
+//  @return Project
+func (a *ProjectsAPIService) ProjectsRetrieveExecute(r ApiProjectsRetrieveRequest) (*Project, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Project
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Project
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -4890,9 +4869,9 @@ func (a *ProjectsApiService) ProjectsRetrieveExecute(r ApiProjectsRetrieveReques
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -4918,15 +4897,15 @@ func (a *ProjectsApiService) ProjectsRetrieveExecute(r ApiProjectsRetrieveReques
 }
 
 type ApiProjectsTemplatePreviewCreateRequest struct {
-	ctx                          context.Context
-	ApiService                   *ProjectsApiService
-	projectPk                    string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	projectPk string
 	templatePreviewCreateRequest *TemplatePreviewCreateRequest
-	asOf                         *time.Time
-	environment                  *string
-	maskSecrets                  *bool
-	tag                          *string
-	template                     *string
+	asOf *time.Time
+	environment *string
+	maskSecrets *bool
+	tag *string
+	template *string
 }
 
 func (r ApiProjectsTemplatePreviewCreateRequest) TemplatePreviewCreateRequest(templatePreviewCreateRequest TemplatePreviewCreateRequest) ApiProjectsTemplatePreviewCreateRequest {
@@ -4973,36 +4952,35 @@ ProjectsTemplatePreviewCreate Method for ProjectsTemplatePreviewCreate
 
 Endpoint for previewing a template.  Post the template content in the request body.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param projectPk
-	@return ApiProjectsTemplatePreviewCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param projectPk
+ @return ApiProjectsTemplatePreviewCreateRequest
 */
-func (a *ProjectsApiService) ProjectsTemplatePreviewCreate(ctx context.Context, projectPk string) ApiProjectsTemplatePreviewCreateRequest {
+func (a *ProjectsAPIService) ProjectsTemplatePreviewCreate(ctx context.Context, projectPk string) ApiProjectsTemplatePreviewCreateRequest {
 	return ApiProjectsTemplatePreviewCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		projectPk:  projectPk,
+		ctx: ctx,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return TemplatePreview
-func (a *ProjectsApiService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsTemplatePreviewCreateRequest) (*TemplatePreview, *http.Response, error) {
+//  @return TemplatePreview
+func (a *ProjectsAPIService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsTemplatePreviewCreateRequest) (*TemplatePreview, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *TemplatePreview
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *TemplatePreview
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsTemplatePreviewCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatePreviewCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/template-preview/"
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -5012,19 +4990,19 @@ func (a *ProjectsApiService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsT
 	}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.maskSecrets != nil {
-		localVarQueryParams.Add("mask_secrets", parameterToString(*r.maskSecrets, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	if r.template != nil {
-		localVarQueryParams.Add("template", parameterToString(*r.template, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "template", r.template, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -5083,9 +5061,9 @@ func (a *ProjectsApiService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsT
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5102,7 +5080,8 @@ func (a *ProjectsApiService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsT
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -5120,9 +5099,9 @@ func (a *ProjectsApiService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsT
 }
 
 type ApiProjectsTemplatesCreateRequest struct {
-	ctx            context.Context
-	ApiService     *ProjectsApiService
-	projectPk      string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	projectPk string
 	templateCreate *TemplateCreate
 }
 
@@ -5138,36 +5117,35 @@ func (r ApiProjectsTemplatesCreateRequest) Execute() (*Template, *http.Response,
 /*
 ProjectsTemplatesCreate Method for ProjectsTemplatesCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param projectPk
-	@return ApiProjectsTemplatesCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param projectPk
+ @return ApiProjectsTemplatesCreateRequest
 */
-func (a *ProjectsApiService) ProjectsTemplatesCreate(ctx context.Context, projectPk string) ApiProjectsTemplatesCreateRequest {
+func (a *ProjectsAPIService) ProjectsTemplatesCreate(ctx context.Context, projectPk string) ApiProjectsTemplatesCreateRequest {
 	return ApiProjectsTemplatesCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		projectPk:  projectPk,
+		ctx: ctx,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Template
-func (a *ProjectsApiService) ProjectsTemplatesCreateExecute(r ApiProjectsTemplatesCreateRequest) (*Template, *http.Response, error) {
+//  @return Template
+func (a *ProjectsAPIService) ProjectsTemplatesCreateExecute(r ApiProjectsTemplatesCreateRequest) (*Template, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Template
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Template
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsTemplatesCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/templates/"
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -5233,9 +5211,9 @@ func (a *ProjectsApiService) ProjectsTemplatesCreateExecute(r ApiProjectsTemplat
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5252,7 +5230,8 @@ func (a *ProjectsApiService) ProjectsTemplatesCreateExecute(r ApiProjectsTemplat
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -5270,10 +5249,10 @@ func (a *ProjectsApiService) ProjectsTemplatesCreateExecute(r ApiProjectsTemplat
 }
 
 type ApiProjectsTemplatesDestroyRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsApiService
-	id         string
-	projectPk  string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
 }
 
 func (r ApiProjectsTemplatesDestroyRequest) Execute() (*http.Response, error) {
@@ -5283,36 +5262,36 @@ func (r ApiProjectsTemplatesDestroyRequest) Execute() (*http.Response, error) {
 /*
 ProjectsTemplatesDestroy Method for ProjectsTemplatesDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param projectPk
-	@return ApiProjectsTemplatesDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsTemplatesDestroyRequest
 */
-func (a *ProjectsApiService) ProjectsTemplatesDestroy(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesDestroyRequest {
+func (a *ProjectsAPIService) ProjectsTemplatesDestroy(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesDestroyRequest {
 	return ApiProjectsTemplatesDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		projectPk:  projectPk,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-func (a *ProjectsApiService) ProjectsTemplatesDestroyExecute(r ApiProjectsTemplatesDestroyRequest) (*http.Response, error) {
+func (a *ProjectsAPIService) ProjectsTemplatesDestroyExecute(r ApiProjectsTemplatesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsTemplatesDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/templates/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -5373,9 +5352,9 @@ func (a *ProjectsApiService) ProjectsTemplatesDestroyExecute(r ApiProjectsTempla
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -5392,18 +5371,18 @@ func (a *ProjectsApiService) ProjectsTemplatesDestroyExecute(r ApiProjectsTempla
 }
 
 type ApiProjectsTemplatesListRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
-	projectPk   string
-	asOf        *time.Time
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	projectPk string
+	asOf *time.Time
 	environment *string
-	evaluate    *bool
+	evaluate *bool
 	maskSecrets *bool
-	name        *string
-	ordering    *string
-	page        *int32
-	pageSize    *int32
-	tag         *string
+	name *string
+	ordering *string
+	page *int32
+	pageSize *int32
+	tag *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -5418,7 +5397,7 @@ func (r ApiProjectsTemplatesListRequest) Environment(environment string) ApiProj
 	return r
 }
 
-// If &#x60;true&#x60;, evaluates the template&#39;s body.  If &#x60;false&#x60;, returns the unevaluated template body.
+// If &#x60;true&#x60;, evaluates the template&#39;s body.  If &#x60;false&#x60;, returns the unevaluated template body. 
 func (r ApiProjectsTemplatesListRequest) Evaluate(evaluate bool) ApiProjectsTemplatesListRequest {
 	r.evaluate = &evaluate
 	return r
@@ -5466,67 +5445,66 @@ func (r ApiProjectsTemplatesListRequest) Execute() (*PaginatedTemplateList, *htt
 /*
 ProjectsTemplatesList Method for ProjectsTemplatesList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param projectPk
-	@return ApiProjectsTemplatesListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param projectPk
+ @return ApiProjectsTemplatesListRequest
 */
-func (a *ProjectsApiService) ProjectsTemplatesList(ctx context.Context, projectPk string) ApiProjectsTemplatesListRequest {
+func (a *ProjectsAPIService) ProjectsTemplatesList(ctx context.Context, projectPk string) ApiProjectsTemplatesListRequest {
 	return ApiProjectsTemplatesListRequest{
 		ApiService: a,
-		ctx:        ctx,
-		projectPk:  projectPk,
+		ctx: ctx,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedTemplateList
-func (a *ProjectsApiService) ProjectsTemplatesListExecute(r ApiProjectsTemplatesListRequest) (*PaginatedTemplateList, *http.Response, error) {
+//  @return PaginatedTemplateList
+func (a *ProjectsAPIService) ProjectsTemplatesListExecute(r ApiProjectsTemplatesListRequest) (*PaginatedTemplateList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedTemplateList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedTemplateList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsTemplatesList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/templates/"
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	if r.maskSecrets != nil {
-		localVarQueryParams.Add("mask_secrets", parameterToString(*r.maskSecrets, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
 	if r.name != nil {
-		localVarQueryParams.Add("name", parameterToString(*r.name, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
 	}
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -5583,9 +5561,9 @@ func (a *ProjectsApiService) ProjectsTemplatesListExecute(r ApiProjectsTemplates
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5602,7 +5580,8 @@ func (a *ProjectsApiService) ProjectsTemplatesListExecute(r ApiProjectsTemplates
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -5620,10 +5599,10 @@ func (a *ProjectsApiService) ProjectsTemplatesListExecute(r ApiProjectsTemplates
 }
 
 type ApiProjectsTemplatesPartialUpdateRequest struct {
-	ctx             context.Context
-	ApiService      *ProjectsApiService
-	id              string
-	projectPk       string
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
 	patchedTemplate *PatchedTemplate
 }
 
@@ -5639,39 +5618,38 @@ func (r ApiProjectsTemplatesPartialUpdateRequest) Execute() (*Template, *http.Re
 /*
 ProjectsTemplatesPartialUpdate Method for ProjectsTemplatesPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param projectPk
-	@return ApiProjectsTemplatesPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsTemplatesPartialUpdateRequest
 */
-func (a *ProjectsApiService) ProjectsTemplatesPartialUpdate(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesPartialUpdateRequest {
+func (a *ProjectsAPIService) ProjectsTemplatesPartialUpdate(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesPartialUpdateRequest {
 	return ApiProjectsTemplatesPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		projectPk:  projectPk,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Template
-func (a *ProjectsApiService) ProjectsTemplatesPartialUpdateExecute(r ApiProjectsTemplatesPartialUpdateRequest) (*Template, *http.Response, error) {
+//  @return Template
+func (a *ProjectsAPIService) ProjectsTemplatesPartialUpdateExecute(r ApiProjectsTemplatesPartialUpdateRequest) (*Template, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Template
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Template
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsTemplatesPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/templates/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -5734,9 +5712,9 @@ func (a *ProjectsApiService) ProjectsTemplatesPartialUpdateExecute(r ApiProjects
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5753,7 +5731,8 @@ func (a *ProjectsApiService) ProjectsTemplatesPartialUpdateExecute(r ApiProjects
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -5771,15 +5750,15 @@ func (a *ProjectsApiService) ProjectsTemplatesPartialUpdateExecute(r ApiProjects
 }
 
 type ApiProjectsTemplatesRetrieveRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
-	id          string
-	projectPk   string
-	asOf        *time.Time
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
+	asOf *time.Time
 	environment *string
-	evaluate    *bool
+	evaluate *bool
 	maskSecrets *bool
-	tag         *string
+	tag *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -5794,7 +5773,7 @@ func (r ApiProjectsTemplatesRetrieveRequest) Environment(environment string) Api
 	return r
 }
 
-// If &#x60;true&#x60;, evaluates the template&#39;s body.  If &#x60;false&#x60;, returns the unevaluated template body.
+// If &#x60;true&#x60;, evaluates the template&#39;s body.  If &#x60;false&#x60;, returns the unevaluated template body. 
 func (r ApiProjectsTemplatesRetrieveRequest) Evaluate(evaluate bool) ApiProjectsTemplatesRetrieveRequest {
 	r.evaluate = &evaluate
 	return r
@@ -5819,58 +5798,57 @@ func (r ApiProjectsTemplatesRetrieveRequest) Execute() (*Template, *http.Respons
 /*
 ProjectsTemplatesRetrieve Method for ProjectsTemplatesRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param projectPk
-	@return ApiProjectsTemplatesRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsTemplatesRetrieveRequest
 */
-func (a *ProjectsApiService) ProjectsTemplatesRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesRetrieveRequest {
+func (a *ProjectsAPIService) ProjectsTemplatesRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesRetrieveRequest {
 	return ApiProjectsTemplatesRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		projectPk:  projectPk,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Template
-func (a *ProjectsApiService) ProjectsTemplatesRetrieveExecute(r ApiProjectsTemplatesRetrieveRequest) (*Template, *http.Response, error) {
+//  @return Template
+func (a *ProjectsAPIService) ProjectsTemplatesRetrieveExecute(r ApiProjectsTemplatesRetrieveRequest) (*Template, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Template
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Template
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsTemplatesRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/templates/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.evaluate != nil {
-		localVarQueryParams.Add("evaluate", parameterToString(*r.evaluate, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
 	if r.maskSecrets != nil {
-		localVarQueryParams.Add("mask_secrets", parameterToString(*r.maskSecrets, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -5927,9 +5905,9 @@ func (a *ProjectsApiService) ProjectsTemplatesRetrieveExecute(r ApiProjectsTempl
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -5946,7 +5924,8 @@ func (a *ProjectsApiService) ProjectsTemplatesRetrieveExecute(r ApiProjectsTempl
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -5964,13 +5943,13 @@ func (a *ProjectsApiService) ProjectsTemplatesRetrieveExecute(r ApiProjectsTempl
 }
 
 type ApiProjectsTemplatesTimelineRetrieveRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
-	id          string
-	projectPk   string
-	asOf        *time.Time
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
+	asOf *time.Time
 	environment *string
-	tag         *string
+	tag *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -6003,52 +5982,51 @@ Information about how a template has changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the template itself is included.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param projectPk
-	@return ApiProjectsTemplatesTimelineRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsTemplatesTimelineRetrieveRequest
 */
-func (a *ProjectsApiService) ProjectsTemplatesTimelineRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesTimelineRetrieveRequest {
+func (a *ProjectsAPIService) ProjectsTemplatesTimelineRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesTimelineRetrieveRequest {
 	return ApiProjectsTemplatesTimelineRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		projectPk:  projectPk,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return TemplateTimeline
-func (a *ProjectsApiService) ProjectsTemplatesTimelineRetrieveExecute(r ApiProjectsTemplatesTimelineRetrieveRequest) (*TemplateTimeline, *http.Response, error) {
+//  @return TemplateTimeline
+func (a *ProjectsAPIService) ProjectsTemplatesTimelineRetrieveExecute(r ApiProjectsTemplatesTimelineRetrieveRequest) (*TemplateTimeline, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *TemplateTimeline
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *TemplateTimeline
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsTemplatesTimelineRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesTimelineRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/templates/{id}/timeline/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -6105,9 +6083,9 @@ func (a *ProjectsApiService) ProjectsTemplatesTimelineRetrieveExecute(r ApiProje
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -6133,12 +6111,12 @@ func (a *ProjectsApiService) ProjectsTemplatesTimelineRetrieveExecute(r ApiProje
 }
 
 type ApiProjectsTemplatesTimelinesRetrieveRequest struct {
-	ctx         context.Context
-	ApiService  *ProjectsApiService
-	projectPk   string
-	asOf        *time.Time
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	projectPk string
+	asOf *time.Time
 	environment *string
-	tag         *string
+	tag *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -6171,49 +6149,48 @@ Information about how the templates of a project have changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the project's templates is included.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param projectPk
-	@return ApiProjectsTemplatesTimelinesRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param projectPk
+ @return ApiProjectsTemplatesTimelinesRetrieveRequest
 */
-func (a *ProjectsApiService) ProjectsTemplatesTimelinesRetrieve(ctx context.Context, projectPk string) ApiProjectsTemplatesTimelinesRetrieveRequest {
+func (a *ProjectsAPIService) ProjectsTemplatesTimelinesRetrieve(ctx context.Context, projectPk string) ApiProjectsTemplatesTimelinesRetrieveRequest {
 	return ApiProjectsTemplatesTimelinesRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		projectPk:  projectPk,
+		ctx: ctx,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return TemplateTimeline
-func (a *ProjectsApiService) ProjectsTemplatesTimelinesRetrieveExecute(r ApiProjectsTemplatesTimelinesRetrieveRequest) (*TemplateTimeline, *http.Response, error) {
+//  @return TemplateTimeline
+func (a *ProjectsAPIService) ProjectsTemplatesTimelinesRetrieveExecute(r ApiProjectsTemplatesTimelinesRetrieveRequest) (*TemplateTimeline, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *TemplateTimeline
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *TemplateTimeline
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsTemplatesTimelinesRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesTimelinesRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/templates/timelines/"
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
 	if r.asOf != nil {
-		localVarQueryParams.Add("as_of", parameterToString(*r.asOf, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
 	if r.environment != nil {
-		localVarQueryParams.Add("environment", parameterToString(*r.environment, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
 	}
 	if r.tag != nil {
-		localVarQueryParams.Add("tag", parameterToString(*r.tag, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -6270,9 +6247,9 @@ func (a *ProjectsApiService) ProjectsTemplatesTimelinesRetrieveExecute(r ApiProj
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -6298,11 +6275,11 @@ func (a *ProjectsApiService) ProjectsTemplatesTimelinesRetrieveExecute(r ApiProj
 }
 
 type ApiProjectsTemplatesUpdateRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsApiService
-	id         string
-	projectPk  string
-	template   *Template
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
+	template *Template
 }
 
 func (r ApiProjectsTemplatesUpdateRequest) Template(template Template) ApiProjectsTemplatesUpdateRequest {
@@ -6317,39 +6294,38 @@ func (r ApiProjectsTemplatesUpdateRequest) Execute() (*Template, *http.Response,
 /*
 ProjectsTemplatesUpdate Method for ProjectsTemplatesUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@param projectPk
-	@return ApiProjectsTemplatesUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsTemplatesUpdateRequest
 */
-func (a *ProjectsApiService) ProjectsTemplatesUpdate(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesUpdateRequest {
+func (a *ProjectsAPIService) ProjectsTemplatesUpdate(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesUpdateRequest {
 	return ApiProjectsTemplatesUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
-		projectPk:  projectPk,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Template
-func (a *ProjectsApiService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplatesUpdateRequest) (*Template, *http.Response, error) {
+//  @return Template
+func (a *ProjectsAPIService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplatesUpdateRequest) (*Template, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Template
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Template
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsTemplatesUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/templates/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterToString(r.projectPk, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -6415,9 +6391,9 @@ func (a *ProjectsApiService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplat
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -6434,7 +6410,8 @@ func (a *ProjectsApiService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplat
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-			newErr.model = v
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -6452,10 +6429,10 @@ func (a *ProjectsApiService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplat
 }
 
 type ApiProjectsUpdateRequest struct {
-	ctx        context.Context
-	ApiService *ProjectsApiService
-	id         string
-	project    *Project
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	project *Project
 }
 
 func (r ApiProjectsUpdateRequest) Project(project Project) ApiProjectsUpdateRequest {
@@ -6470,36 +6447,35 @@ func (r ApiProjectsUpdateRequest) Execute() (*Project, *http.Response, error) {
 /*
 ProjectsUpdate Method for ProjectsUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiProjectsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiProjectsUpdateRequest
 */
-func (a *ProjectsApiService) ProjectsUpdate(ctx context.Context, id string) ApiProjectsUpdateRequest {
+func (a *ProjectsAPIService) ProjectsUpdate(ctx context.Context, id string) ApiProjectsUpdateRequest {
 	return ApiProjectsUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Project
-func (a *ProjectsApiService) ProjectsUpdateExecute(r ApiProjectsUpdateRequest) (*Project, *http.Response, error) {
+//  @return Project
+func (a *ProjectsAPIService) ProjectsUpdateExecute(r ApiProjectsUpdateRequest) (*Project, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Project
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Project
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsApiService.ProjectsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/projects/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -6565,9 +6541,9 @@ func (a *ProjectsApiService) ProjectsUpdateExecute(r ApiProjectsUpdateRequest) (
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

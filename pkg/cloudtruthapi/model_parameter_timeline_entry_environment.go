@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the ParameterTimelineEntryEnvironment type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ParameterTimelineEntryEnvironment{}
+
 // ParameterTimelineEntryEnvironment struct for ParameterTimelineEntryEnvironment
 type ParameterTimelineEntryEnvironment struct {
 	// A unique identifier for the environment.
@@ -118,17 +121,19 @@ func (o *ParameterTimelineEntryEnvironment) SetOverride(v bool) {
 }
 
 func (o ParameterTimelineEntryEnvironment) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["override"] = o.Override
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ParameterTimelineEntryEnvironment) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	toSerialize["override"] = o.Override
+	return toSerialize, nil
 }
 
 type NullableParameterTimelineEntryEnvironment struct {
@@ -166,3 +171,5 @@ func (v *NullableParameterTimelineEntryEnvironment) UnmarshalJSON(src []byte) er
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -16,23 +16,25 @@ import (
 	"time"
 )
 
+// checks if the PatchedAzureKeyVaultIntegration type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedAzureKeyVaultIntegration{}
+
 // PatchedAzureKeyVaultIntegration struct for PatchedAzureKeyVaultIntegration
 type PatchedAzureKeyVaultIntegration struct {
 	Url *string `json:"url,omitempty"`
 	// The unique identifier for the integration.
-	Id   *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	// An optional description for the integration.
 	Description *string `json:"description,omitempty"`
-	// The status of the integration connection with the third-party provider as of the `status_last_checked_at` field.  The status is updated automatically by the server when the integration is modified.
-	Status NullableStatusEnum `json:"status,omitempty"`
+	Status *StatusEnum `json:"status,omitempty"`
 	// If an error occurs, more details will be available in this field.
 	StatusDetail *string `json:"status_detail,omitempty"`
 	// The last time the status was evaluated.
 	StatusLastCheckedAt *time.Time `json:"status_last_checked_at,omitempty"`
-	CreatedAt           *time.Time `json:"created_at,omitempty"`
-	ModifiedAt          *time.Time `json:"modified_at,omitempty"`
-	Fqn                 *string    `json:"fqn,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	Fqn *string `json:"fqn,omitempty"`
 	// The type of integration.
 	Type *string `json:"type,omitempty"`
 	// Allow actions to write to the integration.
@@ -62,7 +64,7 @@ func NewPatchedAzureKeyVaultIntegrationWithDefaults() *PatchedAzureKeyVaultInteg
 
 // GetUrl returns the Url field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetUrl() string {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		var ret string
 		return ret
 	}
@@ -72,7 +74,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetUrl() string {
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetUrlOk() (*string, bool) {
-	if o == nil || o.Url == nil {
+	if o == nil || IsNil(o.Url) {
 		return nil, false
 	}
 	return o.Url, true
@@ -80,7 +82,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetUrlOk() (*string, bool) {
 
 // HasUrl returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasUrl() bool {
-	if o != nil && o.Url != nil {
+	if o != nil && !IsNil(o.Url) {
 		return true
 	}
 
@@ -94,7 +96,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetUrl(v string) {
 
 // GetId returns the Id field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetId() string {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
@@ -104,7 +106,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetId() string {
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetIdOk() (*string, bool) {
-	if o == nil || o.Id == nil {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
 	return o.Id, true
@@ -112,7 +114,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetIdOk() (*string, bool) {
 
 // HasId returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasId() bool {
-	if o != nil && o.Id != nil {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
@@ -126,7 +128,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetId(v string) {
 
 // GetName returns the Name field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetName() string {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
@@ -136,7 +138,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetName() string {
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetNameOk() (*string, bool) {
-	if o == nil || o.Name == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
 	return o.Name, true
@@ -144,7 +146,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetNameOk() (*string, bool) {
 
 // HasName returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasName() bool {
-	if o != nil && o.Name != nil {
+	if o != nil && !IsNil(o.Name) {
 		return true
 	}
 
@@ -158,7 +160,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -168,7 +170,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -176,7 +178,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -188,52 +190,41 @@ func (o *PatchedAzureKeyVaultIntegration) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetStatus returns the Status field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetStatus returns the Status field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetStatus() StatusEnum {
-	if o == nil || o.Status.Get() == nil {
+	if o == nil || IsNil(o.Status) {
 		var ret StatusEnum
 		return ret
 	}
-	return *o.Status.Get()
+	return *o.Status
 }
 
 // GetStatusOk returns a tuple with the Status field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PatchedAzureKeyVaultIntegration) GetStatusOk() (*StatusEnum, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Status) {
 		return nil, false
 	}
-	return o.Status.Get(), o.Status.IsSet()
+	return o.Status, true
 }
 
 // HasStatus returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasStatus() bool {
-	if o != nil && o.Status.IsSet() {
+	if o != nil && !IsNil(o.Status) {
 		return true
 	}
 
 	return false
 }
 
-// SetStatus gets a reference to the given NullableStatusEnum and assigns it to the Status field.
+// SetStatus gets a reference to the given StatusEnum and assigns it to the Status field.
 func (o *PatchedAzureKeyVaultIntegration) SetStatus(v StatusEnum) {
-	o.Status.Set(&v)
-}
-
-// SetStatusNil sets the value for Status to be an explicit nil
-func (o *PatchedAzureKeyVaultIntegration) SetStatusNil() {
-	o.Status.Set(nil)
-}
-
-// UnsetStatus ensures that no value is present for Status, not even an explicit nil
-func (o *PatchedAzureKeyVaultIntegration) UnsetStatus() {
-	o.Status.Unset()
+	o.Status = &v
 }
 
 // GetStatusDetail returns the StatusDetail field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetStatusDetail() string {
-	if o == nil || o.StatusDetail == nil {
+	if o == nil || IsNil(o.StatusDetail) {
 		var ret string
 		return ret
 	}
@@ -243,7 +234,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetStatusDetail() string {
 // GetStatusDetailOk returns a tuple with the StatusDetail field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetStatusDetailOk() (*string, bool) {
-	if o == nil || o.StatusDetail == nil {
+	if o == nil || IsNil(o.StatusDetail) {
 		return nil, false
 	}
 	return o.StatusDetail, true
@@ -251,7 +242,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetStatusDetailOk() (*string, bool) {
 
 // HasStatusDetail returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasStatusDetail() bool {
-	if o != nil && o.StatusDetail != nil {
+	if o != nil && !IsNil(o.StatusDetail) {
 		return true
 	}
 
@@ -265,7 +256,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetStatusDetail(v string) {
 
 // GetStatusLastCheckedAt returns the StatusLastCheckedAt field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetStatusLastCheckedAt() time.Time {
-	if o == nil || o.StatusLastCheckedAt == nil {
+	if o == nil || IsNil(o.StatusLastCheckedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -275,7 +266,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetStatusLastCheckedAt() time.Time {
 // GetStatusLastCheckedAtOk returns a tuple with the StatusLastCheckedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetStatusLastCheckedAtOk() (*time.Time, bool) {
-	if o == nil || o.StatusLastCheckedAt == nil {
+	if o == nil || IsNil(o.StatusLastCheckedAt) {
 		return nil, false
 	}
 	return o.StatusLastCheckedAt, true
@@ -283,7 +274,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetStatusLastCheckedAtOk() (*time.Time
 
 // HasStatusLastCheckedAt returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasStatusLastCheckedAt() bool {
-	if o != nil && o.StatusLastCheckedAt != nil {
+	if o != nil && !IsNil(o.StatusLastCheckedAt) {
 		return true
 	}
 
@@ -297,7 +288,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetStatusLastCheckedAt(v time.Time) {
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetCreatedAt() time.Time {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -307,7 +298,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetCreatedAt() time.Time {
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil || o.CreatedAt == nil {
+	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
 	return o.CreatedAt, true
@@ -315,7 +306,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetCreatedAtOk() (*time.Time, bool) {
 
 // HasCreatedAt returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasCreatedAt() bool {
-	if o != nil && o.CreatedAt != nil {
+	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
 
@@ -329,7 +320,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetCreatedAt(v time.Time) {
 
 // GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetModifiedAt() time.Time {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		var ret time.Time
 		return ret
 	}
@@ -339,7 +330,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetModifiedAt() time.Time {
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || o.ModifiedAt == nil {
+	if o == nil || IsNil(o.ModifiedAt) {
 		return nil, false
 	}
 	return o.ModifiedAt, true
@@ -347,7 +338,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetModifiedAtOk() (*time.Time, bool) {
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasModifiedAt() bool {
-	if o != nil && o.ModifiedAt != nil {
+	if o != nil && !IsNil(o.ModifiedAt) {
 		return true
 	}
 
@@ -361,7 +352,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetModifiedAt(v time.Time) {
 
 // GetFqn returns the Fqn field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetFqn() string {
-	if o == nil || o.Fqn == nil {
+	if o == nil || IsNil(o.Fqn) {
 		var ret string
 		return ret
 	}
@@ -371,7 +362,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetFqn() string {
 // GetFqnOk returns a tuple with the Fqn field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetFqnOk() (*string, bool) {
-	if o == nil || o.Fqn == nil {
+	if o == nil || IsNil(o.Fqn) {
 		return nil, false
 	}
 	return o.Fqn, true
@@ -379,7 +370,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetFqnOk() (*string, bool) {
 
 // HasFqn returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasFqn() bool {
-	if o != nil && o.Fqn != nil {
+	if o != nil && !IsNil(o.Fqn) {
 		return true
 	}
 
@@ -393,7 +384,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetFqn(v string) {
 
 // GetType returns the Type field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetType() string {
-	if o == nil || o.Type == nil {
+	if o == nil || IsNil(o.Type) {
 		var ret string
 		return ret
 	}
@@ -403,7 +394,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetType() string {
 // GetTypeOk returns a tuple with the Type field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetTypeOk() (*string, bool) {
-	if o == nil || o.Type == nil {
+	if o == nil || IsNil(o.Type) {
 		return nil, false
 	}
 	return o.Type, true
@@ -411,7 +402,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetTypeOk() (*string, bool) {
 
 // HasType returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasType() bool {
-	if o != nil && o.Type != nil {
+	if o != nil && !IsNil(o.Type) {
 		return true
 	}
 
@@ -425,7 +416,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetType(v string) {
 
 // GetWritable returns the Writable field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetWritable() bool {
-	if o == nil || o.Writable == nil {
+	if o == nil || IsNil(o.Writable) {
 		var ret bool
 		return ret
 	}
@@ -435,7 +426,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetWritable() bool {
 // GetWritableOk returns a tuple with the Writable field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetWritableOk() (*bool, bool) {
-	if o == nil || o.Writable == nil {
+	if o == nil || IsNil(o.Writable) {
 		return nil, false
 	}
 	return o.Writable, true
@@ -443,7 +434,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetWritableOk() (*bool, bool) {
 
 // HasWritable returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasWritable() bool {
-	if o != nil && o.Writable != nil {
+	if o != nil && !IsNil(o.Writable) {
 		return true
 	}
 
@@ -457,7 +448,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetWritable(v bool) {
 
 // GetVaultName returns the VaultName field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetVaultName() string {
-	if o == nil || o.VaultName == nil {
+	if o == nil || IsNil(o.VaultName) {
 		var ret string
 		return ret
 	}
@@ -467,7 +458,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetVaultName() string {
 // GetVaultNameOk returns a tuple with the VaultName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetVaultNameOk() (*string, bool) {
-	if o == nil || o.VaultName == nil {
+	if o == nil || IsNil(o.VaultName) {
 		return nil, false
 	}
 	return o.VaultName, true
@@ -475,7 +466,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetVaultNameOk() (*string, bool) {
 
 // HasVaultName returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasVaultName() bool {
-	if o != nil && o.VaultName != nil {
+	if o != nil && !IsNil(o.VaultName) {
 		return true
 	}
 
@@ -489,7 +480,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetVaultName(v string) {
 
 // GetTenantId returns the TenantId field value if set, zero value otherwise.
 func (o *PatchedAzureKeyVaultIntegration) GetTenantId() string {
-	if o == nil || o.TenantId == nil {
+	if o == nil || IsNil(o.TenantId) {
 		var ret string
 		return ret
 	}
@@ -499,7 +490,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetTenantId() string {
 // GetTenantIdOk returns a tuple with the TenantId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PatchedAzureKeyVaultIntegration) GetTenantIdOk() (*string, bool) {
-	if o == nil || o.TenantId == nil {
+	if o == nil || IsNil(o.TenantId) {
 		return nil, false
 	}
 	return o.TenantId, true
@@ -507,7 +498,7 @@ func (o *PatchedAzureKeyVaultIntegration) GetTenantIdOk() (*string, bool) {
 
 // HasTenantId returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasTenantId() bool {
-	if o != nil && o.TenantId != nil {
+	if o != nil && !IsNil(o.TenantId) {
 		return true
 	}
 
@@ -520,50 +511,58 @@ func (o *PatchedAzureKeyVaultIntegration) SetTenantId(v string) {
 }
 
 func (o PatchedAzureKeyVaultIntegration) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Url != nil {
-		toSerialize["url"] = o.Url
-	}
-	if o.Id != nil {
-		toSerialize["id"] = o.Id
-	}
-	if o.Name != nil {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Status.IsSet() {
-		toSerialize["status"] = o.Status.Get()
-	}
-	if o.StatusDetail != nil {
-		toSerialize["status_detail"] = o.StatusDetail
-	}
-	if o.StatusLastCheckedAt != nil {
-		toSerialize["status_last_checked_at"] = o.StatusLastCheckedAt
-	}
-	if o.CreatedAt != nil {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if o.ModifiedAt != nil {
-		toSerialize["modified_at"] = o.ModifiedAt
-	}
-	if o.Fqn != nil {
-		toSerialize["fqn"] = o.Fqn
-	}
-	if o.Type != nil {
-		toSerialize["type"] = o.Type
-	}
-	if o.Writable != nil {
-		toSerialize["writable"] = o.Writable
-	}
-	if o.VaultName != nil {
-		toSerialize["vault_name"] = o.VaultName
-	}
-	if o.TenantId != nil {
-		toSerialize["tenant_id"] = o.TenantId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o PatchedAzureKeyVaultIntegration) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Url) {
+		toSerialize["url"] = o.Url
+	}
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
+	if !IsNil(o.Name) {
+		toSerialize["name"] = o.Name
+	}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Status) {
+		toSerialize["status"] = o.Status
+	}
+	if !IsNil(o.StatusDetail) {
+		toSerialize["status_detail"] = o.StatusDetail
+	}
+	if !IsNil(o.StatusLastCheckedAt) {
+		toSerialize["status_last_checked_at"] = o.StatusLastCheckedAt
+	}
+	if !IsNil(o.CreatedAt) {
+		toSerialize["created_at"] = o.CreatedAt
+	}
+	if !IsNil(o.ModifiedAt) {
+		toSerialize["modified_at"] = o.ModifiedAt
+	}
+	if !IsNil(o.Fqn) {
+		toSerialize["fqn"] = o.Fqn
+	}
+	if !IsNil(o.Type) {
+		toSerialize["type"] = o.Type
+	}
+	if !IsNil(o.Writable) {
+		toSerialize["writable"] = o.Writable
+	}
+	if !IsNil(o.VaultName) {
+		toSerialize["vault_name"] = o.VaultName
+	}
+	if !IsNil(o.TenantId) {
+		toSerialize["tenant_id"] = o.TenantId
+	}
+	return toSerialize, nil
 }
 
 type NullablePatchedAzureKeyVaultIntegration struct {
@@ -601,3 +600,5 @@ func (v *NullablePatchedAzureKeyVaultIntegration) UnmarshalJSON(src []byte) erro
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

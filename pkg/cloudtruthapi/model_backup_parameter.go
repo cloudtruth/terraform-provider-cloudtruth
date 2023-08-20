@@ -15,22 +15,25 @@ import (
 	"encoding/json"
 )
 
+// checks if the BackupParameter type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BackupParameter{}
+
 // BackupParameter Parameter, rule, and value data at a point in time.
 type BackupParameter struct {
-	Rules       map[string]BackupParameterRule        `json:"rules"`
-	Values      map[string]BackupParameterValuesValue `json:"values"`
-	Name        string                                `json:"name"`
-	ParamType   string                                `json:"param_type"`
-	Project     string                                `json:"project"`
-	Secret      bool                                  `json:"secret"`
-	Description NullableString                        `json:"description,omitempty"`
+	Rules map[string]BackupParameterRule `json:"rules"`
+	Values map[string]BackupParameterValue `json:"values"`
+	Name string `json:"name"`
+	ParamType string `json:"param_type"`
+	Project string `json:"project"`
+	Secret bool `json:"secret"`
+	Description NullableString `json:"description,omitempty"`
 }
 
 // NewBackupParameter instantiates a new BackupParameter object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewBackupParameter(rules map[string]BackupParameterRule, values map[string]BackupParameterValuesValue, name string, paramType string, project string, secret bool) *BackupParameter {
+func NewBackupParameter(rules map[string]BackupParameterRule, values map[string]BackupParameterValue, name string, paramType string, project string, secret bool) *BackupParameter {
 	this := BackupParameter{}
 	this.Rules = rules
 	this.Values = values
@@ -74,9 +77,9 @@ func (o *BackupParameter) SetRules(v map[string]BackupParameterRule) {
 }
 
 // GetValues returns the Values field value
-func (o *BackupParameter) GetValues() map[string]BackupParameterValuesValue {
+func (o *BackupParameter) GetValues() map[string]BackupParameterValue {
 	if o == nil {
-		var ret map[string]BackupParameterValuesValue
+		var ret map[string]BackupParameterValue
 		return ret
 	}
 
@@ -85,15 +88,15 @@ func (o *BackupParameter) GetValues() map[string]BackupParameterValuesValue {
 
 // GetValuesOk returns a tuple with the Values field value
 // and a boolean to check if the value has been set.
-func (o *BackupParameter) GetValuesOk() (*map[string]BackupParameterValuesValue, bool) {
+func (o *BackupParameter) GetValuesOk() (map[string]BackupParameterValue, bool) {
 	if o == nil {
-		return nil, false
+		return map[string]BackupParameterValue{}, false
 	}
-	return &o.Values, true
+	return o.Values, true
 }
 
 // SetValues sets field value
-func (o *BackupParameter) SetValues(v map[string]BackupParameterValuesValue) {
+func (o *BackupParameter) SetValues(v map[string]BackupParameterValue) {
 	o.Values = v
 }
 
@@ -195,7 +198,7 @@ func (o *BackupParameter) SetSecret(v bool) {
 
 // GetDescription returns the Description field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *BackupParameter) GetDescription() string {
-	if o == nil || o.Description.Get() == nil {
+	if o == nil || IsNil(o.Description.Get()) {
 		var ret string
 		return ret
 	}
@@ -225,7 +228,6 @@ func (o *BackupParameter) HasDescription() bool {
 func (o *BackupParameter) SetDescription(v string) {
 	o.Description.Set(&v)
 }
-
 // SetDescriptionNil sets the value for Description to be an explicit nil
 func (o *BackupParameter) SetDescriptionNil() {
 	o.Description.Set(nil)
@@ -237,29 +239,25 @@ func (o *BackupParameter) UnsetDescription() {
 }
 
 func (o BackupParameter) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o BackupParameter) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["rules"] = o.Rules
-	}
-	if true {
-		toSerialize["values"] = o.Values
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["param_type"] = o.ParamType
-	}
-	if true {
-		toSerialize["project"] = o.Project
-	}
-	if true {
-		toSerialize["secret"] = o.Secret
-	}
+	toSerialize["rules"] = o.Rules
+	toSerialize["values"] = o.Values
+	toSerialize["name"] = o.Name
+	toSerialize["param_type"] = o.ParamType
+	toSerialize["project"] = o.Project
+	toSerialize["secret"] = o.Secret
 	if o.Description.IsSet() {
 		toSerialize["description"] = o.Description.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableBackupParameter struct {
@@ -297,3 +295,5 @@ func (v *NullableBackupParameter) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

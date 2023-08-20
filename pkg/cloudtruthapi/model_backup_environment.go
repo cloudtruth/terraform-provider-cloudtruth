@@ -15,10 +15,13 @@ import (
 	"encoding/json"
 )
 
+// checks if the BackupEnvironment type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &BackupEnvironment{}
+
 // BackupEnvironment Basic environment data at a point in time.
 type BackupEnvironment struct {
-	Name        string         `json:"name"`
-	Parent      NullableString `json:"parent,omitempty"`
+	Name string `json:"name"`
+	Parent NullableString `json:"parent,omitempty"`
 	Description NullableString `json:"description,omitempty"`
 }
 
@@ -66,7 +69,7 @@ func (o *BackupEnvironment) SetName(v string) {
 
 // GetParent returns the Parent field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *BackupEnvironment) GetParent() string {
-	if o == nil || o.Parent.Get() == nil {
+	if o == nil || IsNil(o.Parent.Get()) {
 		var ret string
 		return ret
 	}
@@ -96,7 +99,6 @@ func (o *BackupEnvironment) HasParent() bool {
 func (o *BackupEnvironment) SetParent(v string) {
 	o.Parent.Set(&v)
 }
-
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *BackupEnvironment) SetParentNil() {
 	o.Parent.Set(nil)
@@ -109,7 +111,7 @@ func (o *BackupEnvironment) UnsetParent() {
 
 // GetDescription returns the Description field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *BackupEnvironment) GetDescription() string {
-	if o == nil || o.Description.Get() == nil {
+	if o == nil || IsNil(o.Description.Get()) {
 		var ret string
 		return ret
 	}
@@ -139,7 +141,6 @@ func (o *BackupEnvironment) HasDescription() bool {
 func (o *BackupEnvironment) SetDescription(v string) {
 	o.Description.Set(&v)
 }
-
 // SetDescriptionNil sets the value for Description to be an explicit nil
 func (o *BackupEnvironment) SetDescriptionNil() {
 	o.Description.Set(nil)
@@ -151,17 +152,23 @@ func (o *BackupEnvironment) UnsetDescription() {
 }
 
 func (o BackupEnvironment) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["name"] = o.Name
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
+	return json.Marshal(toSerialize)
+}
+
+func (o BackupEnvironment) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["name"] = o.Name
 	if o.Parent.IsSet() {
 		toSerialize["parent"] = o.Parent.Get()
 	}
 	if o.Description.IsSet() {
 		toSerialize["description"] = o.Description.Get()
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullableBackupEnvironment struct {
@@ -199,3 +206,5 @@ func (v *NullableBackupEnvironment) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

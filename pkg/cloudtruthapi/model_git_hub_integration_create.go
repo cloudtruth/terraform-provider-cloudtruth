@@ -15,12 +15,15 @@ import (
 	"encoding/json"
 )
 
+// checks if the GitHubIntegrationCreate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GitHubIntegrationCreate{}
+
 // GitHubIntegrationCreate struct for GitHubIntegrationCreate
 type GitHubIntegrationCreate struct {
 	// An optional description for the integration.
 	Description *string `json:"description,omitempty"`
 	// Allow actions to write to the integration.
-	Writable         *bool `json:"writable,omitempty"`
+	Writable *bool `json:"writable,omitempty"`
 	GhInstallationId int32 `json:"gh_installation_id"`
 }
 
@@ -44,7 +47,7 @@ func NewGitHubIntegrationCreateWithDefaults() *GitHubIntegrationCreate {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *GitHubIntegrationCreate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -54,7 +57,7 @@ func (o *GitHubIntegrationCreate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GitHubIntegrationCreate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -62,7 +65,7 @@ func (o *GitHubIntegrationCreate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *GitHubIntegrationCreate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -76,7 +79,7 @@ func (o *GitHubIntegrationCreate) SetDescription(v string) {
 
 // GetWritable returns the Writable field value if set, zero value otherwise.
 func (o *GitHubIntegrationCreate) GetWritable() bool {
-	if o == nil || o.Writable == nil {
+	if o == nil || IsNil(o.Writable) {
 		var ret bool
 		return ret
 	}
@@ -86,7 +89,7 @@ func (o *GitHubIntegrationCreate) GetWritable() bool {
 // GetWritableOk returns a tuple with the Writable field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *GitHubIntegrationCreate) GetWritableOk() (*bool, bool) {
-	if o == nil || o.Writable == nil {
+	if o == nil || IsNil(o.Writable) {
 		return nil, false
 	}
 	return o.Writable, true
@@ -94,7 +97,7 @@ func (o *GitHubIntegrationCreate) GetWritableOk() (*bool, bool) {
 
 // HasWritable returns a boolean if a field has been set.
 func (o *GitHubIntegrationCreate) HasWritable() bool {
-	if o != nil && o.Writable != nil {
+	if o != nil && !IsNil(o.Writable) {
 		return true
 	}
 
@@ -131,17 +134,23 @@ func (o *GitHubIntegrationCreate) SetGhInstallationId(v int32) {
 }
 
 func (o GitHubIntegrationCreate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Writable != nil {
-		toSerialize["writable"] = o.Writable
-	}
-	if true {
-		toSerialize["gh_installation_id"] = o.GhInstallationId
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o GitHubIntegrationCreate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Writable) {
+		toSerialize["writable"] = o.Writable
+	}
+	toSerialize["gh_installation_id"] = o.GhInstallationId
+	return toSerialize, nil
 }
 
 type NullableGitHubIntegrationCreate struct {
@@ -179,3 +188,5 @@ func (v *NullableGitHubIntegrationCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

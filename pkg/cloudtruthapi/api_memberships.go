@@ -14,18 +14,19 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
 )
 
-// MembershipsApiService MembershipsApi service
-type MembershipsApiService service
+
+// MembershipsAPIService MembershipsAPI service
+type MembershipsAPIService service
 
 type ApiMembershipsCreateRequest struct {
-	ctx              context.Context
-	ApiService       *MembershipsApiService
+	ctx context.Context
+	ApiService *MembershipsAPIService
 	membershipCreate *MembershipCreate
 }
 
@@ -41,28 +42,27 @@ func (r ApiMembershipsCreateRequest) Execute() (*Membership, *http.Response, err
 /*
 MembershipsCreate Method for MembershipsCreate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiMembershipsCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiMembershipsCreateRequest
 */
-func (a *MembershipsApiService) MembershipsCreate(ctx context.Context) ApiMembershipsCreateRequest {
+func (a *MembershipsAPIService) MembershipsCreate(ctx context.Context) ApiMembershipsCreateRequest {
 	return ApiMembershipsCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Membership
-func (a *MembershipsApiService) MembershipsCreateExecute(r ApiMembershipsCreateRequest) (*Membership, *http.Response, error) {
+//  @return Membership
+func (a *MembershipsAPIService) MembershipsCreateExecute(r ApiMembershipsCreateRequest) (*Membership, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Membership
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Membership
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsAPIService.MembershipsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -133,9 +133,9 @@ func (a *MembershipsApiService) MembershipsCreateExecute(r ApiMembershipsCreateR
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -161,9 +161,9 @@ func (a *MembershipsApiService) MembershipsCreateExecute(r ApiMembershipsCreateR
 }
 
 type ApiMembershipsDestroyRequest struct {
-	ctx        context.Context
-	ApiService *MembershipsApiService
-	id         string
+	ctx context.Context
+	ApiService *MembershipsAPIService
+	id string
 }
 
 func (r ApiMembershipsDestroyRequest) Execute() (*http.Response, error) {
@@ -173,33 +173,33 @@ func (r ApiMembershipsDestroyRequest) Execute() (*http.Response, error) {
 /*
 MembershipsDestroy Method for MembershipsDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiMembershipsDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiMembershipsDestroyRequest
 */
-func (a *MembershipsApiService) MembershipsDestroy(ctx context.Context, id string) ApiMembershipsDestroyRequest {
+func (a *MembershipsAPIService) MembershipsDestroy(ctx context.Context, id string) ApiMembershipsDestroyRequest {
 	return ApiMembershipsDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *MembershipsApiService) MembershipsDestroyExecute(r ApiMembershipsDestroyRequest) (*http.Response, error) {
+func (a *MembershipsAPIService) MembershipsDestroyExecute(r ApiMembershipsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsAPIService.MembershipsDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/memberships/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -260,9 +260,9 @@ func (a *MembershipsApiService) MembershipsDestroyExecute(r ApiMembershipsDestro
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -279,13 +279,13 @@ func (a *MembershipsApiService) MembershipsDestroyExecute(r ApiMembershipsDestro
 }
 
 type ApiMembershipsListRequest struct {
-	ctx        context.Context
-	ApiService *MembershipsApiService
-	ordering   *string
-	page       *int32
-	pageSize   *int32
-	role       *string
-	user       *string
+	ctx context.Context
+	ApiService *MembershipsAPIService
+	ordering *string
+	page *int32
+	pageSize *int32
+	role *string
+	user *string
 }
 
 // Which field to use when ordering the results.
@@ -325,28 +325,27 @@ func (r ApiMembershipsListRequest) Execute() (*PaginatedMembershipList, *http.Re
 /*
 MembershipsList Method for MembershipsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiMembershipsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiMembershipsListRequest
 */
-func (a *MembershipsApiService) MembershipsList(ctx context.Context) ApiMembershipsListRequest {
+func (a *MembershipsAPIService) MembershipsList(ctx context.Context) ApiMembershipsListRequest {
 	return ApiMembershipsListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedMembershipList
-func (a *MembershipsApiService) MembershipsListExecute(r ApiMembershipsListRequest) (*PaginatedMembershipList, *http.Response, error) {
+//  @return PaginatedMembershipList
+func (a *MembershipsAPIService) MembershipsListExecute(r ApiMembershipsListRequest) (*PaginatedMembershipList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedMembershipList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedMembershipList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsAPIService.MembershipsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -358,19 +357,19 @@ func (a *MembershipsApiService) MembershipsListExecute(r ApiMembershipsListReque
 	localVarFormParams := url.Values{}
 
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	if r.role != nil {
-		localVarQueryParams.Add("role", parameterToString(*r.role, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "role", r.role, "")
 	}
 	if r.user != nil {
-		localVarQueryParams.Add("user", parameterToString(*r.user, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "user", r.user, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -427,9 +426,9 @@ func (a *MembershipsApiService) MembershipsListExecute(r ApiMembershipsListReque
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -455,9 +454,9 @@ func (a *MembershipsApiService) MembershipsListExecute(r ApiMembershipsListReque
 }
 
 type ApiMembershipsPartialUpdateRequest struct {
-	ctx               context.Context
-	ApiService        *MembershipsApiService
-	id                string
+	ctx context.Context
+	ApiService *MembershipsAPIService
+	id string
 	patchedMembership *PatchedMembership
 }
 
@@ -473,36 +472,35 @@ func (r ApiMembershipsPartialUpdateRequest) Execute() (*Membership, *http.Respon
 /*
 MembershipsPartialUpdate Method for MembershipsPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiMembershipsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiMembershipsPartialUpdateRequest
 */
-func (a *MembershipsApiService) MembershipsPartialUpdate(ctx context.Context, id string) ApiMembershipsPartialUpdateRequest {
+func (a *MembershipsAPIService) MembershipsPartialUpdate(ctx context.Context, id string) ApiMembershipsPartialUpdateRequest {
 	return ApiMembershipsPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Membership
-func (a *MembershipsApiService) MembershipsPartialUpdateExecute(r ApiMembershipsPartialUpdateRequest) (*Membership, *http.Response, error) {
+//  @return Membership
+func (a *MembershipsAPIService) MembershipsPartialUpdateExecute(r ApiMembershipsPartialUpdateRequest) (*Membership, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Membership
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Membership
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsAPIService.MembershipsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/memberships/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -565,9 +563,9 @@ func (a *MembershipsApiService) MembershipsPartialUpdateExecute(r ApiMemberships
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -593,9 +591,9 @@ func (a *MembershipsApiService) MembershipsPartialUpdateExecute(r ApiMemberships
 }
 
 type ApiMembershipsRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *MembershipsApiService
-	id         string
+	ctx context.Context
+	ApiService *MembershipsAPIService
+	id string
 }
 
 func (r ApiMembershipsRetrieveRequest) Execute() (*Membership, *http.Response, error) {
@@ -605,36 +603,35 @@ func (r ApiMembershipsRetrieveRequest) Execute() (*Membership, *http.Response, e
 /*
 MembershipsRetrieve Method for MembershipsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiMembershipsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiMembershipsRetrieveRequest
 */
-func (a *MembershipsApiService) MembershipsRetrieve(ctx context.Context, id string) ApiMembershipsRetrieveRequest {
+func (a *MembershipsAPIService) MembershipsRetrieve(ctx context.Context, id string) ApiMembershipsRetrieveRequest {
 	return ApiMembershipsRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Membership
-func (a *MembershipsApiService) MembershipsRetrieveExecute(r ApiMembershipsRetrieveRequest) (*Membership, *http.Response, error) {
+//  @return Membership
+func (a *MembershipsAPIService) MembershipsRetrieveExecute(r ApiMembershipsRetrieveRequest) (*Membership, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Membership
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Membership
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsAPIService.MembershipsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/memberships/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -695,9 +692,9 @@ func (a *MembershipsApiService) MembershipsRetrieveExecute(r ApiMembershipsRetri
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -723,9 +720,9 @@ func (a *MembershipsApiService) MembershipsRetrieveExecute(r ApiMembershipsRetri
 }
 
 type ApiMembershipsUpdateRequest struct {
-	ctx        context.Context
-	ApiService *MembershipsApiService
-	id         string
+	ctx context.Context
+	ApiService *MembershipsAPIService
+	id string
 	membership *Membership
 }
 
@@ -741,36 +738,35 @@ func (r ApiMembershipsUpdateRequest) Execute() (*Membership, *http.Response, err
 /*
 MembershipsUpdate Method for MembershipsUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id
-	@return ApiMembershipsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiMembershipsUpdateRequest
 */
-func (a *MembershipsApiService) MembershipsUpdate(ctx context.Context, id string) ApiMembershipsUpdateRequest {
+func (a *MembershipsAPIService) MembershipsUpdate(ctx context.Context, id string) ApiMembershipsUpdateRequest {
 	return ApiMembershipsUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return Membership
-func (a *MembershipsApiService) MembershipsUpdateExecute(r ApiMembershipsUpdateRequest) (*Membership, *http.Response, error) {
+//  @return Membership
+func (a *MembershipsAPIService) MembershipsUpdateExecute(r ApiMembershipsUpdateRequest) (*Membership, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *Membership
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Membership
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsApiService.MembershipsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MembershipsAPIService.MembershipsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/memberships/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -836,9 +832,9 @@ func (a *MembershipsApiService) MembershipsUpdateExecute(r ApiMembershipsUpdateR
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

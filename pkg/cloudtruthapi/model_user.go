@@ -16,24 +16,27 @@ import (
 	"time"
 )
 
+// checks if the User type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &User{}
+
 // User struct for User
 type User struct {
 	Url string `json:"url"`
 	// The unique identifier of a user.
 	Id string `json:"id"`
 	// The type of user record.
-	Type *string        `json:"type,omitempty"`
+	Type *string `json:"type,omitempty"`
 	Name NullableString `json:"name"`
 	// The user's organization name.
 	OrganizationName NullableString `json:"organization_name"`
 	// Membership identifier for user.
 	MembershipId NullableString `json:"membership_id"`
 	// The user's role in the current organization (defined by the request authorization header).
-	Role       NullableString `json:"role"`
-	Email      NullableString `json:"email"`
+	Role NullableString `json:"role"`
+	Email NullableString `json:"email"`
 	PictureUrl NullableString `json:"picture_url"`
-	CreatedAt  time.Time      `json:"created_at"`
-	ModifiedAt time.Time      `json:"modified_at"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 }
 
 // NewUser instantiates a new User object
@@ -113,7 +116,7 @@ func (o *User) SetId(v string) {
 
 // GetType returns the Type field value if set, zero value otherwise.
 func (o *User) GetType() string {
-	if o == nil || o.Type == nil {
+	if o == nil || IsNil(o.Type) {
 		var ret string
 		return ret
 	}
@@ -123,7 +126,7 @@ func (o *User) GetType() string {
 // GetTypeOk returns a tuple with the Type field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *User) GetTypeOk() (*string, bool) {
-	if o == nil || o.Type == nil {
+	if o == nil || IsNil(o.Type) {
 		return nil, false
 	}
 	return o.Type, true
@@ -131,7 +134,7 @@ func (o *User) GetTypeOk() (*string, bool) {
 
 // HasType returns a boolean if a field has been set.
 func (o *User) HasType() bool {
-	if o != nil && o.Type != nil {
+	if o != nil && !IsNil(o.Type) {
 		return true
 	}
 
@@ -348,41 +351,29 @@ func (o *User) SetModifiedAt(v time.Time) {
 }
 
 func (o User) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if o.Type != nil {
-		toSerialize["type"] = o.Type
-	}
-	if true {
-		toSerialize["name"] = o.Name.Get()
-	}
-	if true {
-		toSerialize["organization_name"] = o.OrganizationName.Get()
-	}
-	if true {
-		toSerialize["membership_id"] = o.MembershipId.Get()
-	}
-	if true {
-		toSerialize["role"] = o.Role.Get()
-	}
-	if true {
-		toSerialize["email"] = o.Email.Get()
-	}
-	if true {
-		toSerialize["picture_url"] = o.PictureUrl.Get()
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o User) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	if !IsNil(o.Type) {
+		toSerialize["type"] = o.Type
+	}
+	toSerialize["name"] = o.Name.Get()
+	toSerialize["organization_name"] = o.OrganizationName.Get()
+	toSerialize["membership_id"] = o.MembershipId.Get()
+	toSerialize["role"] = o.Role.Get()
+	toSerialize["email"] = o.Email.Get()
+	toSerialize["picture_url"] = o.PictureUrl.Get()
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableUser struct {
@@ -420,3 +411,5 @@ func (v *NullableUser) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

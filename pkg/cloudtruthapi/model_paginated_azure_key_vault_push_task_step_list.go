@@ -15,12 +15,15 @@ import (
 	"encoding/json"
 )
 
+// checks if the PaginatedAzureKeyVaultPushTaskStepList type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PaginatedAzureKeyVaultPushTaskStepList{}
+
 // PaginatedAzureKeyVaultPushTaskStepList struct for PaginatedAzureKeyVaultPushTaskStepList
 type PaginatedAzureKeyVaultPushTaskStepList struct {
-	Count    *int32                      `json:"count,omitempty"`
-	Next     NullableString              `json:"next,omitempty"`
-	Previous NullableString              `json:"previous,omitempty"`
-	Results  []AzureKeyVaultPushTaskStep `json:"results,omitempty"`
+	Count *int32 `json:"count,omitempty"`
+	Next NullableString `json:"next,omitempty"`
+	Previous NullableString `json:"previous,omitempty"`
+	Results []AzureKeyVaultPushTaskStep `json:"results,omitempty"`
 }
 
 // NewPaginatedAzureKeyVaultPushTaskStepList instantiates a new PaginatedAzureKeyVaultPushTaskStepList object
@@ -42,7 +45,7 @@ func NewPaginatedAzureKeyVaultPushTaskStepListWithDefaults() *PaginatedAzureKeyV
 
 // GetCount returns the Count field value if set, zero value otherwise.
 func (o *PaginatedAzureKeyVaultPushTaskStepList) GetCount() int32 {
-	if o == nil || o.Count == nil {
+	if o == nil || IsNil(o.Count) {
 		var ret int32
 		return ret
 	}
@@ -52,7 +55,7 @@ func (o *PaginatedAzureKeyVaultPushTaskStepList) GetCount() int32 {
 // GetCountOk returns a tuple with the Count field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PaginatedAzureKeyVaultPushTaskStepList) GetCountOk() (*int32, bool) {
-	if o == nil || o.Count == nil {
+	if o == nil || IsNil(o.Count) {
 		return nil, false
 	}
 	return o.Count, true
@@ -60,7 +63,7 @@ func (o *PaginatedAzureKeyVaultPushTaskStepList) GetCountOk() (*int32, bool) {
 
 // HasCount returns a boolean if a field has been set.
 func (o *PaginatedAzureKeyVaultPushTaskStepList) HasCount() bool {
-	if o != nil && o.Count != nil {
+	if o != nil && !IsNil(o.Count) {
 		return true
 	}
 
@@ -74,7 +77,7 @@ func (o *PaginatedAzureKeyVaultPushTaskStepList) SetCount(v int32) {
 
 // GetNext returns the Next field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PaginatedAzureKeyVaultPushTaskStepList) GetNext() string {
-	if o == nil || o.Next.Get() == nil {
+	if o == nil || IsNil(o.Next.Get()) {
 		var ret string
 		return ret
 	}
@@ -104,7 +107,6 @@ func (o *PaginatedAzureKeyVaultPushTaskStepList) HasNext() bool {
 func (o *PaginatedAzureKeyVaultPushTaskStepList) SetNext(v string) {
 	o.Next.Set(&v)
 }
-
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedAzureKeyVaultPushTaskStepList) SetNextNil() {
 	o.Next.Set(nil)
@@ -117,7 +119,7 @@ func (o *PaginatedAzureKeyVaultPushTaskStepList) UnsetNext() {
 
 // GetPrevious returns the Previous field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PaginatedAzureKeyVaultPushTaskStepList) GetPrevious() string {
-	if o == nil || o.Previous.Get() == nil {
+	if o == nil || IsNil(o.Previous.Get()) {
 		var ret string
 		return ret
 	}
@@ -147,7 +149,6 @@ func (o *PaginatedAzureKeyVaultPushTaskStepList) HasPrevious() bool {
 func (o *PaginatedAzureKeyVaultPushTaskStepList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
-
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedAzureKeyVaultPushTaskStepList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -160,7 +161,7 @@ func (o *PaginatedAzureKeyVaultPushTaskStepList) UnsetPrevious() {
 
 // GetResults returns the Results field value if set, zero value otherwise.
 func (o *PaginatedAzureKeyVaultPushTaskStepList) GetResults() []AzureKeyVaultPushTaskStep {
-	if o == nil || o.Results == nil {
+	if o == nil || IsNil(o.Results) {
 		var ret []AzureKeyVaultPushTaskStep
 		return ret
 	}
@@ -170,7 +171,7 @@ func (o *PaginatedAzureKeyVaultPushTaskStepList) GetResults() []AzureKeyVaultPus
 // GetResultsOk returns a tuple with the Results field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *PaginatedAzureKeyVaultPushTaskStepList) GetResultsOk() ([]AzureKeyVaultPushTaskStep, bool) {
-	if o == nil || o.Results == nil {
+	if o == nil || IsNil(o.Results) {
 		return nil, false
 	}
 	return o.Results, true
@@ -178,7 +179,7 @@ func (o *PaginatedAzureKeyVaultPushTaskStepList) GetResultsOk() ([]AzureKeyVault
 
 // HasResults returns a boolean if a field has been set.
 func (o *PaginatedAzureKeyVaultPushTaskStepList) HasResults() bool {
-	if o != nil && o.Results != nil {
+	if o != nil && !IsNil(o.Results) {
 		return true
 	}
 
@@ -191,8 +192,16 @@ func (o *PaginatedAzureKeyVaultPushTaskStepList) SetResults(v []AzureKeyVaultPus
 }
 
 func (o PaginatedAzureKeyVaultPushTaskStepList) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o PaginatedAzureKeyVaultPushTaskStepList) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Count != nil {
+	if !IsNil(o.Count) {
 		toSerialize["count"] = o.Count
 	}
 	if o.Next.IsSet() {
@@ -201,10 +210,10 @@ func (o PaginatedAzureKeyVaultPushTaskStepList) MarshalJSON() ([]byte, error) {
 	if o.Previous.IsSet() {
 		toSerialize["previous"] = o.Previous.Get()
 	}
-	if o.Results != nil {
+	if !IsNil(o.Results) {
 		toSerialize["results"] = o.Results
 	}
-	return json.Marshal(toSerialize)
+	return toSerialize, nil
 }
 
 type NullablePaginatedAzureKeyVaultPushTaskStepList struct {
@@ -242,3 +251,5 @@ func (v *NullablePaginatedAzureKeyVaultPushTaskStepList) UnmarshalJSON(src []byt
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

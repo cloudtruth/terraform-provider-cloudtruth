@@ -14,18 +14,19 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
 )
 
-// ServiceaccountsApiService ServiceaccountsApi service
-type ServiceaccountsApiService service
+
+// ServiceaccountsAPIService ServiceaccountsAPI service
+type ServiceaccountsAPIService service
 
 type ApiServiceaccountsCreateRequest struct {
-	ctx                         context.Context
-	ApiService                  *ServiceaccountsApiService
+	ctx context.Context
+	ApiService *ServiceaccountsAPIService
 	serviceAccountCreateRequest *ServiceAccountCreateRequest
 }
 
@@ -41,38 +42,38 @@ func (r ApiServiceaccountsCreateRequest) Execute() (*ServiceAccountCreateRespons
 /*
 ServiceaccountsCreate Create a ServiceAccount user.
 
-	           Creates a new ServiceAccount.  A ServiceAccount is a user record intended
-	           for machine use (such as a build system).  It does not have a username/password
-	           but is instead accessed using an API key.
 
-	           On creation, the API key will be returned.  This key will only be shown once,
-	           is not stored on any CloudTruth system, and should be treated as a secret.  Should
-	           the key be lost, you will need to delete and recreate the ServiceAccount in order
-	           to generate a new API key.
+            Creates a new ServiceAccount.  A ServiceAccount is a user record intended
+            for machine use (such as a build system).  It does not have a username/password
+            but is instead accessed using an API key.
 
+            On creation, the API key will be returned.  This key will only be shown once,
+            is not stored on any CloudTruth system, and should be treated as a secret.  Should
+            the key be lost, you will need to delete and recreate the ServiceAccount in order
+            to generate a new API key.
+            
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiServiceaccountsCreateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiServiceaccountsCreateRequest
 */
-func (a *ServiceaccountsApiService) ServiceaccountsCreate(ctx context.Context) ApiServiceaccountsCreateRequest {
+func (a *ServiceaccountsAPIService) ServiceaccountsCreate(ctx context.Context) ApiServiceaccountsCreateRequest {
 	return ApiServiceaccountsCreateRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ServiceAccountCreateResponse
-func (a *ServiceaccountsApiService) ServiceaccountsCreateExecute(r ApiServiceaccountsCreateRequest) (*ServiceAccountCreateResponse, *http.Response, error) {
+//  @return ServiceAccountCreateResponse
+func (a *ServiceaccountsAPIService) ServiceaccountsCreateExecute(r ApiServiceaccountsCreateRequest) (*ServiceAccountCreateResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ServiceAccountCreateResponse
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ServiceAccountCreateResponse
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsCreate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsAPIService.ServiceaccountsCreate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -143,9 +144,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsCreateExecute(r ApiServiceacc
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -171,9 +172,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsCreateExecute(r ApiServiceacc
 }
 
 type ApiServiceaccountsDestroyRequest struct {
-	ctx        context.Context
-	ApiService *ServiceaccountsApiService
-	id         string
+	ctx context.Context
+	ApiService *ServiceaccountsAPIService
+	id string
 }
 
 func (r ApiServiceaccountsDestroyRequest) Execute() (*http.Response, error) {
@@ -183,33 +184,33 @@ func (r ApiServiceaccountsDestroyRequest) Execute() (*http.Response, error) {
 /*
 ServiceaccountsDestroy Method for ServiceaccountsDestroy
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A unique value identifying this service account.
-	@return ApiServiceaccountsDestroyRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A unique value identifying this service account.
+ @return ApiServiceaccountsDestroyRequest
 */
-func (a *ServiceaccountsApiService) ServiceaccountsDestroy(ctx context.Context, id string) ApiServiceaccountsDestroyRequest {
+func (a *ServiceaccountsAPIService) ServiceaccountsDestroy(ctx context.Context, id string) ApiServiceaccountsDestroyRequest {
 	return ApiServiceaccountsDestroyRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *ServiceaccountsApiService) ServiceaccountsDestroyExecute(r ApiServiceaccountsDestroyRequest) (*http.Response, error) {
+func (a *ServiceaccountsAPIService) ServiceaccountsDestroyExecute(r ApiServiceaccountsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsDestroy")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsAPIService.ServiceaccountsDestroy")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/serviceaccounts/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -270,9 +271,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsDestroyExecute(r ApiServiceac
 		return localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarHTTPResponse, err
 	}
@@ -289,11 +290,11 @@ func (a *ServiceaccountsApiService) ServiceaccountsDestroyExecute(r ApiServiceac
 }
 
 type ApiServiceaccountsListRequest struct {
-	ctx        context.Context
-	ApiService *ServiceaccountsApiService
-	ordering   *string
-	page       *int32
-	pageSize   *int32
+	ctx context.Context
+	ApiService *ServiceaccountsAPIService
+	ordering *string
+	page *int32
+	pageSize *int32
 }
 
 // Which field to use when ordering the results.
@@ -321,28 +322,27 @@ func (r ApiServiceaccountsListRequest) Execute() (*PaginatedServiceAccountList, 
 /*
 ServiceaccountsList Method for ServiceaccountsList
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiServiceaccountsListRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiServiceaccountsListRequest
 */
-func (a *ServiceaccountsApiService) ServiceaccountsList(ctx context.Context) ApiServiceaccountsListRequest {
+func (a *ServiceaccountsAPIService) ServiceaccountsList(ctx context.Context) ApiServiceaccountsListRequest {
 	return ApiServiceaccountsListRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return PaginatedServiceAccountList
-func (a *ServiceaccountsApiService) ServiceaccountsListExecute(r ApiServiceaccountsListRequest) (*PaginatedServiceAccountList, *http.Response, error) {
+//  @return PaginatedServiceAccountList
+func (a *ServiceaccountsAPIService) ServiceaccountsListExecute(r ApiServiceaccountsListRequest) (*PaginatedServiceAccountList, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *PaginatedServiceAccountList
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PaginatedServiceAccountList
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsList")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsAPIService.ServiceaccountsList")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -354,13 +354,13 @@ func (a *ServiceaccountsApiService) ServiceaccountsListExecute(r ApiServiceaccou
 	localVarFormParams := url.Values{}
 
 	if r.ordering != nil {
-		localVarQueryParams.Add("ordering", parameterToString(*r.ordering, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
 	}
 	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
 	}
 	if r.pageSize != nil {
-		localVarQueryParams.Add("page_size", parameterToString(*r.pageSize, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -417,9 +417,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsListExecute(r ApiServiceaccou
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -445,9 +445,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsListExecute(r ApiServiceaccou
 }
 
 type ApiServiceaccountsPartialUpdateRequest struct {
-	ctx                   context.Context
-	ApiService            *ServiceaccountsApiService
-	id                    string
+	ctx context.Context
+	ApiService *ServiceaccountsAPIService
+	id string
 	patchedServiceAccount *PatchedServiceAccount
 }
 
@@ -463,36 +463,35 @@ func (r ApiServiceaccountsPartialUpdateRequest) Execute() (*ServiceAccount, *htt
 /*
 ServiceaccountsPartialUpdate Method for ServiceaccountsPartialUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A unique value identifying this service account.
-	@return ApiServiceaccountsPartialUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A unique value identifying this service account.
+ @return ApiServiceaccountsPartialUpdateRequest
 */
-func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdate(ctx context.Context, id string) ApiServiceaccountsPartialUpdateRequest {
+func (a *ServiceaccountsAPIService) ServiceaccountsPartialUpdate(ctx context.Context, id string) ApiServiceaccountsPartialUpdateRequest {
 	return ApiServiceaccountsPartialUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ServiceAccount
-func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdateExecute(r ApiServiceaccountsPartialUpdateRequest) (*ServiceAccount, *http.Response, error) {
+//  @return ServiceAccount
+func (a *ServiceaccountsAPIService) ServiceaccountsPartialUpdateExecute(r ApiServiceaccountsPartialUpdateRequest) (*ServiceAccount, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPatch
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ServiceAccount
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ServiceAccount
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsPartialUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsAPIService.ServiceaccountsPartialUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/serviceaccounts/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -555,9 +554,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdateExecute(r ApiSer
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -583,9 +582,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsPartialUpdateExecute(r ApiSer
 }
 
 type ApiServiceaccountsRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *ServiceaccountsApiService
-	id         string
+	ctx context.Context
+	ApiService *ServiceaccountsAPIService
+	id string
 }
 
 func (r ApiServiceaccountsRetrieveRequest) Execute() (*ServiceAccount, *http.Response, error) {
@@ -595,36 +594,35 @@ func (r ApiServiceaccountsRetrieveRequest) Execute() (*ServiceAccount, *http.Res
 /*
 ServiceaccountsRetrieve Method for ServiceaccountsRetrieve
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A unique value identifying this service account.
-	@return ApiServiceaccountsRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A unique value identifying this service account.
+ @return ApiServiceaccountsRetrieveRequest
 */
-func (a *ServiceaccountsApiService) ServiceaccountsRetrieve(ctx context.Context, id string) ApiServiceaccountsRetrieveRequest {
+func (a *ServiceaccountsAPIService) ServiceaccountsRetrieve(ctx context.Context, id string) ApiServiceaccountsRetrieveRequest {
 	return ApiServiceaccountsRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ServiceAccount
-func (a *ServiceaccountsApiService) ServiceaccountsRetrieveExecute(r ApiServiceaccountsRetrieveRequest) (*ServiceAccount, *http.Response, error) {
+//  @return ServiceAccount
+func (a *ServiceaccountsAPIService) ServiceaccountsRetrieveExecute(r ApiServiceaccountsRetrieveRequest) (*ServiceAccount, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ServiceAccount
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ServiceAccount
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsAPIService.ServiceaccountsRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/serviceaccounts/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -685,9 +683,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsRetrieveExecute(r ApiServicea
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
@@ -713,9 +711,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsRetrieveExecute(r ApiServicea
 }
 
 type ApiServiceaccountsUpdateRequest struct {
-	ctx            context.Context
-	ApiService     *ServiceaccountsApiService
-	id             string
+	ctx context.Context
+	ApiService *ServiceaccountsAPIService
+	id string
 	serviceAccount *ServiceAccount
 }
 
@@ -731,36 +729,35 @@ func (r ApiServiceaccountsUpdateRequest) Execute() (*ServiceAccount, *http.Respo
 /*
 ServiceaccountsUpdate Method for ServiceaccountsUpdate
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id A unique value identifying this service account.
-	@return ApiServiceaccountsUpdateRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A unique value identifying this service account.
+ @return ApiServiceaccountsUpdateRequest
 */
-func (a *ServiceaccountsApiService) ServiceaccountsUpdate(ctx context.Context, id string) ApiServiceaccountsUpdateRequest {
+func (a *ServiceaccountsAPIService) ServiceaccountsUpdate(ctx context.Context, id string) ApiServiceaccountsUpdateRequest {
 	return ApiServiceaccountsUpdateRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ServiceAccount
-func (a *ServiceaccountsApiService) ServiceaccountsUpdateExecute(r ApiServiceaccountsUpdateRequest) (*ServiceAccount, *http.Response, error) {
+//  @return ServiceAccount
+func (a *ServiceaccountsAPIService) ServiceaccountsUpdateExecute(r ApiServiceaccountsUpdateRequest) (*ServiceAccount, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPut
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ServiceAccount
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ServiceAccount
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsApiService.ServiceaccountsUpdate")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsAPIService.ServiceaccountsUpdate")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/api/v1/serviceaccounts/{id}/"
-	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterToString(r.id, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -823,9 +820,9 @@ func (a *ServiceaccountsApiService) ServiceaccountsUpdateExecute(r ApiServiceacc
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

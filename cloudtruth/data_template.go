@@ -66,7 +66,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	}
 	name := d.Get("name").(string)
 
-	templateListRequest := c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx,
+	templateListRequest := c.openAPIClient.ProjectsAPI.ProjectsTemplatesList(ctx,
 		*projID).Environment(*envID).Name(name)
 	filteredTemplateListRequest, err := parseTemplateListFilters(templateListRequest, d)
 	if err != nil {
@@ -121,7 +121,7 @@ func renderTemplateBody(ctx context.Context, name, body, projectID string, meta 
 	// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
 	// so we employ a simple retry loop instead
 	for retryCount < loadCacheRetries {
-		previewCreate, r, err := c.openAPIClient.ProjectsApi.ProjectsTemplatePreviewCreate(ctx, projectID).
+		previewCreate, r, err := c.openAPIClient.ProjectsAPI.ProjectsTemplatePreviewCreate(ctx, projectID).
 			TemplatePreviewCreateRequest(*templatePrevReq).Execute()
 		if r.StatusCode >= 500 {
 			apiError = err
@@ -194,7 +194,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 	templateMap := make(map[string]any)
 	var pageNum int32 = 0
 	for {
-		templateListRequest = c.openAPIClient.ProjectsApi.ProjectsTemplatesList(ctx, *projID).Environment(environment)
+		templateListRequest = c.openAPIClient.ProjectsAPI.ProjectsTemplatesList(ctx, *projID).Environment(environment)
 		if pageNum > 0 {
 			templateListRequest = templateListRequest.Page(pageNum)
 		}

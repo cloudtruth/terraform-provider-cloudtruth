@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the TemplateTimelineEntryTemplate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TemplateTimelineEntryTemplate{}
+
 // TemplateTimelineEntryTemplate Helper methods for all views or serializers that expose template concepts.
 type TemplateTimelineEntryTemplate struct {
 	// A unique identifier for the parameter.
@@ -96,7 +99,7 @@ func (o *TemplateTimelineEntryTemplate) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *TemplateTimelineEntryTemplate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -106,7 +109,7 @@ func (o *TemplateTimelineEntryTemplate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TemplateTimelineEntryTemplate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -114,7 +117,7 @@ func (o *TemplateTimelineEntryTemplate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *TemplateTimelineEntryTemplate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -128,7 +131,7 @@ func (o *TemplateTimelineEntryTemplate) SetDescription(v string) {
 
 // GetBody returns the Body field value if set, zero value otherwise.
 func (o *TemplateTimelineEntryTemplate) GetBody() string {
-	if o == nil || o.Body == nil {
+	if o == nil || IsNil(o.Body) {
 		var ret string
 		return ret
 	}
@@ -138,7 +141,7 @@ func (o *TemplateTimelineEntryTemplate) GetBody() string {
 // GetBodyOk returns a tuple with the Body field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *TemplateTimelineEntryTemplate) GetBodyOk() (*string, bool) {
-	if o == nil || o.Body == nil {
+	if o == nil || IsNil(o.Body) {
 		return nil, false
 	}
 	return o.Body, true
@@ -146,7 +149,7 @@ func (o *TemplateTimelineEntryTemplate) GetBodyOk() (*string, bool) {
 
 // HasBody returns a boolean if a field has been set.
 func (o *TemplateTimelineEntryTemplate) HasBody() bool {
-	if o != nil && o.Body != nil {
+	if o != nil && !IsNil(o.Body) {
 		return true
 	}
 
@@ -159,20 +162,24 @@ func (o *TemplateTimelineEntryTemplate) SetBody(v string) {
 }
 
 func (o TemplateTimelineEntryTemplate) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if o.Body != nil {
-		toSerialize["body"] = o.Body
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o TemplateTimelineEntryTemplate) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Body) {
+		toSerialize["body"] = o.Body
+	}
+	return toSerialize, nil
 }
 
 type NullableTemplateTimelineEntryTemplate struct {
@@ -210,3 +217,5 @@ func (v *NullableTemplateTimelineEntryTemplate) UnmarshalJSON(src []byte) error 
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

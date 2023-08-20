@@ -16,16 +16,19 @@ import (
 	"time"
 )
 
+// checks if the ParameterTypeRule type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ParameterTypeRule{}
+
 // ParameterTypeRule A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead of primary key relationships.  Specifically:  * A 'url' field is included instead of the 'id' field. * Relationships to other instances are hyperlinks, instead of primary keys.  NOTE: this only works with DRF 3.1.0 and above.
 type ParameterTypeRule struct {
 	Url string `json:"url"`
-	Id  string `json:"id"`
+	Id string `json:"id"`
 	// The type this rule is for.
-	ParameterType string                `json:"parameter_type"`
-	Type          ParameterRuleTypeEnum `json:"type"`
-	Constraint    string                `json:"constraint"`
-	CreatedAt     time.Time             `json:"created_at"`
-	ModifiedAt    time.Time             `json:"modified_at"`
+	ParameterType string `json:"parameter_type"`
+	Type ParameterRuleTypeEnum `json:"type"`
+	Constraint string `json:"constraint"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 }
 
 // NewParameterTypeRule instantiates a new ParameterTypeRule object
@@ -221,29 +224,23 @@ func (o *ParameterTypeRule) SetModifiedAt(v time.Time) {
 }
 
 func (o ParameterTypeRule) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["parameter_type"] = o.ParameterType
-	}
-	if true {
-		toSerialize["type"] = o.Type
-	}
-	if true {
-		toSerialize["constraint"] = o.Constraint
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ParameterTypeRule) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["parameter_type"] = o.ParameterType
+	toSerialize["type"] = o.Type
+	toSerialize["constraint"] = o.Constraint
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	return toSerialize, nil
 }
 
 type NullableParameterTypeRule struct {
@@ -281,3 +278,5 @@ func (v *NullableParameterTypeRule) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

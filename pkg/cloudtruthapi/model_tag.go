@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+// checks if the Tag type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Tag{}
+
 // Tag The details of a tag.
 type Tag struct {
 	Url string `json:"url"`
@@ -31,14 +34,14 @@ type Tag struct {
 	Pushes []AwsPush `json:"pushes"`
 	// Push actions associated with the tag.
 	PushUrls []string `json:"push_urls"`
-	Usage    TagUsage `json:"usage"`
+	Usage TagReadUsage `json:"usage"`
 }
 
 // NewTag instantiates a new Tag object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTag(url string, id string, name string, timestamp time.Time, pushes []AwsPush, pushUrls []string, usage TagUsage) *Tag {
+func NewTag(url string, id string, name string, timestamp time.Time, pushes []AwsPush, pushUrls []string, usage TagReadUsage) *Tag {
 	this := Tag{}
 	this.Url = url
 	this.Id = id
@@ -132,7 +135,7 @@ func (o *Tag) SetName(v string) {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *Tag) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -142,7 +145,7 @@ func (o *Tag) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *Tag) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -150,7 +153,7 @@ func (o *Tag) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *Tag) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -235,9 +238,9 @@ func (o *Tag) SetPushUrls(v []string) {
 }
 
 // GetUsage returns the Usage field value
-func (o *Tag) GetUsage() TagUsage {
+func (o *Tag) GetUsage() TagReadUsage {
 	if o == nil {
-		var ret TagUsage
+		var ret TagReadUsage
 		return ret
 	}
 
@@ -246,7 +249,7 @@ func (o *Tag) GetUsage() TagUsage {
 
 // GetUsageOk returns a tuple with the Usage field value
 // and a boolean to check if the value has been set.
-func (o *Tag) GetUsageOk() (*TagUsage, bool) {
+func (o *Tag) GetUsageOk() (*TagReadUsage, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -254,37 +257,31 @@ func (o *Tag) GetUsageOk() (*TagUsage, bool) {
 }
 
 // SetUsage sets field value
-func (o *Tag) SetUsage(v TagUsage) {
+func (o *Tag) SetUsage(v TagReadUsage) {
 	o.Usage = v
 }
 
 func (o Tag) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["timestamp"] = o.Timestamp
-	}
-	if true {
-		toSerialize["pushes"] = o.Pushes
-	}
-	if true {
-		toSerialize["push_urls"] = o.PushUrls
-	}
-	if true {
-		toSerialize["usage"] = o.Usage
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o Tag) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["name"] = o.Name
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["timestamp"] = o.Timestamp
+	toSerialize["pushes"] = o.Pushes
+	toSerialize["push_urls"] = o.PushUrls
+	toSerialize["usage"] = o.Usage
+	return toSerialize, nil
 }
 
 type NullableTag struct {
@@ -322,3 +319,5 @@ func (v *NullableTag) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

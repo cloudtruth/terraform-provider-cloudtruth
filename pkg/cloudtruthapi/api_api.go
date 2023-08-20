@@ -14,19 +14,20 @@ package cloudtruthapi
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 )
 
-// ApiApiService ApiApi service
-type ApiApiService service
+
+// ApiAPIService ApiAPI service
+type ApiAPIService service
 
 type ApiApiSchemaRetrieveRequest struct {
-	ctx        context.Context
-	ApiService *ApiApiService
-	format     *string
-	lang       *string
+	ctx context.Context
+	ApiService *ApiAPIService
+	format *string
+	lang *string
 }
 
 func (r ApiApiSchemaRetrieveRequest) Format(format string) ApiApiSchemaRetrieveRequest {
@@ -51,28 +52,27 @@ OpenApi3 schema for this API. Format can be selected via content negotiation.
 - YAML: application/vnd.oai.openapi
 - JSON: application/vnd.oai.openapi+json
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiApiSchemaRetrieveRequest
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiApiSchemaRetrieveRequest
 */
-func (a *ApiApiService) ApiSchemaRetrieve(ctx context.Context) ApiApiSchemaRetrieveRequest {
+func (a *ApiAPIService) ApiSchemaRetrieve(ctx context.Context) ApiApiSchemaRetrieveRequest {
 	return ApiApiSchemaRetrieveRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return map[string]interface{}
-func (a *ApiApiService) ApiSchemaRetrieveExecute(r ApiApiSchemaRetrieveRequest) (map[string]interface{}, *http.Response, error) {
+//  @return map[string]interface{}
+func (a *ApiAPIService) ApiSchemaRetrieveExecute(r ApiApiSchemaRetrieveRequest) (map[string]interface{}, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue map[string]interface{}
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ApiApiService.ApiSchemaRetrieve")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ApiAPIService.ApiSchemaRetrieve")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -84,10 +84,10 @@ func (a *ApiApiService) ApiSchemaRetrieveExecute(r ApiApiSchemaRetrieveRequest) 
 	localVarFormParams := url.Values{}
 
 	if r.format != nil {
-		localVarQueryParams.Add("format", parameterToString(*r.format, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "format", r.format, "")
 	}
 	if r.lang != nil {
-		localVarQueryParams.Add("lang", parameterToString(*r.lang, ""))
+		parameterAddToHeaderOrQuery(localVarQueryParams, "lang", r.lang, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -116,9 +116,9 @@ func (a *ApiApiService) ApiSchemaRetrieveExecute(r ApiApiSchemaRetrieveRequest) 
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}

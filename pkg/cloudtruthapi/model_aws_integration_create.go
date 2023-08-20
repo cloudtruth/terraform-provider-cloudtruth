@@ -15,6 +15,9 @@ import (
 	"encoding/json"
 )
 
+// checks if the AwsIntegrationCreate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &AwsIntegrationCreate{}
+
 // AwsIntegrationCreate struct for AwsIntegrationCreate
 type AwsIntegrationCreate struct {
 	// An optional description for the integration.
@@ -29,7 +32,7 @@ type AwsIntegrationCreate struct {
 	AwsEnabledServices []AwsServiceEnum `json:"aws_enabled_services"`
 	// This is a shared secret between the AWS Administrator who set up your IAM trust relationship and your CloudTruth AWS Integration.  CloudTruth will generate a random value for you to give to your AWS Administrator in order to create the necessary IAM role for proper access.
 	AwsExternalId *string `json:"aws_external_id,omitempty"`
-	// If present, this is the KMS Key Id that is used to push values.  This key must be accessible in the AWS account (it cannot be an ARN to a key in another AWS account).
+	// If present, this is the KMS Key Id that is used to push values.  This key must be accessible in the AWS account (it cannot be an ARN to a key in another AWS account). 
 	AwsKmsKeyId NullableString `json:"aws_kms_key_id,omitempty"`
 	// The role that CloudTruth will assume when interacting with your AWS Account through this integration.  The role is configured by your AWS Account Administrator.  If your AWS Administrator provided you with a value use it, otherwise make your own role name and give it to your AWS Administrator.
 	AwsRoleName string `json:"aws_role_name"`
@@ -58,7 +61,7 @@ func NewAwsIntegrationCreateWithDefaults() *AwsIntegrationCreate {
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *AwsIntegrationCreate) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -68,7 +71,7 @@ func (o *AwsIntegrationCreate) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AwsIntegrationCreate) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -76,7 +79,7 @@ func (o *AwsIntegrationCreate) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *AwsIntegrationCreate) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -90,7 +93,7 @@ func (o *AwsIntegrationCreate) SetDescription(v string) {
 
 // GetWritable returns the Writable field value if set, zero value otherwise.
 func (o *AwsIntegrationCreate) GetWritable() bool {
-	if o == nil || o.Writable == nil {
+	if o == nil || IsNil(o.Writable) {
 		var ret bool
 		return ret
 	}
@@ -100,7 +103,7 @@ func (o *AwsIntegrationCreate) GetWritable() bool {
 // GetWritableOk returns a tuple with the Writable field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AwsIntegrationCreate) GetWritableOk() (*bool, bool) {
-	if o == nil || o.Writable == nil {
+	if o == nil || IsNil(o.Writable) {
 		return nil, false
 	}
 	return o.Writable, true
@@ -108,7 +111,7 @@ func (o *AwsIntegrationCreate) GetWritableOk() (*bool, bool) {
 
 // HasWritable returns a boolean if a field has been set.
 func (o *AwsIntegrationCreate) HasWritable() bool {
-	if o != nil && o.Writable != nil {
+	if o != nil && !IsNil(o.Writable) {
 		return true
 	}
 
@@ -194,7 +197,7 @@ func (o *AwsIntegrationCreate) SetAwsEnabledServices(v []AwsServiceEnum) {
 
 // GetAwsExternalId returns the AwsExternalId field value if set, zero value otherwise.
 func (o *AwsIntegrationCreate) GetAwsExternalId() string {
-	if o == nil || o.AwsExternalId == nil {
+	if o == nil || IsNil(o.AwsExternalId) {
 		var ret string
 		return ret
 	}
@@ -204,7 +207,7 @@ func (o *AwsIntegrationCreate) GetAwsExternalId() string {
 // GetAwsExternalIdOk returns a tuple with the AwsExternalId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AwsIntegrationCreate) GetAwsExternalIdOk() (*string, bool) {
-	if o == nil || o.AwsExternalId == nil {
+	if o == nil || IsNil(o.AwsExternalId) {
 		return nil, false
 	}
 	return o.AwsExternalId, true
@@ -212,7 +215,7 @@ func (o *AwsIntegrationCreate) GetAwsExternalIdOk() (*string, bool) {
 
 // HasAwsExternalId returns a boolean if a field has been set.
 func (o *AwsIntegrationCreate) HasAwsExternalId() bool {
-	if o != nil && o.AwsExternalId != nil {
+	if o != nil && !IsNil(o.AwsExternalId) {
 		return true
 	}
 
@@ -226,7 +229,7 @@ func (o *AwsIntegrationCreate) SetAwsExternalId(v string) {
 
 // GetAwsKmsKeyId returns the AwsKmsKeyId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *AwsIntegrationCreate) GetAwsKmsKeyId() string {
-	if o == nil || o.AwsKmsKeyId.Get() == nil {
+	if o == nil || IsNil(o.AwsKmsKeyId.Get()) {
 		var ret string
 		return ret
 	}
@@ -256,7 +259,6 @@ func (o *AwsIntegrationCreate) HasAwsKmsKeyId() bool {
 func (o *AwsIntegrationCreate) SetAwsKmsKeyId(v string) {
 	o.AwsKmsKeyId.Set(&v)
 }
-
 // SetAwsKmsKeyIdNil sets the value for AwsKmsKeyId to be an explicit nil
 func (o *AwsIntegrationCreate) SetAwsKmsKeyIdNil() {
 	o.AwsKmsKeyId.Set(nil)
@@ -292,32 +294,32 @@ func (o *AwsIntegrationCreate) SetAwsRoleName(v string) {
 }
 
 func (o AwsIntegrationCreate) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o AwsIntegrationCreate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Description != nil {
+	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.Writable != nil {
+	if !IsNil(o.Writable) {
 		toSerialize["writable"] = o.Writable
 	}
-	if true {
-		toSerialize["aws_account_id"] = o.AwsAccountId
-	}
-	if true {
-		toSerialize["aws_enabled_regions"] = o.AwsEnabledRegions
-	}
-	if true {
-		toSerialize["aws_enabled_services"] = o.AwsEnabledServices
-	}
-	if o.AwsExternalId != nil {
+	toSerialize["aws_account_id"] = o.AwsAccountId
+	toSerialize["aws_enabled_regions"] = o.AwsEnabledRegions
+	toSerialize["aws_enabled_services"] = o.AwsEnabledServices
+	if !IsNil(o.AwsExternalId) {
 		toSerialize["aws_external_id"] = o.AwsExternalId
 	}
 	if o.AwsKmsKeyId.IsSet() {
 		toSerialize["aws_kms_key_id"] = o.AwsKmsKeyId.Get()
 	}
-	if true {
-		toSerialize["aws_role_name"] = o.AwsRoleName
-	}
-	return json.Marshal(toSerialize)
+	toSerialize["aws_role_name"] = o.AwsRoleName
+	return toSerialize, nil
 }
 
 type NullableAwsIntegrationCreate struct {
@@ -355,3 +357,5 @@ func (v *NullableAwsIntegrationCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

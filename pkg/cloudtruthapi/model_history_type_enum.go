@@ -21,9 +21,9 @@ type HistoryTypeEnum string
 
 // List of HistoryTypeEnum
 const (
-	HISTORYTYPEENUM_CREATE  HistoryTypeEnum = "create"
-	HISTORYTYPEENUM_UPDATE  HistoryTypeEnum = "update"
-	HISTORYTYPEENUM_DELETE  HistoryTypeEnum = "delete"
+	HISTORYTYPEENUM_CREATE HistoryTypeEnum = "create"
+	HISTORYTYPEENUM_UPDATE HistoryTypeEnum = "update"
+	HISTORYTYPEENUM_DELETE HistoryTypeEnum = "delete"
 	HISTORYTYPEENUM_NOTHING HistoryTypeEnum = "nothing"
 )
 
@@ -113,3 +113,4 @@ func (v *NullableHistoryTypeEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+

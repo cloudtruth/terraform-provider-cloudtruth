@@ -16,15 +16,18 @@ import (
 	"time"
 )
 
+// checks if the ServiceAccountCreateResponse type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ServiceAccountCreateResponse{}
+
 // ServiceAccountCreateResponse struct for ServiceAccountCreateResponse
 type ServiceAccountCreateResponse struct {
-	Url  string                    `json:"url"`
-	Id   string                    `json:"id"`
-	User PatchedServiceAccountUser `json:"user"`
+	Url string `json:"url"`
+	Id string `json:"id"`
+	User User `json:"user"`
 	// An optional description of the process or system using the service account.
-	Description *string   `json:"description,omitempty"`
-	CreatedAt   time.Time `json:"created_at"`
-	ModifiedAt  time.Time `json:"modified_at"`
+	Description *string `json:"description,omitempty"`
+	CreatedAt time.Time `json:"created_at"`
+	ModifiedAt time.Time `json:"modified_at"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
 	LastUsedAt NullableTime `json:"last_used_at"`
 	// The API Key to use as a Bearer token for the service account.
@@ -35,7 +38,7 @@ type ServiceAccountCreateResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewServiceAccountCreateResponse(url string, id string, user PatchedServiceAccountUser, createdAt time.Time, modifiedAt time.Time, lastUsedAt NullableTime, apikey string) *ServiceAccountCreateResponse {
+func NewServiceAccountCreateResponse(url string, id string, user User, createdAt time.Time, modifiedAt time.Time, lastUsedAt NullableTime, apikey string) *ServiceAccountCreateResponse {
 	this := ServiceAccountCreateResponse{}
 	this.Url = url
 	this.Id = id
@@ -104,9 +107,9 @@ func (o *ServiceAccountCreateResponse) SetId(v string) {
 }
 
 // GetUser returns the User field value
-func (o *ServiceAccountCreateResponse) GetUser() PatchedServiceAccountUser {
+func (o *ServiceAccountCreateResponse) GetUser() User {
 	if o == nil {
-		var ret PatchedServiceAccountUser
+		var ret User
 		return ret
 	}
 
@@ -115,7 +118,7 @@ func (o *ServiceAccountCreateResponse) GetUser() PatchedServiceAccountUser {
 
 // GetUserOk returns a tuple with the User field value
 // and a boolean to check if the value has been set.
-func (o *ServiceAccountCreateResponse) GetUserOk() (*PatchedServiceAccountUser, bool) {
+func (o *ServiceAccountCreateResponse) GetUserOk() (*User, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -123,13 +126,13 @@ func (o *ServiceAccountCreateResponse) GetUserOk() (*PatchedServiceAccountUser, 
 }
 
 // SetUser sets field value
-func (o *ServiceAccountCreateResponse) SetUser(v PatchedServiceAccountUser) {
+func (o *ServiceAccountCreateResponse) SetUser(v User) {
 	o.User = v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
 func (o *ServiceAccountCreateResponse) GetDescription() string {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
 	}
@@ -139,7 +142,7 @@ func (o *ServiceAccountCreateResponse) GetDescription() string {
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ServiceAccountCreateResponse) GetDescriptionOk() (*string, bool) {
-	if o == nil || o.Description == nil {
+	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
 	return o.Description, true
@@ -147,7 +150,7 @@ func (o *ServiceAccountCreateResponse) GetDescriptionOk() (*string, bool) {
 
 // HasDescription returns a boolean if a field has been set.
 func (o *ServiceAccountCreateResponse) HasDescription() bool {
-	if o != nil && o.Description != nil {
+	if o != nil && !IsNil(o.Description) {
 		return true
 	}
 
@@ -258,32 +261,26 @@ func (o *ServiceAccountCreateResponse) SetApikey(v string) {
 }
 
 func (o ServiceAccountCreateResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["id"] = o.Id
-	}
-	if true {
-		toSerialize["user"] = o.User
-	}
-	if o.Description != nil {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["created_at"] = o.CreatedAt
-	}
-	if true {
-		toSerialize["modified_at"] = o.ModifiedAt
-	}
-	if true {
-		toSerialize["last_used_at"] = o.LastUsedAt.Get()
-	}
-	if true {
-		toSerialize["apikey"] = o.Apikey
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
 	}
 	return json.Marshal(toSerialize)
+}
+
+func (o ServiceAccountCreateResponse) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["url"] = o.Url
+	toSerialize["id"] = o.Id
+	toSerialize["user"] = o.User
+	if !IsNil(o.Description) {
+		toSerialize["description"] = o.Description
+	}
+	toSerialize["created_at"] = o.CreatedAt
+	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["last_used_at"] = o.LastUsedAt.Get()
+	toSerialize["apikey"] = o.Apikey
+	return toSerialize, nil
 }
 
 type NullableServiceAccountCreateResponse struct {
@@ -321,3 +318,5 @@ func (v *NullableServiceAccountCreateResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+
