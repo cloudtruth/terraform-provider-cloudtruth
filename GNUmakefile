@@ -71,7 +71,6 @@ release: fmtcheck
 client: pkg/cloudtruth/client.go
 
 # Generate Go bindings via Swagger
-# This code will likely move to a dedicated repo
 pkg/cloudtruth/client.go: pkg/openapi.yml
 	docker run --rm \
 		-v "$(shell pwd)/pkg:/pkg" \
