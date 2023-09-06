@@ -3,7 +3,7 @@ on:
   push:
   # Run regular tests to confirm that no upstream API changes have broken the provider
   schedule:
-     - cron: '0 13 * * *'
+     - cron: '0 7 * * *'
 
 jobs:
   build:
