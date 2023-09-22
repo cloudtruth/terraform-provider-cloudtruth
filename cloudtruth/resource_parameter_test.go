@@ -125,8 +125,8 @@ func TestAccResourceIntParameterAddRemoveRule(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "description", paramDesc),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "secret",
 						strconv.FormatBool(false)),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "minVal", fmt.Sprint(minVal)),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "maxVal", fmt.Sprint(maxVal)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "min", fmt.Sprint(minVal)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "max", fmt.Sprint(maxVal)),
 				),
 			},
 			{ // Remove the maxVal and minVal rules, their corresponding properties should be set to ""
@@ -137,8 +137,8 @@ func TestAccResourceIntParameterAddRemoveRule(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "description", paramDesc),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "secret",
 						strconv.FormatBool(false)),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "minVal", ""),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "maxVal", ""),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "min", ""),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "max", ""),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "min_id", ""),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_parameter.%s", intResourceName), "max_id", ""),
 				),
@@ -165,12 +165,12 @@ func TestAccResourceParameterBasic(t *testing.T) {
 				),
 			},
 			{ // Update test, changing the description and the secret toggle
-				Config: testAccResourceParameterCreateBasic(accTestProject, resourceName, createParamName, updateParamDesc, false),
+				Config: testAccResourceParameterCreateBasic(accTestProject, resourceName, createParamName, updateParamDesc, true),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(fullResourceName, "name", createParamName),
 					resource.TestCheckResourceAttr(fullResourceName, "description", updateParamDesc),
 					resource.TestCheckResourceAttr(fullResourceName, "secret",
-						strconv.FormatBool(false)),
+						strconv.FormatBool(true)),
 				),
 			},
 			{
