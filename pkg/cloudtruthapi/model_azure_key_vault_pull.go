@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the AzureKeyVaultPull type satisfies the MappedNullable interface at compile time
@@ -30,7 +31,7 @@ type AzureKeyVaultPull struct {
 	Description *string `json:"description,omitempty"`
 	LatestTask NullableAzureKeyVaultPullLatestTask `json:"latest_task"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 	// Allow the pull to create environments.  Any automatically created environments will be children of the `default` environment.  If an environment needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
 	CreateEnvironments *bool `json:"create_environments,omitempty"`
 	// Allow the pull to create projects.  If a project needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
@@ -38,17 +39,19 @@ type AzureKeyVaultPull struct {
 	// When set to dry-run mode an action will report the changes that it would have made in task steps, however those changes are not actually performed.
 	DryRun *bool `json:"dry_run,omitempty"`
 	// Values being managed by a mapped pull.
-	MappedValues []Value `json:"mapped_values"`
+	MappedValues []ValueCreate `json:"mapped_values"`
 	Mode ModeEnum `json:"mode"`
 	// Defines a pattern matching string that contains either mustache or regular expression syntax (with named capture groups) that locate the environment, project, and parameter name of the content you are looking for.  If you are using mustache pattern matching, use:    - ``{{ environment }}`` to identify the environment name   - ``{{ parameter }}`` to identify the parameter name   - ``{{ project }}`` to identify the project name  If you are using a regular expression, use Python syntax with named capture groups that locate the `environment`, `project`, and `parameter`.
 	Resource NullableString `json:"resource"`
 }
 
+type _AzureKeyVaultPull AzureKeyVaultPull
+
 // NewAzureKeyVaultPull instantiates a new AzureKeyVaultPull object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAzureKeyVaultPull(url string, id string, name string, latestTask NullableAzureKeyVaultPullLatestTask, createdAt time.Time, modifiedAt time.Time, mappedValues []Value, mode ModeEnum, resource NullableString) *AzureKeyVaultPull {
+func NewAzureKeyVaultPull(url string, id string, name string, latestTask NullableAzureKeyVaultPullLatestTask, createdAt time.Time, modifiedAt NullableTime, mappedValues []ValueCreate, mode ModeEnum, resource NullableString) *AzureKeyVaultPull {
 	this := AzureKeyVaultPull{}
 	this.Url = url
 	this.Id = id
@@ -225,27 +228,29 @@ func (o *AzureKeyVaultPull) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *AzureKeyVaultPull) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *AzureKeyVaultPull) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *AzureKeyVaultPull) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 // GetCreateEnvironments returns the CreateEnvironments field value if set, zero value otherwise.
@@ -345,9 +350,9 @@ func (o *AzureKeyVaultPull) SetDryRun(v bool) {
 }
 
 // GetMappedValues returns the MappedValues field value
-func (o *AzureKeyVaultPull) GetMappedValues() []Value {
+func (o *AzureKeyVaultPull) GetMappedValues() []ValueCreate {
 	if o == nil {
-		var ret []Value
+		var ret []ValueCreate
 		return ret
 	}
 
@@ -356,7 +361,7 @@ func (o *AzureKeyVaultPull) GetMappedValues() []Value {
 
 // GetMappedValuesOk returns a tuple with the MappedValues field value
 // and a boolean to check if the value has been set.
-func (o *AzureKeyVaultPull) GetMappedValuesOk() ([]Value, bool) {
+func (o *AzureKeyVaultPull) GetMappedValuesOk() ([]ValueCreate, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -364,7 +369,7 @@ func (o *AzureKeyVaultPull) GetMappedValuesOk() ([]Value, bool) {
 }
 
 // SetMappedValues sets field value
-func (o *AzureKeyVaultPull) SetMappedValues(v []Value) {
+func (o *AzureKeyVaultPull) SetMappedValues(v []ValueCreate) {
 	o.MappedValues = v
 }
 
@@ -436,7 +441,7 @@ func (o AzureKeyVaultPull) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["latest_task"] = o.LatestTask.Get()
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	if !IsNil(o.CreateEnvironments) {
 		toSerialize["create_environments"] = o.CreateEnvironments
 	}
@@ -450,6 +455,49 @@ func (o AzureKeyVaultPull) ToMap() (map[string]interface{}, error) {
 	toSerialize["mode"] = o.Mode
 	toSerialize["resource"] = o.Resource.Get()
 	return toSerialize, nil
+}
+
+func (o *AzureKeyVaultPull) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"id",
+		"name",
+		"latest_task",
+		"created_at",
+		"modified_at",
+		"mapped_values",
+		"mode",
+		"resource",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAzureKeyVaultPull := _AzureKeyVaultPull{}
+
+	err = json.Unmarshal(bytes, &varAzureKeyVaultPull)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AzureKeyVaultPull(varAzureKeyVaultPull)
+
+	return err
 }
 
 type NullableAzureKeyVaultPull struct {

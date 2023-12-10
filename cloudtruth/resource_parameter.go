@@ -319,7 +319,7 @@ func updateParameter(ctx context.Context, paramID, projID string, d *schema.Reso
 	c *cloudTruthClient) (*http.Response, error) {
 	tflog.Debug(ctx, "entering updateParameter")
 	defer tflog.Debug(ctx, "exiting updateParameter")
-	patchedParam := cloudtruthapi.PatchedParameter{}
+	patchedParam := cloudtruthapi.PatchedParameterUpdate{}
 	hasParamChange := false
 	if d.HasChange("name") {
 		paramName := d.Get("name").(string)
@@ -341,7 +341,7 @@ func updateParameter(ctx context.Context, paramID, projID string, d *schema.Reso
 	if hasParamChange {
 		// The caller handles retries
 		_, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersPartialUpdate(ctx, paramID, projID).
-			PatchedParameter(patchedParam).Execute()
+			PatchedParameterUpdate(patchedParam).Execute()
 		if err != nil {
 			return r, err
 		}
@@ -367,7 +367,7 @@ func updateParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID,
 	if err != nil {
 		return nil, err
 	}
-	paramRule := cloudtruthapi.NewParameterRuleWithDefaults()
+	paramRule := cloudtruthapi.NewParameterRuleUpdateWithDefaults()
 	paramRule.SetId(ruleID)
 	paramRule.SetConstraint(ruleVal)
 	paramRule.SetType(*ruleType)
@@ -376,7 +376,7 @@ func updateParameterRule(ctx context.Context, paramID, projID, ruleName, ruleID,
 
 	var r *http.Response
 	for retryCount < ruleOperationRetries {
-		ruleUpdateRequest = c.openAPIClient.ProjectsAPI.ProjectsParametersRulesUpdate(ctx, ruleID, paramID, projID).ParameterRule(*paramRule)
+		ruleUpdateRequest = c.openAPIClient.ProjectsAPI.ProjectsParametersRulesUpdate(ctx, ruleID, paramID, projID).ParameterRuleUpdate(*paramRule)
 		_, r, err = ruleUpdateRequest.Execute()
 		if r.StatusCode >= 500 {
 			tflog.Debug(ctx, fmt.Sprintf("updateParameterRule: error updating rule %s: %+v", ruleName, err))

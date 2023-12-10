@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the TemplateTimeline type satisfies the MappedNullable interface at compile time
@@ -27,6 +28,8 @@ type TemplateTimeline struct {
 	NextAsOf *time.Time `json:"next_as_of,omitempty"`
 	Results []TemplateTimelineEntry `json:"results"`
 }
+
+type _TemplateTimeline TemplateTimeline
 
 // NewTemplateTimeline instantiates a new TemplateTimeline object
 // This constructor will assign default values to properties that have it defined,
@@ -143,6 +146,42 @@ func (o TemplateTimeline) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["results"] = o.Results
 	return toSerialize, nil
+}
+
+func (o *TemplateTimeline) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"count",
+		"results",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTemplateTimeline := _TemplateTimeline{}
+
+	err = json.Unmarshal(bytes, &varTemplateTimeline)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TemplateTimeline(varTemplateTimeline)
+
+	return err
 }
 
 type NullableTemplateTimeline struct {

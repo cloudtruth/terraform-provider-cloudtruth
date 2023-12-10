@@ -13,6 +13,7 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the BackupExternalReference type satisfies the MappedNullable interface at compile time
@@ -23,6 +24,8 @@ type BackupExternalReference struct {
 	Fqn string `json:"fqn"`
 	JmesPath NullableString `json:"jmes_path,omitempty"`
 }
+
+type _BackupExternalReference BackupExternalReference
 
 // NewBackupExternalReference instantiates a new BackupExternalReference object
 // This constructor will assign default values to properties that have it defined,
@@ -123,6 +126,41 @@ func (o BackupExternalReference) ToMap() (map[string]interface{}, error) {
 		toSerialize["jmes_path"] = o.JmesPath.Get()
 	}
 	return toSerialize, nil
+}
+
+func (o *BackupExternalReference) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"fqn",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varBackupExternalReference := _BackupExternalReference{}
+
+	err = json.Unmarshal(bytes, &varBackupExternalReference)
+
+	if err != nil {
+		return err
+	}
+
+	*o = BackupExternalReference(varBackupExternalReference)
+
+	return err
 }
 
 type NullableBackupExternalReference struct {

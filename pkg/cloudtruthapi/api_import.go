@@ -93,9 +93,15 @@ func (a *ImportAPIService) ImportCreateExecute(r ApiImportCreateRequest) (*Impor
 
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
+	} else {
+		var defaultValue bool = false
+		r.maskSecrets = &defaultValue
 	}
 	if r.preview != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "preview", r.preview, "")
+	} else {
+		var defaultValue bool = false
+		r.preview = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}

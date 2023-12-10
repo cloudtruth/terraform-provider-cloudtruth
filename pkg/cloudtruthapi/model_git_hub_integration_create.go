@@ -13,6 +13,7 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the GitHubIntegrationCreate type satisfies the MappedNullable interface at compile time
@@ -26,6 +27,8 @@ type GitHubIntegrationCreate struct {
 	Writable *bool `json:"writable,omitempty"`
 	GhInstallationId int32 `json:"gh_installation_id"`
 }
+
+type _GitHubIntegrationCreate GitHubIntegrationCreate
 
 // NewGitHubIntegrationCreate instantiates a new GitHubIntegrationCreate object
 // This constructor will assign default values to properties that have it defined,
@@ -151,6 +154,41 @@ func (o GitHubIntegrationCreate) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["gh_installation_id"] = o.GhInstallationId
 	return toSerialize, nil
+}
+
+func (o *GitHubIntegrationCreate) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"gh_installation_id",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varGitHubIntegrationCreate := _GitHubIntegrationCreate{}
+
+	err = json.Unmarshal(bytes, &varGitHubIntegrationCreate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GitHubIntegrationCreate(varGitHubIntegrationCreate)
+
+	return err
 }
 
 type NullableGitHubIntegrationCreate struct {

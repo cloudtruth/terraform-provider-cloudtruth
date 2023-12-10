@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the Environment type satisfies the MappedNullable interface at compile time
@@ -21,33 +22,38 @@ var _ MappedNullable = &Environment{}
 
 // Environment struct for Environment
 type Environment struct {
+	// The URL for the environment.
 	Url string `json:"url"`
-	// A unique identifier for the environment.
 	Id string `json:"id"`
+	LedgerId string `json:"ledger_id"`
 	// The environment name.
 	Name string `json:"name"`
 	// A description of the environment.  You may find it helpful to document how this environment is used to assist others when they need to maintain software that uses this content.
 	Description *string `json:"description,omitempty"`
 	// Environments can inherit from a single parent environment which provides values for parameters when specific environments do not have a value set.  Every organization has one default environment that cannot be removed.
-	Parent NullableString `json:"parent,omitempty"`
+	Parent NullableString `json:"parent"`
 	// This is the opposite of `parent`, see that field for more details.
 	Children []string `json:"children"`
 	// Indicates if access control is being enforced through grants.
 	AccessControlled *bool `json:"access_controlled,omitempty"`
 	Role NullableRoleEnum `json:"role"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 }
+
+type _Environment Environment
 
 // NewEnvironment instantiates a new Environment object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEnvironment(url string, id string, name string, children []string, role NullableRoleEnum, createdAt time.Time, modifiedAt time.Time) *Environment {
+func NewEnvironment(url string, id string, ledgerId string, name string, parent NullableString, children []string, role NullableRoleEnum, createdAt time.Time, modifiedAt NullableTime) *Environment {
 	this := Environment{}
 	this.Url = url
 	this.Id = id
+	this.LedgerId = ledgerId
 	this.Name = name
+	this.Parent = parent
 	this.Children = children
 	this.Role = role
 	this.CreatedAt = createdAt
@@ -111,6 +117,30 @@ func (o *Environment) SetId(v string) {
 	o.Id = v
 }
 
+// GetLedgerId returns the LedgerId field value
+func (o *Environment) GetLedgerId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.LedgerId
+}
+
+// GetLedgerIdOk returns a tuple with the LedgerId field value
+// and a boolean to check if the value has been set.
+func (o *Environment) GetLedgerIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.LedgerId, true
+}
+
+// SetLedgerId sets field value
+func (o *Environment) SetLedgerId(v string) {
+	o.LedgerId = v
+}
+
 // GetName returns the Name field value
 func (o *Environment) GetName() string {
 	if o == nil {
@@ -167,16 +197,18 @@ func (o *Environment) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetParent returns the Parent field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetParent returns the Parent field value
+// If the value is explicit nil, the zero value for string will be returned
 func (o *Environment) GetParent() string {
-	if o == nil || IsNil(o.Parent.Get()) {
+	if o == nil || o.Parent.Get() == nil {
 		var ret string
 		return ret
 	}
+
 	return *o.Parent.Get()
 }
 
-// GetParentOk returns a tuple with the Parent field value if set, nil otherwise
+// GetParentOk returns a tuple with the Parent field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Environment) GetParentOk() (*string, bool) {
@@ -186,27 +218,9 @@ func (o *Environment) GetParentOk() (*string, bool) {
 	return o.Parent.Get(), o.Parent.IsSet()
 }
 
-// HasParent returns a boolean if a field has been set.
-func (o *Environment) HasParent() bool {
-	if o != nil && o.Parent.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetParent gets a reference to the given NullableString and assigns it to the Parent field.
+// SetParent sets field value
 func (o *Environment) SetParent(v string) {
 	o.Parent.Set(&v)
-}
-// SetParentNil sets the value for Parent to be an explicit nil
-func (o *Environment) SetParentNil() {
-	o.Parent.Set(nil)
-}
-
-// UnsetParent ensures that no value is present for Parent, not even an explicit nil
-func (o *Environment) UnsetParent() {
-	o.Parent.Unset()
 }
 
 // GetChildren returns the Children field value
@@ -316,27 +330,29 @@ func (o *Environment) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *Environment) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Environment) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *Environment) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 func (o Environment) MarshalJSON() ([]byte, error) {
@@ -351,21 +367,63 @@ func (o Environment) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["url"] = o.Url
 	toSerialize["id"] = o.Id
+	toSerialize["ledger_id"] = o.LedgerId
 	toSerialize["name"] = o.Name
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.Parent.IsSet() {
-		toSerialize["parent"] = o.Parent.Get()
-	}
+	toSerialize["parent"] = o.Parent.Get()
 	toSerialize["children"] = o.Children
 	if !IsNil(o.AccessControlled) {
 		toSerialize["access_controlled"] = o.AccessControlled
 	}
 	toSerialize["role"] = o.Role.Get()
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
+}
+
+func (o *Environment) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"id",
+		"ledger_id",
+		"name",
+		"parent",
+		"children",
+		"role",
+		"created_at",
+		"modified_at",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varEnvironment := _Environment{}
+
+	err = json.Unmarshal(bytes, &varEnvironment)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Environment(varEnvironment)
+
+	return err
 }
 
 type NullableEnvironment struct {

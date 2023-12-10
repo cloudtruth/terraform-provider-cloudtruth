@@ -30,7 +30,7 @@ type PatchedGitHubPull struct {
 	Description *string `json:"description,omitempty"`
 	LatestTask NullableGitHubPullLatestTask `json:"latest_task,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	ModifiedAt NullableTime `json:"modified_at,omitempty"`
 	// Allow the pull to create environments.  Any automatically created environments will be children of the `default` environment.  If an environment needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
 	CreateEnvironments *bool `json:"create_environments,omitempty"`
 	// Allow the pull to create projects.  If a project needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
@@ -38,7 +38,7 @@ type PatchedGitHubPull struct {
 	// When set to dry-run mode an action will report the changes that it would have made in task steps, however those changes are not actually performed.
 	DryRun *bool `json:"dry_run,omitempty"`
 	// Values being managed by a mapped pull.
-	MappedValues []Value `json:"mapped_values,omitempty"`
+	MappedValues []ValueCreate `json:"mapped_values,omitempty"`
 	Mode *ModeEnum `json:"mode,omitempty"`
 }
 
@@ -261,36 +261,46 @@ func (o *PatchedGitHubPull) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
-// GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
+// GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedGitHubPull) GetModifiedAt() time.Time {
-	if o == nil || IsNil(o.ModifiedAt) {
+	if o == nil || IsNil(o.ModifiedAt.Get()) {
 		var ret time.Time
 		return ret
 	}
-	return *o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PatchedGitHubPull) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || IsNil(o.ModifiedAt) {
+	if o == nil {
 		return nil, false
 	}
-	return o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedGitHubPull) HasModifiedAt() bool {
-	if o != nil && !IsNil(o.ModifiedAt) {
+	if o != nil && o.ModifiedAt.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetModifiedAt gets a reference to the given time.Time and assigns it to the ModifiedAt field.
+// SetModifiedAt gets a reference to the given NullableTime and assigns it to the ModifiedAt field.
 func (o *PatchedGitHubPull) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = &v
+	o.ModifiedAt.Set(&v)
+}
+// SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
+func (o *PatchedGitHubPull) SetModifiedAtNil() {
+	o.ModifiedAt.Set(nil)
+}
+
+// UnsetModifiedAt ensures that no value is present for ModifiedAt, not even an explicit nil
+func (o *PatchedGitHubPull) UnsetModifiedAt() {
+	o.ModifiedAt.Unset()
 }
 
 // GetCreateEnvironments returns the CreateEnvironments field value if set, zero value otherwise.
@@ -390,9 +400,9 @@ func (o *PatchedGitHubPull) SetDryRun(v bool) {
 }
 
 // GetMappedValues returns the MappedValues field value if set, zero value otherwise.
-func (o *PatchedGitHubPull) GetMappedValues() []Value {
+func (o *PatchedGitHubPull) GetMappedValues() []ValueCreate {
 	if o == nil || IsNil(o.MappedValues) {
-		var ret []Value
+		var ret []ValueCreate
 		return ret
 	}
 	return o.MappedValues
@@ -400,7 +410,7 @@ func (o *PatchedGitHubPull) GetMappedValues() []Value {
 
 // GetMappedValuesOk returns a tuple with the MappedValues field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedGitHubPull) GetMappedValuesOk() ([]Value, bool) {
+func (o *PatchedGitHubPull) GetMappedValuesOk() ([]ValueCreate, bool) {
 	if o == nil || IsNil(o.MappedValues) {
 		return nil, false
 	}
@@ -416,8 +426,8 @@ func (o *PatchedGitHubPull) HasMappedValues() bool {
 	return false
 }
 
-// SetMappedValues gets a reference to the given []Value and assigns it to the MappedValues field.
-func (o *PatchedGitHubPull) SetMappedValues(v []Value) {
+// SetMappedValues gets a reference to the given []ValueCreate and assigns it to the MappedValues field.
+func (o *PatchedGitHubPull) SetMappedValues(v []ValueCreate) {
 	o.MappedValues = v
 }
 
@@ -481,8 +491,8 @@ func (o PatchedGitHubPull) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
-	if !IsNil(o.ModifiedAt) {
-		toSerialize["modified_at"] = o.ModifiedAt
+	if o.ModifiedAt.IsSet() {
+		toSerialize["modified_at"] = o.ModifiedAt.Get()
 	}
 	if !IsNil(o.CreateEnvironments) {
 		toSerialize["create_environments"] = o.CreateEnvironments

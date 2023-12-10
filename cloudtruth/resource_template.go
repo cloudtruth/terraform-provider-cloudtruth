@@ -146,7 +146,7 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 	templateDesc := d.Get("description").(string)
 	templateID := d.Id()
 
-	patchedTemplate := cloudtruthapi.PatchedTemplate{}
+	patchedTemplate := cloudtruthapi.PatchedTemplateUpdate{}
 	hasChange := false
 	if d.HasChange("name") {
 		patchedTemplate.SetName(templateName)
@@ -165,7 +165,7 @@ func resourceTemplateUpdate(ctx context.Context, d *schema.ResourceData, meta an
 			var r *http.Response
 			var err error
 			_, r, err = c.openAPIClient.ProjectsAPI.ProjectsTemplatesPartialUpdate(ctx, templateID,
-				*projID).PatchedTemplate(patchedTemplate).Execute()
+				*projID).PatchedTemplateUpdate(patchedTemplate).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceTemplateUpdate: error updating template %s", templateName), r, err)
 			}

@@ -13,6 +13,7 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the TemplateTimelineEntryTemplate type satisfies the MappedNullable interface at compile time
@@ -20,23 +21,25 @@ var _ MappedNullable = &TemplateTimelineEntryTemplate{}
 
 // TemplateTimelineEntryTemplate Helper methods for all views or serializers that expose template concepts.
 type TemplateTimelineEntryTemplate struct {
-	// A unique identifier for the parameter.
 	Id string `json:"id"`
+	LedgerId string `json:"ledger_id"`
 	// The parameter name.
 	Name string `json:"name"`
-	// A description of the parameter.  You may find it helpful to document how this parameter is used to assist others when they need to maintain software that uses this content.
 	Description *string `json:"description,omitempty"`
 	// The content of the template.  Use mustache-style templating delimiters of `{{` and `}}` to reference parameter values by name for substitution into the template result.
 	Body *string `json:"body,omitempty"`
 }
 
+type _TemplateTimelineEntryTemplate TemplateTimelineEntryTemplate
+
 // NewTemplateTimelineEntryTemplate instantiates a new TemplateTimelineEntryTemplate object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTemplateTimelineEntryTemplate(id string, name string) *TemplateTimelineEntryTemplate {
+func NewTemplateTimelineEntryTemplate(id string, ledgerId string, name string) *TemplateTimelineEntryTemplate {
 	this := TemplateTimelineEntryTemplate{}
 	this.Id = id
+	this.LedgerId = ledgerId
 	this.Name = name
 	return &this
 }
@@ -71,6 +74,30 @@ func (o *TemplateTimelineEntryTemplate) GetIdOk() (*string, bool) {
 // SetId sets field value
 func (o *TemplateTimelineEntryTemplate) SetId(v string) {
 	o.Id = v
+}
+
+// GetLedgerId returns the LedgerId field value
+func (o *TemplateTimelineEntryTemplate) GetLedgerId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.LedgerId
+}
+
+// GetLedgerIdOk returns a tuple with the LedgerId field value
+// and a boolean to check if the value has been set.
+func (o *TemplateTimelineEntryTemplate) GetLedgerIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.LedgerId, true
+}
+
+// SetLedgerId sets field value
+func (o *TemplateTimelineEntryTemplate) SetLedgerId(v string) {
+	o.LedgerId = v
 }
 
 // GetName returns the Name field value
@@ -172,6 +199,7 @@ func (o TemplateTimelineEntryTemplate) MarshalJSON() ([]byte, error) {
 func (o TemplateTimelineEntryTemplate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
+	toSerialize["ledger_id"] = o.LedgerId
 	toSerialize["name"] = o.Name
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
@@ -180,6 +208,43 @@ func (o TemplateTimelineEntryTemplate) ToMap() (map[string]interface{}, error) {
 		toSerialize["body"] = o.Body
 	}
 	return toSerialize, nil
+}
+
+func (o *TemplateTimelineEntryTemplate) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+		"ledger_id",
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTemplateTimelineEntryTemplate := _TemplateTimelineEntryTemplate{}
+
+	err = json.Unmarshal(bytes, &varTemplateTimelineEntryTemplate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TemplateTimelineEntryTemplate(varTemplateTimelineEntryTemplate)
+
+	return err
 }
 
 type NullableTemplateTimelineEntryTemplate struct {

@@ -83,7 +83,11 @@ pkg/cloudtruth/client.go: pkg/openapi.yml
 		--additional-properties packageVersion=1.0.0 \
 		--additional-properties enumClassPrefix=true \
 		--type-mappings=object=interface{}
-	rm pkg/cloudtruthapi/go.mod pkg/cloudtruthapi/go.sum # These files are unecessary and break local imports
+        # These files are unecessary and break local imports
+	rm pkg/cloudtruthapi/go.mod pkg/cloudtruthapi/go.sum
+        # These files are unecessary
+	rm -rf pkg/cloudtruthapi/test pkg/cloudtruthapi/docs pkg/cloudtruthapi/api pkg/cloudtruthapi/.openapi-generator
+	rm pkg/cloudtruthapi/.travis.yml pkg/cloudtruthapi/git_push.sh pkg/cloudtruthapi/README.md
 
 pkg/openapi.yml: pkg
 	curl -s https://api.cloudtruth.io/api/schema/ > pkg/openapi.yml

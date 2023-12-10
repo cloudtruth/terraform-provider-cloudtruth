@@ -14,13 +14,14 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
-// checks if the PatchedValueExternalStatus type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PatchedValueExternalStatus{}
+// checks if the ValueExternalStatus type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &ValueExternalStatus{}
 
-// PatchedValueExternalStatus The most recent mapped pull status for an external value.
-type PatchedValueExternalStatus struct {
+// ValueExternalStatus The most recent mapped pull status for an external value.
+type ValueExternalStatus struct {
 	Url string `json:"url"`
 	// Unique identifier for a task step.
 	Id string `json:"id"`
@@ -60,15 +61,17 @@ type PatchedValueExternalStatus struct {
 	// Details on the error that occurred during processing.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 }
 
-// NewPatchedValueExternalStatus instantiates a new PatchedValueExternalStatus object
+type _ValueExternalStatus ValueExternalStatus
+
+// NewValueExternalStatus instantiates a new ValueExternalStatus object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPatchedValueExternalStatus(url string, id string, success bool, environment NullableString, project NullableString, parameter NullableString, createdAt time.Time, modifiedAt time.Time) *PatchedValueExternalStatus {
-	this := PatchedValueExternalStatus{}
+func NewValueExternalStatus(url string, id string, success bool, environment NullableString, project NullableString, parameter NullableString, createdAt time.Time, modifiedAt NullableTime) *ValueExternalStatus {
+	this := ValueExternalStatus{}
 	this.Url = url
 	this.Id = id
 	this.Success = success
@@ -80,16 +83,16 @@ func NewPatchedValueExternalStatus(url string, id string, success bool, environm
 	return &this
 }
 
-// NewPatchedValueExternalStatusWithDefaults instantiates a new PatchedValueExternalStatus object
+// NewValueExternalStatusWithDefaults instantiates a new ValueExternalStatus object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPatchedValueExternalStatusWithDefaults() *PatchedValueExternalStatus {
-	this := PatchedValueExternalStatus{}
+func NewValueExternalStatusWithDefaults() *ValueExternalStatus {
+	this := ValueExternalStatus{}
 	return &this
 }
 
 // GetUrl returns the Url field value
-func (o *PatchedValueExternalStatus) GetUrl() string {
+func (o *ValueExternalStatus) GetUrl() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -100,7 +103,7 @@ func (o *PatchedValueExternalStatus) GetUrl() string {
 
 // GetUrlOk returns a tuple with the Url field value
 // and a boolean to check if the value has been set.
-func (o *PatchedValueExternalStatus) GetUrlOk() (*string, bool) {
+func (o *ValueExternalStatus) GetUrlOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -108,12 +111,12 @@ func (o *PatchedValueExternalStatus) GetUrlOk() (*string, bool) {
 }
 
 // SetUrl sets field value
-func (o *PatchedValueExternalStatus) SetUrl(v string) {
+func (o *ValueExternalStatus) SetUrl(v string) {
 	o.Url = v
 }
 
 // GetId returns the Id field value
-func (o *PatchedValueExternalStatus) GetId() string {
+func (o *ValueExternalStatus) GetId() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -124,7 +127,7 @@ func (o *PatchedValueExternalStatus) GetId() string {
 
 // GetIdOk returns a tuple with the Id field value
 // and a boolean to check if the value has been set.
-func (o *PatchedValueExternalStatus) GetIdOk() (*string, bool) {
+func (o *ValueExternalStatus) GetIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -132,12 +135,12 @@ func (o *PatchedValueExternalStatus) GetIdOk() (*string, bool) {
 }
 
 // SetId sets field value
-func (o *PatchedValueExternalStatus) SetId(v string) {
+func (o *ValueExternalStatus) SetId(v string) {
 	o.Id = v
 }
 
 // GetOperation returns the Operation field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetOperation() OperationEnum {
+func (o *ValueExternalStatus) GetOperation() OperationEnum {
 	if o == nil || IsNil(o.Operation.Get()) {
 		var ret OperationEnum
 		return ret
@@ -148,7 +151,7 @@ func (o *PatchedValueExternalStatus) GetOperation() OperationEnum {
 // GetOperationOk returns a tuple with the Operation field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetOperationOk() (*OperationEnum, bool) {
+func (o *ValueExternalStatus) GetOperationOk() (*OperationEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -156,7 +159,7 @@ func (o *PatchedValueExternalStatus) GetOperationOk() (*OperationEnum, bool) {
 }
 
 // HasOperation returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasOperation() bool {
+func (o *ValueExternalStatus) HasOperation() bool {
 	if o != nil && o.Operation.IsSet() {
 		return true
 	}
@@ -165,21 +168,21 @@ func (o *PatchedValueExternalStatus) HasOperation() bool {
 }
 
 // SetOperation gets a reference to the given NullableOperationEnum and assigns it to the Operation field.
-func (o *PatchedValueExternalStatus) SetOperation(v OperationEnum) {
+func (o *ValueExternalStatus) SetOperation(v OperationEnum) {
 	o.Operation.Set(&v)
 }
 // SetOperationNil sets the value for Operation to be an explicit nil
-func (o *PatchedValueExternalStatus) SetOperationNil() {
+func (o *ValueExternalStatus) SetOperationNil() {
 	o.Operation.Set(nil)
 }
 
 // UnsetOperation ensures that no value is present for Operation, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetOperation() {
+func (o *ValueExternalStatus) UnsetOperation() {
 	o.Operation.Unset()
 }
 
 // GetSuccess returns the Success field value
-func (o *PatchedValueExternalStatus) GetSuccess() bool {
+func (o *ValueExternalStatus) GetSuccess() bool {
 	if o == nil {
 		var ret bool
 		return ret
@@ -190,7 +193,7 @@ func (o *PatchedValueExternalStatus) GetSuccess() bool {
 
 // GetSuccessOk returns a tuple with the Success field value
 // and a boolean to check if the value has been set.
-func (o *PatchedValueExternalStatus) GetSuccessOk() (*bool, bool) {
+func (o *ValueExternalStatus) GetSuccessOk() (*bool, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -198,12 +201,12 @@ func (o *PatchedValueExternalStatus) GetSuccessOk() (*bool, bool) {
 }
 
 // SetSuccess sets field value
-func (o *PatchedValueExternalStatus) SetSuccess(v bool) {
+func (o *ValueExternalStatus) SetSuccess(v bool) {
 	o.Success = v
 }
 
 // GetSuccessDetail returns the SuccessDetail field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetSuccessDetail() string {
+func (o *ValueExternalStatus) GetSuccessDetail() string {
 	if o == nil || IsNil(o.SuccessDetail.Get()) {
 		var ret string
 		return ret
@@ -214,7 +217,7 @@ func (o *PatchedValueExternalStatus) GetSuccessDetail() string {
 // GetSuccessDetailOk returns a tuple with the SuccessDetail field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetSuccessDetailOk() (*string, bool) {
+func (o *ValueExternalStatus) GetSuccessDetailOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -222,7 +225,7 @@ func (o *PatchedValueExternalStatus) GetSuccessDetailOk() (*string, bool) {
 }
 
 // HasSuccessDetail returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasSuccessDetail() bool {
+func (o *ValueExternalStatus) HasSuccessDetail() bool {
 	if o != nil && o.SuccessDetail.IsSet() {
 		return true
 	}
@@ -231,21 +234,21 @@ func (o *PatchedValueExternalStatus) HasSuccessDetail() bool {
 }
 
 // SetSuccessDetail gets a reference to the given NullableString and assigns it to the SuccessDetail field.
-func (o *PatchedValueExternalStatus) SetSuccessDetail(v string) {
+func (o *ValueExternalStatus) SetSuccessDetail(v string) {
 	o.SuccessDetail.Set(&v)
 }
 // SetSuccessDetailNil sets the value for SuccessDetail to be an explicit nil
-func (o *PatchedValueExternalStatus) SetSuccessDetailNil() {
+func (o *ValueExternalStatus) SetSuccessDetailNil() {
 	o.SuccessDetail.Set(nil)
 }
 
 // UnsetSuccessDetail ensures that no value is present for SuccessDetail, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetSuccessDetail() {
+func (o *ValueExternalStatus) UnsetSuccessDetail() {
 	o.SuccessDetail.Unset()
 }
 
 // GetFqn returns the Fqn field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetFqn() string {
+func (o *ValueExternalStatus) GetFqn() string {
 	if o == nil || IsNil(o.Fqn.Get()) {
 		var ret string
 		return ret
@@ -256,7 +259,7 @@ func (o *PatchedValueExternalStatus) GetFqn() string {
 // GetFqnOk returns a tuple with the Fqn field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetFqnOk() (*string, bool) {
+func (o *ValueExternalStatus) GetFqnOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -264,7 +267,7 @@ func (o *PatchedValueExternalStatus) GetFqnOk() (*string, bool) {
 }
 
 // HasFqn returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasFqn() bool {
+func (o *ValueExternalStatus) HasFqn() bool {
 	if o != nil && o.Fqn.IsSet() {
 		return true
 	}
@@ -273,22 +276,22 @@ func (o *PatchedValueExternalStatus) HasFqn() bool {
 }
 
 // SetFqn gets a reference to the given NullableString and assigns it to the Fqn field.
-func (o *PatchedValueExternalStatus) SetFqn(v string) {
+func (o *ValueExternalStatus) SetFqn(v string) {
 	o.Fqn.Set(&v)
 }
 // SetFqnNil sets the value for Fqn to be an explicit nil
-func (o *PatchedValueExternalStatus) SetFqnNil() {
+func (o *ValueExternalStatus) SetFqnNil() {
 	o.Fqn.Set(nil)
 }
 
 // UnsetFqn ensures that no value is present for Fqn, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetFqn() {
+func (o *ValueExternalStatus) UnsetFqn() {
 	o.Fqn.Unset()
 }
 
 // GetEnvironment returns the Environment field value
 // If the value is explicit nil, the zero value for string will be returned
-func (o *PatchedValueExternalStatus) GetEnvironment() string {
+func (o *ValueExternalStatus) GetEnvironment() string {
 	if o == nil || o.Environment.Get() == nil {
 		var ret string
 		return ret
@@ -300,7 +303,7 @@ func (o *PatchedValueExternalStatus) GetEnvironment() string {
 // GetEnvironmentOk returns a tuple with the Environment field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetEnvironmentOk() (*string, bool) {
+func (o *ValueExternalStatus) GetEnvironmentOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -308,12 +311,12 @@ func (o *PatchedValueExternalStatus) GetEnvironmentOk() (*string, bool) {
 }
 
 // SetEnvironment sets field value
-func (o *PatchedValueExternalStatus) SetEnvironment(v string) {
+func (o *ValueExternalStatus) SetEnvironment(v string) {
 	o.Environment.Set(&v)
 }
 
 // GetEnvironmentId returns the EnvironmentId field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetEnvironmentId() string {
+func (o *ValueExternalStatus) GetEnvironmentId() string {
 	if o == nil || IsNil(o.EnvironmentId.Get()) {
 		var ret string
 		return ret
@@ -324,7 +327,7 @@ func (o *PatchedValueExternalStatus) GetEnvironmentId() string {
 // GetEnvironmentIdOk returns a tuple with the EnvironmentId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetEnvironmentIdOk() (*string, bool) {
+func (o *ValueExternalStatus) GetEnvironmentIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -332,7 +335,7 @@ func (o *PatchedValueExternalStatus) GetEnvironmentIdOk() (*string, bool) {
 }
 
 // HasEnvironmentId returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasEnvironmentId() bool {
+func (o *ValueExternalStatus) HasEnvironmentId() bool {
 	if o != nil && o.EnvironmentId.IsSet() {
 		return true
 	}
@@ -341,21 +344,21 @@ func (o *PatchedValueExternalStatus) HasEnvironmentId() bool {
 }
 
 // SetEnvironmentId gets a reference to the given NullableString and assigns it to the EnvironmentId field.
-func (o *PatchedValueExternalStatus) SetEnvironmentId(v string) {
+func (o *ValueExternalStatus) SetEnvironmentId(v string) {
 	o.EnvironmentId.Set(&v)
 }
 // SetEnvironmentIdNil sets the value for EnvironmentId to be an explicit nil
-func (o *PatchedValueExternalStatus) SetEnvironmentIdNil() {
+func (o *ValueExternalStatus) SetEnvironmentIdNil() {
 	o.EnvironmentId.Set(nil)
 }
 
 // UnsetEnvironmentId ensures that no value is present for EnvironmentId, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetEnvironmentId() {
+func (o *ValueExternalStatus) UnsetEnvironmentId() {
 	o.EnvironmentId.Unset()
 }
 
 // GetEnvironmentName returns the EnvironmentName field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetEnvironmentName() string {
+func (o *ValueExternalStatus) GetEnvironmentName() string {
 	if o == nil || IsNil(o.EnvironmentName.Get()) {
 		var ret string
 		return ret
@@ -366,7 +369,7 @@ func (o *PatchedValueExternalStatus) GetEnvironmentName() string {
 // GetEnvironmentNameOk returns a tuple with the EnvironmentName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetEnvironmentNameOk() (*string, bool) {
+func (o *ValueExternalStatus) GetEnvironmentNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -374,7 +377,7 @@ func (o *PatchedValueExternalStatus) GetEnvironmentNameOk() (*string, bool) {
 }
 
 // HasEnvironmentName returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasEnvironmentName() bool {
+func (o *ValueExternalStatus) HasEnvironmentName() bool {
 	if o != nil && o.EnvironmentName.IsSet() {
 		return true
 	}
@@ -383,22 +386,22 @@ func (o *PatchedValueExternalStatus) HasEnvironmentName() bool {
 }
 
 // SetEnvironmentName gets a reference to the given NullableString and assigns it to the EnvironmentName field.
-func (o *PatchedValueExternalStatus) SetEnvironmentName(v string) {
+func (o *ValueExternalStatus) SetEnvironmentName(v string) {
 	o.EnvironmentName.Set(&v)
 }
 // SetEnvironmentNameNil sets the value for EnvironmentName to be an explicit nil
-func (o *PatchedValueExternalStatus) SetEnvironmentNameNil() {
+func (o *ValueExternalStatus) SetEnvironmentNameNil() {
 	o.EnvironmentName.Set(nil)
 }
 
 // UnsetEnvironmentName ensures that no value is present for EnvironmentName, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetEnvironmentName() {
+func (o *ValueExternalStatus) UnsetEnvironmentName() {
 	o.EnvironmentName.Unset()
 }
 
 // GetProject returns the Project field value
 // If the value is explicit nil, the zero value for string will be returned
-func (o *PatchedValueExternalStatus) GetProject() string {
+func (o *ValueExternalStatus) GetProject() string {
 	if o == nil || o.Project.Get() == nil {
 		var ret string
 		return ret
@@ -410,7 +413,7 @@ func (o *PatchedValueExternalStatus) GetProject() string {
 // GetProjectOk returns a tuple with the Project field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetProjectOk() (*string, bool) {
+func (o *ValueExternalStatus) GetProjectOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -418,12 +421,12 @@ func (o *PatchedValueExternalStatus) GetProjectOk() (*string, bool) {
 }
 
 // SetProject sets field value
-func (o *PatchedValueExternalStatus) SetProject(v string) {
+func (o *ValueExternalStatus) SetProject(v string) {
 	o.Project.Set(&v)
 }
 
 // GetProjectId returns the ProjectId field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetProjectId() string {
+func (o *ValueExternalStatus) GetProjectId() string {
 	if o == nil || IsNil(o.ProjectId.Get()) {
 		var ret string
 		return ret
@@ -434,7 +437,7 @@ func (o *PatchedValueExternalStatus) GetProjectId() string {
 // GetProjectIdOk returns a tuple with the ProjectId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetProjectIdOk() (*string, bool) {
+func (o *ValueExternalStatus) GetProjectIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -442,7 +445,7 @@ func (o *PatchedValueExternalStatus) GetProjectIdOk() (*string, bool) {
 }
 
 // HasProjectId returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasProjectId() bool {
+func (o *ValueExternalStatus) HasProjectId() bool {
 	if o != nil && o.ProjectId.IsSet() {
 		return true
 	}
@@ -451,21 +454,21 @@ func (o *PatchedValueExternalStatus) HasProjectId() bool {
 }
 
 // SetProjectId gets a reference to the given NullableString and assigns it to the ProjectId field.
-func (o *PatchedValueExternalStatus) SetProjectId(v string) {
+func (o *ValueExternalStatus) SetProjectId(v string) {
 	o.ProjectId.Set(&v)
 }
 // SetProjectIdNil sets the value for ProjectId to be an explicit nil
-func (o *PatchedValueExternalStatus) SetProjectIdNil() {
+func (o *ValueExternalStatus) SetProjectIdNil() {
 	o.ProjectId.Set(nil)
 }
 
 // UnsetProjectId ensures that no value is present for ProjectId, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetProjectId() {
+func (o *ValueExternalStatus) UnsetProjectId() {
 	o.ProjectId.Unset()
 }
 
 // GetProjectName returns the ProjectName field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetProjectName() string {
+func (o *ValueExternalStatus) GetProjectName() string {
 	if o == nil || IsNil(o.ProjectName.Get()) {
 		var ret string
 		return ret
@@ -476,7 +479,7 @@ func (o *PatchedValueExternalStatus) GetProjectName() string {
 // GetProjectNameOk returns a tuple with the ProjectName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetProjectNameOk() (*string, bool) {
+func (o *ValueExternalStatus) GetProjectNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -484,7 +487,7 @@ func (o *PatchedValueExternalStatus) GetProjectNameOk() (*string, bool) {
 }
 
 // HasProjectName returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasProjectName() bool {
+func (o *ValueExternalStatus) HasProjectName() bool {
 	if o != nil && o.ProjectName.IsSet() {
 		return true
 	}
@@ -493,22 +496,22 @@ func (o *PatchedValueExternalStatus) HasProjectName() bool {
 }
 
 // SetProjectName gets a reference to the given NullableString and assigns it to the ProjectName field.
-func (o *PatchedValueExternalStatus) SetProjectName(v string) {
+func (o *ValueExternalStatus) SetProjectName(v string) {
 	o.ProjectName.Set(&v)
 }
 // SetProjectNameNil sets the value for ProjectName to be an explicit nil
-func (o *PatchedValueExternalStatus) SetProjectNameNil() {
+func (o *ValueExternalStatus) SetProjectNameNil() {
 	o.ProjectName.Set(nil)
 }
 
 // UnsetProjectName ensures that no value is present for ProjectName, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetProjectName() {
+func (o *ValueExternalStatus) UnsetProjectName() {
 	o.ProjectName.Unset()
 }
 
 // GetParameter returns the Parameter field value
 // If the value is explicit nil, the zero value for string will be returned
-func (o *PatchedValueExternalStatus) GetParameter() string {
+func (o *ValueExternalStatus) GetParameter() string {
 	if o == nil || o.Parameter.Get() == nil {
 		var ret string
 		return ret
@@ -520,7 +523,7 @@ func (o *PatchedValueExternalStatus) GetParameter() string {
 // GetParameterOk returns a tuple with the Parameter field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetParameterOk() (*string, bool) {
+func (o *ValueExternalStatus) GetParameterOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -528,12 +531,12 @@ func (o *PatchedValueExternalStatus) GetParameterOk() (*string, bool) {
 }
 
 // SetParameter sets field value
-func (o *PatchedValueExternalStatus) SetParameter(v string) {
+func (o *ValueExternalStatus) SetParameter(v string) {
 	o.Parameter.Set(&v)
 }
 
 // GetParameterId returns the ParameterId field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetParameterId() string {
+func (o *ValueExternalStatus) GetParameterId() string {
 	if o == nil || IsNil(o.ParameterId.Get()) {
 		var ret string
 		return ret
@@ -544,7 +547,7 @@ func (o *PatchedValueExternalStatus) GetParameterId() string {
 // GetParameterIdOk returns a tuple with the ParameterId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetParameterIdOk() (*string, bool) {
+func (o *ValueExternalStatus) GetParameterIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -552,7 +555,7 @@ func (o *PatchedValueExternalStatus) GetParameterIdOk() (*string, bool) {
 }
 
 // HasParameterId returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasParameterId() bool {
+func (o *ValueExternalStatus) HasParameterId() bool {
 	if o != nil && o.ParameterId.IsSet() {
 		return true
 	}
@@ -561,21 +564,21 @@ func (o *PatchedValueExternalStatus) HasParameterId() bool {
 }
 
 // SetParameterId gets a reference to the given NullableString and assigns it to the ParameterId field.
-func (o *PatchedValueExternalStatus) SetParameterId(v string) {
+func (o *ValueExternalStatus) SetParameterId(v string) {
 	o.ParameterId.Set(&v)
 }
 // SetParameterIdNil sets the value for ParameterId to be an explicit nil
-func (o *PatchedValueExternalStatus) SetParameterIdNil() {
+func (o *ValueExternalStatus) SetParameterIdNil() {
 	o.ParameterId.Set(nil)
 }
 
 // UnsetParameterId ensures that no value is present for ParameterId, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetParameterId() {
+func (o *ValueExternalStatus) UnsetParameterId() {
 	o.ParameterId.Unset()
 }
 
 // GetParameterName returns the ParameterName field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetParameterName() string {
+func (o *ValueExternalStatus) GetParameterName() string {
 	if o == nil || IsNil(o.ParameterName.Get()) {
 		var ret string
 		return ret
@@ -586,7 +589,7 @@ func (o *PatchedValueExternalStatus) GetParameterName() string {
 // GetParameterNameOk returns a tuple with the ParameterName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetParameterNameOk() (*string, bool) {
+func (o *ValueExternalStatus) GetParameterNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -594,7 +597,7 @@ func (o *PatchedValueExternalStatus) GetParameterNameOk() (*string, bool) {
 }
 
 // HasParameterName returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasParameterName() bool {
+func (o *ValueExternalStatus) HasParameterName() bool {
 	if o != nil && o.ParameterName.IsSet() {
 		return true
 	}
@@ -603,21 +606,21 @@ func (o *PatchedValueExternalStatus) HasParameterName() bool {
 }
 
 // SetParameterName gets a reference to the given NullableString and assigns it to the ParameterName field.
-func (o *PatchedValueExternalStatus) SetParameterName(v string) {
+func (o *ValueExternalStatus) SetParameterName(v string) {
 	o.ParameterName.Set(&v)
 }
 // SetParameterNameNil sets the value for ParameterName to be an explicit nil
-func (o *PatchedValueExternalStatus) SetParameterNameNil() {
+func (o *ValueExternalStatus) SetParameterNameNil() {
 	o.ParameterName.Set(nil)
 }
 
 // UnsetParameterName ensures that no value is present for ParameterName, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetParameterName() {
+func (o *ValueExternalStatus) UnsetParameterName() {
 	o.ParameterName.Unset()
 }
 
 // GetVenueId returns the VenueId field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetVenueId() string {
+func (o *ValueExternalStatus) GetVenueId() string {
 	if o == nil || IsNil(o.VenueId.Get()) {
 		var ret string
 		return ret
@@ -628,7 +631,7 @@ func (o *PatchedValueExternalStatus) GetVenueId() string {
 // GetVenueIdOk returns a tuple with the VenueId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetVenueIdOk() (*string, bool) {
+func (o *ValueExternalStatus) GetVenueIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -636,7 +639,7 @@ func (o *PatchedValueExternalStatus) GetVenueIdOk() (*string, bool) {
 }
 
 // HasVenueId returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasVenueId() bool {
+func (o *ValueExternalStatus) HasVenueId() bool {
 	if o != nil && o.VenueId.IsSet() {
 		return true
 	}
@@ -645,21 +648,21 @@ func (o *PatchedValueExternalStatus) HasVenueId() bool {
 }
 
 // SetVenueId gets a reference to the given NullableString and assigns it to the VenueId field.
-func (o *PatchedValueExternalStatus) SetVenueId(v string) {
+func (o *ValueExternalStatus) SetVenueId(v string) {
 	o.VenueId.Set(&v)
 }
 // SetVenueIdNil sets the value for VenueId to be an explicit nil
-func (o *PatchedValueExternalStatus) SetVenueIdNil() {
+func (o *ValueExternalStatus) SetVenueIdNil() {
 	o.VenueId.Set(nil)
 }
 
 // UnsetVenueId ensures that no value is present for VenueId, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetVenueId() {
+func (o *ValueExternalStatus) UnsetVenueId() {
 	o.VenueId.Unset()
 }
 
 // GetVenueName returns the VenueName field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetVenueName() string {
+func (o *ValueExternalStatus) GetVenueName() string {
 	if o == nil || IsNil(o.VenueName.Get()) {
 		var ret string
 		return ret
@@ -670,7 +673,7 @@ func (o *PatchedValueExternalStatus) GetVenueName() string {
 // GetVenueNameOk returns a tuple with the VenueName field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetVenueNameOk() (*string, bool) {
+func (o *ValueExternalStatus) GetVenueNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -678,7 +681,7 @@ func (o *PatchedValueExternalStatus) GetVenueNameOk() (*string, bool) {
 }
 
 // HasVenueName returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasVenueName() bool {
+func (o *ValueExternalStatus) HasVenueName() bool {
 	if o != nil && o.VenueName.IsSet() {
 		return true
 	}
@@ -687,21 +690,21 @@ func (o *PatchedValueExternalStatus) HasVenueName() bool {
 }
 
 // SetVenueName gets a reference to the given NullableString and assigns it to the VenueName field.
-func (o *PatchedValueExternalStatus) SetVenueName(v string) {
+func (o *ValueExternalStatus) SetVenueName(v string) {
 	o.VenueName.Set(&v)
 }
 // SetVenueNameNil sets the value for VenueName to be an explicit nil
-func (o *PatchedValueExternalStatus) SetVenueNameNil() {
+func (o *ValueExternalStatus) SetVenueNameNil() {
 	o.VenueName.Set(nil)
 }
 
 // UnsetVenueName ensures that no value is present for VenueName, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetVenueName() {
+func (o *ValueExternalStatus) UnsetVenueName() {
 	o.VenueName.Unset()
 }
 
 // GetSummary returns the Summary field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetSummary() string {
+func (o *ValueExternalStatus) GetSummary() string {
 	if o == nil || IsNil(o.Summary.Get()) {
 		var ret string
 		return ret
@@ -712,7 +715,7 @@ func (o *PatchedValueExternalStatus) GetSummary() string {
 // GetSummaryOk returns a tuple with the Summary field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetSummaryOk() (*string, bool) {
+func (o *ValueExternalStatus) GetSummaryOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -720,7 +723,7 @@ func (o *PatchedValueExternalStatus) GetSummaryOk() (*string, bool) {
 }
 
 // HasSummary returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasSummary() bool {
+func (o *ValueExternalStatus) HasSummary() bool {
 	if o != nil && o.Summary.IsSet() {
 		return true
 	}
@@ -729,21 +732,21 @@ func (o *PatchedValueExternalStatus) HasSummary() bool {
 }
 
 // SetSummary gets a reference to the given NullableString and assigns it to the Summary field.
-func (o *PatchedValueExternalStatus) SetSummary(v string) {
+func (o *ValueExternalStatus) SetSummary(v string) {
 	o.Summary.Set(&v)
 }
 // SetSummaryNil sets the value for Summary to be an explicit nil
-func (o *PatchedValueExternalStatus) SetSummaryNil() {
+func (o *ValueExternalStatus) SetSummaryNil() {
 	o.Summary.Set(nil)
 }
 
 // UnsetSummary ensures that no value is present for Summary, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetSummary() {
+func (o *ValueExternalStatus) UnsetSummary() {
 	o.Summary.Unset()
 }
 
 // GetErrorCode returns the ErrorCode field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetErrorCode() string {
+func (o *ValueExternalStatus) GetErrorCode() string {
 	if o == nil || IsNil(o.ErrorCode.Get()) {
 		var ret string
 		return ret
@@ -754,7 +757,7 @@ func (o *PatchedValueExternalStatus) GetErrorCode() string {
 // GetErrorCodeOk returns a tuple with the ErrorCode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetErrorCodeOk() (*string, bool) {
+func (o *ValueExternalStatus) GetErrorCodeOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -762,7 +765,7 @@ func (o *PatchedValueExternalStatus) GetErrorCodeOk() (*string, bool) {
 }
 
 // HasErrorCode returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasErrorCode() bool {
+func (o *ValueExternalStatus) HasErrorCode() bool {
 	if o != nil && o.ErrorCode.IsSet() {
 		return true
 	}
@@ -771,21 +774,21 @@ func (o *PatchedValueExternalStatus) HasErrorCode() bool {
 }
 
 // SetErrorCode gets a reference to the given NullableString and assigns it to the ErrorCode field.
-func (o *PatchedValueExternalStatus) SetErrorCode(v string) {
+func (o *ValueExternalStatus) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
-func (o *PatchedValueExternalStatus) SetErrorCodeNil() {
+func (o *ValueExternalStatus) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
 }
 
 // UnsetErrorCode ensures that no value is present for ErrorCode, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetErrorCode() {
+func (o *ValueExternalStatus) UnsetErrorCode() {
 	o.ErrorCode.Unset()
 }
 
 // GetErrorDetail returns the ErrorDetail field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedValueExternalStatus) GetErrorDetail() string {
+func (o *ValueExternalStatus) GetErrorDetail() string {
 	if o == nil || IsNil(o.ErrorDetail.Get()) {
 		var ret string
 		return ret
@@ -796,7 +799,7 @@ func (o *PatchedValueExternalStatus) GetErrorDetail() string {
 // GetErrorDetailOk returns a tuple with the ErrorDetail field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedValueExternalStatus) GetErrorDetailOk() (*string, bool) {
+func (o *ValueExternalStatus) GetErrorDetailOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -804,7 +807,7 @@ func (o *PatchedValueExternalStatus) GetErrorDetailOk() (*string, bool) {
 }
 
 // HasErrorDetail returns a boolean if a field has been set.
-func (o *PatchedValueExternalStatus) HasErrorDetail() bool {
+func (o *ValueExternalStatus) HasErrorDetail() bool {
 	if o != nil && o.ErrorDetail.IsSet() {
 		return true
 	}
@@ -813,21 +816,21 @@ func (o *PatchedValueExternalStatus) HasErrorDetail() bool {
 }
 
 // SetErrorDetail gets a reference to the given NullableString and assigns it to the ErrorDetail field.
-func (o *PatchedValueExternalStatus) SetErrorDetail(v string) {
+func (o *ValueExternalStatus) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
-func (o *PatchedValueExternalStatus) SetErrorDetailNil() {
+func (o *ValueExternalStatus) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
 }
 
 // UnsetErrorDetail ensures that no value is present for ErrorDetail, not even an explicit nil
-func (o *PatchedValueExternalStatus) UnsetErrorDetail() {
+func (o *ValueExternalStatus) UnsetErrorDetail() {
 	o.ErrorDetail.Unset()
 }
 
 // GetCreatedAt returns the CreatedAt field value
-func (o *PatchedValueExternalStatus) GetCreatedAt() time.Time {
+func (o *ValueExternalStatus) GetCreatedAt() time.Time {
 	if o == nil {
 		var ret time.Time
 		return ret
@@ -838,7 +841,7 @@ func (o *PatchedValueExternalStatus) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value
 // and a boolean to check if the value has been set.
-func (o *PatchedValueExternalStatus) GetCreatedAtOk() (*time.Time, bool) {
+func (o *ValueExternalStatus) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -846,35 +849,37 @@ func (o *PatchedValueExternalStatus) GetCreatedAtOk() (*time.Time, bool) {
 }
 
 // SetCreatedAt sets field value
-func (o *PatchedValueExternalStatus) SetCreatedAt(v time.Time) {
+func (o *ValueExternalStatus) SetCreatedAt(v time.Time) {
 	o.CreatedAt = v
 }
 
 // GetModifiedAt returns the ModifiedAt field value
-func (o *PatchedValueExternalStatus) GetModifiedAt() time.Time {
-	if o == nil {
+// If the value is explicit nil, the zero value for time.Time will be returned
+func (o *ValueExternalStatus) GetModifiedAt() time.Time {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
-func (o *PatchedValueExternalStatus) GetModifiedAtOk() (*time.Time, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ValueExternalStatus) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
-func (o *PatchedValueExternalStatus) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+func (o *ValueExternalStatus) SetModifiedAt(v time.Time) {
+	o.ModifiedAt.Set(&v)
 }
 
-func (o PatchedValueExternalStatus) MarshalJSON() ([]byte, error) {
+func (o ValueExternalStatus) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -882,7 +887,7 @@ func (o PatchedValueExternalStatus) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PatchedValueExternalStatus) ToMap() (map[string]interface{}, error) {
+func (o ValueExternalStatus) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["url"] = o.Url
 	toSerialize["id"] = o.Id
@@ -933,42 +938,84 @@ func (o PatchedValueExternalStatus) ToMap() (map[string]interface{}, error) {
 		toSerialize["error_detail"] = o.ErrorDetail.Get()
 	}
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
 }
 
-type NullablePatchedValueExternalStatus struct {
-	value *PatchedValueExternalStatus
+func (o *ValueExternalStatus) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"id",
+		"success",
+		"environment",
+		"project",
+		"parameter",
+		"created_at",
+		"modified_at",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varValueExternalStatus := _ValueExternalStatus{}
+
+	err = json.Unmarshal(bytes, &varValueExternalStatus)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ValueExternalStatus(varValueExternalStatus)
+
+	return err
+}
+
+type NullableValueExternalStatus struct {
+	value *ValueExternalStatus
 	isSet bool
 }
 
-func (v NullablePatchedValueExternalStatus) Get() *PatchedValueExternalStatus {
+func (v NullableValueExternalStatus) Get() *ValueExternalStatus {
 	return v.value
 }
 
-func (v *NullablePatchedValueExternalStatus) Set(val *PatchedValueExternalStatus) {
+func (v *NullableValueExternalStatus) Set(val *ValueExternalStatus) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePatchedValueExternalStatus) IsSet() bool {
+func (v NullableValueExternalStatus) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePatchedValueExternalStatus) Unset() {
+func (v *NullableValueExternalStatus) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePatchedValueExternalStatus(val *PatchedValueExternalStatus) *NullablePatchedValueExternalStatus {
-	return &NullablePatchedValueExternalStatus{value: val, isSet: true}
+func NewNullableValueExternalStatus(val *ValueExternalStatus) *NullableValueExternalStatus {
+	return &NullableValueExternalStatus{value: val, isSet: true}
 }
 
-func (v NullablePatchedValueExternalStatus) MarshalJSON() ([]byte, error) {
+func (v NullableValueExternalStatus) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePatchedValueExternalStatus) UnmarshalJSON(src []byte) error {
+func (v *NullableValueExternalStatus) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

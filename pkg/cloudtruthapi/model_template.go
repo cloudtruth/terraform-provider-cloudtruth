@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the Template type satisfies the MappedNullable interface at compile time
@@ -23,8 +24,8 @@ var _ MappedNullable = &Template{}
 type Template struct {
 	// The templates this value references, if interpolated.
 	Url string `json:"url"`
-	// A unique identifier for the template.
 	Id string `json:"id"`
+	LedgerId string `json:"ledger_id"`
 	// The template name.
 	Name string `json:"name"`
 	// ('A description of the template.  You may find it helpful to document how this template is used to assist others when they need to maintain software that uses this content.',)
@@ -33,30 +34,36 @@ type Template struct {
 	Evaluated bool `json:"evaluated"`
 	// The content of the template.  Use mustache-style templating delimiters of `{{` and `}}` to reference parameter values by name for substitution into the template result.
 	Body *string `json:"body,omitempty"`
-	// Parameters that this template references.
+	// Projects (other than this template's project) that this template references.  This field is not valid for history requests.
+	ReferencedProjects []string `json:"referenced_projects"`
+	// Parameters that this template references.  This field is not valid for history requests.
 	ReferencedParameters []string `json:"referenced_parameters"`
-	// Other templates that this template references.
+	// Other templates that this template references.  This field is not valid for history requests.
 	ReferencedTemplates []string `json:"referenced_templates"`
-	// Other templates that reference this template.
+	// Other templates that reference this template.  This field is not valid for history requests.
 	ReferencingTemplates []string `json:"referencing_templates"`
-	// The dynamic values that reference this template.
+	// The dynamic values that reference this template.  This field is not valid for history requests.
 	ReferencingValues []string `json:"referencing_values"`
 	// If True, this template contains secrets.
 	HasSecret bool `json:"has_secret"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 }
+
+type _Template Template
 
 // NewTemplate instantiates a new Template object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTemplate(url string, id string, name string, evaluated bool, referencedParameters []string, referencedTemplates []string, referencingTemplates []string, referencingValues []string, hasSecret bool, createdAt time.Time, modifiedAt time.Time) *Template {
+func NewTemplate(url string, id string, ledgerId string, name string, evaluated bool, referencedProjects []string, referencedParameters []string, referencedTemplates []string, referencingTemplates []string, referencingValues []string, hasSecret bool, createdAt time.Time, modifiedAt NullableTime) *Template {
 	this := Template{}
 	this.Url = url
 	this.Id = id
+	this.LedgerId = ledgerId
 	this.Name = name
 	this.Evaluated = evaluated
+	this.ReferencedProjects = referencedProjects
 	this.ReferencedParameters = referencedParameters
 	this.ReferencedTemplates = referencedTemplates
 	this.ReferencingTemplates = referencingTemplates
@@ -121,6 +128,30 @@ func (o *Template) GetIdOk() (*string, bool) {
 // SetId sets field value
 func (o *Template) SetId(v string) {
 	o.Id = v
+}
+
+// GetLedgerId returns the LedgerId field value
+func (o *Template) GetLedgerId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.LedgerId
+}
+
+// GetLedgerIdOk returns a tuple with the LedgerId field value
+// and a boolean to check if the value has been set.
+func (o *Template) GetLedgerIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.LedgerId, true
+}
+
+// SetLedgerId sets field value
+func (o *Template) SetLedgerId(v string) {
+	o.LedgerId = v
 }
 
 // GetName returns the Name field value
@@ -233,6 +264,30 @@ func (o *Template) HasBody() bool {
 // SetBody gets a reference to the given string and assigns it to the Body field.
 func (o *Template) SetBody(v string) {
 	o.Body = &v
+}
+
+// GetReferencedProjects returns the ReferencedProjects field value
+func (o *Template) GetReferencedProjects() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+
+	return o.ReferencedProjects
+}
+
+// GetReferencedProjectsOk returns a tuple with the ReferencedProjects field value
+// and a boolean to check if the value has been set.
+func (o *Template) GetReferencedProjectsOk() ([]string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.ReferencedProjects, true
+}
+
+// SetReferencedProjects sets field value
+func (o *Template) SetReferencedProjects(v []string) {
+	o.ReferencedProjects = v
 }
 
 // GetReferencedParameters returns the ReferencedParameters field value
@@ -380,27 +435,29 @@ func (o *Template) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *Template) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Template) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *Template) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 func (o Template) MarshalJSON() ([]byte, error) {
@@ -415,6 +472,7 @@ func (o Template) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["url"] = o.Url
 	toSerialize["id"] = o.Id
+	toSerialize["ledger_id"] = o.LedgerId
 	toSerialize["name"] = o.Name
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
@@ -423,14 +481,62 @@ func (o Template) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Body) {
 		toSerialize["body"] = o.Body
 	}
+	toSerialize["referenced_projects"] = o.ReferencedProjects
 	toSerialize["referenced_parameters"] = o.ReferencedParameters
 	toSerialize["referenced_templates"] = o.ReferencedTemplates
 	toSerialize["referencing_templates"] = o.ReferencingTemplates
 	toSerialize["referencing_values"] = o.ReferencingValues
 	toSerialize["has_secret"] = o.HasSecret
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
+}
+
+func (o *Template) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"id",
+		"ledger_id",
+		"name",
+		"evaluated",
+		"referenced_projects",
+		"referenced_parameters",
+		"referenced_templates",
+		"referencing_templates",
+		"referencing_values",
+		"has_secret",
+		"created_at",
+		"modified_at",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTemplate := _Template{}
+
+	err = json.Unmarshal(bytes, &varTemplate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Template(varTemplate)
+
+	return err
 }
 
 type NullableTemplate struct {

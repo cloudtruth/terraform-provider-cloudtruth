@@ -13,6 +13,7 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the ParameterTimelineEntryHistoryParameter type satisfies the MappedNullable interface at compile time
@@ -21,18 +22,20 @@ var _ MappedNullable = &ParameterTimelineEntryHistoryParameter{}
 // ParameterTimelineEntryHistoryParameter The affected parameter.
 type ParameterTimelineEntryHistoryParameter struct {
 	// A unique identifier for the parameter.
-	Id string `json:"id"`
+	ParameterId NullableString `json:"parameter_id"`
 	// The parameter name.
 	Name string `json:"name"`
 }
+
+type _ParameterTimelineEntryHistoryParameter ParameterTimelineEntryHistoryParameter
 
 // NewParameterTimelineEntryHistoryParameter instantiates a new ParameterTimelineEntryHistoryParameter object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewParameterTimelineEntryHistoryParameter(id string, name string) *ParameterTimelineEntryHistoryParameter {
+func NewParameterTimelineEntryHistoryParameter(parameterId NullableString, name string) *ParameterTimelineEntryHistoryParameter {
 	this := ParameterTimelineEntryHistoryParameter{}
-	this.Id = id
+	this.ParameterId = parameterId
 	this.Name = name
 	return &this
 }
@@ -45,28 +48,30 @@ func NewParameterTimelineEntryHistoryParameterWithDefaults() *ParameterTimelineE
 	return &this
 }
 
-// GetId returns the Id field value
-func (o *ParameterTimelineEntryHistoryParameter) GetId() string {
-	if o == nil {
+// GetParameterId returns the ParameterId field value
+// If the value is explicit nil, the zero value for string will be returned
+func (o *ParameterTimelineEntryHistoryParameter) GetParameterId() string {
+	if o == nil || o.ParameterId.Get() == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Id
+	return *o.ParameterId.Get()
 }
 
-// GetIdOk returns a tuple with the Id field value
+// GetParameterIdOk returns a tuple with the ParameterId field value
 // and a boolean to check if the value has been set.
-func (o *ParameterTimelineEntryHistoryParameter) GetIdOk() (*string, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ParameterTimelineEntryHistoryParameter) GetParameterIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Id, true
+	return o.ParameterId.Get(), o.ParameterId.IsSet()
 }
 
-// SetId sets field value
-func (o *ParameterTimelineEntryHistoryParameter) SetId(v string) {
-	o.Id = v
+// SetParameterId sets field value
+func (o *ParameterTimelineEntryHistoryParameter) SetParameterId(v string) {
+	o.ParameterId.Set(&v)
 }
 
 // GetName returns the Name field value
@@ -103,9 +108,45 @@ func (o ParameterTimelineEntryHistoryParameter) MarshalJSON() ([]byte, error) {
 
 func (o ParameterTimelineEntryHistoryParameter) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["id"] = o.Id
+	toSerialize["parameter_id"] = o.ParameterId.Get()
 	toSerialize["name"] = o.Name
 	return toSerialize, nil
+}
+
+func (o *ParameterTimelineEntryHistoryParameter) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"parameter_id",
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varParameterTimelineEntryHistoryParameter := _ParameterTimelineEntryHistoryParameter{}
+
+	err = json.Unmarshal(bytes, &varParameterTimelineEntryHistoryParameter)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ParameterTimelineEntryHistoryParameter(varParameterTimelineEntryHistoryParameter)
+
+	return err
 }
 
 type NullableParameterTimelineEntryHistoryParameter struct {

@@ -13,6 +13,7 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the ServiceAccountCreateRequest type satisfies the MappedNullable interface at compile time
@@ -24,7 +25,13 @@ type ServiceAccountCreateRequest struct {
 	Name string `json:"name"`
 	// An optional description of the process or system using the service account.
 	Description *string `json:"description,omitempty"`
+	// The role for the service acount
+	Role *string `json:"role,omitempty"`
+	// The owner of the service account.
+	Owner *string `json:"owner,omitempty"`
 }
+
+type _ServiceAccountCreateRequest ServiceAccountCreateRequest
 
 // NewServiceAccountCreateRequest instantiates a new ServiceAccountCreateRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -100,6 +107,70 @@ func (o *ServiceAccountCreateRequest) SetDescription(v string) {
 	o.Description = &v
 }
 
+// GetRole returns the Role field value if set, zero value otherwise.
+func (o *ServiceAccountCreateRequest) GetRole() string {
+	if o == nil || IsNil(o.Role) {
+		var ret string
+		return ret
+	}
+	return *o.Role
+}
+
+// GetRoleOk returns a tuple with the Role field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ServiceAccountCreateRequest) GetRoleOk() (*string, bool) {
+	if o == nil || IsNil(o.Role) {
+		return nil, false
+	}
+	return o.Role, true
+}
+
+// HasRole returns a boolean if a field has been set.
+func (o *ServiceAccountCreateRequest) HasRole() bool {
+	if o != nil && !IsNil(o.Role) {
+		return true
+	}
+
+	return false
+}
+
+// SetRole gets a reference to the given string and assigns it to the Role field.
+func (o *ServiceAccountCreateRequest) SetRole(v string) {
+	o.Role = &v
+}
+
+// GetOwner returns the Owner field value if set, zero value otherwise.
+func (o *ServiceAccountCreateRequest) GetOwner() string {
+	if o == nil || IsNil(o.Owner) {
+		var ret string
+		return ret
+	}
+	return *o.Owner
+}
+
+// GetOwnerOk returns a tuple with the Owner field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ServiceAccountCreateRequest) GetOwnerOk() (*string, bool) {
+	if o == nil || IsNil(o.Owner) {
+		return nil, false
+	}
+	return o.Owner, true
+}
+
+// HasOwner returns a boolean if a field has been set.
+func (o *ServiceAccountCreateRequest) HasOwner() bool {
+	if o != nil && !IsNil(o.Owner) {
+		return true
+	}
+
+	return false
+}
+
+// SetOwner gets a reference to the given string and assigns it to the Owner field.
+func (o *ServiceAccountCreateRequest) SetOwner(v string) {
+	o.Owner = &v
+}
+
 func (o ServiceAccountCreateRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -114,7 +185,48 @@ func (o ServiceAccountCreateRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
+	if !IsNil(o.Role) {
+		toSerialize["role"] = o.Role
+	}
+	if !IsNil(o.Owner) {
+		toSerialize["owner"] = o.Owner
+	}
 	return toSerialize, nil
+}
+
+func (o *ServiceAccountCreateRequest) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varServiceAccountCreateRequest := _ServiceAccountCreateRequest{}
+
+	err = json.Unmarshal(bytes, &varServiceAccountCreateRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ServiceAccountCreateRequest(varServiceAccountCreateRequest)
+
+	return err
 }
 
 type NullableServiceAccountCreateRequest struct {

@@ -151,7 +151,7 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta
 	envID := d.Id()
 	envName := d.Get("name").(string)
 	envDesc := d.Get("description").(string)
-	patchedEnv := cloudtruthapi.PatchedEnvironment{}
+	patchedEnv := cloudtruthapi.PatchedEnvironmentUpdate{}
 	hasChange := false
 	if d.HasChange("name") {
 		patchedEnv.SetName(envName)
@@ -167,7 +167,7 @@ func resourceEnvironmentUpdate(ctx context.Context, d *schema.ResourceData, meta
 			var r *http.Response
 			var err error
 			_, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsPartialUpdate(ctx,
-				envID).PatchedEnvironment(patchedEnv).Execute()
+				envID).PatchedEnvironmentUpdate(patchedEnv).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceEnvironmentUpdate: error updating environment %s", envName), r, err)
 			}

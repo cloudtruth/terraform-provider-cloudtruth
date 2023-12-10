@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the ServiceAccountCreateResponse type satisfies the MappedNullable interface at compile time
@@ -23,22 +24,25 @@ var _ MappedNullable = &ServiceAccountCreateResponse{}
 type ServiceAccountCreateResponse struct {
 	Url string `json:"url"`
 	Id string `json:"id"`
+	Owner NullableString `json:"owner,omitempty"`
 	User User `json:"user"`
 	// An optional description of the process or system using the service account.
 	Description *string `json:"description,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
 	LastUsedAt NullableTime `json:"last_used_at"`
 	// The API Key to use as a Bearer token for the service account.
 	Apikey string `json:"apikey"`
 }
 
+type _ServiceAccountCreateResponse ServiceAccountCreateResponse
+
 // NewServiceAccountCreateResponse instantiates a new ServiceAccountCreateResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewServiceAccountCreateResponse(url string, id string, user User, createdAt time.Time, modifiedAt time.Time, lastUsedAt NullableTime, apikey string) *ServiceAccountCreateResponse {
+func NewServiceAccountCreateResponse(url string, id string, user User, createdAt time.Time, modifiedAt NullableTime, lastUsedAt NullableTime, apikey string) *ServiceAccountCreateResponse {
 	this := ServiceAccountCreateResponse{}
 	this.Url = url
 	this.Id = id
@@ -104,6 +108,48 @@ func (o *ServiceAccountCreateResponse) GetIdOk() (*string, bool) {
 // SetId sets field value
 func (o *ServiceAccountCreateResponse) SetId(v string) {
 	o.Id = v
+}
+
+// GetOwner returns the Owner field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *ServiceAccountCreateResponse) GetOwner() string {
+	if o == nil || IsNil(o.Owner.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.Owner.Get()
+}
+
+// GetOwnerOk returns a tuple with the Owner field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ServiceAccountCreateResponse) GetOwnerOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Owner.Get(), o.Owner.IsSet()
+}
+
+// HasOwner returns a boolean if a field has been set.
+func (o *ServiceAccountCreateResponse) HasOwner() bool {
+	if o != nil && o.Owner.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetOwner gets a reference to the given NullableString and assigns it to the Owner field.
+func (o *ServiceAccountCreateResponse) SetOwner(v string) {
+	o.Owner.Set(&v)
+}
+// SetOwnerNil sets the value for Owner to be an explicit nil
+func (o *ServiceAccountCreateResponse) SetOwnerNil() {
+	o.Owner.Set(nil)
+}
+
+// UnsetOwner ensures that no value is present for Owner, not even an explicit nil
+func (o *ServiceAccountCreateResponse) UnsetOwner() {
+	o.Owner.Unset()
 }
 
 // GetUser returns the User field value
@@ -187,27 +233,29 @@ func (o *ServiceAccountCreateResponse) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *ServiceAccountCreateResponse) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ServiceAccountCreateResponse) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *ServiceAccountCreateResponse) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 // GetLastUsedAt returns the LastUsedAt field value
@@ -272,15 +320,59 @@ func (o ServiceAccountCreateResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["url"] = o.Url
 	toSerialize["id"] = o.Id
+	if o.Owner.IsSet() {
+		toSerialize["owner"] = o.Owner.Get()
+	}
 	toSerialize["user"] = o.User
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	toSerialize["last_used_at"] = o.LastUsedAt.Get()
 	toSerialize["apikey"] = o.Apikey
 	return toSerialize, nil
+}
+
+func (o *ServiceAccountCreateResponse) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"id",
+		"user",
+		"created_at",
+		"modified_at",
+		"last_used_at",
+		"apikey",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varServiceAccountCreateResponse := _ServiceAccountCreateResponse{}
+
+	err = json.Unmarshal(bytes, &varServiceAccountCreateResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ServiceAccountCreateResponse(varServiceAccountCreateResponse)
+
+	return err
 }
 
 type NullableServiceAccountCreateResponse struct {

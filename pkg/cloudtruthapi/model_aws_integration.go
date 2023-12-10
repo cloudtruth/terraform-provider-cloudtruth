@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the AwsIntegration type satisfies the MappedNullable interface at compile time
@@ -31,9 +32,9 @@ type AwsIntegration struct {
 	// If an error occurs, more details will be available in this field.
 	StatusDetail string `json:"status_detail"`
 	// The last time the status was evaluated.
-	StatusLastCheckedAt time.Time `json:"status_last_checked_at"`
+	StatusLastCheckedAt NullableTime `json:"status_last_checked_at"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 	Fqn string `json:"fqn"`
 	// The type of integration.
 	Type string `json:"type"`
@@ -53,11 +54,13 @@ type AwsIntegration struct {
 	AwsRoleName string `json:"aws_role_name"`
 }
 
+type _AwsIntegration AwsIntegration
+
 // NewAwsIntegration instantiates a new AwsIntegration object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAwsIntegration(url string, id string, name string, status StatusEnum, statusDetail string, statusLastCheckedAt time.Time, createdAt time.Time, modifiedAt time.Time, fqn string, type_ string, awsAccountId string, awsEnabledRegions []AwsRegionEnum, awsEnabledServices []AwsServiceEnum, awsExternalId string, awsRoleName string) *AwsIntegration {
+func NewAwsIntegration(url string, id string, name string, status StatusEnum, statusDetail string, statusLastCheckedAt NullableTime, createdAt time.Time, modifiedAt NullableTime, fqn string, type_ string, awsAccountId string, awsEnabledRegions []AwsRegionEnum, awsEnabledServices []AwsServiceEnum, awsExternalId string, awsRoleName string) *AwsIntegration {
 	this := AwsIntegration{}
 	this.Url = url
 	this.Id = id
@@ -238,27 +241,29 @@ func (o *AwsIntegration) SetStatusDetail(v string) {
 }
 
 // GetStatusLastCheckedAt returns the StatusLastCheckedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *AwsIntegration) GetStatusLastCheckedAt() time.Time {
-	if o == nil {
+	if o == nil || o.StatusLastCheckedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.StatusLastCheckedAt
+	return *o.StatusLastCheckedAt.Get()
 }
 
 // GetStatusLastCheckedAtOk returns a tuple with the StatusLastCheckedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *AwsIntegration) GetStatusLastCheckedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.StatusLastCheckedAt, true
+	return o.StatusLastCheckedAt.Get(), o.StatusLastCheckedAt.IsSet()
 }
 
 // SetStatusLastCheckedAt sets field value
 func (o *AwsIntegration) SetStatusLastCheckedAt(v time.Time) {
-	o.StatusLastCheckedAt = v
+	o.StatusLastCheckedAt.Set(&v)
 }
 
 // GetCreatedAt returns the CreatedAt field value
@@ -286,27 +291,29 @@ func (o *AwsIntegration) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *AwsIntegration) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *AwsIntegration) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *AwsIntegration) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 // GetFqn returns the Fqn field value
@@ -569,9 +576,9 @@ func (o AwsIntegration) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["status"] = o.Status
 	toSerialize["status_detail"] = o.StatusDetail
-	toSerialize["status_last_checked_at"] = o.StatusLastCheckedAt
+	toSerialize["status_last_checked_at"] = o.StatusLastCheckedAt.Get()
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	toSerialize["fqn"] = o.Fqn
 	toSerialize["type"] = o.Type
 	if !IsNil(o.Writable) {
@@ -586,6 +593,55 @@ func (o AwsIntegration) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["aws_role_name"] = o.AwsRoleName
 	return toSerialize, nil
+}
+
+func (o *AwsIntegration) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"id",
+		"name",
+		"status",
+		"status_detail",
+		"status_last_checked_at",
+		"created_at",
+		"modified_at",
+		"fqn",
+		"type",
+		"aws_account_id",
+		"aws_enabled_regions",
+		"aws_enabled_services",
+		"aws_external_id",
+		"aws_role_name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAwsIntegration := _AwsIntegration{}
+
+	err = json.Unmarshal(bytes, &varAwsIntegration)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AwsIntegration(varAwsIntegration)
+
+	return err
 }
 
 type NullableAwsIntegration struct {

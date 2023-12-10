@@ -13,6 +13,7 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the BackupParameterType type satisfies the MappedNullable interface at compile time
@@ -25,6 +26,8 @@ type BackupParameterType struct {
 	Parent string `json:"parent"`
 	Description NullableString `json:"description,omitempty"`
 }
+
+type _BackupParameterType BackupParameterType
 
 // NewBackupParameterType instantiates a new BackupParameterType object
 // This constructor will assign default values to properties that have it defined,
@@ -177,6 +180,43 @@ func (o BackupParameterType) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description.Get()
 	}
 	return toSerialize, nil
+}
+
+func (o *BackupParameterType) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"rules",
+		"name",
+		"parent",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varBackupParameterType := _BackupParameterType{}
+
+	err = json.Unmarshal(bytes, &varBackupParameterType)
+
+	if err != nil {
+		return err
+	}
+
+	*o = BackupParameterType(varBackupParameterType)
+
+	return err
 }
 
 type NullableBackupParameterType struct {

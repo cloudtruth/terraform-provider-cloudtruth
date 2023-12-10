@@ -13,6 +13,7 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the TemplatePreview type satisfies the MappedNullable interface at compile time
@@ -25,6 +26,8 @@ type TemplatePreview struct {
 	// If True, the instantiated template contains secrets.
 	HasSecret bool `json:"has_secret"`
 }
+
+type _TemplatePreview TemplatePreview
 
 // NewTemplatePreview instantiates a new TemplatePreview object
 // This constructor will assign default values to properties that have it defined,
@@ -106,6 +109,42 @@ func (o TemplatePreview) ToMap() (map[string]interface{}, error) {
 	toSerialize["body"] = o.Body
 	toSerialize["has_secret"] = o.HasSecret
 	return toSerialize, nil
+}
+
+func (o *TemplatePreview) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"body",
+		"has_secret",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTemplatePreview := _TemplatePreview{}
+
+	err = json.Unmarshal(bytes, &varTemplatePreview)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TemplatePreview(varTemplatePreview)
+
+	return err
 }
 
 type NullableTemplatePreview struct {

@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the AwsPullLatestTask type satisfies the MappedNullable interface at compile time
@@ -34,14 +35,16 @@ type AwsPullLatestTask struct {
 	// If an error occurs early during processing, before attempting to process values, this detail may be helpful in determining the problem.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 }
+
+type _AwsPullLatestTask AwsPullLatestTask
 
 // NewAwsPullLatestTask instantiates a new AwsPullLatestTask object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAwsPullLatestTask(url string, id string, createdAt time.Time, modifiedAt time.Time) *AwsPullLatestTask {
+func NewAwsPullLatestTask(url string, id string, createdAt time.Time, modifiedAt NullableTime) *AwsPullLatestTask {
 	this := AwsPullLatestTask{}
 	this.Url = url
 	this.Id = id
@@ -321,27 +324,29 @@ func (o *AwsPullLatestTask) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *AwsPullLatestTask) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *AwsPullLatestTask) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *AwsPullLatestTask) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 func (o AwsPullLatestTask) MarshalJSON() ([]byte, error) {
@@ -372,8 +377,46 @@ func (o AwsPullLatestTask) ToMap() (map[string]interface{}, error) {
 		toSerialize["error_detail"] = o.ErrorDetail.Get()
 	}
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
+}
+
+func (o *AwsPullLatestTask) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"id",
+		"created_at",
+		"modified_at",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAwsPullLatestTask := _AwsPullLatestTask{}
+
+	err = json.Unmarshal(bytes, &varAwsPullLatestTask)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AwsPullLatestTask(varAwsPullLatestTask)
+
+	return err
 }
 
 type NullableAwsPullLatestTask struct {

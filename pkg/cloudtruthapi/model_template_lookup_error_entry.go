@@ -13,6 +13,7 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the TemplateLookupErrorEntry type satisfies the MappedNullable interface at compile time
@@ -29,6 +30,8 @@ type TemplateLookupErrorEntry struct {
 	// Details about the error.
 	ErrorDetail string `json:"error_detail"`
 }
+
+type _TemplateLookupErrorEntry TemplateLookupErrorEntry
 
 // NewTemplateLookupErrorEntry instantiates a new TemplateLookupErrorEntry object
 // This constructor will assign default values to properties that have it defined,
@@ -162,6 +165,44 @@ func (o TemplateLookupErrorEntry) ToMap() (map[string]interface{}, error) {
 	toSerialize["error_code"] = o.ErrorCode
 	toSerialize["error_detail"] = o.ErrorDetail
 	return toSerialize, nil
+}
+
+func (o *TemplateLookupErrorEntry) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"parameter_id",
+		"parameter_name",
+		"error_code",
+		"error_detail",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTemplateLookupErrorEntry := _TemplateLookupErrorEntry{}
+
+	err = json.Unmarshal(bytes, &varTemplateLookupErrorEntry)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TemplateLookupErrorEntry(varTemplateLookupErrorEntry)
+
+	return err
 }
 
 type NullableTemplateLookupErrorEntry struct {

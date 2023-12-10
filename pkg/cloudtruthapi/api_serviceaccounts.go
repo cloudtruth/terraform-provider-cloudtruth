@@ -714,15 +714,15 @@ type ApiServiceaccountsUpdateRequest struct {
 	ctx context.Context
 	ApiService *ServiceaccountsAPIService
 	id string
-	serviceAccount *ServiceAccount
+	serviceAccountUpdateRequest *ServiceAccountUpdateRequest
 }
 
-func (r ApiServiceaccountsUpdateRequest) ServiceAccount(serviceAccount ServiceAccount) ApiServiceaccountsUpdateRequest {
-	r.serviceAccount = &serviceAccount
+func (r ApiServiceaccountsUpdateRequest) ServiceAccountUpdateRequest(serviceAccountUpdateRequest ServiceAccountUpdateRequest) ApiServiceaccountsUpdateRequest {
+	r.serviceAccountUpdateRequest = &serviceAccountUpdateRequest
 	return r
 }
 
-func (r ApiServiceaccountsUpdateRequest) Execute() (*ServiceAccount, *http.Response, error) {
+func (r ApiServiceaccountsUpdateRequest) Execute() (*ServiceAccountUpdateRequest, *http.Response, error) {
 	return r.ApiService.ServiceaccountsUpdateExecute(r)
 }
 
@@ -742,13 +742,13 @@ func (a *ServiceaccountsAPIService) ServiceaccountsUpdate(ctx context.Context, i
 }
 
 // Execute executes the request
-//  @return ServiceAccount
-func (a *ServiceaccountsAPIService) ServiceaccountsUpdateExecute(r ApiServiceaccountsUpdateRequest) (*ServiceAccount, *http.Response, error) {
+//  @return ServiceAccountUpdateRequest
+func (a *ServiceaccountsAPIService) ServiceaccountsUpdateExecute(r ApiServiceaccountsUpdateRequest) (*ServiceAccountUpdateRequest, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ServiceAccount
+		localVarReturnValue  *ServiceAccountUpdateRequest
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsAPIService.ServiceaccountsUpdate")
@@ -781,7 +781,7 @@ func (a *ServiceaccountsAPIService) ServiceaccountsUpdateExecute(r ApiServiceacc
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.serviceAccount
+	localVarPostBody = r.serviceAccountUpdateRequest
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

@@ -25,6 +25,146 @@ import (
 // EnvironmentsAPIService EnvironmentsAPI service
 type EnvironmentsAPIService service
 
+type ApiEnvironmentsCopyCreateRequest struct {
+	ctx context.Context
+	ApiService *EnvironmentsAPIService
+	id string
+	environmentCopy *EnvironmentCopy
+}
+
+func (r ApiEnvironmentsCopyCreateRequest) EnvironmentCopy(environmentCopy EnvironmentCopy) ApiEnvironmentsCopyCreateRequest {
+	r.environmentCopy = &environmentCopy
+	return r
+}
+
+func (r ApiEnvironmentsCopyCreateRequest) Execute() (*Environment, *http.Response, error) {
+	return r.ApiService.EnvironmentsCopyCreateExecute(r)
+}
+
+/*
+EnvironmentsCopyCreate Method for EnvironmentsCopyCreate
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiEnvironmentsCopyCreateRequest
+*/
+func (a *EnvironmentsAPIService) EnvironmentsCopyCreate(ctx context.Context, id string) ApiEnvironmentsCopyCreateRequest {
+	return ApiEnvironmentsCopyCreateRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+// Execute executes the request
+//  @return Environment
+func (a *EnvironmentsAPIService) EnvironmentsCopyCreateExecute(r ApiEnvironmentsCopyCreateRequest) (*Environment, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Environment
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsCopyCreate")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v1/environments/{id}/copy/"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.environmentCopy == nil {
+		return localVarReturnValue, nil, reportError("environmentCopy is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.environmentCopy
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["ApiKeyAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["Authorization"] = key
+			}
+		}
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["JWTAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["Authorization"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiEnvironmentsCreateRequest struct {
 	ctx context.Context
 	ApiService *EnvironmentsAPIService
@@ -288,8 +428,6 @@ type ApiEnvironmentsListRequest struct {
 	ordering *string
 	page *int32
 	pageSize *int32
-	parentName *string
-	parentNameIcontains *string
 }
 
 func (r ApiEnvironmentsListRequest) DescriptionIcontains(descriptionIcontains string) ApiEnvironmentsListRequest {
@@ -322,16 +460,6 @@ func (r ApiEnvironmentsListRequest) Page(page int32) ApiEnvironmentsListRequest 
 // Number of results to return per page.
 func (r ApiEnvironmentsListRequest) PageSize(pageSize int32) ApiEnvironmentsListRequest {
 	r.pageSize = &pageSize
-	return r
-}
-
-func (r ApiEnvironmentsListRequest) ParentName(parentName string) ApiEnvironmentsListRequest {
-	r.parentName = &parentName
-	return r
-}
-
-func (r ApiEnvironmentsListRequest) ParentNameIcontains(parentNameIcontains string) ApiEnvironmentsListRequest {
-	r.parentNameIcontains = &parentNameIcontains
 	return r
 }
 
@@ -390,12 +518,6 @@ func (a *EnvironmentsAPIService) EnvironmentsListExecute(r ApiEnvironmentsListRe
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
-	}
-	if r.parentName != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "parent__name", r.parentName, "")
-	}
-	if r.parentNameIcontains != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "parent__name__icontains", r.parentNameIcontains, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -483,15 +605,15 @@ type ApiEnvironmentsPartialUpdateRequest struct {
 	ctx context.Context
 	ApiService *EnvironmentsAPIService
 	id string
-	patchedEnvironment *PatchedEnvironment
+	patchedEnvironmentUpdate *PatchedEnvironmentUpdate
 }
 
-func (r ApiEnvironmentsPartialUpdateRequest) PatchedEnvironment(patchedEnvironment PatchedEnvironment) ApiEnvironmentsPartialUpdateRequest {
-	r.patchedEnvironment = &patchedEnvironment
+func (r ApiEnvironmentsPartialUpdateRequest) PatchedEnvironmentUpdate(patchedEnvironmentUpdate PatchedEnvironmentUpdate) ApiEnvironmentsPartialUpdateRequest {
+	r.patchedEnvironmentUpdate = &patchedEnvironmentUpdate
 	return r
 }
 
-func (r ApiEnvironmentsPartialUpdateRequest) Execute() (*Environment, *http.Response, error) {
+func (r ApiEnvironmentsPartialUpdateRequest) Execute() (*EnvironmentUpdate, *http.Response, error) {
 	return r.ApiService.EnvironmentsPartialUpdateExecute(r)
 }
 
@@ -511,13 +633,13 @@ func (a *EnvironmentsAPIService) EnvironmentsPartialUpdate(ctx context.Context, 
 }
 
 // Execute executes the request
-//  @return Environment
-func (a *EnvironmentsAPIService) EnvironmentsPartialUpdateExecute(r ApiEnvironmentsPartialUpdateRequest) (*Environment, *http.Response, error) {
+//  @return EnvironmentUpdate
+func (a *EnvironmentsAPIService) EnvironmentsPartialUpdateExecute(r ApiEnvironmentsPartialUpdateRequest) (*EnvironmentUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPatch
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *Environment
+		localVarReturnValue  *EnvironmentUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsPartialUpdate")
@@ -550,7 +672,7 @@ func (a *EnvironmentsAPIService) EnvironmentsPartialUpdateExecute(r ApiEnvironme
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.patchedEnvironment
+	localVarPostBody = r.patchedEnvironmentUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -791,7 +913,7 @@ func (r ApiEnvironmentsRetrieveRequest) Execute() (*Environment, *http.Response,
 EnvironmentsRetrieve Method for EnvironmentsRetrieve
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
+ @param id A UUID string identifying this environment ledger.
  @return ApiEnvironmentsRetrieveRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsRetrieve(ctx context.Context, id string) ApiEnvironmentsRetrieveRequest {
@@ -1833,15 +1955,15 @@ type ApiEnvironmentsUpdateRequest struct {
 	ctx context.Context
 	ApiService *EnvironmentsAPIService
 	id string
-	environment *Environment
+	environmentUpdate *EnvironmentUpdate
 }
 
-func (r ApiEnvironmentsUpdateRequest) Environment(environment Environment) ApiEnvironmentsUpdateRequest {
-	r.environment = &environment
+func (r ApiEnvironmentsUpdateRequest) EnvironmentUpdate(environmentUpdate EnvironmentUpdate) ApiEnvironmentsUpdateRequest {
+	r.environmentUpdate = &environmentUpdate
 	return r
 }
 
-func (r ApiEnvironmentsUpdateRequest) Execute() (*Environment, *http.Response, error) {
+func (r ApiEnvironmentsUpdateRequest) Execute() (*EnvironmentUpdate, *http.Response, error) {
 	return r.ApiService.EnvironmentsUpdateExecute(r)
 }
 
@@ -1861,13 +1983,13 @@ func (a *EnvironmentsAPIService) EnvironmentsUpdate(ctx context.Context, id stri
 }
 
 // Execute executes the request
-//  @return Environment
-func (a *EnvironmentsAPIService) EnvironmentsUpdateExecute(r ApiEnvironmentsUpdateRequest) (*Environment, *http.Response, error) {
+//  @return EnvironmentUpdate
+func (a *EnvironmentsAPIService) EnvironmentsUpdateExecute(r ApiEnvironmentsUpdateRequest) (*EnvironmentUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *Environment
+		localVarReturnValue  *EnvironmentUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsUpdate")
@@ -1881,8 +2003,8 @@ func (a *EnvironmentsAPIService) EnvironmentsUpdateExecute(r ApiEnvironmentsUpda
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.environment == nil {
-		return localVarReturnValue, nil, reportError("environment is required and must be specified")
+	if r.environmentUpdate == nil {
+		return localVarReturnValue, nil, reportError("environmentUpdate is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -1903,7 +2025,7 @@ func (a *EnvironmentsAPIService) EnvironmentsUpdateExecute(r ApiEnvironmentsUpda
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.environment
+	localVarPostBody = r.environmentUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

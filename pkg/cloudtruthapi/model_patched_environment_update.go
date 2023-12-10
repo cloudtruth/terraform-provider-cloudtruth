@@ -16,13 +16,11 @@ import (
 	"time"
 )
 
-// checks if the PatchedEnvironment type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PatchedEnvironment{}
+// checks if the PatchedEnvironmentUpdate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedEnvironmentUpdate{}
 
-// PatchedEnvironment struct for PatchedEnvironment
-type PatchedEnvironment struct {
-	Url *string `json:"url,omitempty"`
-	// A unique identifier for the environment.
+// PatchedEnvironmentUpdate struct for PatchedEnvironmentUpdate
+type PatchedEnvironmentUpdate struct {
 	Id *string `json:"id,omitempty"`
 	// The environment name.
 	Name *string `json:"name,omitempty"`
@@ -36,60 +34,28 @@ type PatchedEnvironment struct {
 	AccessControlled *bool `json:"access_controlled,omitempty"`
 	Role NullableRoleEnum `json:"role,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	ModifiedAt NullableTime `json:"modified_at,omitempty"`
 }
 
-// NewPatchedEnvironment instantiates a new PatchedEnvironment object
+// NewPatchedEnvironmentUpdate instantiates a new PatchedEnvironmentUpdate object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPatchedEnvironment() *PatchedEnvironment {
-	this := PatchedEnvironment{}
+func NewPatchedEnvironmentUpdate() *PatchedEnvironmentUpdate {
+	this := PatchedEnvironmentUpdate{}
 	return &this
 }
 
-// NewPatchedEnvironmentWithDefaults instantiates a new PatchedEnvironment object
+// NewPatchedEnvironmentUpdateWithDefaults instantiates a new PatchedEnvironmentUpdate object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPatchedEnvironmentWithDefaults() *PatchedEnvironment {
-	this := PatchedEnvironment{}
+func NewPatchedEnvironmentUpdateWithDefaults() *PatchedEnvironmentUpdate {
+	this := PatchedEnvironmentUpdate{}
 	return &this
-}
-
-// GetUrl returns the Url field value if set, zero value otherwise.
-func (o *PatchedEnvironment) GetUrl() string {
-	if o == nil || IsNil(o.Url) {
-		var ret string
-		return ret
-	}
-	return *o.Url
-}
-
-// GetUrlOk returns a tuple with the Url field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PatchedEnvironment) GetUrlOk() (*string, bool) {
-	if o == nil || IsNil(o.Url) {
-		return nil, false
-	}
-	return o.Url, true
-}
-
-// HasUrl returns a boolean if a field has been set.
-func (o *PatchedEnvironment) HasUrl() bool {
-	if o != nil && !IsNil(o.Url) {
-		return true
-	}
-
-	return false
-}
-
-// SetUrl gets a reference to the given string and assigns it to the Url field.
-func (o *PatchedEnvironment) SetUrl(v string) {
-	o.Url = &v
 }
 
 // GetId returns the Id field value if set, zero value otherwise.
-func (o *PatchedEnvironment) GetId() string {
+func (o *PatchedEnvironmentUpdate) GetId() string {
 	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
@@ -99,7 +65,7 @@ func (o *PatchedEnvironment) GetId() string {
 
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedEnvironment) GetIdOk() (*string, bool) {
+func (o *PatchedEnvironmentUpdate) GetIdOk() (*string, bool) {
 	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
@@ -107,7 +73,7 @@ func (o *PatchedEnvironment) GetIdOk() (*string, bool) {
 }
 
 // HasId returns a boolean if a field has been set.
-func (o *PatchedEnvironment) HasId() bool {
+func (o *PatchedEnvironmentUpdate) HasId() bool {
 	if o != nil && !IsNil(o.Id) {
 		return true
 	}
@@ -116,12 +82,12 @@ func (o *PatchedEnvironment) HasId() bool {
 }
 
 // SetId gets a reference to the given string and assigns it to the Id field.
-func (o *PatchedEnvironment) SetId(v string) {
+func (o *PatchedEnvironmentUpdate) SetId(v string) {
 	o.Id = &v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
-func (o *PatchedEnvironment) GetName() string {
+func (o *PatchedEnvironmentUpdate) GetName() string {
 	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
@@ -131,7 +97,7 @@ func (o *PatchedEnvironment) GetName() string {
 
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedEnvironment) GetNameOk() (*string, bool) {
+func (o *PatchedEnvironmentUpdate) GetNameOk() (*string, bool) {
 	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
@@ -139,7 +105,7 @@ func (o *PatchedEnvironment) GetNameOk() (*string, bool) {
 }
 
 // HasName returns a boolean if a field has been set.
-func (o *PatchedEnvironment) HasName() bool {
+func (o *PatchedEnvironmentUpdate) HasName() bool {
 	if o != nil && !IsNil(o.Name) {
 		return true
 	}
@@ -148,12 +114,12 @@ func (o *PatchedEnvironment) HasName() bool {
 }
 
 // SetName gets a reference to the given string and assigns it to the Name field.
-func (o *PatchedEnvironment) SetName(v string) {
+func (o *PatchedEnvironmentUpdate) SetName(v string) {
 	o.Name = &v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
-func (o *PatchedEnvironment) GetDescription() string {
+func (o *PatchedEnvironmentUpdate) GetDescription() string {
 	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
@@ -163,7 +129,7 @@ func (o *PatchedEnvironment) GetDescription() string {
 
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedEnvironment) GetDescriptionOk() (*string, bool) {
+func (o *PatchedEnvironmentUpdate) GetDescriptionOk() (*string, bool) {
 	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
@@ -171,7 +137,7 @@ func (o *PatchedEnvironment) GetDescriptionOk() (*string, bool) {
 }
 
 // HasDescription returns a boolean if a field has been set.
-func (o *PatchedEnvironment) HasDescription() bool {
+func (o *PatchedEnvironmentUpdate) HasDescription() bool {
 	if o != nil && !IsNil(o.Description) {
 		return true
 	}
@@ -180,12 +146,12 @@ func (o *PatchedEnvironment) HasDescription() bool {
 }
 
 // SetDescription gets a reference to the given string and assigns it to the Description field.
-func (o *PatchedEnvironment) SetDescription(v string) {
+func (o *PatchedEnvironmentUpdate) SetDescription(v string) {
 	o.Description = &v
 }
 
 // GetParent returns the Parent field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedEnvironment) GetParent() string {
+func (o *PatchedEnvironmentUpdate) GetParent() string {
 	if o == nil || IsNil(o.Parent.Get()) {
 		var ret string
 		return ret
@@ -196,7 +162,7 @@ func (o *PatchedEnvironment) GetParent() string {
 // GetParentOk returns a tuple with the Parent field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedEnvironment) GetParentOk() (*string, bool) {
+func (o *PatchedEnvironmentUpdate) GetParentOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -204,7 +170,7 @@ func (o *PatchedEnvironment) GetParentOk() (*string, bool) {
 }
 
 // HasParent returns a boolean if a field has been set.
-func (o *PatchedEnvironment) HasParent() bool {
+func (o *PatchedEnvironmentUpdate) HasParent() bool {
 	if o != nil && o.Parent.IsSet() {
 		return true
 	}
@@ -213,21 +179,21 @@ func (o *PatchedEnvironment) HasParent() bool {
 }
 
 // SetParent gets a reference to the given NullableString and assigns it to the Parent field.
-func (o *PatchedEnvironment) SetParent(v string) {
+func (o *PatchedEnvironmentUpdate) SetParent(v string) {
 	o.Parent.Set(&v)
 }
 // SetParentNil sets the value for Parent to be an explicit nil
-func (o *PatchedEnvironment) SetParentNil() {
+func (o *PatchedEnvironmentUpdate) SetParentNil() {
 	o.Parent.Set(nil)
 }
 
 // UnsetParent ensures that no value is present for Parent, not even an explicit nil
-func (o *PatchedEnvironment) UnsetParent() {
+func (o *PatchedEnvironmentUpdate) UnsetParent() {
 	o.Parent.Unset()
 }
 
 // GetChildren returns the Children field value if set, zero value otherwise.
-func (o *PatchedEnvironment) GetChildren() []string {
+func (o *PatchedEnvironmentUpdate) GetChildren() []string {
 	if o == nil || IsNil(o.Children) {
 		var ret []string
 		return ret
@@ -237,7 +203,7 @@ func (o *PatchedEnvironment) GetChildren() []string {
 
 // GetChildrenOk returns a tuple with the Children field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedEnvironment) GetChildrenOk() ([]string, bool) {
+func (o *PatchedEnvironmentUpdate) GetChildrenOk() ([]string, bool) {
 	if o == nil || IsNil(o.Children) {
 		return nil, false
 	}
@@ -245,7 +211,7 @@ func (o *PatchedEnvironment) GetChildrenOk() ([]string, bool) {
 }
 
 // HasChildren returns a boolean if a field has been set.
-func (o *PatchedEnvironment) HasChildren() bool {
+func (o *PatchedEnvironmentUpdate) HasChildren() bool {
 	if o != nil && !IsNil(o.Children) {
 		return true
 	}
@@ -254,12 +220,12 @@ func (o *PatchedEnvironment) HasChildren() bool {
 }
 
 // SetChildren gets a reference to the given []string and assigns it to the Children field.
-func (o *PatchedEnvironment) SetChildren(v []string) {
+func (o *PatchedEnvironmentUpdate) SetChildren(v []string) {
 	o.Children = v
 }
 
 // GetAccessControlled returns the AccessControlled field value if set, zero value otherwise.
-func (o *PatchedEnvironment) GetAccessControlled() bool {
+func (o *PatchedEnvironmentUpdate) GetAccessControlled() bool {
 	if o == nil || IsNil(o.AccessControlled) {
 		var ret bool
 		return ret
@@ -269,7 +235,7 @@ func (o *PatchedEnvironment) GetAccessControlled() bool {
 
 // GetAccessControlledOk returns a tuple with the AccessControlled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedEnvironment) GetAccessControlledOk() (*bool, bool) {
+func (o *PatchedEnvironmentUpdate) GetAccessControlledOk() (*bool, bool) {
 	if o == nil || IsNil(o.AccessControlled) {
 		return nil, false
 	}
@@ -277,7 +243,7 @@ func (o *PatchedEnvironment) GetAccessControlledOk() (*bool, bool) {
 }
 
 // HasAccessControlled returns a boolean if a field has been set.
-func (o *PatchedEnvironment) HasAccessControlled() bool {
+func (o *PatchedEnvironmentUpdate) HasAccessControlled() bool {
 	if o != nil && !IsNil(o.AccessControlled) {
 		return true
 	}
@@ -286,12 +252,12 @@ func (o *PatchedEnvironment) HasAccessControlled() bool {
 }
 
 // SetAccessControlled gets a reference to the given bool and assigns it to the AccessControlled field.
-func (o *PatchedEnvironment) SetAccessControlled(v bool) {
+func (o *PatchedEnvironmentUpdate) SetAccessControlled(v bool) {
 	o.AccessControlled = &v
 }
 
 // GetRole returns the Role field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedEnvironment) GetRole() RoleEnum {
+func (o *PatchedEnvironmentUpdate) GetRole() RoleEnum {
 	if o == nil || IsNil(o.Role.Get()) {
 		var ret RoleEnum
 		return ret
@@ -302,7 +268,7 @@ func (o *PatchedEnvironment) GetRole() RoleEnum {
 // GetRoleOk returns a tuple with the Role field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedEnvironment) GetRoleOk() (*RoleEnum, bool) {
+func (o *PatchedEnvironmentUpdate) GetRoleOk() (*RoleEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -310,7 +276,7 @@ func (o *PatchedEnvironment) GetRoleOk() (*RoleEnum, bool) {
 }
 
 // HasRole returns a boolean if a field has been set.
-func (o *PatchedEnvironment) HasRole() bool {
+func (o *PatchedEnvironmentUpdate) HasRole() bool {
 	if o != nil && o.Role.IsSet() {
 		return true
 	}
@@ -319,21 +285,21 @@ func (o *PatchedEnvironment) HasRole() bool {
 }
 
 // SetRole gets a reference to the given NullableRoleEnum and assigns it to the Role field.
-func (o *PatchedEnvironment) SetRole(v RoleEnum) {
+func (o *PatchedEnvironmentUpdate) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
 // SetRoleNil sets the value for Role to be an explicit nil
-func (o *PatchedEnvironment) SetRoleNil() {
+func (o *PatchedEnvironmentUpdate) SetRoleNil() {
 	o.Role.Set(nil)
 }
 
 // UnsetRole ensures that no value is present for Role, not even an explicit nil
-func (o *PatchedEnvironment) UnsetRole() {
+func (o *PatchedEnvironmentUpdate) UnsetRole() {
 	o.Role.Unset()
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *PatchedEnvironment) GetCreatedAt() time.Time {
+func (o *PatchedEnvironmentUpdate) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
@@ -343,7 +309,7 @@ func (o *PatchedEnvironment) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedEnvironment) GetCreatedAtOk() (*time.Time, bool) {
+func (o *PatchedEnvironmentUpdate) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -351,7 +317,7 @@ func (o *PatchedEnvironment) GetCreatedAtOk() (*time.Time, bool) {
 }
 
 // HasCreatedAt returns a boolean if a field has been set.
-func (o *PatchedEnvironment) HasCreatedAt() bool {
+func (o *PatchedEnvironmentUpdate) HasCreatedAt() bool {
 	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
@@ -360,43 +326,53 @@ func (o *PatchedEnvironment) HasCreatedAt() bool {
 }
 
 // SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *PatchedEnvironment) SetCreatedAt(v time.Time) {
+func (o *PatchedEnvironmentUpdate) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
-// GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
-func (o *PatchedEnvironment) GetModifiedAt() time.Time {
-	if o == nil || IsNil(o.ModifiedAt) {
+// GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PatchedEnvironmentUpdate) GetModifiedAt() time.Time {
+	if o == nil || IsNil(o.ModifiedAt.Get()) {
 		var ret time.Time
 		return ret
 	}
-	return *o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedEnvironment) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || IsNil(o.ModifiedAt) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PatchedEnvironmentUpdate) GetModifiedAtOk() (*time.Time, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // HasModifiedAt returns a boolean if a field has been set.
-func (o *PatchedEnvironment) HasModifiedAt() bool {
-	if o != nil && !IsNil(o.ModifiedAt) {
+func (o *PatchedEnvironmentUpdate) HasModifiedAt() bool {
+	if o != nil && o.ModifiedAt.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetModifiedAt gets a reference to the given time.Time and assigns it to the ModifiedAt field.
-func (o *PatchedEnvironment) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = &v
+// SetModifiedAt gets a reference to the given NullableTime and assigns it to the ModifiedAt field.
+func (o *PatchedEnvironmentUpdate) SetModifiedAt(v time.Time) {
+	o.ModifiedAt.Set(&v)
+}
+// SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
+func (o *PatchedEnvironmentUpdate) SetModifiedAtNil() {
+	o.ModifiedAt.Set(nil)
 }
 
-func (o PatchedEnvironment) MarshalJSON() ([]byte, error) {
+// UnsetModifiedAt ensures that no value is present for ModifiedAt, not even an explicit nil
+func (o *PatchedEnvironmentUpdate) UnsetModifiedAt() {
+	o.ModifiedAt.Unset()
+}
+
+func (o PatchedEnvironmentUpdate) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -404,11 +380,8 @@ func (o PatchedEnvironment) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PatchedEnvironment) ToMap() (map[string]interface{}, error) {
+func (o PatchedEnvironmentUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Url) {
-		toSerialize["url"] = o.Url
-	}
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
@@ -433,44 +406,44 @@ func (o PatchedEnvironment) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
-	if !IsNil(o.ModifiedAt) {
-		toSerialize["modified_at"] = o.ModifiedAt
+	if o.ModifiedAt.IsSet() {
+		toSerialize["modified_at"] = o.ModifiedAt.Get()
 	}
 	return toSerialize, nil
 }
 
-type NullablePatchedEnvironment struct {
-	value *PatchedEnvironment
+type NullablePatchedEnvironmentUpdate struct {
+	value *PatchedEnvironmentUpdate
 	isSet bool
 }
 
-func (v NullablePatchedEnvironment) Get() *PatchedEnvironment {
+func (v NullablePatchedEnvironmentUpdate) Get() *PatchedEnvironmentUpdate {
 	return v.value
 }
 
-func (v *NullablePatchedEnvironment) Set(val *PatchedEnvironment) {
+func (v *NullablePatchedEnvironmentUpdate) Set(val *PatchedEnvironmentUpdate) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePatchedEnvironment) IsSet() bool {
+func (v NullablePatchedEnvironmentUpdate) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePatchedEnvironment) Unset() {
+func (v *NullablePatchedEnvironmentUpdate) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePatchedEnvironment(val *PatchedEnvironment) *NullablePatchedEnvironment {
-	return &NullablePatchedEnvironment{value: val, isSet: true}
+func NewNullablePatchedEnvironmentUpdate(val *PatchedEnvironmentUpdate) *NullablePatchedEnvironmentUpdate {
+	return &NullablePatchedEnvironmentUpdate{value: val, isSet: true}
 }
 
-func (v NullablePatchedEnvironment) MarshalJSON() ([]byte, error) {
+func (v NullablePatchedEnvironmentUpdate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePatchedEnvironment) UnmarshalJSON(src []byte) error {
+func (v *NullablePatchedEnvironmentUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

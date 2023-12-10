@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the TagCreate type satisfies the MappedNullable interface at compile time
@@ -27,7 +28,11 @@ type TagCreate struct {
 	Description *string `json:"description,omitempty"`
 	// The point in time this tag represents. If not specified then the current time will be used.
 	Timestamp NullableTime `json:"timestamp,omitempty"`
+	// If True, this tag cannot be modified once it is created.
+	Immutable *bool `json:"immutable,omitempty"`
 }
+
+type _TagCreate TagCreate
 
 // NewTagCreate instantiates a new TagCreate object
 // This constructor will assign default values to properties that have it defined,
@@ -145,6 +150,38 @@ func (o *TagCreate) UnsetTimestamp() {
 	o.Timestamp.Unset()
 }
 
+// GetImmutable returns the Immutable field value if set, zero value otherwise.
+func (o *TagCreate) GetImmutable() bool {
+	if o == nil || IsNil(o.Immutable) {
+		var ret bool
+		return ret
+	}
+	return *o.Immutable
+}
+
+// GetImmutableOk returns a tuple with the Immutable field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TagCreate) GetImmutableOk() (*bool, bool) {
+	if o == nil || IsNil(o.Immutable) {
+		return nil, false
+	}
+	return o.Immutable, true
+}
+
+// HasImmutable returns a boolean if a field has been set.
+func (o *TagCreate) HasImmutable() bool {
+	if o != nil && !IsNil(o.Immutable) {
+		return true
+	}
+
+	return false
+}
+
+// SetImmutable gets a reference to the given bool and assigns it to the Immutable field.
+func (o *TagCreate) SetImmutable(v bool) {
+	o.Immutable = &v
+}
+
 func (o TagCreate) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -162,7 +199,45 @@ func (o TagCreate) ToMap() (map[string]interface{}, error) {
 	if o.Timestamp.IsSet() {
 		toSerialize["timestamp"] = o.Timestamp.Get()
 	}
+	if !IsNil(o.Immutable) {
+		toSerialize["immutable"] = o.Immutable
+	}
 	return toSerialize, nil
+}
+
+func (o *TagCreate) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTagCreate := _TagCreate{}
+
+	err = json.Unmarshal(bytes, &varTagCreate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TagCreate(varTagCreate)
+
+	return err
 }
 
 type NullableTagCreate struct {

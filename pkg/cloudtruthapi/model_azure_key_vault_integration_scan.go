@@ -13,6 +13,7 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the AzureKeyVaultIntegrationScan type satisfies the MappedNullable interface at compile time
@@ -23,6 +24,8 @@ type AzureKeyVaultIntegrationScan struct {
 	// Defines a pattern matching string that contains either mustache or regular expression syntax (with named capture groups) that locate the environment, project, and parameter name of the content you are looking for.  If you are using mustache pattern matching, use:    - ``{{ environment }}`` to identify the environment name   - ``{{ parameter }}`` to identify the parameter name   - ``{{ project }}`` to identify the project name  If you are using a regular expression, use Python syntax with named capture groups that locate the `environment`, `project`, and `parameter`.
 	Resource NullableString `json:"resource"`
 }
+
+type _AzureKeyVaultIntegrationScan AzureKeyVaultIntegrationScan
 
 // NewAzureKeyVaultIntegrationScan instantiates a new AzureKeyVaultIntegrationScan object
 // This constructor will assign default values to properties that have it defined,
@@ -80,6 +83,41 @@ func (o AzureKeyVaultIntegrationScan) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["resource"] = o.Resource.Get()
 	return toSerialize, nil
+}
+
+func (o *AzureKeyVaultIntegrationScan) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"resource",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAzureKeyVaultIntegrationScan := _AzureKeyVaultIntegrationScan{}
+
+	err = json.Unmarshal(bytes, &varAzureKeyVaultIntegrationScan)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AzureKeyVaultIntegrationScan(varAzureKeyVaultIntegrationScan)
+
+	return err
 }
 
 type NullableAzureKeyVaultIntegrationScan struct {

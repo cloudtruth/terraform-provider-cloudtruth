@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the AuditTrailSummary type satisfies the MappedNullable interface at compile time
@@ -30,6 +31,8 @@ type AuditTrailSummary struct {
 	// The total number of audit records available.
 	Total int32 `json:"total"`
 }
+
+type _AuditTrailSummary AuditTrailSummary
 
 // NewAuditTrailSummary instantiates a new AuditTrailSummary object
 // This constructor will assign default values to properties that have it defined,
@@ -165,6 +168,44 @@ func (o AuditTrailSummary) ToMap() (map[string]interface{}, error) {
 	toSerialize["max_records"] = o.MaxRecords
 	toSerialize["total"] = o.Total
 	return toSerialize, nil
+}
+
+func (o *AuditTrailSummary) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"earliest",
+		"max_days",
+		"max_records",
+		"total",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAuditTrailSummary := _AuditTrailSummary{}
+
+	err = json.Unmarshal(bytes, &varAuditTrailSummary)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AuditTrailSummary(varAuditTrailSummary)
+
+	return err
 }
 
 type NullableAuditTrailSummary struct {

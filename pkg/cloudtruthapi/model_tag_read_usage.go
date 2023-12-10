@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the TagReadUsage type satisfies the MappedNullable interface at compile time
@@ -28,6 +29,8 @@ type TagReadUsage struct {
 	// The number of times the tag has been used to read configuration.
 	TotalReads int32 `json:"total_reads"`
 }
+
+type _TagReadUsage TagReadUsage
 
 // NewTagReadUsage instantiates a new TagReadUsage object
 // This constructor will assign default values to properties that have it defined,
@@ -146,6 +149,42 @@ func (o TagReadUsage) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["total_reads"] = o.TotalReads
 	return toSerialize, nil
+}
+
+func (o *TagReadUsage) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"last_read",
+		"total_reads",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTagReadUsage := _TagReadUsage{}
+
+	err = json.Unmarshal(bytes, &varTagReadUsage)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TagReadUsage(varTagReadUsage)
+
+	return err
 }
 
 type NullableTagReadUsage struct {

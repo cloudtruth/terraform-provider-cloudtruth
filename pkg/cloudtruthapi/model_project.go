@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the Project type satisfies the MappedNullable interface at compile time
@@ -21,38 +22,45 @@ var _ MappedNullable = &Project{}
 
 // Project struct for Project
 type Project struct {
+	// The URL for the project.
 	Url string `json:"url"`
-	// A unique identifier for the project.
 	Id string `json:"id"`
+	LedgerId string `json:"ledger_id"`
 	// The project name.
 	Name string `json:"name"`
+	// A regular expression parameter names must match
+	ParameterNamePattern *string `json:"parameter_name_pattern,omitempty"`
 	// A description of the project.  You may find it helpful to document how this project is used to assist others when they need to maintain software that uses this content.
 	Description *string `json:"description,omitempty"`
 	// This is the opposite of `depends_on`, see that field for more details.
 	Dependents []string `json:"dependents"`
 	// Project dependencies allow projects to be used for shared configuration, for example a database used by many applications needs to advertise its port number.  Projects can depend on another project which will add the parameters from the parent project into the current project.  All of the parameter names between the two projects must be unique.  When retrieving values or rendering templates, all of the parameters from the parent project will also be available in the current project.
-	DependsOn NullableString `json:"depends_on,omitempty"`
+	DependsOn NullableString `json:"depends_on"`
 	// Indicates if access control is being enforced through grants.
 	AccessControlled *bool `json:"access_controlled,omitempty"`
 	Role NullableRoleEnum `json:"role"`
-	// Deprecated. Only shows pushes for aws integrations in /api/v1/.
-	Pushes []AwsPush `json:"pushes"`
-	// Push actions associated with the project.
+	// Deprecated. Blank.
+	Pushes []string `json:"pushes"`
+	// Deprecated. Blank.
 	PushUrls []string `json:"push_urls"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 }
+
+type _Project Project
 
 // NewProject instantiates a new Project object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProject(url string, id string, name string, dependents []string, role NullableRoleEnum, pushes []AwsPush, pushUrls []string, createdAt time.Time, modifiedAt time.Time) *Project {
+func NewProject(url string, id string, ledgerId string, name string, dependents []string, dependsOn NullableString, role NullableRoleEnum, pushes []string, pushUrls []string, createdAt time.Time, modifiedAt NullableTime) *Project {
 	this := Project{}
 	this.Url = url
 	this.Id = id
+	this.LedgerId = ledgerId
 	this.Name = name
 	this.Dependents = dependents
+	this.DependsOn = dependsOn
 	this.Role = role
 	this.Pushes = pushes
 	this.PushUrls = pushUrls
@@ -117,6 +125,30 @@ func (o *Project) SetId(v string) {
 	o.Id = v
 }
 
+// GetLedgerId returns the LedgerId field value
+func (o *Project) GetLedgerId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.LedgerId
+}
+
+// GetLedgerIdOk returns a tuple with the LedgerId field value
+// and a boolean to check if the value has been set.
+func (o *Project) GetLedgerIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.LedgerId, true
+}
+
+// SetLedgerId sets field value
+func (o *Project) SetLedgerId(v string) {
+	o.LedgerId = v
+}
+
 // GetName returns the Name field value
 func (o *Project) GetName() string {
 	if o == nil {
@@ -139,6 +171,38 @@ func (o *Project) GetNameOk() (*string, bool) {
 // SetName sets field value
 func (o *Project) SetName(v string) {
 	o.Name = v
+}
+
+// GetParameterNamePattern returns the ParameterNamePattern field value if set, zero value otherwise.
+func (o *Project) GetParameterNamePattern() string {
+	if o == nil || IsNil(o.ParameterNamePattern) {
+		var ret string
+		return ret
+	}
+	return *o.ParameterNamePattern
+}
+
+// GetParameterNamePatternOk returns a tuple with the ParameterNamePattern field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Project) GetParameterNamePatternOk() (*string, bool) {
+	if o == nil || IsNil(o.ParameterNamePattern) {
+		return nil, false
+	}
+	return o.ParameterNamePattern, true
+}
+
+// HasParameterNamePattern returns a boolean if a field has been set.
+func (o *Project) HasParameterNamePattern() bool {
+	if o != nil && !IsNil(o.ParameterNamePattern) {
+		return true
+	}
+
+	return false
+}
+
+// SetParameterNamePattern gets a reference to the given string and assigns it to the ParameterNamePattern field.
+func (o *Project) SetParameterNamePattern(v string) {
+	o.ParameterNamePattern = &v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
@@ -197,16 +261,18 @@ func (o *Project) SetDependents(v []string) {
 	o.Dependents = v
 }
 
-// GetDependsOn returns the DependsOn field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetDependsOn returns the DependsOn field value
+// If the value is explicit nil, the zero value for string will be returned
 func (o *Project) GetDependsOn() string {
-	if o == nil || IsNil(o.DependsOn.Get()) {
+	if o == nil || o.DependsOn.Get() == nil {
 		var ret string
 		return ret
 	}
+
 	return *o.DependsOn.Get()
 }
 
-// GetDependsOnOk returns a tuple with the DependsOn field value if set, nil otherwise
+// GetDependsOnOk returns a tuple with the DependsOn field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Project) GetDependsOnOk() (*string, bool) {
@@ -216,27 +282,9 @@ func (o *Project) GetDependsOnOk() (*string, bool) {
 	return o.DependsOn.Get(), o.DependsOn.IsSet()
 }
 
-// HasDependsOn returns a boolean if a field has been set.
-func (o *Project) HasDependsOn() bool {
-	if o != nil && o.DependsOn.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetDependsOn gets a reference to the given NullableString and assigns it to the DependsOn field.
+// SetDependsOn sets field value
 func (o *Project) SetDependsOn(v string) {
 	o.DependsOn.Set(&v)
-}
-// SetDependsOnNil sets the value for DependsOn to be an explicit nil
-func (o *Project) SetDependsOnNil() {
-	o.DependsOn.Set(nil)
-}
-
-// UnsetDependsOn ensures that no value is present for DependsOn, not even an explicit nil
-func (o *Project) UnsetDependsOn() {
-	o.DependsOn.Unset()
 }
 
 // GetAccessControlled returns the AccessControlled field value if set, zero value otherwise.
@@ -298,9 +346,9 @@ func (o *Project) SetRole(v RoleEnum) {
 }
 
 // GetPushes returns the Pushes field value
-func (o *Project) GetPushes() []AwsPush {
+func (o *Project) GetPushes() []string {
 	if o == nil {
-		var ret []AwsPush
+		var ret []string
 		return ret
 	}
 
@@ -309,7 +357,7 @@ func (o *Project) GetPushes() []AwsPush {
 
 // GetPushesOk returns a tuple with the Pushes field value
 // and a boolean to check if the value has been set.
-func (o *Project) GetPushesOk() ([]AwsPush, bool) {
+func (o *Project) GetPushesOk() ([]string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -317,7 +365,7 @@ func (o *Project) GetPushesOk() ([]AwsPush, bool) {
 }
 
 // SetPushes sets field value
-func (o *Project) SetPushes(v []AwsPush) {
+func (o *Project) SetPushes(v []string) {
 	o.Pushes = v
 }
 
@@ -370,27 +418,29 @@ func (o *Project) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *Project) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Project) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *Project) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 func (o Project) MarshalJSON() ([]byte, error) {
@@ -405,14 +455,16 @@ func (o Project) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["url"] = o.Url
 	toSerialize["id"] = o.Id
+	toSerialize["ledger_id"] = o.LedgerId
 	toSerialize["name"] = o.Name
+	if !IsNil(o.ParameterNamePattern) {
+		toSerialize["parameter_name_pattern"] = o.ParameterNamePattern
+	}
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["dependents"] = o.Dependents
-	if o.DependsOn.IsSet() {
-		toSerialize["depends_on"] = o.DependsOn.Get()
-	}
+	toSerialize["depends_on"] = o.DependsOn.Get()
 	if !IsNil(o.AccessControlled) {
 		toSerialize["access_controlled"] = o.AccessControlled
 	}
@@ -420,8 +472,53 @@ func (o Project) ToMap() (map[string]interface{}, error) {
 	toSerialize["pushes"] = o.Pushes
 	toSerialize["push_urls"] = o.PushUrls
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
+}
+
+func (o *Project) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"id",
+		"ledger_id",
+		"name",
+		"dependents",
+		"depends_on",
+		"role",
+		"pushes",
+		"push_urls",
+		"created_at",
+		"modified_at",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varProject := _Project{}
+
+	err = json.Unmarshal(bytes, &varProject)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Project(varProject)
+
+	return err
 }
 
 type NullableProject struct {

@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the Tag type satisfies the MappedNullable interface at compile time
@@ -21,6 +22,7 @@ var _ MappedNullable = &Tag{}
 
 // Tag The details of a tag.
 type Tag struct {
+	// The URL for the tag.
 	Url string `json:"url"`
 	// A unique identifier for the tag.
 	Id string `json:"id"`
@@ -30,12 +32,16 @@ type Tag struct {
 	Description *string `json:"description,omitempty"`
 	// The point in time this tag represents.
 	Timestamp time.Time `json:"timestamp"`
-	// Deprecated. Only shows pushes for aws integrations in /api/v1/.
+	// If True, this tag cannot be modified once it is created.
+	Immutable *bool `json:"immutable,omitempty"`
+	// Deprecated. Use `push_urls` instead.
 	Pushes []AwsPush `json:"pushes"`
 	// Push actions associated with the tag.
 	PushUrls []string `json:"push_urls"`
 	Usage TagReadUsage `json:"usage"`
 }
+
+type _Tag Tag
 
 // NewTag instantiates a new Tag object
 // This constructor will assign default values to properties that have it defined,
@@ -189,6 +195,38 @@ func (o *Tag) SetTimestamp(v time.Time) {
 	o.Timestamp = v
 }
 
+// GetImmutable returns the Immutable field value if set, zero value otherwise.
+func (o *Tag) GetImmutable() bool {
+	if o == nil || IsNil(o.Immutable) {
+		var ret bool
+		return ret
+	}
+	return *o.Immutable
+}
+
+// GetImmutableOk returns a tuple with the Immutable field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Tag) GetImmutableOk() (*bool, bool) {
+	if o == nil || IsNil(o.Immutable) {
+		return nil, false
+	}
+	return o.Immutable, true
+}
+
+// HasImmutable returns a boolean if a field has been set.
+func (o *Tag) HasImmutable() bool {
+	if o != nil && !IsNil(o.Immutable) {
+		return true
+	}
+
+	return false
+}
+
+// SetImmutable gets a reference to the given bool and assigns it to the Immutable field.
+func (o *Tag) SetImmutable(v bool) {
+	o.Immutable = &v
+}
+
 // GetPushes returns the Pushes field value
 func (o *Tag) GetPushes() []AwsPush {
 	if o == nil {
@@ -278,10 +316,54 @@ func (o Tag) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["timestamp"] = o.Timestamp
+	if !IsNil(o.Immutable) {
+		toSerialize["immutable"] = o.Immutable
+	}
 	toSerialize["pushes"] = o.Pushes
 	toSerialize["push_urls"] = o.PushUrls
 	toSerialize["usage"] = o.Usage
 	return toSerialize, nil
+}
+
+func (o *Tag) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"id",
+		"name",
+		"timestamp",
+		"pushes",
+		"push_urls",
+		"usage",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTag := _Tag{}
+
+	err = json.Unmarshal(bytes, &varTag)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Tag(varTag)
+
+	return err
 }
 
 type NullableTag struct {

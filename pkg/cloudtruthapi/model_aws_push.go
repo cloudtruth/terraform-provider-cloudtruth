@@ -14,6 +14,7 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 )
 
 // checks if the AwsPush type satisfies the MappedNullable interface at compile time
@@ -30,7 +31,7 @@ type AwsPush struct {
 	Description *string `json:"description,omitempty"`
 	LatestTask NullableAwsPushLatestTask `json:"latest_task"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 	// This setting allows parameters (non-secrets) to be pushed to a destination that only supports storing secrets.  This may increase your overall cost from the cloud provider as some cloud providers charge a premium for secrets-only storage.
 	CoerceParameters *bool `json:"coerce_parameters,omitempty"`
 	// Include parameters (non-secrets) in the values being pushed.  This setting requires the destination to support parameters or for the `coerce_parameters` flag to be enabled, otherwise the push will fail.
@@ -55,11 +56,13 @@ type AwsPush struct {
 	Resource NullableString `json:"resource"`
 }
 
+type _AwsPush AwsPush
+
 // NewAwsPush instantiates a new AwsPush object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAwsPush(url string, id string, name string, latestTask NullableAwsPushLatestTask, createdAt time.Time, modifiedAt time.Time, projects []string, tags []string, region AwsRegionEnum, service AwsServiceEnum, resource NullableString) *AwsPush {
+func NewAwsPush(url string, id string, name string, latestTask NullableAwsPushLatestTask, createdAt time.Time, modifiedAt NullableTime, projects []string, tags []string, region AwsRegionEnum, service AwsServiceEnum, resource NullableString) *AwsPush {
 	this := AwsPush{}
 	this.Url = url
 	this.Id = id
@@ -238,27 +241,29 @@ func (o *AwsPush) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *AwsPush) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *AwsPush) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *AwsPush) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 // GetCoerceParameters returns the CoerceParameters field value if set, zero value otherwise.
@@ -625,7 +630,7 @@ func (o AwsPush) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["latest_task"] = o.LatestTask.Get()
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	if !IsNil(o.CoerceParameters) {
 		toSerialize["coerce_parameters"] = o.CoerceParameters
 	}
@@ -653,6 +658,51 @@ func (o AwsPush) ToMap() (map[string]interface{}, error) {
 	toSerialize["service"] = o.Service
 	toSerialize["resource"] = o.Resource.Get()
 	return toSerialize, nil
+}
+
+func (o *AwsPush) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"url",
+		"id",
+		"name",
+		"latest_task",
+		"created_at",
+		"modified_at",
+		"projects",
+		"tags",
+		"region",
+		"service",
+		"resource",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varAwsPush := _AwsPush{}
+
+	err = json.Unmarshal(bytes, &varAwsPush)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AwsPush(varAwsPush)
+
+	return err
 }
 
 type NullableAwsPush struct {

@@ -13,6 +13,7 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the ParameterCreate type satisfies the MappedNullable interface at compile time
@@ -24,11 +25,13 @@ type ParameterCreate struct {
 	Name string `json:"name"`
 	// A description of the parameter.  You may find it helpful to document how this parameter is used to assist others when they need to maintain software that uses this content.
 	Description *string `json:"description,omitempty"`
-	// Indicates if this content is secret or not.  When a parameter is considered to be a secret, any internal values are stored in a dedicated vault for your organization for maximum security.  External values are inspected on-demand to ensure they align with the parameter's secret setting and if they do not, those external values are not allowed to be used.
+	// Indicates if this content is secret or not.  External values are inspected on-demand to ensure they align with the parameter's secret setting and if they do not, those external values are not allowed to be used.
 	Secret *bool `json:"secret,omitempty"`
-	// The type of this Parameter.
+	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.         
 	Type *string `json:"type,omitempty"`
 }
+
+type _ParameterCreate ParameterCreate
 
 // NewParameterCreate instantiates a new ParameterCreate object
 // This constructor will assign default values to properties that have it defined,
@@ -37,8 +40,6 @@ type ParameterCreate struct {
 func NewParameterCreate(name string) *ParameterCreate {
 	this := ParameterCreate{}
 	this.Name = name
-	var type_ string = "string"
-	this.Type = &type_
 	return &this
 }
 
@@ -47,8 +48,6 @@ func NewParameterCreate(name string) *ParameterCreate {
 // but it doesn't guarantee that properties required by API are set
 func NewParameterCreateWithDefaults() *ParameterCreate {
 	this := ParameterCreate{}
-	var type_ string = "string"
-	this.Type = &type_
 	return &this
 }
 
@@ -193,6 +192,41 @@ func (o ParameterCreate) ToMap() (map[string]interface{}, error) {
 		toSerialize["type"] = o.Type
 	}
 	return toSerialize, nil
+}
+
+func (o *ParameterCreate) UnmarshalJSON(bytes []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"name",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(bytes, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varParameterCreate := _ParameterCreate{}
+
+	err = json.Unmarshal(bytes, &varParameterCreate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ParameterCreate(varParameterCreate)
+
+	return err
 }
 
 type NullableParameterCreate struct {
