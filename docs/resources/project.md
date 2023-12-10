@@ -22,6 +22,7 @@ A CloudTruth project.
 ### Optional
 
 - `description` (String) Description of the project
+- `parameter_name_pattern` (String) A regular expression parameter names must match
 - `parent` (String) The parent CloudTruth project, defaults to no parent i.e. a top level project
 
 ### Read-Only
