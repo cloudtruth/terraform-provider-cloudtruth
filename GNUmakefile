@@ -86,7 +86,7 @@ pkg/cloudtruth/client.go: pkg/openapi.yml
         # These files are unecessary and break local imports
 	rm pkg/cloudtruthapi/go.mod pkg/cloudtruthapi/go.sum
         # These files are unecessary
-	rm -rf pkg/cloudtruthapi/test pkg/cloudtruthapi/docs pkg/cloudtruthapi/api pkg/cloudtruthapi/.openapi-generator
+	rm -rf pkg/cloudtruthapi/test pkg/cloudtruthapi/api pkg/cloudtruthapi/.openapi-generator pkg/cloudtruthapi/docs
 	rm pkg/cloudtruthapi/.travis.yml pkg/cloudtruthapi/git_push.sh pkg/cloudtruthapi/README.md
 
 pkg/openapi.yml: pkg
