@@ -22,6 +22,8 @@ var _ MappedNullable = &OrganizationCreate{}
 type OrganizationCreate struct {
 	// The organization name.
 	Name string `json:"name"`
+	// Multi-factor authentication for the organization
+	MfaEnabled *bool `json:"mfa_enabled,omitempty"`
 }
 
 // NewOrganizationCreate instantiates a new OrganizationCreate object
@@ -66,6 +68,38 @@ func (o *OrganizationCreate) SetName(v string) {
 	o.Name = v
 }
 
+// GetMfaEnabled returns the MfaEnabled field value if set, zero value otherwise.
+func (o *OrganizationCreate) GetMfaEnabled() bool {
+	if o == nil || IsNil(o.MfaEnabled) {
+		var ret bool
+		return ret
+	}
+	return *o.MfaEnabled
+}
+
+// GetMfaEnabledOk returns a tuple with the MfaEnabled field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *OrganizationCreate) GetMfaEnabledOk() (*bool, bool) {
+	if o == nil || IsNil(o.MfaEnabled) {
+		return nil, false
+	}
+	return o.MfaEnabled, true
+}
+
+// HasMfaEnabled returns a boolean if a field has been set.
+func (o *OrganizationCreate) HasMfaEnabled() bool {
+	if o != nil && !IsNil(o.MfaEnabled) {
+		return true
+	}
+
+	return false
+}
+
+// SetMfaEnabled gets a reference to the given bool and assigns it to the MfaEnabled field.
+func (o *OrganizationCreate) SetMfaEnabled(v bool) {
+	o.MfaEnabled = &v
+}
+
 func (o OrganizationCreate) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -77,6 +111,9 @@ func (o OrganizationCreate) MarshalJSON() ([]byte, error) {
 func (o OrganizationCreate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["name"] = o.Name
+	if !IsNil(o.MfaEnabled) {
+		toSerialize["mfa_enabled"] = o.MfaEnabled
+	}
 	return toSerialize, nil
 }
 

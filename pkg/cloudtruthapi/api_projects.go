@@ -25,6 +25,146 @@ import (
 // ProjectsAPIService ProjectsAPI service
 type ProjectsAPIService service
 
+type ApiProjectsCopyCreateRequest struct {
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectCopy *ProjectCopy
+}
+
+func (r ApiProjectsCopyCreateRequest) ProjectCopy(projectCopy ProjectCopy) ApiProjectsCopyCreateRequest {
+	r.projectCopy = &projectCopy
+	return r
+}
+
+func (r ApiProjectsCopyCreateRequest) Execute() (*Project, *http.Response, error) {
+	return r.ApiService.ProjectsCopyCreateExecute(r)
+}
+
+/*
+ProjectsCopyCreate Method for ProjectsCopyCreate
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiProjectsCopyCreateRequest
+*/
+func (a *ProjectsAPIService) ProjectsCopyCreate(ctx context.Context, id string) ApiProjectsCopyCreateRequest {
+	return ApiProjectsCopyCreateRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+// Execute executes the request
+//  @return Project
+func (a *ProjectsAPIService) ProjectsCopyCreateExecute(r ApiProjectsCopyCreateRequest) (*Project, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Project
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsCopyCreate")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v1/projects/{id}/copy/"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.projectCopy == nil {
+		return localVarReturnValue, nil, reportError("projectCopy is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.projectCopy
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["ApiKeyAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["Authorization"] = key
+			}
+		}
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["JWTAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["Authorization"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiProjectsCreateRequest struct {
 	ctx context.Context
 	ApiService *ProjectsAPIService
@@ -475,7 +615,6 @@ type ApiProjectsParameterExportListRequest struct {
 	output *string
 	startswith *string
 	tag *string
-	wrap *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -535,12 +674,6 @@ func (r ApiProjectsParameterExportListRequest) Startswith(startswith string) Api
 // Specify a tag to retrieve configuration from. Cannot be specified with &#x60;as_of&#x60;. Requires &#x60;environment&#x60;.
 func (r ApiProjectsParameterExportListRequest) Tag(tag string) ApiProjectsParameterExportListRequest {
 	r.tag = &tag
-	return r
-}
-
-// Indicates all secrets are wrapped. For more information on secret wrapping, see the documentation.
-func (r ApiProjectsParameterExportListRequest) Wrap(wrap bool) ApiProjectsParameterExportListRequest {
-	r.wrap = &wrap
 	return r
 }
 
@@ -623,9 +756,6 @@ func (a *ProjectsAPIService) ProjectsParameterExportListExecute(r ApiProjectsPar
 	if r.tag != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
-	if r.wrap != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
-	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -702,6 +832,150 @@ func (a *ProjectsAPIService) ProjectsParameterExportListExecute(r ApiProjectsPar
 			}
 					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
 					newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiProjectsParametersCopyCreateRequest struct {
+	ctx context.Context
+	ApiService *ProjectsAPIService
+	id string
+	projectPk string
+	parameterCopy *ParameterCopy
+}
+
+func (r ApiProjectsParametersCopyCreateRequest) ParameterCopy(parameterCopy ParameterCopy) ApiProjectsParametersCopyCreateRequest {
+	r.parameterCopy = &parameterCopy
+	return r
+}
+
+func (r ApiProjectsParametersCopyCreateRequest) Execute() (*Parameter, *http.Response, error) {
+	return r.ApiService.ProjectsParametersCopyCreateExecute(r)
+}
+
+/*
+ProjectsParametersCopyCreate Method for ProjectsParametersCopyCreate
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @param projectPk
+ @return ApiProjectsParametersCopyCreateRequest
+*/
+func (a *ProjectsAPIService) ProjectsParametersCopyCreate(ctx context.Context, id string, projectPk string) ApiProjectsParametersCopyCreateRequest {
+	return ApiProjectsParametersCopyCreateRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+		projectPk: projectPk,
+	}
+}
+
+// Execute executes the request
+//  @return Parameter
+func (a *ProjectsAPIService) ProjectsParametersCopyCreateExecute(r ApiProjectsParametersCopyCreateRequest) (*Parameter, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Parameter
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersCopyCreate")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v1/projects/{project_pk}/parameters/{id}/copy/"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project_pk"+"}", url.PathEscape(parameterValueToString(r.projectPk, "projectPk")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.parameterCopy == nil {
+		return localVarReturnValue, nil, reportError("parameterCopy is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.parameterCopy
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["ApiKeyAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["Authorization"] = key
+			}
+		}
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["JWTAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["Authorization"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -987,6 +1261,7 @@ type ApiProjectsParametersDualityListRequest struct {
 	difference *bool
 	environment *string
 	evaluate *bool
+	immediateParameters *bool
 	maskSecrets *bool
 	name *string
 	nameContains *string
@@ -1003,7 +1278,6 @@ type ApiProjectsParametersDualityListRequest struct {
 	t2AsOf *time.Time
 	t2Tag *string
 	values *bool
-	wrap *bool
 }
 
 // Compare the values at &#x60;t1&#x60; and &#x60;t2&#x60; and if they are the same, omit the parameter from the result.
@@ -1012,7 +1286,7 @@ func (r ApiProjectsParametersDualityListRequest) Difference(difference bool) Api
 	return r
 }
 
-// Name or id (uuid) of the environment to get parameter values for. Cannot be used with &#x60;values&#x60;.
+// Name or id (uuid) of the environment(s) to get parameter values for. Cannot be used with &#x60;values&#x60;.
 func (r ApiProjectsParametersDualityListRequest) Environment(environment string) ApiProjectsParametersDualityListRequest {
 	r.environment = &environment
 	return r
@@ -1021,6 +1295,12 @@ func (r ApiProjectsParametersDualityListRequest) Environment(environment string)
 // If &#x60;true&#x60;, runs template evaluation on this parameter&#39;s values.  If &#x60;false&#x60;, returns the value&#39;s template. Has no effect on values that are not interpolated.
 func (r ApiProjectsParametersDualityListRequest) Evaluate(evaluate bool) ApiProjectsParametersDualityListRequest {
 	r.evaluate = &evaluate
+	return r
+}
+
+// If true, filter by current project parameters only. Otherwise, include both of the inherited and current project parameters.
+func (r ApiProjectsParametersDualityListRequest) ImmediateParameters(immediateParameters bool) ApiProjectsParametersDualityListRequest {
+	r.immediateParameters = &immediateParameters
 	return r
 }
 
@@ -1113,12 +1393,6 @@ func (r ApiProjectsParametersDualityListRequest) Values(values bool) ApiProjects
 	return r
 }
 
-// Wrap secrets.
-func (r ApiProjectsParametersDualityListRequest) Wrap(wrap bool) ApiProjectsParametersDualityListRequest {
-	r.wrap = &wrap
-	return r
-}
-
 func (r ApiProjectsParametersDualityListRequest) Execute() (*PaginatedParameterDualityList, *http.Response, error) {
 	return r.ApiService.ProjectsParametersDualityListExecute(r)
 }
@@ -1179,6 +1453,9 @@ func (a *ProjectsAPIService) ProjectsParametersDualityListExecute(r ApiProjectsP
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
+	if r.immediateParameters != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "immediate_parameters", r.immediateParameters, "")
+	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
@@ -1226,9 +1503,6 @@ func (a *ProjectsAPIService) ProjectsParametersDualityListExecute(r ApiProjectsP
 	}
 	if r.values != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "values", r.values, "")
-	}
-	if r.wrap != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1321,7 +1595,7 @@ type ApiProjectsParametersListRequest struct {
 	difference *string
 	environment *string
 	evaluate *bool
-	idIn *[]string
+	immediateParameters *bool
 	maskSecrets *bool
 	name *string
 	nameContains *string
@@ -1332,16 +1606,9 @@ type ApiProjectsParametersListRequest struct {
 	ordering *string
 	page *int32
 	pageSize *int32
-	projectName *string
-	projectNameContains *string
-	projectNameIcontains *string
-	projectNameIexact *string
-	projectNameIstartswith *string
-	projectNameStartswith *string
 	secret *bool
 	tag *string
 	values *bool
-	wrap *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -1355,13 +1622,13 @@ func (r ApiProjectsParametersListRequest) DescriptionIcontains(descriptionIconta
 	return r
 }
 
-// Specify a list of comma-separated environment names or ids (uuid) to compare values. Only returns a parameter if there is a difference. Cannot be used with &#x60;environment&#x60;, &#x60;wrap&#x60; or &#x60;values&#x60;. If used with &#x60;mask_secrets&#x60; then no secret parameters will be included in the result.
+// Specify a list of comma-separated environment names or ids (uuid) to compare values. Only returns a parameter if there is a difference. Cannot be used with &#x60;environment&#x60; or &#x60;values&#x60;. If used with &#x60;mask_secrets&#x60; then no secret parameters will be included in the result.
 func (r ApiProjectsParametersListRequest) Difference(difference string) ApiProjectsParametersListRequest {
 	r.difference = &difference
 	return r
 }
 
-// Name or id (uuid) of the environment to get parameter values for. Cannot be used with &#x60;values&#x60;.
+// Name or id (uuid) of the environment(s) to get parameter values for. Cannot be used with &#x60;values&#x60;.
 func (r ApiProjectsParametersListRequest) Environment(environment string) ApiProjectsParametersListRequest {
 	r.environment = &environment
 	return r
@@ -1373,9 +1640,9 @@ func (r ApiProjectsParametersListRequest) Evaluate(evaluate bool) ApiProjectsPar
 	return r
 }
 
-// Multiple values may be separated by commas.
-func (r ApiProjectsParametersListRequest) IdIn(idIn []string) ApiProjectsParametersListRequest {
-	r.idIn = &idIn
+// If true, filter by current project parameters only. Otherwise, include both of the inherited and current project parameters.
+func (r ApiProjectsParametersListRequest) ImmediateParameters(immediateParameters bool) ApiProjectsParametersListRequest {
+	r.immediateParameters = &immediateParameters
 	return r
 }
 
@@ -1433,36 +1700,6 @@ func (r ApiProjectsParametersListRequest) PageSize(pageSize int32) ApiProjectsPa
 	return r
 }
 
-func (r ApiProjectsParametersListRequest) ProjectName(projectName string) ApiProjectsParametersListRequest {
-	r.projectName = &projectName
-	return r
-}
-
-func (r ApiProjectsParametersListRequest) ProjectNameContains(projectNameContains string) ApiProjectsParametersListRequest {
-	r.projectNameContains = &projectNameContains
-	return r
-}
-
-func (r ApiProjectsParametersListRequest) ProjectNameIcontains(projectNameIcontains string) ApiProjectsParametersListRequest {
-	r.projectNameIcontains = &projectNameIcontains
-	return r
-}
-
-func (r ApiProjectsParametersListRequest) ProjectNameIexact(projectNameIexact string) ApiProjectsParametersListRequest {
-	r.projectNameIexact = &projectNameIexact
-	return r
-}
-
-func (r ApiProjectsParametersListRequest) ProjectNameIstartswith(projectNameIstartswith string) ApiProjectsParametersListRequest {
-	r.projectNameIstartswith = &projectNameIstartswith
-	return r
-}
-
-func (r ApiProjectsParametersListRequest) ProjectNameStartswith(projectNameStartswith string) ApiProjectsParametersListRequest {
-	r.projectNameStartswith = &projectNameStartswith
-	return r
-}
-
 func (r ApiProjectsParametersListRequest) Secret(secret bool) ApiProjectsParametersListRequest {
 	r.secret = &secret
 	return r
@@ -1477,12 +1714,6 @@ func (r ApiProjectsParametersListRequest) Tag(tag string) ApiProjectsParametersL
 // If false, values are not returned: the &#x60;values&#x60; array will have no entries. This speeds up retrieval if value content is not needed. Cannot be used with &#x60;environment&#x60;.
 func (r ApiProjectsParametersListRequest) Values(values bool) ApiProjectsParametersListRequest {
 	r.values = &values
-	return r
-}
-
-// Wrap secrets.
-func (r ApiProjectsParametersListRequest) Wrap(wrap bool) ApiProjectsParametersListRequest {
-	r.wrap = &wrap
 	return r
 }
 
@@ -1542,8 +1773,8 @@ func (a *ProjectsAPIService) ProjectsParametersListExecute(r ApiProjectsParamete
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
-	if r.idIn != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "id__in", r.idIn, "csv")
+	if r.immediateParameters != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "immediate_parameters", r.immediateParameters, "")
 	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
@@ -1575,24 +1806,6 @@ func (a *ProjectsAPIService) ProjectsParametersListExecute(r ApiProjectsParamete
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
 	}
-	if r.projectName != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name", r.projectName, "")
-	}
-	if r.projectNameContains != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name__contains", r.projectNameContains, "")
-	}
-	if r.projectNameIcontains != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name__icontains", r.projectNameIcontains, "")
-	}
-	if r.projectNameIexact != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name__iexact", r.projectNameIexact, "")
-	}
-	if r.projectNameIstartswith != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name__istartswith", r.projectNameIstartswith, "")
-	}
-	if r.projectNameStartswith != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "project__name__startswith", r.projectNameStartswith, "")
-	}
 	if r.secret != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "secret", r.secret, "")
 	}
@@ -1601,9 +1814,6 @@ func (a *ProjectsAPIService) ProjectsParametersListExecute(r ApiProjectsParamete
 	}
 	if r.values != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "values", r.values, "")
-	}
-	if r.wrap != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1692,11 +1902,11 @@ type ApiProjectsParametersPartialUpdateRequest struct {
 	ApiService *ProjectsAPIService
 	id string
 	projectPk string
-	patchedParameter *PatchedParameter
+	patchedParameterUpdate *PatchedParameterUpdate
 }
 
-func (r ApiProjectsParametersPartialUpdateRequest) PatchedParameter(patchedParameter PatchedParameter) ApiProjectsParametersPartialUpdateRequest {
-	r.patchedParameter = &patchedParameter
+func (r ApiProjectsParametersPartialUpdateRequest) PatchedParameterUpdate(patchedParameterUpdate PatchedParameterUpdate) ApiProjectsParametersPartialUpdateRequest {
+	r.patchedParameterUpdate = &patchedParameterUpdate
 	return r
 }
 
@@ -1762,7 +1972,7 @@ func (a *ProjectsAPIService) ProjectsParametersPartialUpdateExecute(r ApiProject
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.patchedParameter
+	localVarPostBody = r.patchedParameterUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -2021,10 +2231,10 @@ type ApiProjectsParametersRetrieveRequest struct {
 	asOf *time.Time
 	environment *string
 	evaluate *bool
+	immediateParameters *bool
 	maskSecrets *bool
 	tag *string
 	values *bool
-	wrap *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -2033,7 +2243,7 @@ func (r ApiProjectsParametersRetrieveRequest) AsOf(asOf time.Time) ApiProjectsPa
 	return r
 }
 
-// Name or id (uuid) of the environment to get parameter values for. Cannot be used with &#x60;values&#x60;.
+// Name or id (uuid) of the environment(s) to get parameter values for. Cannot be used with &#x60;values&#x60;.
 func (r ApiProjectsParametersRetrieveRequest) Environment(environment string) ApiProjectsParametersRetrieveRequest {
 	r.environment = &environment
 	return r
@@ -2042,6 +2252,12 @@ func (r ApiProjectsParametersRetrieveRequest) Environment(environment string) Ap
 // If &#x60;true&#x60;, runs template evaluation on this parameter&#39;s values.  If &#x60;false&#x60;, returns the value&#39;s template. Has no effect on values that are not interpolated.
 func (r ApiProjectsParametersRetrieveRequest) Evaluate(evaluate bool) ApiProjectsParametersRetrieveRequest {
 	r.evaluate = &evaluate
+	return r
+}
+
+// If true, filter by current project parameters only. Otherwise, include both of the inherited and current project parameters.
+func (r ApiProjectsParametersRetrieveRequest) ImmediateParameters(immediateParameters bool) ApiProjectsParametersRetrieveRequest {
+	r.immediateParameters = &immediateParameters
 	return r
 }
 
@@ -2063,12 +2279,6 @@ func (r ApiProjectsParametersRetrieveRequest) Values(values bool) ApiProjectsPar
 	return r
 }
 
-// Wrap secrets.
-func (r ApiProjectsParametersRetrieveRequest) Wrap(wrap bool) ApiProjectsParametersRetrieveRequest {
-	r.wrap = &wrap
-	return r
-}
-
 func (r ApiProjectsParametersRetrieveRequest) Execute() (*Parameter, *http.Response, error) {
 	return r.ApiService.ProjectsParametersRetrieveExecute(r)
 }
@@ -2077,7 +2287,7 @@ func (r ApiProjectsParametersRetrieveRequest) Execute() (*Parameter, *http.Respo
 ProjectsParametersRetrieve Method for ProjectsParametersRetrieve
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
+ @param id A UUID string identifying this parameter ledger.
  @param projectPk
  @return ApiProjectsParametersRetrieveRequest
 */
@@ -2122,6 +2332,9 @@ func (a *ProjectsAPIService) ProjectsParametersRetrieveExecute(r ApiProjectsPara
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
+	if r.immediateParameters != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "immediate_parameters", r.immediateParameters, "")
+	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
 	}
@@ -2130,9 +2343,6 @@ func (a *ProjectsAPIService) ProjectsParametersRetrieveExecute(r ApiProjectsPara
 	}
 	if r.values != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "values", r.values, "")
-	}
-	if r.wrap != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -2664,15 +2874,15 @@ type ApiProjectsParametersRulesPartialUpdateRequest struct {
 	id string
 	parameterPk string
 	projectPk string
-	patchedParameterRule *PatchedParameterRule
+	patchedParameterRuleUpdate *PatchedParameterRuleUpdate
 }
 
-func (r ApiProjectsParametersRulesPartialUpdateRequest) PatchedParameterRule(patchedParameterRule PatchedParameterRule) ApiProjectsParametersRulesPartialUpdateRequest {
-	r.patchedParameterRule = &patchedParameterRule
+func (r ApiProjectsParametersRulesPartialUpdateRequest) PatchedParameterRuleUpdate(patchedParameterRuleUpdate PatchedParameterRuleUpdate) ApiProjectsParametersRulesPartialUpdateRequest {
+	r.patchedParameterRuleUpdate = &patchedParameterRuleUpdate
 	return r
 }
 
-func (r ApiProjectsParametersRulesPartialUpdateRequest) Execute() (*ParameterRule, *http.Response, error) {
+func (r ApiProjectsParametersRulesPartialUpdateRequest) Execute() (*ParameterRuleUpdate, *http.Response, error) {
 	return r.ApiService.ProjectsParametersRulesPartialUpdateExecute(r)
 }
 
@@ -2696,13 +2906,13 @@ func (a *ProjectsAPIService) ProjectsParametersRulesPartialUpdate(ctx context.Co
 }
 
 // Execute executes the request
-//  @return ParameterRule
-func (a *ProjectsAPIService) ProjectsParametersRulesPartialUpdateExecute(r ApiProjectsParametersRulesPartialUpdateRequest) (*ParameterRule, *http.Response, error) {
+//  @return ParameterRuleUpdate
+func (a *ProjectsAPIService) ProjectsParametersRulesPartialUpdateExecute(r ApiProjectsParametersRulesPartialUpdateRequest) (*ParameterRuleUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPatch
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ParameterRule
+		localVarReturnValue  *ParameterRuleUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesPartialUpdate")
@@ -2737,7 +2947,7 @@ func (a *ProjectsAPIService) ProjectsParametersRulesPartialUpdateExecute(r ApiPr
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.patchedParameterRule
+	localVarPostBody = r.patchedParameterRuleUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -2819,7 +3029,7 @@ func (r ApiProjectsParametersRulesRetrieveRequest) Execute() (*ParameterRule, *h
 ProjectsParametersRulesRetrieve Method for ProjectsParametersRulesRetrieve
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter rule.
+ @param id A UUID string identifying this parameter rule ledger.
  @param parameterPk The parameter id.
  @param projectPk The project id.
  @return ApiProjectsParametersRulesRetrieveRequest
@@ -2946,15 +3156,15 @@ type ApiProjectsParametersRulesUpdateRequest struct {
 	id string
 	parameterPk string
 	projectPk string
-	parameterRule *ParameterRule
+	parameterRuleUpdate *ParameterRuleUpdate
 }
 
-func (r ApiProjectsParametersRulesUpdateRequest) ParameterRule(parameterRule ParameterRule) ApiProjectsParametersRulesUpdateRequest {
-	r.parameterRule = &parameterRule
+func (r ApiProjectsParametersRulesUpdateRequest) ParameterRuleUpdate(parameterRuleUpdate ParameterRuleUpdate) ApiProjectsParametersRulesUpdateRequest {
+	r.parameterRuleUpdate = &parameterRuleUpdate
 	return r
 }
 
-func (r ApiProjectsParametersRulesUpdateRequest) Execute() (*ParameterRule, *http.Response, error) {
+func (r ApiProjectsParametersRulesUpdateRequest) Execute() (*ParameterRuleUpdate, *http.Response, error) {
 	return r.ApiService.ProjectsParametersRulesUpdateExecute(r)
 }
 
@@ -2978,13 +3188,13 @@ func (a *ProjectsAPIService) ProjectsParametersRulesUpdate(ctx context.Context, 
 }
 
 // Execute executes the request
-//  @return ParameterRule
-func (a *ProjectsAPIService) ProjectsParametersRulesUpdateExecute(r ApiProjectsParametersRulesUpdateRequest) (*ParameterRule, *http.Response, error) {
+//  @return ParameterRuleUpdate
+func (a *ProjectsAPIService) ProjectsParametersRulesUpdateExecute(r ApiProjectsParametersRulesUpdateRequest) (*ParameterRuleUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ParameterRule
+		localVarReturnValue  *ParameterRuleUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesUpdate")
@@ -3000,8 +3210,8 @@ func (a *ProjectsAPIService) ProjectsParametersRulesUpdateExecute(r ApiProjectsP
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.parameterRule == nil {
-		return localVarReturnValue, nil, reportError("parameterRule is required and must be specified")
+	if r.parameterRuleUpdate == nil {
+		return localVarReturnValue, nil, reportError("parameterRuleUpdate is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -3022,7 +3232,7 @@ func (a *ProjectsAPIService) ProjectsParametersRulesUpdateExecute(r ApiProjectsP
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.parameterRule
+	localVarPostBody = r.parameterRuleUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -3122,7 +3332,7 @@ The time range of historical information available depends on your subscription.
 Any changes to the parameter itself, including rules and values, is included.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
+ @param id A UUID string identifying this parameter ledger.
  @param projectPk
  @return ApiProjectsParametersTimelineRetrieveRequest
 */
@@ -3405,11 +3615,11 @@ type ApiProjectsParametersUpdateRequest struct {
 	ApiService *ProjectsAPIService
 	id string
 	projectPk string
-	parameter *Parameter
+	parameterUpdate *ParameterUpdate
 }
 
-func (r ApiProjectsParametersUpdateRequest) Parameter(parameter Parameter) ApiProjectsParametersUpdateRequest {
-	r.parameter = &parameter
+func (r ApiProjectsParametersUpdateRequest) ParameterUpdate(parameterUpdate ParameterUpdate) ApiProjectsParametersUpdateRequest {
+	r.parameterUpdate = &parameterUpdate
 	return r
 }
 
@@ -3456,8 +3666,8 @@ func (a *ProjectsAPIService) ProjectsParametersUpdateExecute(r ApiProjectsParame
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.parameter == nil {
-		return localVarReturnValue, nil, reportError("parameter is required and must be specified")
+	if r.parameterUpdate == nil {
+		return localVarReturnValue, nil, reportError("parameterUpdate is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -3478,7 +3688,7 @@ func (a *ProjectsAPIService) ProjectsParametersUpdateExecute(r ApiProjectsParame
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.parameter
+	localVarPostBody = r.parameterUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -3550,8 +3760,8 @@ type ApiProjectsParametersValuesCreateRequest struct {
 	parameterPk string
 	projectPk string
 	valueCreate *ValueCreate
+	environment *string
 	evaluate *bool
-	wrap *bool
 }
 
 func (r ApiProjectsParametersValuesCreateRequest) ValueCreate(valueCreate ValueCreate) ApiProjectsParametersValuesCreateRequest {
@@ -3559,15 +3769,15 @@ func (r ApiProjectsParametersValuesCreateRequest) ValueCreate(valueCreate ValueC
 	return r
 }
 
-// If &#x60;true&#x60;, runs template evaluation on this parameter.  If &#x60;false&#x60;, returns the value&#39;s template. No effect on values that are not interpolated.
-func (r ApiProjectsParametersValuesCreateRequest) Evaluate(evaluate bool) ApiProjectsParametersValuesCreateRequest {
-	r.evaluate = &evaluate
+// When fetching a single value, if that value is dynamic and evaluate is true, uses this environment for template evaluation.  If none is specified, uses the value&#39;s environment.  Note that the value must be active in the specified environment. No effect on values that are not dynamic.
+func (r ApiProjectsParametersValuesCreateRequest) Environment(environment string) ApiProjectsParametersValuesCreateRequest {
+	r.environment = &environment
 	return r
 }
 
-// Indicates the &#x60;internal_value&#x60; is a wrapped secret. For more information on secret wrapping, see the documentation. 
-func (r ApiProjectsParametersValuesCreateRequest) Wrap(wrap bool) ApiProjectsParametersValuesCreateRequest {
-	r.wrap = &wrap
+// If &#x60;true&#x60;, runs template evaluation on this parameter.  If &#x60;false&#x60;, returns the value&#39;s template. No effect on values that are not interpolated.
+func (r ApiProjectsParametersValuesCreateRequest) Evaluate(evaluate bool) ApiProjectsParametersValuesCreateRequest {
+	r.evaluate = &evaluate
 	return r
 }
 
@@ -3620,11 +3830,11 @@ func (a *ProjectsAPIService) ProjectsParametersValuesCreateExecute(r ApiProjects
 		return localVarReturnValue, nil, reportError("valueCreate is required and must be specified")
 	}
 
+	if r.environment != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
+	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	}
-	if r.wrap != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -3716,7 +3926,14 @@ type ApiProjectsParametersValuesDestroyRequest struct {
 	id string
 	parameterPk string
 	projectPk string
+	environment *string
 	evaluate *bool
+}
+
+// When fetching a single value, if that value is dynamic and evaluate is true, uses this environment for template evaluation.  If none is specified, uses the value&#39;s environment.  Note that the value must be active in the specified environment. No effect on values that are not dynamic.
+func (r ApiProjectsParametersValuesDestroyRequest) Environment(environment string) ApiProjectsParametersValuesDestroyRequest {
+	r.environment = &environment
+	return r
 }
 
 // If &#x60;true&#x60;, runs template evaluation on this parameter.  If &#x60;false&#x60;, returns the value&#39;s template. No effect on values that are not interpolated.
@@ -3772,6 +3989,9 @@ func (a *ProjectsAPIService) ProjectsParametersValuesDestroyExecute(r ApiProject
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.environment != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
+	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
@@ -3862,7 +4082,6 @@ type ApiProjectsParametersValuesListRequest struct {
 	page *int32
 	pageSize *int32
 	tag *string
-	wrap *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -3871,7 +4090,7 @@ func (r ApiProjectsParametersValuesListRequest) AsOf(asOf time.Time) ApiProjects
 	return r
 }
 
-// Name or id of the environment to limit the result to. If this is not specified then the result will contain a value for any environment in which it is set. You cannot use this option to retrieve the _effective_ value of a parameter in an environment for which is is not explicitly set. To see _effective_ values use the Parameters API (see the &#x60;values&#x60; field).
+// When fetching a single value, if that value is dynamic and evaluate is true, uses this environment for template evaluation.  If none is specified, uses the value&#39;s environment.  Note that the value must be active in the specified environment. No effect on values that are not dynamic.
 func (r ApiProjectsParametersValuesListRequest) Environment(environment string) ApiProjectsParametersValuesListRequest {
 	r.environment = &environment
 	return r
@@ -3916,12 +4135,6 @@ func (r ApiProjectsParametersValuesListRequest) PageSize(pageSize int32) ApiProj
 // Specify a tag to retrieve configuration from. Cannot be specified with &#x60;as_of&#x60;. Requires &#x60;environment&#x60;.
 func (r ApiProjectsParametersValuesListRequest) Tag(tag string) ApiProjectsParametersValuesListRequest {
 	r.tag = &tag
-	return r
-}
-
-// For writes, indicates &#x60;internal_value&#x60; is wrapped; for reads, indicates &#x60;value&#x60; is wrapped. For more information on secret wrapping, see the documentation. 
-func (r ApiProjectsParametersValuesListRequest) Wrap(wrap bool) ApiProjectsParametersValuesListRequest {
-	r.wrap = &wrap
 	return r
 }
 
@@ -4001,9 +4214,6 @@ func (a *ProjectsAPIService) ProjectsParametersValuesListExecute(r ApiProjectsPa
 	}
 	if r.tag != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
-	}
-	if r.wrap != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -4093,9 +4303,15 @@ type ApiProjectsParametersValuesPartialUpdateRequest struct {
 	id string
 	parameterPk string
 	projectPk string
+	environment *string
 	evaluate *bool
-	wrap *bool
-	patchedValue *PatchedValue
+	patchedValueUpdate *PatchedValueUpdate
+}
+
+// When fetching a single value, if that value is dynamic and evaluate is true, uses this environment for template evaluation.  If none is specified, uses the value&#39;s environment.  Note that the value must be active in the specified environment. No effect on values that are not dynamic.
+func (r ApiProjectsParametersValuesPartialUpdateRequest) Environment(environment string) ApiProjectsParametersValuesPartialUpdateRequest {
+	r.environment = &environment
+	return r
 }
 
 // If &#x60;true&#x60;, runs template evaluation on this parameter.  If &#x60;false&#x60;, returns the value&#39;s template. No effect on values that are not interpolated.
@@ -4104,18 +4320,12 @@ func (r ApiProjectsParametersValuesPartialUpdateRequest) Evaluate(evaluate bool)
 	return r
 }
 
-// Indicates the &#x60;internal_value&#x60; is a wrapped secret. For more information on secret wrapping, see the documentation. 
-func (r ApiProjectsParametersValuesPartialUpdateRequest) Wrap(wrap bool) ApiProjectsParametersValuesPartialUpdateRequest {
-	r.wrap = &wrap
+func (r ApiProjectsParametersValuesPartialUpdateRequest) PatchedValueUpdate(patchedValueUpdate PatchedValueUpdate) ApiProjectsParametersValuesPartialUpdateRequest {
+	r.patchedValueUpdate = &patchedValueUpdate
 	return r
 }
 
-func (r ApiProjectsParametersValuesPartialUpdateRequest) PatchedValue(patchedValue PatchedValue) ApiProjectsParametersValuesPartialUpdateRequest {
-	r.patchedValue = &patchedValue
-	return r
-}
-
-func (r ApiProjectsParametersValuesPartialUpdateRequest) Execute() (*Value, *http.Response, error) {
+func (r ApiProjectsParametersValuesPartialUpdateRequest) Execute() (*ValueUpdate, *http.Response, error) {
 	return r.ApiService.ProjectsParametersValuesPartialUpdateExecute(r)
 }
 
@@ -4141,13 +4351,13 @@ func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdate(ctx context.C
 }
 
 // Execute executes the request
-//  @return Value
-func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdateExecute(r ApiProjectsParametersValuesPartialUpdateRequest) (*Value, *http.Response, error) {
+//  @return ValueUpdate
+func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdateExecute(r ApiProjectsParametersValuesPartialUpdateRequest) (*ValueUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPatch
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *Value
+		localVarReturnValue  *ValueUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesPartialUpdate")
@@ -4164,11 +4374,11 @@ func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdateExecute(r ApiP
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.environment != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
+	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	}
-	if r.wrap != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -4188,7 +4398,7 @@ func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdateExecute(r ApiP
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.patchedValue
+	localVarPostBody = r.patchedValueUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -4261,17 +4471,23 @@ type ApiProjectsParametersValuesRetrieveRequest struct {
 	parameterPk string
 	projectPk string
 	asOf *time.Time
+	environment *string
 	evaluate *bool
 	exclude *string
 	include *string
 	maskSecrets *bool
 	tag *string
-	wrap *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
 func (r ApiProjectsParametersValuesRetrieveRequest) AsOf(asOf time.Time) ApiProjectsParametersValuesRetrieveRequest {
 	r.asOf = &asOf
+	return r
+}
+
+// When fetching a single value, if that value is dynamic and evaluate is true, uses this environment for template evaluation.  If none is specified, uses the value&#39;s environment.  Note that the value must be active in the specified environment. No effect on values that are not dynamic.
+func (r ApiProjectsParametersValuesRetrieveRequest) Environment(environment string) ApiProjectsParametersValuesRetrieveRequest {
+	r.environment = &environment
 	return r
 }
 
@@ -4305,12 +4521,6 @@ func (r ApiProjectsParametersValuesRetrieveRequest) Tag(tag string) ApiProjectsP
 	return r
 }
 
-// For writes, indicates &#x60;internal_value&#x60; is wrapped; for reads, indicates &#x60;value&#x60; is wrapped. For more information on secret wrapping, see the documentation. 
-func (r ApiProjectsParametersValuesRetrieveRequest) Wrap(wrap bool) ApiProjectsParametersValuesRetrieveRequest {
-	r.wrap = &wrap
-	return r
-}
-
 func (r ApiProjectsParametersValuesRetrieveRequest) Execute() (*Value, *http.Response, error) {
 	return r.ApiService.ProjectsParametersValuesRetrieveExecute(r)
 }
@@ -4321,7 +4531,7 @@ ProjectsParametersValuesRetrieve Retrieve a value.
 Retrieve the value of a parameter in an environment.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
+ @param id A UUID string identifying this value ledger.
  @param parameterPk The parameter id.
  @param projectPk The project id.
  @return ApiProjectsParametersValuesRetrieveRequest
@@ -4363,6 +4573,9 @@ func (a *ProjectsAPIService) ProjectsParametersValuesRetrieveExecute(r ApiProjec
 	if r.asOf != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "as_of", r.asOf, "")
 	}
+	if r.environment != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
+	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
 	}
@@ -4377,9 +4590,6 @@ func (a *ProjectsAPIService) ProjectsParametersValuesRetrieveExecute(r ApiProjec
 	}
 	if r.tag != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
-	}
-	if r.wrap != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -4469,9 +4679,15 @@ type ApiProjectsParametersValuesUpdateRequest struct {
 	id string
 	parameterPk string
 	projectPk string
+	environment *string
 	evaluate *bool
-	wrap *bool
-	value *Value
+	valueUpdate *ValueUpdate
+}
+
+// When fetching a single value, if that value is dynamic and evaluate is true, uses this environment for template evaluation.  If none is specified, uses the value&#39;s environment.  Note that the value must be active in the specified environment. No effect on values that are not dynamic.
+func (r ApiProjectsParametersValuesUpdateRequest) Environment(environment string) ApiProjectsParametersValuesUpdateRequest {
+	r.environment = &environment
+	return r
 }
 
 // If &#x60;true&#x60;, runs template evaluation on this parameter.  If &#x60;false&#x60;, returns the value&#39;s template. No effect on values that are not interpolated.
@@ -4480,18 +4696,12 @@ func (r ApiProjectsParametersValuesUpdateRequest) Evaluate(evaluate bool) ApiPro
 	return r
 }
 
-// Indicates the &#x60;internal_value&#x60; is a wrapped secret. For more information on secret wrapping, see the documentation. 
-func (r ApiProjectsParametersValuesUpdateRequest) Wrap(wrap bool) ApiProjectsParametersValuesUpdateRequest {
-	r.wrap = &wrap
+func (r ApiProjectsParametersValuesUpdateRequest) ValueUpdate(valueUpdate ValueUpdate) ApiProjectsParametersValuesUpdateRequest {
+	r.valueUpdate = &valueUpdate
 	return r
 }
 
-func (r ApiProjectsParametersValuesUpdateRequest) Value(value Value) ApiProjectsParametersValuesUpdateRequest {
-	r.value = &value
-	return r
-}
-
-func (r ApiProjectsParametersValuesUpdateRequest) Execute() (*Value, *http.Response, error) {
+func (r ApiProjectsParametersValuesUpdateRequest) Execute() (*ValueUpdate, *http.Response, error) {
 	return r.ApiService.ProjectsParametersValuesUpdateExecute(r)
 }
 
@@ -4517,13 +4727,13 @@ func (a *ProjectsAPIService) ProjectsParametersValuesUpdate(ctx context.Context,
 }
 
 // Execute executes the request
-//  @return Value
-func (a *ProjectsAPIService) ProjectsParametersValuesUpdateExecute(r ApiProjectsParametersValuesUpdateRequest) (*Value, *http.Response, error) {
+//  @return ValueUpdate
+func (a *ProjectsAPIService) ProjectsParametersValuesUpdateExecute(r ApiProjectsParametersValuesUpdateRequest) (*ValueUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *Value
+		localVarReturnValue  *ValueUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesUpdate")
@@ -4540,11 +4750,11 @@ func (a *ProjectsAPIService) ProjectsParametersValuesUpdateExecute(r ApiProjects
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.environment != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "environment", r.environment, "")
+	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	}
-	if r.wrap != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "wrap", r.wrap, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -4564,7 +4774,7 @@ func (a *ProjectsAPIService) ProjectsParametersValuesUpdateExecute(r ApiProjects
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.value
+	localVarPostBody = r.valueUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -4634,15 +4844,15 @@ type ApiProjectsPartialUpdateRequest struct {
 	ctx context.Context
 	ApiService *ProjectsAPIService
 	id string
-	patchedProject *PatchedProject
+	patchedProjectUpdate *PatchedProjectUpdate
 }
 
-func (r ApiProjectsPartialUpdateRequest) PatchedProject(patchedProject PatchedProject) ApiProjectsPartialUpdateRequest {
-	r.patchedProject = &patchedProject
+func (r ApiProjectsPartialUpdateRequest) PatchedProjectUpdate(patchedProjectUpdate PatchedProjectUpdate) ApiProjectsPartialUpdateRequest {
+	r.patchedProjectUpdate = &patchedProjectUpdate
 	return r
 }
 
-func (r ApiProjectsPartialUpdateRequest) Execute() (*Project, *http.Response, error) {
+func (r ApiProjectsPartialUpdateRequest) Execute() (*ProjectUpdate, *http.Response, error) {
 	return r.ApiService.ProjectsPartialUpdateExecute(r)
 }
 
@@ -4662,13 +4872,13 @@ func (a *ProjectsAPIService) ProjectsPartialUpdate(ctx context.Context, id strin
 }
 
 // Execute executes the request
-//  @return Project
-func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUpdateRequest) (*Project, *http.Response, error) {
+//  @return ProjectUpdate
+func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUpdateRequest) (*ProjectUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPatch
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *Project
+		localVarReturnValue  *ProjectUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsPartialUpdate")
@@ -4701,7 +4911,7 @@ func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUp
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.patchedProject
+	localVarPostBody = r.patchedProjectUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -4781,7 +4991,7 @@ func (r ApiProjectsRetrieveRequest) Execute() (*Project, *http.Response, error) 
 ProjectsRetrieve Method for ProjectsRetrieve
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
+ @param id A UUID string identifying this project ledger.
  @return ApiProjectsRetrieveRequest
 */
 func (a *ProjectsAPIService) ProjectsRetrieve(ctx context.Context, id string) ApiProjectsRetrieveRequest {
@@ -5603,11 +5813,11 @@ type ApiProjectsTemplatesPartialUpdateRequest struct {
 	ApiService *ProjectsAPIService
 	id string
 	projectPk string
-	patchedTemplate *PatchedTemplate
+	patchedTemplateUpdate *PatchedTemplateUpdate
 }
 
-func (r ApiProjectsTemplatesPartialUpdateRequest) PatchedTemplate(patchedTemplate PatchedTemplate) ApiProjectsTemplatesPartialUpdateRequest {
-	r.patchedTemplate = &patchedTemplate
+func (r ApiProjectsTemplatesPartialUpdateRequest) PatchedTemplateUpdate(patchedTemplateUpdate PatchedTemplateUpdate) ApiProjectsTemplatesPartialUpdateRequest {
+	r.patchedTemplateUpdate = &patchedTemplateUpdate
 	return r
 }
 
@@ -5673,7 +5883,7 @@ func (a *ProjectsAPIService) ProjectsTemplatesPartialUpdateExecute(r ApiProjects
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.patchedTemplate
+	localVarPostBody = r.patchedTemplateUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -5799,7 +6009,7 @@ func (r ApiProjectsTemplatesRetrieveRequest) Execute() (*Template, *http.Respons
 ProjectsTemplatesRetrieve Method for ProjectsTemplatesRetrieve
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
+ @param id A UUID string identifying this parameter ledger.
  @param projectPk
  @return ApiProjectsTemplatesRetrieveRequest
 */
@@ -5983,7 +6193,7 @@ The time range of historical information available depends on your subscription.
 Any changes to the template itself is included.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
+ @param id A UUID string identifying this parameter ledger.
  @param projectPk
  @return ApiProjectsTemplatesTimelineRetrieveRequest
 */
@@ -6279,11 +6489,11 @@ type ApiProjectsTemplatesUpdateRequest struct {
 	ApiService *ProjectsAPIService
 	id string
 	projectPk string
-	template *Template
+	templateUpdate *TemplateUpdate
 }
 
-func (r ApiProjectsTemplatesUpdateRequest) Template(template Template) ApiProjectsTemplatesUpdateRequest {
-	r.template = &template
+func (r ApiProjectsTemplatesUpdateRequest) TemplateUpdate(templateUpdate TemplateUpdate) ApiProjectsTemplatesUpdateRequest {
+	r.templateUpdate = &templateUpdate
 	return r
 }
 
@@ -6330,8 +6540,8 @@ func (a *ProjectsAPIService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplat
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.template == nil {
-		return localVarReturnValue, nil, reportError("template is required and must be specified")
+	if r.templateUpdate == nil {
+		return localVarReturnValue, nil, reportError("templateUpdate is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -6352,7 +6562,7 @@ func (a *ProjectsAPIService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplat
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.template
+	localVarPostBody = r.templateUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -6432,15 +6642,15 @@ type ApiProjectsUpdateRequest struct {
 	ctx context.Context
 	ApiService *ProjectsAPIService
 	id string
-	project *Project
+	projectUpdate *ProjectUpdate
 }
 
-func (r ApiProjectsUpdateRequest) Project(project Project) ApiProjectsUpdateRequest {
-	r.project = &project
+func (r ApiProjectsUpdateRequest) ProjectUpdate(projectUpdate ProjectUpdate) ApiProjectsUpdateRequest {
+	r.projectUpdate = &projectUpdate
 	return r
 }
 
-func (r ApiProjectsUpdateRequest) Execute() (*Project, *http.Response, error) {
+func (r ApiProjectsUpdateRequest) Execute() (*ProjectUpdate, *http.Response, error) {
 	return r.ApiService.ProjectsUpdateExecute(r)
 }
 
@@ -6460,13 +6670,13 @@ func (a *ProjectsAPIService) ProjectsUpdate(ctx context.Context, id string) ApiP
 }
 
 // Execute executes the request
-//  @return Project
-func (a *ProjectsAPIService) ProjectsUpdateExecute(r ApiProjectsUpdateRequest) (*Project, *http.Response, error) {
+//  @return ProjectUpdate
+func (a *ProjectsAPIService) ProjectsUpdateExecute(r ApiProjectsUpdateRequest) (*ProjectUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *Project
+		localVarReturnValue  *ProjectUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsUpdate")
@@ -6480,8 +6690,8 @@ func (a *ProjectsAPIService) ProjectsUpdateExecute(r ApiProjectsUpdateRequest) (
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.project == nil {
-		return localVarReturnValue, nil, reportError("project is required and must be specified")
+	if r.projectUpdate == nil {
+		return localVarReturnValue, nil, reportError("projectUpdate is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -6502,7 +6712,7 @@ func (a *ProjectsAPIService) ProjectsUpdateExecute(r ApiProjectsUpdateRequest) (
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.project
+	localVarPostBody = r.projectUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

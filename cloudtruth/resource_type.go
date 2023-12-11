@@ -85,15 +85,14 @@ func resourceTypeCreate(ctx context.Context, d *schema.ResourceData, meta any) d
 	defer tflog.Debug(ctx, "exiting resourceTypeCreate")
 	c := meta.(*cloudTruthClient)
 	typeName := d.Get("name").(string)
-	typeCreate := cloudtruthapi.NewParameterTypeCreate(typeName)
+	// concreteType is the underlying type (builtin or custom) of the cloudtruth_type resource
+	concreteType := c.lookupType(ctx, d.Get("type").(string))
+	baseParamType := getBaseParamType(ctx, concreteType, c)
+	typeCreate := cloudtruthapi.NewParameterTypeCreate(typeName, baseParamType)
 	typeDesc := d.Get("description").(string)
 	if typeDesc != "" {
 		typeCreate.SetDescription(typeDesc)
 	}
-	// concreteType is the underlying type (builtin or custom) of the cloudtruth_type resource
-	concreteType := c.lookupType(ctx, d.Get("type").(string))
-	baseParamType := getBaseParamType(ctx, concreteType, c)
-
 	var rules map[string]any
 	var err error
 	if rules, err = validateAndFetchRules(ctx, c, d, concreteType); err != nil {
@@ -282,14 +281,14 @@ func updateTypeRule(ctx context.Context, paramID, ruleName, ruleID, baseParamTyp
 	if err != nil {
 		return nil, err
 	}
-	paramTypeRule := cloudtruthapi.NewParameterTypeRuleWithDefaults()
+	paramTypeRule := cloudtruthapi.NewParameterTypeRuleUpdateWithDefaults()
 	paramTypeRule.SetId(ruleID)
 	paramTypeRule.SetConstraint(ruleVal)
 	paramTypeRule.SetType(*ruleType)
 
 	var r *http.Response
 	for retryCount < ruleOperationRetries {
-		ruleUpdateRequest = c.openAPIClient.TypesAPI.TypesRulesUpdate(ctx, ruleID, paramID).ParameterTypeRule(*paramTypeRule)
+		ruleUpdateRequest = c.openAPIClient.TypesAPI.TypesRulesUpdate(ctx, ruleID, paramID).ParameterTypeRuleUpdate(*paramTypeRule)
 		_, r, err = ruleUpdateRequest.Execute()
 		if r.StatusCode >= 500 {
 			tflog.Debug(ctx, fmt.Sprintf("updateTypeRule: error updating rule %s: %+v", ruleName, err))
@@ -338,7 +337,7 @@ func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) d
 	c := meta.(*cloudTruthClient)
 	typeName := d.Get("name").(string)
 	hasChange := false
-	patchedTypeUpdate := cloudtruthapi.NewPatchedParameterType()
+	patchedTypeUpdate := cloudtruthapi.NewPatchedParameterTypeUpdate()
 	if d.HasChange("description") {
 		typeDesc := d.Get("description").(string)
 		patchedTypeUpdate.SetDescription(typeDesc)
@@ -350,7 +349,7 @@ func resourceTypeUpdate(ctx context.Context, d *schema.ResourceData, meta any) d
 		retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutUpdate), func() *retry.RetryError {
 			var r *http.Response
 			var err error
-			_, r, err = c.openAPIClient.TypesAPI.TypesPartialUpdate(ctx, typeID).PatchedParameterType(*patchedTypeUpdate).Execute()
+			_, r, err = c.openAPIClient.TypesAPI.TypesPartialUpdate(ctx, typeID).PatchedParameterTypeUpdate(*patchedTypeUpdate).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceTypeUpdate: error updating type %s", typeName), r, err)
 			}

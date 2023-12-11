@@ -24,17 +24,18 @@ type ParameterTypeCreate struct {
 	Name string `json:"name"`
 	// A description of the parameter type, provide documentation on how to use this type here.
 	Description *string `json:"description,omitempty"`
-	// All types must derive, either directly or indirectly, from one of the CloudTruth built-in types.   This is the ParameterType that this type is derived from.
-	Parent NullableString `json:"parent,omitempty"`
+	// The URL for this parameter type's parent
+	Parent string `json:"parent"`
 }
 
 // NewParameterTypeCreate instantiates a new ParameterTypeCreate object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewParameterTypeCreate(name string) *ParameterTypeCreate {
+func NewParameterTypeCreate(name string, parent string) *ParameterTypeCreate {
 	this := ParameterTypeCreate{}
 	this.Name = name
+	this.Parent = parent
 	return &this
 }
 
@@ -102,46 +103,28 @@ func (o *ParameterTypeCreate) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetParent returns the Parent field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetParent returns the Parent field value
 func (o *ParameterTypeCreate) GetParent() string {
-	if o == nil || IsNil(o.Parent.Get()) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Parent.Get()
+
+	return o.Parent
 }
 
-// GetParentOk returns a tuple with the Parent field value if set, nil otherwise
+// GetParentOk returns a tuple with the Parent field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ParameterTypeCreate) GetParentOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Parent.Get(), o.Parent.IsSet()
+	return &o.Parent, true
 }
 
-// HasParent returns a boolean if a field has been set.
-func (o *ParameterTypeCreate) HasParent() bool {
-	if o != nil && o.Parent.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetParent gets a reference to the given NullableString and assigns it to the Parent field.
+// SetParent sets field value
 func (o *ParameterTypeCreate) SetParent(v string) {
-	o.Parent.Set(&v)
-}
-// SetParentNil sets the value for Parent to be an explicit nil
-func (o *ParameterTypeCreate) SetParentNil() {
-	o.Parent.Set(nil)
-}
-
-// UnsetParent ensures that no value is present for Parent, not even an explicit nil
-func (o *ParameterTypeCreate) UnsetParent() {
-	o.Parent.Unset()
+	o.Parent = v
 }
 
 func (o ParameterTypeCreate) MarshalJSON() ([]byte, error) {
@@ -158,9 +141,7 @@ func (o ParameterTypeCreate) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.Parent.IsSet() {
-		toSerialize["parent"] = o.Parent.Get()
-	}
+	toSerialize["parent"] = o.Parent
 	return toSerialize, nil
 }
 

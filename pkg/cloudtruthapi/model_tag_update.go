@@ -29,6 +29,8 @@ type TagUpdate struct {
 	Description *string `json:"description,omitempty"`
 	// The point in time this tag represents.  If explicitly set to `null` then the current time will be used.
 	Timestamp NullableTime `json:"timestamp,omitempty"`
+	// If True, this tag cannot be modified once it is created.
+	Immutable *bool `json:"immutable,omitempty"`
 }
 
 // NewTagUpdate instantiates a new TagUpdate object
@@ -172,6 +174,38 @@ func (o *TagUpdate) UnsetTimestamp() {
 	o.Timestamp.Unset()
 }
 
+// GetImmutable returns the Immutable field value if set, zero value otherwise.
+func (o *TagUpdate) GetImmutable() bool {
+	if o == nil || IsNil(o.Immutable) {
+		var ret bool
+		return ret
+	}
+	return *o.Immutable
+}
+
+// GetImmutableOk returns a tuple with the Immutable field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TagUpdate) GetImmutableOk() (*bool, bool) {
+	if o == nil || IsNil(o.Immutable) {
+		return nil, false
+	}
+	return o.Immutable, true
+}
+
+// HasImmutable returns a boolean if a field has been set.
+func (o *TagUpdate) HasImmutable() bool {
+	if o != nil && !IsNil(o.Immutable) {
+		return true
+	}
+
+	return false
+}
+
+// SetImmutable gets a reference to the given bool and assigns it to the Immutable field.
+func (o *TagUpdate) SetImmutable(v bool) {
+	o.Immutable = &v
+}
+
 func (o TagUpdate) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -189,6 +223,9 @@ func (o TagUpdate) ToMap() (map[string]interface{}, error) {
 	}
 	if o.Timestamp.IsSet() {
 		toSerialize["timestamp"] = o.Timestamp.Get()
+	}
+	if !IsNil(o.Immutable) {
+		toSerialize["immutable"] = o.Immutable
 	}
 	return toSerialize, nil
 }

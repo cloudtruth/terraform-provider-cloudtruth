@@ -4698,7 +4698,7 @@ func (r ApiIntegrationsAzureKeyVaultDestroyRequest) Execute() (*http.Response, e
 }
 
 /*
-IntegrationsAzureKeyVaultDestroy Delete an AWS integration.
+IntegrationsAzureKeyVaultDestroy Delete an Azure Key Vault integration.
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id
@@ -9045,6 +9045,7 @@ type ApiIntegrationsExploreListRequest struct {
 	ordering *string
 	page *int32
 	pageSize *int32
+	pageToken *string
 }
 
 // FQN (URL-like) for third-party integration.
@@ -9074,6 +9075,12 @@ func (r ApiIntegrationsExploreListRequest) Page(page int32) ApiIntegrationsExplo
 // Number of results to return per page.
 func (r ApiIntegrationsExploreListRequest) PageSize(pageSize int32) ApiIntegrationsExploreListRequest {
 	r.pageSize = &pageSize
+	return r
+}
+
+// When paginating, this is the value that came back in the last page&#39;s next
+func (r ApiIntegrationsExploreListRequest) PageToken(pageToken string) ApiIntegrationsExploreListRequest {
+	r.pageToken = &pageToken
 	return r
 }
 
@@ -9136,6 +9143,9 @@ func (a *IntegrationsAPIService) IntegrationsExploreListExecute(r ApiIntegration
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
+	}
+	if r.pageToken != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page_token", r.pageToken, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

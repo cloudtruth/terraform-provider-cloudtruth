@@ -30,7 +30,7 @@ type AzureKeyVaultPush struct {
 	Description *string `json:"description,omitempty"`
 	LatestTask NullableAzureKeyVaultPushLatestTask `json:"latest_task"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 	// This setting allows parameters (non-secrets) to be pushed to a destination that only supports storing secrets.  This may increase your overall cost from the cloud provider as some cloud providers charge a premium for secrets-only storage.
 	CoerceParameters *bool `json:"coerce_parameters,omitempty"`
 	// Include parameters (non-secrets) in the values being pushed.  This setting requires the destination to support parameters or for the `coerce_parameters` flag to be enabled, otherwise the push will fail.
@@ -57,7 +57,7 @@ type AzureKeyVaultPush struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAzureKeyVaultPush(url string, id string, name string, latestTask NullableAzureKeyVaultPushLatestTask, createdAt time.Time, modifiedAt time.Time, projects []string, tags []string, resource NullableString) *AzureKeyVaultPush {
+func NewAzureKeyVaultPush(url string, id string, name string, latestTask NullableAzureKeyVaultPushLatestTask, createdAt time.Time, modifiedAt NullableTime, projects []string, tags []string, resource NullableString) *AzureKeyVaultPush {
 	this := AzureKeyVaultPush{}
 	this.Url = url
 	this.Id = id
@@ -234,27 +234,29 @@ func (o *AzureKeyVaultPush) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *AzureKeyVaultPush) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *AzureKeyVaultPush) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *AzureKeyVaultPush) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 // GetCoerceParameters returns the CoerceParameters field value if set, zero value otherwise.
@@ -573,7 +575,7 @@ func (o AzureKeyVaultPush) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["latest_task"] = o.LatestTask.Get()
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	if !IsNil(o.CoerceParameters) {
 		toSerialize["coerce_parameters"] = o.CoerceParameters
 	}

@@ -16,84 +16,46 @@ import (
 	"time"
 )
 
-// checks if the PatchedProject type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PatchedProject{}
+// checks if the PatchedProjectUpdate type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PatchedProjectUpdate{}
 
-// PatchedProject struct for PatchedProject
-type PatchedProject struct {
-	Url *string `json:"url,omitempty"`
-	// A unique identifier for the project.
+// PatchedProjectUpdate struct for PatchedProjectUpdate
+type PatchedProjectUpdate struct {
 	Id *string `json:"id,omitempty"`
 	// The project name.
 	Name *string `json:"name,omitempty"`
 	// A description of the project.  You may find it helpful to document how this project is used to assist others when they need to maintain software that uses this content.
 	Description *string `json:"description,omitempty"`
-	// This is the opposite of `depends_on`, see that field for more details.
-	Dependents []string `json:"dependents,omitempty"`
+	// A regular expression parameter names must match
+	ParameterNamePattern *string `json:"parameter_name_pattern,omitempty"`
 	// Project dependencies allow projects to be used for shared configuration, for example a database used by many applications needs to advertise its port number.  Projects can depend on another project which will add the parameters from the parent project into the current project.  All of the parameter names between the two projects must be unique.  When retrieving values or rendering templates, all of the parameters from the parent project will also be available in the current project.
 	DependsOn NullableString `json:"depends_on,omitempty"`
 	// Indicates if access control is being enforced through grants.
 	AccessControlled *bool `json:"access_controlled,omitempty"`
 	Role NullableRoleEnum `json:"role,omitempty"`
-	// Deprecated. Only shows pushes for aws integrations in /api/v1/.
-	Pushes []AwsPush `json:"pushes,omitempty"`
-	// Push actions associated with the project.
-	PushUrls []string `json:"push_urls,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	ModifiedAt NullableTime `json:"modified_at,omitempty"`
 }
 
-// NewPatchedProject instantiates a new PatchedProject object
+// NewPatchedProjectUpdate instantiates a new PatchedProjectUpdate object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPatchedProject() *PatchedProject {
-	this := PatchedProject{}
+func NewPatchedProjectUpdate() *PatchedProjectUpdate {
+	this := PatchedProjectUpdate{}
 	return &this
 }
 
-// NewPatchedProjectWithDefaults instantiates a new PatchedProject object
+// NewPatchedProjectUpdateWithDefaults instantiates a new PatchedProjectUpdate object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPatchedProjectWithDefaults() *PatchedProject {
-	this := PatchedProject{}
+func NewPatchedProjectUpdateWithDefaults() *PatchedProjectUpdate {
+	this := PatchedProjectUpdate{}
 	return &this
-}
-
-// GetUrl returns the Url field value if set, zero value otherwise.
-func (o *PatchedProject) GetUrl() string {
-	if o == nil || IsNil(o.Url) {
-		var ret string
-		return ret
-	}
-	return *o.Url
-}
-
-// GetUrlOk returns a tuple with the Url field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PatchedProject) GetUrlOk() (*string, bool) {
-	if o == nil || IsNil(o.Url) {
-		return nil, false
-	}
-	return o.Url, true
-}
-
-// HasUrl returns a boolean if a field has been set.
-func (o *PatchedProject) HasUrl() bool {
-	if o != nil && !IsNil(o.Url) {
-		return true
-	}
-
-	return false
-}
-
-// SetUrl gets a reference to the given string and assigns it to the Url field.
-func (o *PatchedProject) SetUrl(v string) {
-	o.Url = &v
 }
 
 // GetId returns the Id field value if set, zero value otherwise.
-func (o *PatchedProject) GetId() string {
+func (o *PatchedProjectUpdate) GetId() string {
 	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
@@ -103,7 +65,7 @@ func (o *PatchedProject) GetId() string {
 
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedProject) GetIdOk() (*string, bool) {
+func (o *PatchedProjectUpdate) GetIdOk() (*string, bool) {
 	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
@@ -111,7 +73,7 @@ func (o *PatchedProject) GetIdOk() (*string, bool) {
 }
 
 // HasId returns a boolean if a field has been set.
-func (o *PatchedProject) HasId() bool {
+func (o *PatchedProjectUpdate) HasId() bool {
 	if o != nil && !IsNil(o.Id) {
 		return true
 	}
@@ -120,12 +82,12 @@ func (o *PatchedProject) HasId() bool {
 }
 
 // SetId gets a reference to the given string and assigns it to the Id field.
-func (o *PatchedProject) SetId(v string) {
+func (o *PatchedProjectUpdate) SetId(v string) {
 	o.Id = &v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
-func (o *PatchedProject) GetName() string {
+func (o *PatchedProjectUpdate) GetName() string {
 	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
@@ -135,7 +97,7 @@ func (o *PatchedProject) GetName() string {
 
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedProject) GetNameOk() (*string, bool) {
+func (o *PatchedProjectUpdate) GetNameOk() (*string, bool) {
 	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
@@ -143,7 +105,7 @@ func (o *PatchedProject) GetNameOk() (*string, bool) {
 }
 
 // HasName returns a boolean if a field has been set.
-func (o *PatchedProject) HasName() bool {
+func (o *PatchedProjectUpdate) HasName() bool {
 	if o != nil && !IsNil(o.Name) {
 		return true
 	}
@@ -152,12 +114,12 @@ func (o *PatchedProject) HasName() bool {
 }
 
 // SetName gets a reference to the given string and assigns it to the Name field.
-func (o *PatchedProject) SetName(v string) {
+func (o *PatchedProjectUpdate) SetName(v string) {
 	o.Name = &v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
-func (o *PatchedProject) GetDescription() string {
+func (o *PatchedProjectUpdate) GetDescription() string {
 	if o == nil || IsNil(o.Description) {
 		var ret string
 		return ret
@@ -167,7 +129,7 @@ func (o *PatchedProject) GetDescription() string {
 
 // GetDescriptionOk returns a tuple with the Description field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedProject) GetDescriptionOk() (*string, bool) {
+func (o *PatchedProjectUpdate) GetDescriptionOk() (*string, bool) {
 	if o == nil || IsNil(o.Description) {
 		return nil, false
 	}
@@ -175,7 +137,7 @@ func (o *PatchedProject) GetDescriptionOk() (*string, bool) {
 }
 
 // HasDescription returns a boolean if a field has been set.
-func (o *PatchedProject) HasDescription() bool {
+func (o *PatchedProjectUpdate) HasDescription() bool {
 	if o != nil && !IsNil(o.Description) {
 		return true
 	}
@@ -184,44 +146,44 @@ func (o *PatchedProject) HasDescription() bool {
 }
 
 // SetDescription gets a reference to the given string and assigns it to the Description field.
-func (o *PatchedProject) SetDescription(v string) {
+func (o *PatchedProjectUpdate) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetDependents returns the Dependents field value if set, zero value otherwise.
-func (o *PatchedProject) GetDependents() []string {
-	if o == nil || IsNil(o.Dependents) {
-		var ret []string
+// GetParameterNamePattern returns the ParameterNamePattern field value if set, zero value otherwise.
+func (o *PatchedProjectUpdate) GetParameterNamePattern() string {
+	if o == nil || IsNil(o.ParameterNamePattern) {
+		var ret string
 		return ret
 	}
-	return o.Dependents
+	return *o.ParameterNamePattern
 }
 
-// GetDependentsOk returns a tuple with the Dependents field value if set, nil otherwise
+// GetParameterNamePatternOk returns a tuple with the ParameterNamePattern field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedProject) GetDependentsOk() ([]string, bool) {
-	if o == nil || IsNil(o.Dependents) {
+func (o *PatchedProjectUpdate) GetParameterNamePatternOk() (*string, bool) {
+	if o == nil || IsNil(o.ParameterNamePattern) {
 		return nil, false
 	}
-	return o.Dependents, true
+	return o.ParameterNamePattern, true
 }
 
-// HasDependents returns a boolean if a field has been set.
-func (o *PatchedProject) HasDependents() bool {
-	if o != nil && !IsNil(o.Dependents) {
+// HasParameterNamePattern returns a boolean if a field has been set.
+func (o *PatchedProjectUpdate) HasParameterNamePattern() bool {
+	if o != nil && !IsNil(o.ParameterNamePattern) {
 		return true
 	}
 
 	return false
 }
 
-// SetDependents gets a reference to the given []string and assigns it to the Dependents field.
-func (o *PatchedProject) SetDependents(v []string) {
-	o.Dependents = v
+// SetParameterNamePattern gets a reference to the given string and assigns it to the ParameterNamePattern field.
+func (o *PatchedProjectUpdate) SetParameterNamePattern(v string) {
+	o.ParameterNamePattern = &v
 }
 
 // GetDependsOn returns the DependsOn field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedProject) GetDependsOn() string {
+func (o *PatchedProjectUpdate) GetDependsOn() string {
 	if o == nil || IsNil(o.DependsOn.Get()) {
 		var ret string
 		return ret
@@ -232,7 +194,7 @@ func (o *PatchedProject) GetDependsOn() string {
 // GetDependsOnOk returns a tuple with the DependsOn field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedProject) GetDependsOnOk() (*string, bool) {
+func (o *PatchedProjectUpdate) GetDependsOnOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -240,7 +202,7 @@ func (o *PatchedProject) GetDependsOnOk() (*string, bool) {
 }
 
 // HasDependsOn returns a boolean if a field has been set.
-func (o *PatchedProject) HasDependsOn() bool {
+func (o *PatchedProjectUpdate) HasDependsOn() bool {
 	if o != nil && o.DependsOn.IsSet() {
 		return true
 	}
@@ -249,21 +211,21 @@ func (o *PatchedProject) HasDependsOn() bool {
 }
 
 // SetDependsOn gets a reference to the given NullableString and assigns it to the DependsOn field.
-func (o *PatchedProject) SetDependsOn(v string) {
+func (o *PatchedProjectUpdate) SetDependsOn(v string) {
 	o.DependsOn.Set(&v)
 }
 // SetDependsOnNil sets the value for DependsOn to be an explicit nil
-func (o *PatchedProject) SetDependsOnNil() {
+func (o *PatchedProjectUpdate) SetDependsOnNil() {
 	o.DependsOn.Set(nil)
 }
 
 // UnsetDependsOn ensures that no value is present for DependsOn, not even an explicit nil
-func (o *PatchedProject) UnsetDependsOn() {
+func (o *PatchedProjectUpdate) UnsetDependsOn() {
 	o.DependsOn.Unset()
 }
 
 // GetAccessControlled returns the AccessControlled field value if set, zero value otherwise.
-func (o *PatchedProject) GetAccessControlled() bool {
+func (o *PatchedProjectUpdate) GetAccessControlled() bool {
 	if o == nil || IsNil(o.AccessControlled) {
 		var ret bool
 		return ret
@@ -273,7 +235,7 @@ func (o *PatchedProject) GetAccessControlled() bool {
 
 // GetAccessControlledOk returns a tuple with the AccessControlled field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedProject) GetAccessControlledOk() (*bool, bool) {
+func (o *PatchedProjectUpdate) GetAccessControlledOk() (*bool, bool) {
 	if o == nil || IsNil(o.AccessControlled) {
 		return nil, false
 	}
@@ -281,7 +243,7 @@ func (o *PatchedProject) GetAccessControlledOk() (*bool, bool) {
 }
 
 // HasAccessControlled returns a boolean if a field has been set.
-func (o *PatchedProject) HasAccessControlled() bool {
+func (o *PatchedProjectUpdate) HasAccessControlled() bool {
 	if o != nil && !IsNil(o.AccessControlled) {
 		return true
 	}
@@ -290,12 +252,12 @@ func (o *PatchedProject) HasAccessControlled() bool {
 }
 
 // SetAccessControlled gets a reference to the given bool and assigns it to the AccessControlled field.
-func (o *PatchedProject) SetAccessControlled(v bool) {
+func (o *PatchedProjectUpdate) SetAccessControlled(v bool) {
 	o.AccessControlled = &v
 }
 
 // GetRole returns the Role field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *PatchedProject) GetRole() RoleEnum {
+func (o *PatchedProjectUpdate) GetRole() RoleEnum {
 	if o == nil || IsNil(o.Role.Get()) {
 		var ret RoleEnum
 		return ret
@@ -306,7 +268,7 @@ func (o *PatchedProject) GetRole() RoleEnum {
 // GetRoleOk returns a tuple with the Role field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *PatchedProject) GetRoleOk() (*RoleEnum, bool) {
+func (o *PatchedProjectUpdate) GetRoleOk() (*RoleEnum, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -314,7 +276,7 @@ func (o *PatchedProject) GetRoleOk() (*RoleEnum, bool) {
 }
 
 // HasRole returns a boolean if a field has been set.
-func (o *PatchedProject) HasRole() bool {
+func (o *PatchedProjectUpdate) HasRole() bool {
 	if o != nil && o.Role.IsSet() {
 		return true
 	}
@@ -323,85 +285,21 @@ func (o *PatchedProject) HasRole() bool {
 }
 
 // SetRole gets a reference to the given NullableRoleEnum and assigns it to the Role field.
-func (o *PatchedProject) SetRole(v RoleEnum) {
+func (o *PatchedProjectUpdate) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
 // SetRoleNil sets the value for Role to be an explicit nil
-func (o *PatchedProject) SetRoleNil() {
+func (o *PatchedProjectUpdate) SetRoleNil() {
 	o.Role.Set(nil)
 }
 
 // UnsetRole ensures that no value is present for Role, not even an explicit nil
-func (o *PatchedProject) UnsetRole() {
+func (o *PatchedProjectUpdate) UnsetRole() {
 	o.Role.Unset()
 }
 
-// GetPushes returns the Pushes field value if set, zero value otherwise.
-func (o *PatchedProject) GetPushes() []AwsPush {
-	if o == nil || IsNil(o.Pushes) {
-		var ret []AwsPush
-		return ret
-	}
-	return o.Pushes
-}
-
-// GetPushesOk returns a tuple with the Pushes field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PatchedProject) GetPushesOk() ([]AwsPush, bool) {
-	if o == nil || IsNil(o.Pushes) {
-		return nil, false
-	}
-	return o.Pushes, true
-}
-
-// HasPushes returns a boolean if a field has been set.
-func (o *PatchedProject) HasPushes() bool {
-	if o != nil && !IsNil(o.Pushes) {
-		return true
-	}
-
-	return false
-}
-
-// SetPushes gets a reference to the given []AwsPush and assigns it to the Pushes field.
-func (o *PatchedProject) SetPushes(v []AwsPush) {
-	o.Pushes = v
-}
-
-// GetPushUrls returns the PushUrls field value if set, zero value otherwise.
-func (o *PatchedProject) GetPushUrls() []string {
-	if o == nil || IsNil(o.PushUrls) {
-		var ret []string
-		return ret
-	}
-	return o.PushUrls
-}
-
-// GetPushUrlsOk returns a tuple with the PushUrls field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *PatchedProject) GetPushUrlsOk() ([]string, bool) {
-	if o == nil || IsNil(o.PushUrls) {
-		return nil, false
-	}
-	return o.PushUrls, true
-}
-
-// HasPushUrls returns a boolean if a field has been set.
-func (o *PatchedProject) HasPushUrls() bool {
-	if o != nil && !IsNil(o.PushUrls) {
-		return true
-	}
-
-	return false
-}
-
-// SetPushUrls gets a reference to the given []string and assigns it to the PushUrls field.
-func (o *PatchedProject) SetPushUrls(v []string) {
-	o.PushUrls = v
-}
-
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *PatchedProject) GetCreatedAt() time.Time {
+func (o *PatchedProjectUpdate) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
@@ -411,7 +309,7 @@ func (o *PatchedProject) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedProject) GetCreatedAtOk() (*time.Time, bool) {
+func (o *PatchedProjectUpdate) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -419,7 +317,7 @@ func (o *PatchedProject) GetCreatedAtOk() (*time.Time, bool) {
 }
 
 // HasCreatedAt returns a boolean if a field has been set.
-func (o *PatchedProject) HasCreatedAt() bool {
+func (o *PatchedProjectUpdate) HasCreatedAt() bool {
 	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
@@ -428,43 +326,53 @@ func (o *PatchedProject) HasCreatedAt() bool {
 }
 
 // SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *PatchedProject) SetCreatedAt(v time.Time) {
+func (o *PatchedProjectUpdate) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
-// GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
-func (o *PatchedProject) GetModifiedAt() time.Time {
-	if o == nil || IsNil(o.ModifiedAt) {
+// GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PatchedProjectUpdate) GetModifiedAt() time.Time {
+	if o == nil || IsNil(o.ModifiedAt.Get()) {
 		var ret time.Time
 		return ret
 	}
-	return *o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PatchedProject) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || IsNil(o.ModifiedAt) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PatchedProjectUpdate) GetModifiedAtOk() (*time.Time, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // HasModifiedAt returns a boolean if a field has been set.
-func (o *PatchedProject) HasModifiedAt() bool {
-	if o != nil && !IsNil(o.ModifiedAt) {
+func (o *PatchedProjectUpdate) HasModifiedAt() bool {
+	if o != nil && o.ModifiedAt.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetModifiedAt gets a reference to the given time.Time and assigns it to the ModifiedAt field.
-func (o *PatchedProject) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = &v
+// SetModifiedAt gets a reference to the given NullableTime and assigns it to the ModifiedAt field.
+func (o *PatchedProjectUpdate) SetModifiedAt(v time.Time) {
+	o.ModifiedAt.Set(&v)
+}
+// SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
+func (o *PatchedProjectUpdate) SetModifiedAtNil() {
+	o.ModifiedAt.Set(nil)
 }
 
-func (o PatchedProject) MarshalJSON() ([]byte, error) {
+// UnsetModifiedAt ensures that no value is present for ModifiedAt, not even an explicit nil
+func (o *PatchedProjectUpdate) UnsetModifiedAt() {
+	o.ModifiedAt.Unset()
+}
+
+func (o PatchedProjectUpdate) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -472,11 +380,8 @@ func (o PatchedProject) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PatchedProject) ToMap() (map[string]interface{}, error) {
+func (o PatchedProjectUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Url) {
-		toSerialize["url"] = o.Url
-	}
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
@@ -486,8 +391,8 @@ func (o PatchedProject) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if !IsNil(o.Dependents) {
-		toSerialize["dependents"] = o.Dependents
+	if !IsNil(o.ParameterNamePattern) {
+		toSerialize["parameter_name_pattern"] = o.ParameterNamePattern
 	}
 	if o.DependsOn.IsSet() {
 		toSerialize["depends_on"] = o.DependsOn.Get()
@@ -498,53 +403,47 @@ func (o PatchedProject) ToMap() (map[string]interface{}, error) {
 	if o.Role.IsSet() {
 		toSerialize["role"] = o.Role.Get()
 	}
-	if !IsNil(o.Pushes) {
-		toSerialize["pushes"] = o.Pushes
-	}
-	if !IsNil(o.PushUrls) {
-		toSerialize["push_urls"] = o.PushUrls
-	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
-	if !IsNil(o.ModifiedAt) {
-		toSerialize["modified_at"] = o.ModifiedAt
+	if o.ModifiedAt.IsSet() {
+		toSerialize["modified_at"] = o.ModifiedAt.Get()
 	}
 	return toSerialize, nil
 }
 
-type NullablePatchedProject struct {
-	value *PatchedProject
+type NullablePatchedProjectUpdate struct {
+	value *PatchedProjectUpdate
 	isSet bool
 }
 
-func (v NullablePatchedProject) Get() *PatchedProject {
+func (v NullablePatchedProjectUpdate) Get() *PatchedProjectUpdate {
 	return v.value
 }
 
-func (v *NullablePatchedProject) Set(val *PatchedProject) {
+func (v *NullablePatchedProjectUpdate) Set(val *PatchedProjectUpdate) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePatchedProject) IsSet() bool {
+func (v NullablePatchedProjectUpdate) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePatchedProject) Unset() {
+func (v *NullablePatchedProjectUpdate) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePatchedProject(val *PatchedProject) *NullablePatchedProject {
-	return &NullablePatchedProject{value: val, isSet: true}
+func NewNullablePatchedProjectUpdate(val *PatchedProjectUpdate) *NullablePatchedProjectUpdate {
+	return &NullablePatchedProjectUpdate{value: val, isSet: true}
 }
 
-func (v NullablePatchedProject) MarshalJSON() ([]byte, error) {
+func (v NullablePatchedProjectUpdate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePatchedProject) UnmarshalJSON(src []byte) error {
+func (v *NullablePatchedProjectUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

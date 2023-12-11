@@ -31,9 +31,9 @@ type PatchedAzureKeyVaultIntegration struct {
 	// If an error occurs, more details will be available in this field.
 	StatusDetail *string `json:"status_detail,omitempty"`
 	// The last time the status was evaluated.
-	StatusLastCheckedAt *time.Time `json:"status_last_checked_at,omitempty"`
+	StatusLastCheckedAt NullableTime `json:"status_last_checked_at,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	ModifiedAt NullableTime `json:"modified_at,omitempty"`
 	Fqn *string `json:"fqn,omitempty"`
 	// The type of integration.
 	Type *string `json:"type,omitempty"`
@@ -254,36 +254,46 @@ func (o *PatchedAzureKeyVaultIntegration) SetStatusDetail(v string) {
 	o.StatusDetail = &v
 }
 
-// GetStatusLastCheckedAt returns the StatusLastCheckedAt field value if set, zero value otherwise.
+// GetStatusLastCheckedAt returns the StatusLastCheckedAt field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedAzureKeyVaultIntegration) GetStatusLastCheckedAt() time.Time {
-	if o == nil || IsNil(o.StatusLastCheckedAt) {
+	if o == nil || IsNil(o.StatusLastCheckedAt.Get()) {
 		var ret time.Time
 		return ret
 	}
-	return *o.StatusLastCheckedAt
+	return *o.StatusLastCheckedAt.Get()
 }
 
 // GetStatusLastCheckedAtOk returns a tuple with the StatusLastCheckedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PatchedAzureKeyVaultIntegration) GetStatusLastCheckedAtOk() (*time.Time, bool) {
-	if o == nil || IsNil(o.StatusLastCheckedAt) {
+	if o == nil {
 		return nil, false
 	}
-	return o.StatusLastCheckedAt, true
+	return o.StatusLastCheckedAt.Get(), o.StatusLastCheckedAt.IsSet()
 }
 
 // HasStatusLastCheckedAt returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasStatusLastCheckedAt() bool {
-	if o != nil && !IsNil(o.StatusLastCheckedAt) {
+	if o != nil && o.StatusLastCheckedAt.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetStatusLastCheckedAt gets a reference to the given time.Time and assigns it to the StatusLastCheckedAt field.
+// SetStatusLastCheckedAt gets a reference to the given NullableTime and assigns it to the StatusLastCheckedAt field.
 func (o *PatchedAzureKeyVaultIntegration) SetStatusLastCheckedAt(v time.Time) {
-	o.StatusLastCheckedAt = &v
+	o.StatusLastCheckedAt.Set(&v)
+}
+// SetStatusLastCheckedAtNil sets the value for StatusLastCheckedAt to be an explicit nil
+func (o *PatchedAzureKeyVaultIntegration) SetStatusLastCheckedAtNil() {
+	o.StatusLastCheckedAt.Set(nil)
+}
+
+// UnsetStatusLastCheckedAt ensures that no value is present for StatusLastCheckedAt, not even an explicit nil
+func (o *PatchedAzureKeyVaultIntegration) UnsetStatusLastCheckedAt() {
+	o.StatusLastCheckedAt.Unset()
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
@@ -318,36 +328,46 @@ func (o *PatchedAzureKeyVaultIntegration) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
-// GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
+// GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedAzureKeyVaultIntegration) GetModifiedAt() time.Time {
-	if o == nil || IsNil(o.ModifiedAt) {
+	if o == nil || IsNil(o.ModifiedAt.Get()) {
 		var ret time.Time
 		return ret
 	}
-	return *o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PatchedAzureKeyVaultIntegration) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || IsNil(o.ModifiedAt) {
+	if o == nil {
 		return nil, false
 	}
-	return o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedAzureKeyVaultIntegration) HasModifiedAt() bool {
-	if o != nil && !IsNil(o.ModifiedAt) {
+	if o != nil && o.ModifiedAt.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetModifiedAt gets a reference to the given time.Time and assigns it to the ModifiedAt field.
+// SetModifiedAt gets a reference to the given NullableTime and assigns it to the ModifiedAt field.
 func (o *PatchedAzureKeyVaultIntegration) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = &v
+	o.ModifiedAt.Set(&v)
+}
+// SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
+func (o *PatchedAzureKeyVaultIntegration) SetModifiedAtNil() {
+	o.ModifiedAt.Set(nil)
+}
+
+// UnsetModifiedAt ensures that no value is present for ModifiedAt, not even an explicit nil
+func (o *PatchedAzureKeyVaultIntegration) UnsetModifiedAt() {
+	o.ModifiedAt.Unset()
 }
 
 // GetFqn returns the Fqn field value if set, zero value otherwise.
@@ -538,14 +558,14 @@ func (o PatchedAzureKeyVaultIntegration) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.StatusDetail) {
 		toSerialize["status_detail"] = o.StatusDetail
 	}
-	if !IsNil(o.StatusLastCheckedAt) {
-		toSerialize["status_last_checked_at"] = o.StatusLastCheckedAt
+	if o.StatusLastCheckedAt.IsSet() {
+		toSerialize["status_last_checked_at"] = o.StatusLastCheckedAt.Get()
 	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
-	if !IsNil(o.ModifiedAt) {
-		toSerialize["modified_at"] = o.ModifiedAt
+	if o.ModifiedAt.IsSet() {
+		toSerialize["modified_at"] = o.ModifiedAt.Get()
 	}
 	if !IsNil(o.Fqn) {
 		toSerialize["fqn"] = o.Fqn

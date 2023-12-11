@@ -21,24 +21,27 @@ var _ MappedNullable = &ParameterRule{}
 
 // ParameterRule A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead of primary key relationships.  Specifically:  * A 'url' field is included instead of the 'id' field. * Relationships to other instances are hyperlinks, instead of primary keys.  NOTE: this only works with DRF 3.1.0 and above.
 type ParameterRule struct {
+	// The URL for the parameter rule.
 	Url string `json:"url"`
 	Id string `json:"id"`
+	LedgerId string `json:"ledger_id"`
 	// The parameter this rule is for.
 	Parameter string `json:"parameter"`
 	Type ParameterRuleTypeEnum `json:"type"`
 	Constraint string `json:"constraint"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 }
 
 // NewParameterRule instantiates a new ParameterRule object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewParameterRule(url string, id string, parameter string, type_ ParameterRuleTypeEnum, constraint string, createdAt time.Time, modifiedAt time.Time) *ParameterRule {
+func NewParameterRule(url string, id string, ledgerId string, parameter string, type_ ParameterRuleTypeEnum, constraint string, createdAt time.Time, modifiedAt NullableTime) *ParameterRule {
 	this := ParameterRule{}
 	this.Url = url
 	this.Id = id
+	this.LedgerId = ledgerId
 	this.Parameter = parameter
 	this.Type = type_
 	this.Constraint = constraint
@@ -101,6 +104,30 @@ func (o *ParameterRule) GetIdOk() (*string, bool) {
 // SetId sets field value
 func (o *ParameterRule) SetId(v string) {
 	o.Id = v
+}
+
+// GetLedgerId returns the LedgerId field value
+func (o *ParameterRule) GetLedgerId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.LedgerId
+}
+
+// GetLedgerIdOk returns a tuple with the LedgerId field value
+// and a boolean to check if the value has been set.
+func (o *ParameterRule) GetLedgerIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.LedgerId, true
+}
+
+// SetLedgerId sets field value
+func (o *ParameterRule) SetLedgerId(v string) {
+	o.LedgerId = v
 }
 
 // GetParameter returns the Parameter field value
@@ -200,27 +227,29 @@ func (o *ParameterRule) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *ParameterRule) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ParameterRule) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *ParameterRule) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 func (o ParameterRule) MarshalJSON() ([]byte, error) {
@@ -235,11 +264,12 @@ func (o ParameterRule) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["url"] = o.Url
 	toSerialize["id"] = o.Id
+	toSerialize["ledger_id"] = o.LedgerId
 	toSerialize["parameter"] = o.Parameter
 	toSerialize["type"] = o.Type
 	toSerialize["constraint"] = o.Constraint
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
 }
 

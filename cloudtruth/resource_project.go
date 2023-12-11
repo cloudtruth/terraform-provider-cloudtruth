@@ -30,6 +30,12 @@ func resourceProject() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 			},
+			"parameter_name_pattern": {
+				Description: "A regular expression parameter names must match",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "",
+			},
 			"description": {
 				Description: "Description of the project",
 				Type:        schema.TypeString,
@@ -51,11 +57,15 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 	defer tflog.Debug(ctx, "exiting resourceProjectCreate")
 	c := meta.(*cloudTruthClient)
 	projectName := d.Get("name").(string)
+	//parameterNamePattern := d.Get("parameter_name_pattern").(string)
 	projectDesc := d.Get("description").(string)
 	projectCreate := cloudtruthapi.NewProjectCreate(projectName)
 	if projectDesc != "" {
 		projectCreate.SetDescription(projectDesc)
 	}
+	/*if parameterNamePattern != "" {
+		projectCreate.
+	}*/
 	projectParent := d.Get("parent").(string)
 	if projectParent != "" {
 		parent, err := c.getProjectURL(ctx, projectParent)
@@ -149,7 +159,7 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 	projectName := d.Get("name").(string)
 	projectDesc := d.Get("description").(string)
 
-	patchedProject := cloudtruthapi.PatchedProject{}
+	patchedProject := cloudtruthapi.PatchedProjectUpdate{}
 	hasChange := false
 
 	// explicitly not checking for/allowing reparenting from the provider because the UI does not allow it
@@ -167,7 +177,7 @@ func resourceProjectUpdate(ctx context.Context, d *schema.ResourceData, meta any
 			var r *http.Response
 			var err error
 			_, r, err = c.openAPIClient.ProjectsAPI.ProjectsPartialUpdate(ctx,
-				projectID).PatchedProject(patchedProject).Execute()
+				projectID).PatchedProjectUpdate(patchedProject).Execute()
 			if err != nil {
 				return handleAPIError(fmt.Sprintf("resourceProjectUpdate: error updating project %s", projectName), r, err)
 			}

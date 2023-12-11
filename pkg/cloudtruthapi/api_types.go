@@ -287,8 +287,6 @@ type ApiTypesListRequest struct {
 	ordering *string
 	page *int32
 	pageSize *int32
-	parentNameIcontains *string
-	parentNameIexact *string
 }
 
 func (r ApiTypesListRequest) DescriptionIcontains(descriptionIcontains string) ApiTypesListRequest {
@@ -321,16 +319,6 @@ func (r ApiTypesListRequest) Page(page int32) ApiTypesListRequest {
 // Number of results to return per page.
 func (r ApiTypesListRequest) PageSize(pageSize int32) ApiTypesListRequest {
 	r.pageSize = &pageSize
-	return r
-}
-
-func (r ApiTypesListRequest) ParentNameIcontains(parentNameIcontains string) ApiTypesListRequest {
-	r.parentNameIcontains = &parentNameIcontains
-	return r
-}
-
-func (r ApiTypesListRequest) ParentNameIexact(parentNameIexact string) ApiTypesListRequest {
-	r.parentNameIexact = &parentNameIexact
 	return r
 }
 
@@ -389,12 +377,6 @@ func (a *TypesAPIService) TypesListExecute(r ApiTypesListRequest) (*PaginatedPar
 	}
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page_size", r.pageSize, "")
-	}
-	if r.parentNameIcontains != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "parent__name__icontains", r.parentNameIcontains, "")
-	}
-	if r.parentNameIexact != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "parent__name__iexact", r.parentNameIexact, "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -482,15 +464,15 @@ type ApiTypesPartialUpdateRequest struct {
 	ctx context.Context
 	ApiService *TypesAPIService
 	id string
-	patchedParameterType *PatchedParameterType
+	patchedParameterTypeUpdate *PatchedParameterTypeUpdate
 }
 
-func (r ApiTypesPartialUpdateRequest) PatchedParameterType(patchedParameterType PatchedParameterType) ApiTypesPartialUpdateRequest {
-	r.patchedParameterType = &patchedParameterType
+func (r ApiTypesPartialUpdateRequest) PatchedParameterTypeUpdate(patchedParameterTypeUpdate PatchedParameterTypeUpdate) ApiTypesPartialUpdateRequest {
+	r.patchedParameterTypeUpdate = &patchedParameterTypeUpdate
 	return r
 }
 
-func (r ApiTypesPartialUpdateRequest) Execute() (*ParameterType, *http.Response, error) {
+func (r ApiTypesPartialUpdateRequest) Execute() (*ParameterTypeUpdate, *http.Response, error) {
 	return r.ApiService.TypesPartialUpdateExecute(r)
 }
 
@@ -510,13 +492,13 @@ func (a *TypesAPIService) TypesPartialUpdate(ctx context.Context, id string) Api
 }
 
 // Execute executes the request
-//  @return ParameterType
-func (a *TypesAPIService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateRequest) (*ParameterType, *http.Response, error) {
+//  @return ParameterTypeUpdate
+func (a *TypesAPIService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateRequest) (*ParameterTypeUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPatch
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ParameterType
+		localVarReturnValue  *ParameterTypeUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesPartialUpdate")
@@ -549,7 +531,7 @@ func (a *TypesAPIService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateReque
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.patchedParameterType
+	localVarPostBody = r.patchedParameterTypeUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -629,7 +611,7 @@ func (r ApiTypesRetrieveRequest) Execute() (*ParameterType, *http.Response, erro
 TypesRetrieve Method for TypesRetrieve
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
+ @param id A UUID string identifying this parameter type ledger.
  @return ApiTypesRetrieveRequest
 */
 func (a *TypesAPIService) TypesRetrieve(ctx context.Context, id string) ApiTypesRetrieveRequest {
@@ -1179,15 +1161,15 @@ type ApiTypesRulesPartialUpdateRequest struct {
 	ApiService *TypesAPIService
 	id string
 	parametertypePk string
-	patchedParameterTypeRule *PatchedParameterTypeRule
+	patchedParameterTypeRuleUpdate *PatchedParameterTypeRuleUpdate
 }
 
-func (r ApiTypesRulesPartialUpdateRequest) PatchedParameterTypeRule(patchedParameterTypeRule PatchedParameterTypeRule) ApiTypesRulesPartialUpdateRequest {
-	r.patchedParameterTypeRule = &patchedParameterTypeRule
+func (r ApiTypesRulesPartialUpdateRequest) PatchedParameterTypeRuleUpdate(patchedParameterTypeRuleUpdate PatchedParameterTypeRuleUpdate) ApiTypesRulesPartialUpdateRequest {
+	r.patchedParameterTypeRuleUpdate = &patchedParameterTypeRuleUpdate
 	return r
 }
 
-func (r ApiTypesRulesPartialUpdateRequest) Execute() (*ParameterTypeRule, *http.Response, error) {
+func (r ApiTypesRulesPartialUpdateRequest) Execute() (*ParameterTypeRuleUpdate, *http.Response, error) {
 	return r.ApiService.TypesRulesPartialUpdateExecute(r)
 }
 
@@ -1209,13 +1191,13 @@ func (a *TypesAPIService) TypesRulesPartialUpdate(ctx context.Context, id string
 }
 
 // Execute executes the request
-//  @return ParameterTypeRule
-func (a *TypesAPIService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialUpdateRequest) (*ParameterTypeRule, *http.Response, error) {
+//  @return ParameterTypeRuleUpdate
+func (a *TypesAPIService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialUpdateRequest) (*ParameterTypeRuleUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPatch
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeRule
+		localVarReturnValue  *ParameterTypeRuleUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesPartialUpdate")
@@ -1249,7 +1231,7 @@ func (a *TypesAPIService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialU
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.patchedParameterTypeRule
+	localVarPostBody = r.patchedParameterTypeRuleUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -1330,7 +1312,7 @@ func (r ApiTypesRulesRetrieveRequest) Execute() (*ParameterTypeRule, *http.Respo
 TypesRulesRetrieve Method for TypesRulesRetrieve
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter type rule.
+ @param id A UUID string identifying this parameter type rule ledger.
  @param parametertypePk The parameter type id.
  @return ApiTypesRulesRetrieveRequest
 */
@@ -1453,15 +1435,15 @@ type ApiTypesRulesUpdateRequest struct {
 	ApiService *TypesAPIService
 	id string
 	parametertypePk string
-	parameterTypeRule *ParameterTypeRule
+	parameterTypeRuleUpdate *ParameterTypeRuleUpdate
 }
 
-func (r ApiTypesRulesUpdateRequest) ParameterTypeRule(parameterTypeRule ParameterTypeRule) ApiTypesRulesUpdateRequest {
-	r.parameterTypeRule = &parameterTypeRule
+func (r ApiTypesRulesUpdateRequest) ParameterTypeRuleUpdate(parameterTypeRuleUpdate ParameterTypeRuleUpdate) ApiTypesRulesUpdateRequest {
+	r.parameterTypeRuleUpdate = &parameterTypeRuleUpdate
 	return r
 }
 
-func (r ApiTypesRulesUpdateRequest) Execute() (*ParameterTypeRule, *http.Response, error) {
+func (r ApiTypesRulesUpdateRequest) Execute() (*ParameterTypeRuleUpdate, *http.Response, error) {
 	return r.ApiService.TypesRulesUpdateExecute(r)
 }
 
@@ -1483,13 +1465,13 @@ func (a *TypesAPIService) TypesRulesUpdate(ctx context.Context, id string, param
 }
 
 // Execute executes the request
-//  @return ParameterTypeRule
-func (a *TypesAPIService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) (*ParameterTypeRule, *http.Response, error) {
+//  @return ParameterTypeRuleUpdate
+func (a *TypesAPIService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) (*ParameterTypeRuleUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeRule
+		localVarReturnValue  *ParameterTypeRuleUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesUpdate")
@@ -1504,8 +1486,8 @@ func (a *TypesAPIService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.parameterTypeRule == nil {
-		return localVarReturnValue, nil, reportError("parameterTypeRule is required and must be specified")
+	if r.parameterTypeRuleUpdate == nil {
+		return localVarReturnValue, nil, reportError("parameterTypeRuleUpdate is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -1526,7 +1508,7 @@ func (a *TypesAPIService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) 
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.parameterTypeRule
+	localVarPostBody = r.parameterTypeRuleUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
@@ -1596,15 +1578,15 @@ type ApiTypesUpdateRequest struct {
 	ctx context.Context
 	ApiService *TypesAPIService
 	id string
-	parameterType *ParameterType
+	parameterTypeUpdate *ParameterTypeUpdate
 }
 
-func (r ApiTypesUpdateRequest) ParameterType(parameterType ParameterType) ApiTypesUpdateRequest {
-	r.parameterType = &parameterType
+func (r ApiTypesUpdateRequest) ParameterTypeUpdate(parameterTypeUpdate ParameterTypeUpdate) ApiTypesUpdateRequest {
+	r.parameterTypeUpdate = &parameterTypeUpdate
 	return r
 }
 
-func (r ApiTypesUpdateRequest) Execute() (*ParameterType, *http.Response, error) {
+func (r ApiTypesUpdateRequest) Execute() (*ParameterTypeUpdate, *http.Response, error) {
 	return r.ApiService.TypesUpdateExecute(r)
 }
 
@@ -1624,13 +1606,13 @@ func (a *TypesAPIService) TypesUpdate(ctx context.Context, id string) ApiTypesUp
 }
 
 // Execute executes the request
-//  @return ParameterType
-func (a *TypesAPIService) TypesUpdateExecute(r ApiTypesUpdateRequest) (*ParameterType, *http.Response, error) {
+//  @return ParameterTypeUpdate
+func (a *TypesAPIService) TypesUpdateExecute(r ApiTypesUpdateRequest) (*ParameterTypeUpdate, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ParameterType
+		localVarReturnValue  *ParameterTypeUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesUpdate")
@@ -1644,8 +1626,8 @@ func (a *TypesAPIService) TypesUpdateExecute(r ApiTypesUpdateRequest) (*Paramete
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.parameterType == nil {
-		return localVarReturnValue, nil, reportError("parameterType is required and must be specified")
+	if r.parameterTypeUpdate == nil {
+		return localVarReturnValue, nil, reportError("parameterTypeUpdate is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -1666,7 +1648,7 @@ func (a *TypesAPIService) TypesUpdateExecute(r ApiTypesUpdateRequest) (*Paramete
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.parameterType
+	localVarPostBody = r.parameterTypeUpdate
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

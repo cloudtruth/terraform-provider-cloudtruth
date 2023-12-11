@@ -21,7 +21,7 @@ var _ MappedNullable = &ParameterTimelineEntryParameter{}
 // ParameterTimelineEntryParameter struct for ParameterTimelineEntryParameter
 type ParameterTimelineEntryParameter struct {
 	// A unique identifier for the parameter.
-	Id string `json:"id"`
+	ParameterId NullableString `json:"parameter_id"`
 	// The parameter name.
 	Name string `json:"name"`
 }
@@ -30,9 +30,9 @@ type ParameterTimelineEntryParameter struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewParameterTimelineEntryParameter(id string, name string) *ParameterTimelineEntryParameter {
+func NewParameterTimelineEntryParameter(parameterId NullableString, name string) *ParameterTimelineEntryParameter {
 	this := ParameterTimelineEntryParameter{}
-	this.Id = id
+	this.ParameterId = parameterId
 	this.Name = name
 	return &this
 }
@@ -45,28 +45,30 @@ func NewParameterTimelineEntryParameterWithDefaults() *ParameterTimelineEntryPar
 	return &this
 }
 
-// GetId returns the Id field value
-func (o *ParameterTimelineEntryParameter) GetId() string {
-	if o == nil {
+// GetParameterId returns the ParameterId field value
+// If the value is explicit nil, the zero value for string will be returned
+func (o *ParameterTimelineEntryParameter) GetParameterId() string {
+	if o == nil || o.ParameterId.Get() == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Id
+	return *o.ParameterId.Get()
 }
 
-// GetIdOk returns a tuple with the Id field value
+// GetParameterIdOk returns a tuple with the ParameterId field value
 // and a boolean to check if the value has been set.
-func (o *ParameterTimelineEntryParameter) GetIdOk() (*string, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ParameterTimelineEntryParameter) GetParameterIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Id, true
+	return o.ParameterId.Get(), o.ParameterId.IsSet()
 }
 
-// SetId sets field value
-func (o *ParameterTimelineEntryParameter) SetId(v string) {
-	o.Id = v
+// SetParameterId sets field value
+func (o *ParameterTimelineEntryParameter) SetParameterId(v string) {
+	o.ParameterId.Set(&v)
 }
 
 // GetName returns the Name field value
@@ -103,7 +105,7 @@ func (o ParameterTimelineEntryParameter) MarshalJSON() ([]byte, error) {
 
 func (o ParameterTimelineEntryParameter) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["id"] = o.Id
+	toSerialize["parameter_id"] = o.ParameterId.Get()
 	toSerialize["name"] = o.Name
 	return toSerialize, nil
 }

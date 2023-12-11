@@ -26,6 +26,13 @@ type Organization struct {
 	Id string `json:"id"`
 	// The organization name.
 	Name string `json:"name"`
+	// A regular expression project names must match
+	ProjectNamePattern *string `json:"project_name_pattern,omitempty"`
+	// If set, we are performing maintenance on this organization and have disabled making changes
+	Maintenance bool `json:"maintenance"`
+	// Multi-factor authentication for the organization
+	MfaEnabled *bool `json:"mfa_enabled,omitempty"`
+	Version VersionEnum `json:"version"`
 	// Indicates if this Organization is the one currently targeted by the Bearer token used by the client to authorize.
 	Current bool `json:"current"`
 	Role RoleEnum `json:"role"`
@@ -35,18 +42,20 @@ type Organization struct {
 	SubscriptionPlanId NullableString `json:"subscription_plan_id"`
 	SubscriptionPlanName NullableString `json:"subscription_plan_name"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 }
 
 // NewOrganization instantiates a new Organization object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewOrganization(url string, id string, name string, current bool, role RoleEnum, subscriptionExpiresAt NullableTime, subscriptionFeatures []string, subscriptionId NullableString, subscriptionPlanId NullableString, subscriptionPlanName NullableString, createdAt time.Time, modifiedAt time.Time) *Organization {
+func NewOrganization(url string, id string, name string, maintenance bool, version VersionEnum, current bool, role RoleEnum, subscriptionExpiresAt NullableTime, subscriptionFeatures []string, subscriptionId NullableString, subscriptionPlanId NullableString, subscriptionPlanName NullableString, createdAt time.Time, modifiedAt NullableTime) *Organization {
 	this := Organization{}
 	this.Url = url
 	this.Id = id
 	this.Name = name
+	this.Maintenance = maintenance
+	this.Version = version
 	this.Current = current
 	this.Role = role
 	this.SubscriptionExpiresAt = subscriptionExpiresAt
@@ -137,6 +146,118 @@ func (o *Organization) GetNameOk() (*string, bool) {
 // SetName sets field value
 func (o *Organization) SetName(v string) {
 	o.Name = v
+}
+
+// GetProjectNamePattern returns the ProjectNamePattern field value if set, zero value otherwise.
+func (o *Organization) GetProjectNamePattern() string {
+	if o == nil || IsNil(o.ProjectNamePattern) {
+		var ret string
+		return ret
+	}
+	return *o.ProjectNamePattern
+}
+
+// GetProjectNamePatternOk returns a tuple with the ProjectNamePattern field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Organization) GetProjectNamePatternOk() (*string, bool) {
+	if o == nil || IsNil(o.ProjectNamePattern) {
+		return nil, false
+	}
+	return o.ProjectNamePattern, true
+}
+
+// HasProjectNamePattern returns a boolean if a field has been set.
+func (o *Organization) HasProjectNamePattern() bool {
+	if o != nil && !IsNil(o.ProjectNamePattern) {
+		return true
+	}
+
+	return false
+}
+
+// SetProjectNamePattern gets a reference to the given string and assigns it to the ProjectNamePattern field.
+func (o *Organization) SetProjectNamePattern(v string) {
+	o.ProjectNamePattern = &v
+}
+
+// GetMaintenance returns the Maintenance field value
+func (o *Organization) GetMaintenance() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.Maintenance
+}
+
+// GetMaintenanceOk returns a tuple with the Maintenance field value
+// and a boolean to check if the value has been set.
+func (o *Organization) GetMaintenanceOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Maintenance, true
+}
+
+// SetMaintenance sets field value
+func (o *Organization) SetMaintenance(v bool) {
+	o.Maintenance = v
+}
+
+// GetMfaEnabled returns the MfaEnabled field value if set, zero value otherwise.
+func (o *Organization) GetMfaEnabled() bool {
+	if o == nil || IsNil(o.MfaEnabled) {
+		var ret bool
+		return ret
+	}
+	return *o.MfaEnabled
+}
+
+// GetMfaEnabledOk returns a tuple with the MfaEnabled field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Organization) GetMfaEnabledOk() (*bool, bool) {
+	if o == nil || IsNil(o.MfaEnabled) {
+		return nil, false
+	}
+	return o.MfaEnabled, true
+}
+
+// HasMfaEnabled returns a boolean if a field has been set.
+func (o *Organization) HasMfaEnabled() bool {
+	if o != nil && !IsNil(o.MfaEnabled) {
+		return true
+	}
+
+	return false
+}
+
+// SetMfaEnabled gets a reference to the given bool and assigns it to the MfaEnabled field.
+func (o *Organization) SetMfaEnabled(v bool) {
+	o.MfaEnabled = &v
+}
+
+// GetVersion returns the Version field value
+func (o *Organization) GetVersion() VersionEnum {
+	if o == nil {
+		var ret VersionEnum
+		return ret
+	}
+
+	return o.Version
+}
+
+// GetVersionOk returns a tuple with the Version field value
+// and a boolean to check if the value has been set.
+func (o *Organization) GetVersionOk() (*VersionEnum, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Version, true
+}
+
+// SetVersion sets field value
+func (o *Organization) SetVersion(v VersionEnum) {
+	o.Version = v
 }
 
 // GetCurrent returns the Current field value
@@ -340,27 +461,29 @@ func (o *Organization) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *Organization) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Organization) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *Organization) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 func (o Organization) MarshalJSON() ([]byte, error) {
@@ -376,6 +499,14 @@ func (o Organization) ToMap() (map[string]interface{}, error) {
 	toSerialize["url"] = o.Url
 	toSerialize["id"] = o.Id
 	toSerialize["name"] = o.Name
+	if !IsNil(o.ProjectNamePattern) {
+		toSerialize["project_name_pattern"] = o.ProjectNamePattern
+	}
+	toSerialize["maintenance"] = o.Maintenance
+	if !IsNil(o.MfaEnabled) {
+		toSerialize["mfa_enabled"] = o.MfaEnabled
+	}
+	toSerialize["version"] = o.Version
 	toSerialize["current"] = o.Current
 	toSerialize["role"] = o.Role
 	toSerialize["subscription_expires_at"] = o.SubscriptionExpiresAt.Get()
@@ -384,7 +515,7 @@ func (o Organization) ToMap() (map[string]interface{}, error) {
 	toSerialize["subscription_plan_id"] = o.SubscriptionPlanId.Get()
 	toSerialize["subscription_plan_name"] = o.SubscriptionPlanName.Get()
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
 }
 

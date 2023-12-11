@@ -23,11 +23,12 @@ var _ MappedNullable = &ServiceAccount{}
 type ServiceAccount struct {
 	Url string `json:"url"`
 	Id string `json:"id"`
+	Owner NullableString `json:"owner,omitempty"`
 	User User `json:"user"`
 	// An optional description of the process or system using the service account.
 	Description *string `json:"description,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
 	LastUsedAt NullableTime `json:"last_used_at"`
 }
@@ -36,7 +37,7 @@ type ServiceAccount struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewServiceAccount(url string, id string, user User, createdAt time.Time, modifiedAt time.Time, lastUsedAt NullableTime) *ServiceAccount {
+func NewServiceAccount(url string, id string, user User, createdAt time.Time, modifiedAt NullableTime, lastUsedAt NullableTime) *ServiceAccount {
 	this := ServiceAccount{}
 	this.Url = url
 	this.Id = id
@@ -101,6 +102,48 @@ func (o *ServiceAccount) GetIdOk() (*string, bool) {
 // SetId sets field value
 func (o *ServiceAccount) SetId(v string) {
 	o.Id = v
+}
+
+// GetOwner returns the Owner field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *ServiceAccount) GetOwner() string {
+	if o == nil || IsNil(o.Owner.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.Owner.Get()
+}
+
+// GetOwnerOk returns a tuple with the Owner field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ServiceAccount) GetOwnerOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Owner.Get(), o.Owner.IsSet()
+}
+
+// HasOwner returns a boolean if a field has been set.
+func (o *ServiceAccount) HasOwner() bool {
+	if o != nil && o.Owner.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetOwner gets a reference to the given NullableString and assigns it to the Owner field.
+func (o *ServiceAccount) SetOwner(v string) {
+	o.Owner.Set(&v)
+}
+// SetOwnerNil sets the value for Owner to be an explicit nil
+func (o *ServiceAccount) SetOwnerNil() {
+	o.Owner.Set(nil)
+}
+
+// UnsetOwner ensures that no value is present for Owner, not even an explicit nil
+func (o *ServiceAccount) UnsetOwner() {
+	o.Owner.Unset()
 }
 
 // GetUser returns the User field value
@@ -184,27 +227,29 @@ func (o *ServiceAccount) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *ServiceAccount) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ServiceAccount) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *ServiceAccount) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 // GetLastUsedAt returns the LastUsedAt field value
@@ -245,12 +290,15 @@ func (o ServiceAccount) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["url"] = o.Url
 	toSerialize["id"] = o.Id
+	if o.Owner.IsSet() {
+		toSerialize["owner"] = o.Owner.Get()
+	}
 	toSerialize["user"] = o.User
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	toSerialize["last_used_at"] = o.LastUsedAt.Get()
 	return toSerialize, nil
 }

@@ -21,6 +21,7 @@ var _ MappedNullable = &Tag{}
 
 // Tag The details of a tag.
 type Tag struct {
+	// The URL for the tag.
 	Url string `json:"url"`
 	// A unique identifier for the tag.
 	Id string `json:"id"`
@@ -30,7 +31,9 @@ type Tag struct {
 	Description *string `json:"description,omitempty"`
 	// The point in time this tag represents.
 	Timestamp time.Time `json:"timestamp"`
-	// Deprecated. Only shows pushes for aws integrations in /api/v1/.
+	// If True, this tag cannot be modified once it is created.
+	Immutable *bool `json:"immutable,omitempty"`
+	// Deprecated. Use `push_urls` instead.
 	Pushes []AwsPush `json:"pushes"`
 	// Push actions associated with the tag.
 	PushUrls []string `json:"push_urls"`
@@ -189,6 +192,38 @@ func (o *Tag) SetTimestamp(v time.Time) {
 	o.Timestamp = v
 }
 
+// GetImmutable returns the Immutable field value if set, zero value otherwise.
+func (o *Tag) GetImmutable() bool {
+	if o == nil || IsNil(o.Immutable) {
+		var ret bool
+		return ret
+	}
+	return *o.Immutable
+}
+
+// GetImmutableOk returns a tuple with the Immutable field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Tag) GetImmutableOk() (*bool, bool) {
+	if o == nil || IsNil(o.Immutable) {
+		return nil, false
+	}
+	return o.Immutable, true
+}
+
+// HasImmutable returns a boolean if a field has been set.
+func (o *Tag) HasImmutable() bool {
+	if o != nil && !IsNil(o.Immutable) {
+		return true
+	}
+
+	return false
+}
+
+// SetImmutable gets a reference to the given bool and assigns it to the Immutable field.
+func (o *Tag) SetImmutable(v bool) {
+	o.Immutable = &v
+}
+
 // GetPushes returns the Pushes field value
 func (o *Tag) GetPushes() []AwsPush {
 	if o == nil {
@@ -278,6 +313,9 @@ func (o Tag) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description
 	}
 	toSerialize["timestamp"] = o.Timestamp
+	if !IsNil(o.Immutable) {
+		toSerialize["immutable"] = o.Immutable
+	}
 	toSerialize["pushes"] = o.Pushes
 	toSerialize["push_urls"] = o.PushUrls
 	toSerialize["usage"] = o.Usage

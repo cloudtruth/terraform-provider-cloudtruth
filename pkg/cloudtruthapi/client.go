@@ -58,6 +58,8 @@ type APIClient struct {
 
 	EnvironmentsAPI *EnvironmentsAPIService
 
+	FeaturesAPI *FeaturesAPIService
+
 	GrantsAPI *GrantsAPIService
 
 	GroupsAPI *GroupsAPIService
@@ -103,6 +105,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.AuditAPI = (*AuditAPIService)(&c.common)
 	c.BackupAPI = (*BackupAPIService)(&c.common)
 	c.EnvironmentsAPI = (*EnvironmentsAPIService)(&c.common)
+	c.FeaturesAPI = (*FeaturesAPIService)(&c.common)
 	c.GrantsAPI = (*GrantsAPIService)(&c.common)
 	c.GroupsAPI = (*GroupsAPIService)(&c.common)
 	c.ImportAPI = (*ImportAPIService)(&c.common)
@@ -455,6 +458,11 @@ func (c *APIClient) prepareRequest(
 		localVarRequest = localVarRequest.WithContext(ctx)
 
 		// Walk through any authentication.
+
+		// AccessToken Authentication
+		if auth, ok := ctx.Value(ContextAccessToken).(string); ok {
+			localVarRequest.Header.Add("Authorization", "Bearer "+auth)
+		}
 
 	}
 

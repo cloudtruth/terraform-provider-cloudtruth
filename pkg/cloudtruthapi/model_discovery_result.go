@@ -20,7 +20,7 @@ var _ MappedNullable = &DiscoveryResult{}
 
 // DiscoveryResult struct for DiscoveryResult
 type DiscoveryResult struct {
-	Matched map[string]DiscoveredContent `json:"matched"`
+	Matched map[string][]DiscoveredContent `json:"matched"`
 	Skipped map[string]string `json:"skipped"`
 }
 
@@ -28,7 +28,7 @@ type DiscoveryResult struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDiscoveryResult(matched map[string]DiscoveredContent, skipped map[string]string) *DiscoveryResult {
+func NewDiscoveryResult(matched map[string][]DiscoveredContent, skipped map[string]string) *DiscoveryResult {
 	this := DiscoveryResult{}
 	this.Matched = matched
 	this.Skipped = skipped
@@ -44,9 +44,9 @@ func NewDiscoveryResultWithDefaults() *DiscoveryResult {
 }
 
 // GetMatched returns the Matched field value
-func (o *DiscoveryResult) GetMatched() map[string]DiscoveredContent {
+func (o *DiscoveryResult) GetMatched() map[string][]DiscoveredContent {
 	if o == nil {
-		var ret map[string]DiscoveredContent
+		var ret map[string][]DiscoveredContent
 		return ret
 	}
 
@@ -55,7 +55,7 @@ func (o *DiscoveryResult) GetMatched() map[string]DiscoveredContent {
 
 // GetMatchedOk returns a tuple with the Matched field value
 // and a boolean to check if the value has been set.
-func (o *DiscoveryResult) GetMatchedOk() (*map[string]DiscoveredContent, bool) {
+func (o *DiscoveryResult) GetMatchedOk() (*map[string][]DiscoveredContent, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -63,7 +63,7 @@ func (o *DiscoveryResult) GetMatchedOk() (*map[string]DiscoveredContent, bool) {
 }
 
 // SetMatched sets field value
-func (o *DiscoveryResult) SetMatched(v map[string]DiscoveredContent) {
+func (o *DiscoveryResult) SetMatched(v map[string][]DiscoveredContent) {
 	o.Matched = v
 }
 

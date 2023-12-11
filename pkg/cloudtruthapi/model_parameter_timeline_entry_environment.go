@@ -21,7 +21,7 @@ var _ MappedNullable = &ParameterTimelineEntryEnvironment{}
 // ParameterTimelineEntryEnvironment struct for ParameterTimelineEntryEnvironment
 type ParameterTimelineEntryEnvironment struct {
 	// A unique identifier for the environment.
-	Id string `json:"id"`
+	EnvironmentId NullableString `json:"environment_id"`
 	// The environment name.
 	Name string `json:"name"`
 	// Indicates if the value change was direct or if it flowed into the environment. If `true` then the value was actually set directly into this environment. If `false` then the environment has no value set directly so it inherited the value from its parent.
@@ -32,9 +32,9 @@ type ParameterTimelineEntryEnvironment struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewParameterTimelineEntryEnvironment(id string, name string, override bool) *ParameterTimelineEntryEnvironment {
+func NewParameterTimelineEntryEnvironment(environmentId NullableString, name string, override bool) *ParameterTimelineEntryEnvironment {
 	this := ParameterTimelineEntryEnvironment{}
-	this.Id = id
+	this.EnvironmentId = environmentId
 	this.Name = name
 	this.Override = override
 	return &this
@@ -48,28 +48,30 @@ func NewParameterTimelineEntryEnvironmentWithDefaults() *ParameterTimelineEntryE
 	return &this
 }
 
-// GetId returns the Id field value
-func (o *ParameterTimelineEntryEnvironment) GetId() string {
-	if o == nil {
+// GetEnvironmentId returns the EnvironmentId field value
+// If the value is explicit nil, the zero value for string will be returned
+func (o *ParameterTimelineEntryEnvironment) GetEnvironmentId() string {
+	if o == nil || o.EnvironmentId.Get() == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Id
+	return *o.EnvironmentId.Get()
 }
 
-// GetIdOk returns a tuple with the Id field value
+// GetEnvironmentIdOk returns a tuple with the EnvironmentId field value
 // and a boolean to check if the value has been set.
-func (o *ParameterTimelineEntryEnvironment) GetIdOk() (*string, bool) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ParameterTimelineEntryEnvironment) GetEnvironmentIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Id, true
+	return o.EnvironmentId.Get(), o.EnvironmentId.IsSet()
 }
 
-// SetId sets field value
-func (o *ParameterTimelineEntryEnvironment) SetId(v string) {
-	o.Id = v
+// SetEnvironmentId sets field value
+func (o *ParameterTimelineEntryEnvironment) SetEnvironmentId(v string) {
+	o.EnvironmentId.Set(&v)
 }
 
 // GetName returns the Name field value
@@ -130,7 +132,7 @@ func (o ParameterTimelineEntryEnvironment) MarshalJSON() ([]byte, error) {
 
 func (o ParameterTimelineEntryEnvironment) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["id"] = o.Id
+	toSerialize["environment_id"] = o.EnvironmentId.Get()
 	toSerialize["name"] = o.Name
 	toSerialize["override"] = o.Override
 	return toSerialize, nil

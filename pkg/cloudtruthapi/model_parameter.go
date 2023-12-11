@@ -21,52 +21,54 @@ var _ MappedNullable = &Parameter{}
 
 // Parameter A single parameter inside of a project.
 type Parameter struct {
+	// The parameter url.
 	Url string `json:"url"`
-	// A unique identifier for the parameter.
 	Id string `json:"id"`
+	LedgerId string `json:"ledger_id"`
 	// The parameter name.
 	Name string `json:"name"`
-	// A description of the parameter.  You may find it helpful to document how this parameter is used to assist others when they need to maintain software that uses this content.
 	Description *string `json:"description,omitempty"`
-	// Indicates if this content is secret or not.  When a parameter is considered to be a secret, any internal values are stored in a dedicated vault for your organization for maximum security.  External values are inspected on-demand to ensure they align with the parameter's secret setting and if they do not, those external values are not allowed to be used.
-	Secret *bool `json:"secret,omitempty"`
-	// The type of this Parameter.
+	Secret bool `json:"secret"`
+	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.         
 	Type *string `json:"type,omitempty"`
 	// Rules applied to this parameter.
 	Rules []ParameterRule `json:"rules"`
-	// The project that the parameter is within.
+	// The project url.
 	Project string `json:"project"`
 	// The project name that the parameter is within.
 	ProjectName string `json:"project_name"`
-	// Templates that reference this Parameter.
+	// Templates that reference this Parameter.  This field is not valid for history requests.
 	ReferencingTemplates []string `json:"referencing_templates"`
-	// Dynamic values that reference this Parameter.
+	// Dynamic values that reference this Parameter.  This field is not valid for history requests.
 	ReferencingValues []string `json:"referencing_values"`
 	//              This dictionary has keys that correspond to environment urls, and values             that correspond to the effective value for this parameter in that environment.             Each parameter has an effective value in every environment based on             project dependencies and environment inheritance.              The effective value is found by looking (within the keyed environment) up             the project dependencies by parameter name.  If a value is not found, the             parent environment is consulted with the same logic to locate a value.  It             is possible for there to be a `null` value record for an environment, which             means there is no value set; it is also possible for there to be a value record             with a `value` of `null`, which means the value was explicitly set to `null`.              If the value's parameter does not match the enclosing parameter (holding the             values array) then that value is flowing in through project dependencies.             Clients must recognize this in case the user asks to modify the value; in this             case the client must POST a new Value to the current parameter to override the             value coming in from the project dependency.              If the Value.environment matches the key, then it is an explicit value set for             that environment.  If they differ, the value was obtained from a parent             environment (directly or indirectly).  If the value is None then no value has             ever been set in any environment for this parameter within all the project             dependencies.         
 	Values map[string]Value `json:"values"`
+	//          Identical to values, except the dictionary is flattened to a list.         Note that in this case, the environment in the Value is the environment         asked for, not the environment where it was obtained.         
+	ValuesFlat []Value `json:"values_flat"`
 	// If this parameter's project depends on another project which provides a parameter of the same name, this parameter overrides the one provided by the dependee.  You can use this field to determine if there will be side-effects the user should know about when deleting a parameter.  Deleting a parameter that overrides another one due to an identical name will uncover the one from the dependee project.
 	Overrides NullableString `json:"overrides"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 }
 
 // NewParameter instantiates a new Parameter object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewParameter(url string, id string, name string, rules []ParameterRule, project string, projectName string, referencingTemplates []string, referencingValues []string, values map[string]Value, overrides NullableString, createdAt time.Time, modifiedAt time.Time) *Parameter {
+func NewParameter(url string, id string, ledgerId string, name string, secret bool, rules []ParameterRule, project string, projectName string, referencingTemplates []string, referencingValues []string, values map[string]Value, valuesFlat []Value, overrides NullableString, createdAt time.Time, modifiedAt NullableTime) *Parameter {
 	this := Parameter{}
 	this.Url = url
 	this.Id = id
+	this.LedgerId = ledgerId
 	this.Name = name
-	var type_ string = "string"
-	this.Type = &type_
+	this.Secret = secret
 	this.Rules = rules
 	this.Project = project
 	this.ProjectName = projectName
 	this.ReferencingTemplates = referencingTemplates
 	this.ReferencingValues = referencingValues
 	this.Values = values
+	this.ValuesFlat = valuesFlat
 	this.Overrides = overrides
 	this.CreatedAt = createdAt
 	this.ModifiedAt = modifiedAt
@@ -78,8 +80,6 @@ func NewParameter(url string, id string, name string, rules []ParameterRule, pro
 // but it doesn't guarantee that properties required by API are set
 func NewParameterWithDefaults() *Parameter {
 	this := Parameter{}
-	var type_ string = "string"
-	this.Type = &type_
 	return &this
 }
 
@@ -129,6 +129,30 @@ func (o *Parameter) GetIdOk() (*string, bool) {
 // SetId sets field value
 func (o *Parameter) SetId(v string) {
 	o.Id = v
+}
+
+// GetLedgerId returns the LedgerId field value
+func (o *Parameter) GetLedgerId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.LedgerId
+}
+
+// GetLedgerIdOk returns a tuple with the LedgerId field value
+// and a boolean to check if the value has been set.
+func (o *Parameter) GetLedgerIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.LedgerId, true
+}
+
+// SetLedgerId sets field value
+func (o *Parameter) SetLedgerId(v string) {
+	o.LedgerId = v
 }
 
 // GetName returns the Name field value
@@ -187,36 +211,28 @@ func (o *Parameter) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetSecret returns the Secret field value if set, zero value otherwise.
+// GetSecret returns the Secret field value
 func (o *Parameter) GetSecret() bool {
-	if o == nil || IsNil(o.Secret) {
+	if o == nil {
 		var ret bool
 		return ret
 	}
-	return *o.Secret
+
+	return o.Secret
 }
 
-// GetSecretOk returns a tuple with the Secret field value if set, nil otherwise
+// GetSecretOk returns a tuple with the Secret field value
 // and a boolean to check if the value has been set.
 func (o *Parameter) GetSecretOk() (*bool, bool) {
-	if o == nil || IsNil(o.Secret) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Secret, true
+	return &o.Secret, true
 }
 
-// HasSecret returns a boolean if a field has been set.
-func (o *Parameter) HasSecret() bool {
-	if o != nil && !IsNil(o.Secret) {
-		return true
-	}
-
-	return false
-}
-
-// SetSecret gets a reference to the given bool and assigns it to the Secret field.
+// SetSecret sets field value
 func (o *Parameter) SetSecret(v bool) {
-	o.Secret = &v
+	o.Secret = v
 }
 
 // GetType returns the Type field value if set, zero value otherwise.
@@ -395,6 +411,30 @@ func (o *Parameter) SetValues(v map[string]Value) {
 	o.Values = v
 }
 
+// GetValuesFlat returns the ValuesFlat field value
+func (o *Parameter) GetValuesFlat() []Value {
+	if o == nil {
+		var ret []Value
+		return ret
+	}
+
+	return o.ValuesFlat
+}
+
+// GetValuesFlatOk returns a tuple with the ValuesFlat field value
+// and a boolean to check if the value has been set.
+func (o *Parameter) GetValuesFlatOk() ([]Value, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.ValuesFlat, true
+}
+
+// SetValuesFlat sets field value
+func (o *Parameter) SetValuesFlat(v []Value) {
+	o.ValuesFlat = v
+}
+
 // GetOverrides returns the Overrides field value
 // If the value is explicit nil, the zero value for string will be returned
 func (o *Parameter) GetOverrides() string {
@@ -446,27 +486,29 @@ func (o *Parameter) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *Parameter) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Parameter) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *Parameter) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 func (o Parameter) MarshalJSON() ([]byte, error) {
@@ -481,13 +523,12 @@ func (o Parameter) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["url"] = o.Url
 	toSerialize["id"] = o.Id
+	toSerialize["ledger_id"] = o.LedgerId
 	toSerialize["name"] = o.Name
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if !IsNil(o.Secret) {
-		toSerialize["secret"] = o.Secret
-	}
+	toSerialize["secret"] = o.Secret
 	if !IsNil(o.Type) {
 		toSerialize["type"] = o.Type
 	}
@@ -497,9 +538,10 @@ func (o Parameter) ToMap() (map[string]interface{}, error) {
 	toSerialize["referencing_templates"] = o.ReferencingTemplates
 	toSerialize["referencing_values"] = o.ReferencingValues
 	toSerialize["values"] = o.Values
+	toSerialize["values_flat"] = o.ValuesFlat
 	toSerialize["overrides"] = o.Overrides.Get()
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
 }
 

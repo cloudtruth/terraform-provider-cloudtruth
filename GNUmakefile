@@ -75,7 +75,7 @@ pkg/cloudtruth/client.go: pkg/openapi.yml
 	docker run --rm \
 		-v "$(shell pwd)/pkg:/pkg" \
 		--user "$(shell id -u):$(shell id -g)" \
-		openapitools/openapi-generator-cli generate \
+		openapitools/openapi-generator-cli:v7.0.0 generate \
 		-i /pkg/openapi.yml \
 		-g go \
 		-o /pkg/cloudtruthapi \
@@ -83,7 +83,11 @@ pkg/cloudtruth/client.go: pkg/openapi.yml
 		--additional-properties packageVersion=1.0.0 \
 		--additional-properties enumClassPrefix=true \
 		--type-mappings=object=interface{}
-	rm pkg/cloudtruthapi/go.mod pkg/cloudtruthapi/go.sum # These files are unecessary and break local imports
+        # These files are unecessary and break local imports
+	rm pkg/cloudtruthapi/go.mod pkg/cloudtruthapi/go.sum
+        # These files are unecessary
+	rm -rf pkg/cloudtruthapi/test pkg/cloudtruthapi/api pkg/cloudtruthapi/.openapi-generator pkg/cloudtruthapi/docs
+	rm pkg/cloudtruthapi/.travis.yml pkg/cloudtruthapi/git_push.sh pkg/cloudtruthapi/README.md
 
 pkg/openapi.yml: pkg
 	curl -s https://api.cloudtruth.io/api/schema/ > pkg/openapi.yml

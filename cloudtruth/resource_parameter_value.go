@@ -252,7 +252,7 @@ func resourceParameterValueRead(ctx context.Context, d *schema.ResourceData, met
 }
 
 func updateParameterValue(ctx context.Context, paramID, paramValueID, projID string, d *schema.ResourceData, c *cloudTruthClient) (*http.Response, error) {
-	updateValue := cloudtruthapi.NewValueWithDefaults()
+	updateValue := cloudtruthapi.NewValueUpdateWithDefaults()
 	hasParamValueChange := false
 	if d.HasChange("value") {
 		value := d.Get("value").(string)
@@ -309,7 +309,7 @@ func updateParameterValue(ctx context.Context, paramID, paramValueID, projID str
 		if hasParamValueChange {
 			// No retry logic here, the caller handles that
 			_, r, err = c.openAPIClient.ProjectsAPI.ProjectsParametersValuesUpdate(ctx, paramValueID, paramID,
-				projID).Value(*updateValue).Execute()
+				projID).ValueUpdate(*updateValue).Execute()
 			if err != nil {
 				return r, err
 			}

@@ -23,11 +23,12 @@ var _ MappedNullable = &PatchedServiceAccount{}
 type PatchedServiceAccount struct {
 	Url *string `json:"url,omitempty"`
 	Id *string `json:"id,omitempty"`
+	Owner NullableString `json:"owner,omitempty"`
 	User *User `json:"user,omitempty"`
 	// An optional description of the process or system using the service account.
 	Description *string `json:"description,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt *time.Time `json:"modified_at,omitempty"`
+	ModifiedAt NullableTime `json:"modified_at,omitempty"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
 	LastUsedAt NullableTime `json:"last_used_at,omitempty"`
 }
@@ -111,6 +112,48 @@ func (o *PatchedServiceAccount) HasId() bool {
 // SetId gets a reference to the given string and assigns it to the Id field.
 func (o *PatchedServiceAccount) SetId(v string) {
 	o.Id = &v
+}
+
+// GetOwner returns the Owner field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PatchedServiceAccount) GetOwner() string {
+	if o == nil || IsNil(o.Owner.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.Owner.Get()
+}
+
+// GetOwnerOk returns a tuple with the Owner field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PatchedServiceAccount) GetOwnerOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Owner.Get(), o.Owner.IsSet()
+}
+
+// HasOwner returns a boolean if a field has been set.
+func (o *PatchedServiceAccount) HasOwner() bool {
+	if o != nil && o.Owner.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetOwner gets a reference to the given NullableString and assigns it to the Owner field.
+func (o *PatchedServiceAccount) SetOwner(v string) {
+	o.Owner.Set(&v)
+}
+// SetOwnerNil sets the value for Owner to be an explicit nil
+func (o *PatchedServiceAccount) SetOwnerNil() {
+	o.Owner.Set(nil)
+}
+
+// UnsetOwner ensures that no value is present for Owner, not even an explicit nil
+func (o *PatchedServiceAccount) UnsetOwner() {
+	o.Owner.Unset()
 }
 
 // GetUser returns the User field value if set, zero value otherwise.
@@ -209,36 +252,46 @@ func (o *PatchedServiceAccount) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
-// GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise.
+// GetModifiedAt returns the ModifiedAt field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *PatchedServiceAccount) GetModifiedAt() time.Time {
-	if o == nil || IsNil(o.ModifiedAt) {
+	if o == nil || IsNil(o.ModifiedAt.Get()) {
 		var ret time.Time
 		return ret
 	}
-	return *o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PatchedServiceAccount) GetModifiedAtOk() (*time.Time, bool) {
-	if o == nil || IsNil(o.ModifiedAt) {
+	if o == nil {
 		return nil, false
 	}
-	return o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // HasModifiedAt returns a boolean if a field has been set.
 func (o *PatchedServiceAccount) HasModifiedAt() bool {
-	if o != nil && !IsNil(o.ModifiedAt) {
+	if o != nil && o.ModifiedAt.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetModifiedAt gets a reference to the given time.Time and assigns it to the ModifiedAt field.
+// SetModifiedAt gets a reference to the given NullableTime and assigns it to the ModifiedAt field.
 func (o *PatchedServiceAccount) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = &v
+	o.ModifiedAt.Set(&v)
+}
+// SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
+func (o *PatchedServiceAccount) SetModifiedAtNil() {
+	o.ModifiedAt.Set(nil)
+}
+
+// UnsetModifiedAt ensures that no value is present for ModifiedAt, not even an explicit nil
+func (o *PatchedServiceAccount) UnsetModifiedAt() {
+	o.ModifiedAt.Unset()
 }
 
 // GetLastUsedAt returns the LastUsedAt field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -299,6 +352,9 @@ func (o PatchedServiceAccount) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
+	if o.Owner.IsSet() {
+		toSerialize["owner"] = o.Owner.Get()
+	}
 	if !IsNil(o.User) {
 		toSerialize["user"] = o.User
 	}
@@ -308,8 +364,8 @@ func (o PatchedServiceAccount) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
-	if !IsNil(o.ModifiedAt) {
-		toSerialize["modified_at"] = o.ModifiedAt
+	if o.ModifiedAt.IsSet() {
+		toSerialize["modified_at"] = o.ModifiedAt.Get()
 	}
 	if o.LastUsedAt.IsSet() {
 		toSerialize["last_used_at"] = o.LastUsedAt.Get()

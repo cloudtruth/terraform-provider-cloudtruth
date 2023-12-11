@@ -21,61 +21,73 @@ var _ MappedNullable = &Value{}
 
 // Value A value for a parameter in a given environment.
 type Value struct {
+	// The value url.
 	Url string `json:"url"`
-	// A unique identifier for the value.
 	Id string `json:"id"`
+	LedgerId string `json:"ledger_id"`
+	// The active environment this Value is viewed under
+	ActiveEnvironment string `json:"active_environment"`
+	// The active environment id this Value is viewed under
+	ActiveEnvironmentId string `json:"active_environment_id"`
+	// The name of the environment that this environment is viewed under
+	ActiveEnvironmentName string `json:"active_environment_name"`
 	// The environment this value is set in.
 	Environment string `json:"environment"`
+	// The environment id for this value.
+	EnvironmentId string `json:"environment_id"`
 	// The environment name for this value.  This is a convenience to avoid another query against the server to resolve the environment url into a name.
 	EnvironmentName string `json:"environment_name"`
-	// The earliest tag name this value appears in (within the value's environment).
-	EarliestTag NullableString `json:"earliest_tag"`
 	// The parameter this value is for.
 	Parameter string `json:"parameter"`
-	// An external parameter leverages a CloudTruth integration to retrieve content on-demand from an external source.  When this is `false` the value is stored by CloudTruth and considered to be _internal_.  When this is `true`, the `external_fqn` field must be set.
+	// The parameter id for this value.
+	ParameterId string `json:"parameter_id"`
 	External *bool `json:"external,omitempty"`
-	// The FQN, or Fully-Qualified Name, is the path through the integration to get to the desired content.  This must be present and reference a valid integration when the value is `external`.
 	ExternalFqn *string `json:"external_fqn,omitempty"`
-	// If the value is `external`, the content returned by the integration can be reduced by applying a JMESpath expression.  This is valid as long as the content is structured and of a supported format.  JMESpath expressions are supported on `json`, `yaml`, and `dotenv` content.
-	ExternalFilter *string `json:"external_filter,omitempty"`
+	ExternalFilter NullableString `json:"external_filter,omitempty"`
 	// This field is deprecated and unused.
 	ExternalError NullableString `json:"external_error"`
-	ExternalStatus NullablePatchedValueExternalStatus `json:"external_status"`
-	// This is the content to use when resolving the Value for an internal non-secret, or when storing a secret.  When storing a secret, this content is stored in your organization's dedicated vault and this field is cleared.  This field is required if the value is being created or updated and is `internal`.  This field cannot be specified when creating or updating an `external` value.
+	ExternalStatus NullableValueExternalStatus `json:"external_status"`
 	InternalValue NullableString `json:"internal_value,omitempty"`
-	// If `true`, apply template substitution rules to this value.  If `false`, this value is a literal value.  Note: secrets cannot be interpolated.
 	Interpolated *bool `json:"interpolated,omitempty"`
-	// This is the actual content of the Value for the given parameter in the given environment.  If you request secret masking, no secret content will be included in the result and instead a series of asterisks will be used instead for the value.  If you request wrapping, the secret content will be wrapped in an envelope that is bound to your JWT token.  For more information about secret wrapping, see the docs.  Clients applying this value to a shell environment should set `<parameter_name>=<value>` even if `value` is the empty string.  If `value` is `null`, the client should unset that shell environment variable.
+	// This is the actual content of the Value for the given parameter in the given environment.  If you request secret masking, no secret content will be included in the result and instead a series of asterisks will be used instead for the value.  Clients applying this value to a shell environment should set `<parameter_name>=<value>` even if `value` is the empty string.  If `value` is `null`, the client should unset that shell environment variable.
 	Value NullableString `json:"value"`
 	// If true, the `value` field has undergone template evaluation.
 	Evaluated bool `json:"evaluated"`
 	// Indicates the value content is a secret.  Normally this is `true` when the parameter is a secret. It is possible for a parameter to be a secret with a external value that is not a secret.  It is not possible to convert a parameter from a secret to a non-secret if any of the values are external and a secret.  Clients can check this condition by leveraging this field.  It is also possible for a parameter to not be a secret but for this value to be dynamic and reference a Parameter that is a secret.  In this case, we indicate the value is a secret.
 	Secret NullableBool `json:"secret"`
-	// The parameters this value references, if interpolated.
+	// The projects this value references, if dynamic.  This field is not valid for history requests.
+	ReferencedProjects []string `json:"referenced_projects"`
+	// The parameters this value references, if dynamic.  this field is not valid for history requests.
 	ReferencedParameters []string `json:"referenced_parameters"`
-	// The templates this value references, if interpolated.
+	// The templates this value references, if dynamic.  This field is not valid for history requests.
 	ReferencedTemplates []string `json:"referenced_templates"`
 	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	ModifiedAt NullableTime `json:"modified_at"`
 }
 
 // NewValue instantiates a new Value object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewValue(url string, id string, environment string, environmentName string, earliestTag NullableString, parameter string, externalError NullableString, externalStatus NullablePatchedValueExternalStatus, value NullableString, evaluated bool, secret NullableBool, referencedParameters []string, referencedTemplates []string, createdAt time.Time, modifiedAt time.Time) *Value {
+func NewValue(url string, id string, ledgerId string, activeEnvironment string, activeEnvironmentId string, activeEnvironmentName string, environment string, environmentId string, environmentName string, parameter string, parameterId string, externalError NullableString, externalStatus NullableValueExternalStatus, value NullableString, evaluated bool, secret NullableBool, referencedProjects []string, referencedParameters []string, referencedTemplates []string, createdAt time.Time, modifiedAt NullableTime) *Value {
 	this := Value{}
 	this.Url = url
 	this.Id = id
+	this.LedgerId = ledgerId
+	this.ActiveEnvironment = activeEnvironment
+	this.ActiveEnvironmentId = activeEnvironmentId
+	this.ActiveEnvironmentName = activeEnvironmentName
 	this.Environment = environment
+	this.EnvironmentId = environmentId
 	this.EnvironmentName = environmentName
-	this.EarliestTag = earliestTag
 	this.Parameter = parameter
+	this.ParameterId = parameterId
 	this.ExternalError = externalError
 	this.ExternalStatus = externalStatus
 	this.Value = value
 	this.Evaluated = evaluated
 	this.Secret = secret
+	this.ReferencedProjects = referencedProjects
 	this.ReferencedParameters = referencedParameters
 	this.ReferencedTemplates = referencedTemplates
 	this.CreatedAt = createdAt
@@ -139,6 +151,102 @@ func (o *Value) SetId(v string) {
 	o.Id = v
 }
 
+// GetLedgerId returns the LedgerId field value
+func (o *Value) GetLedgerId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.LedgerId
+}
+
+// GetLedgerIdOk returns a tuple with the LedgerId field value
+// and a boolean to check if the value has been set.
+func (o *Value) GetLedgerIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.LedgerId, true
+}
+
+// SetLedgerId sets field value
+func (o *Value) SetLedgerId(v string) {
+	o.LedgerId = v
+}
+
+// GetActiveEnvironment returns the ActiveEnvironment field value
+func (o *Value) GetActiveEnvironment() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ActiveEnvironment
+}
+
+// GetActiveEnvironmentOk returns a tuple with the ActiveEnvironment field value
+// and a boolean to check if the value has been set.
+func (o *Value) GetActiveEnvironmentOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ActiveEnvironment, true
+}
+
+// SetActiveEnvironment sets field value
+func (o *Value) SetActiveEnvironment(v string) {
+	o.ActiveEnvironment = v
+}
+
+// GetActiveEnvironmentId returns the ActiveEnvironmentId field value
+func (o *Value) GetActiveEnvironmentId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ActiveEnvironmentId
+}
+
+// GetActiveEnvironmentIdOk returns a tuple with the ActiveEnvironmentId field value
+// and a boolean to check if the value has been set.
+func (o *Value) GetActiveEnvironmentIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ActiveEnvironmentId, true
+}
+
+// SetActiveEnvironmentId sets field value
+func (o *Value) SetActiveEnvironmentId(v string) {
+	o.ActiveEnvironmentId = v
+}
+
+// GetActiveEnvironmentName returns the ActiveEnvironmentName field value
+func (o *Value) GetActiveEnvironmentName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ActiveEnvironmentName
+}
+
+// GetActiveEnvironmentNameOk returns a tuple with the ActiveEnvironmentName field value
+// and a boolean to check if the value has been set.
+func (o *Value) GetActiveEnvironmentNameOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ActiveEnvironmentName, true
+}
+
+// SetActiveEnvironmentName sets field value
+func (o *Value) SetActiveEnvironmentName(v string) {
+	o.ActiveEnvironmentName = v
+}
+
 // GetEnvironment returns the Environment field value
 func (o *Value) GetEnvironment() string {
 	if o == nil {
@@ -161,6 +269,30 @@ func (o *Value) GetEnvironmentOk() (*string, bool) {
 // SetEnvironment sets field value
 func (o *Value) SetEnvironment(v string) {
 	o.Environment = v
+}
+
+// GetEnvironmentId returns the EnvironmentId field value
+func (o *Value) GetEnvironmentId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.EnvironmentId
+}
+
+// GetEnvironmentIdOk returns a tuple with the EnvironmentId field value
+// and a boolean to check if the value has been set.
+func (o *Value) GetEnvironmentIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.EnvironmentId, true
+}
+
+// SetEnvironmentId sets field value
+func (o *Value) SetEnvironmentId(v string) {
+	o.EnvironmentId = v
 }
 
 // GetEnvironmentName returns the EnvironmentName field value
@@ -187,32 +319,6 @@ func (o *Value) SetEnvironmentName(v string) {
 	o.EnvironmentName = v
 }
 
-// GetEarliestTag returns the EarliestTag field value
-// If the value is explicit nil, the zero value for string will be returned
-func (o *Value) GetEarliestTag() string {
-	if o == nil || o.EarliestTag.Get() == nil {
-		var ret string
-		return ret
-	}
-
-	return *o.EarliestTag.Get()
-}
-
-// GetEarliestTagOk returns a tuple with the EarliestTag field value
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *Value) GetEarliestTagOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.EarliestTag.Get(), o.EarliestTag.IsSet()
-}
-
-// SetEarliestTag sets field value
-func (o *Value) SetEarliestTag(v string) {
-	o.EarliestTag.Set(&v)
-}
-
 // GetParameter returns the Parameter field value
 func (o *Value) GetParameter() string {
 	if o == nil {
@@ -235,6 +341,30 @@ func (o *Value) GetParameterOk() (*string, bool) {
 // SetParameter sets field value
 func (o *Value) SetParameter(v string) {
 	o.Parameter = v
+}
+
+// GetParameterId returns the ParameterId field value
+func (o *Value) GetParameterId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ParameterId
+}
+
+// GetParameterIdOk returns a tuple with the ParameterId field value
+// and a boolean to check if the value has been set.
+func (o *Value) GetParameterIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ParameterId, true
+}
+
+// SetParameterId sets field value
+func (o *Value) SetParameterId(v string) {
+	o.ParameterId = v
 }
 
 // GetExternal returns the External field value if set, zero value otherwise.
@@ -301,36 +431,46 @@ func (o *Value) SetExternalFqn(v string) {
 	o.ExternalFqn = &v
 }
 
-// GetExternalFilter returns the ExternalFilter field value if set, zero value otherwise.
+// GetExternalFilter returns the ExternalFilter field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *Value) GetExternalFilter() string {
-	if o == nil || IsNil(o.ExternalFilter) {
+	if o == nil || IsNil(o.ExternalFilter.Get()) {
 		var ret string
 		return ret
 	}
-	return *o.ExternalFilter
+	return *o.ExternalFilter.Get()
 }
 
 // GetExternalFilterOk returns a tuple with the ExternalFilter field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Value) GetExternalFilterOk() (*string, bool) {
-	if o == nil || IsNil(o.ExternalFilter) {
+	if o == nil {
 		return nil, false
 	}
-	return o.ExternalFilter, true
+	return o.ExternalFilter.Get(), o.ExternalFilter.IsSet()
 }
 
 // HasExternalFilter returns a boolean if a field has been set.
 func (o *Value) HasExternalFilter() bool {
-	if o != nil && !IsNil(o.ExternalFilter) {
+	if o != nil && o.ExternalFilter.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetExternalFilter gets a reference to the given string and assigns it to the ExternalFilter field.
+// SetExternalFilter gets a reference to the given NullableString and assigns it to the ExternalFilter field.
 func (o *Value) SetExternalFilter(v string) {
-	o.ExternalFilter = &v
+	o.ExternalFilter.Set(&v)
+}
+// SetExternalFilterNil sets the value for ExternalFilter to be an explicit nil
+func (o *Value) SetExternalFilterNil() {
+	o.ExternalFilter.Set(nil)
+}
+
+// UnsetExternalFilter ensures that no value is present for ExternalFilter, not even an explicit nil
+func (o *Value) UnsetExternalFilter() {
+	o.ExternalFilter.Unset()
 }
 
 // GetExternalError returns the ExternalError field value
@@ -360,10 +500,10 @@ func (o *Value) SetExternalError(v string) {
 }
 
 // GetExternalStatus returns the ExternalStatus field value
-// If the value is explicit nil, the zero value for PatchedValueExternalStatus will be returned
-func (o *Value) GetExternalStatus() PatchedValueExternalStatus {
+// If the value is explicit nil, the zero value for ValueExternalStatus will be returned
+func (o *Value) GetExternalStatus() ValueExternalStatus {
 	if o == nil || o.ExternalStatus.Get() == nil {
-		var ret PatchedValueExternalStatus
+		var ret ValueExternalStatus
 		return ret
 	}
 
@@ -373,7 +513,7 @@ func (o *Value) GetExternalStatus() PatchedValueExternalStatus {
 // GetExternalStatusOk returns a tuple with the ExternalStatus field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *Value) GetExternalStatusOk() (*PatchedValueExternalStatus, bool) {
+func (o *Value) GetExternalStatusOk() (*ValueExternalStatus, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -381,7 +521,7 @@ func (o *Value) GetExternalStatusOk() (*PatchedValueExternalStatus, bool) {
 }
 
 // SetExternalStatus sets field value
-func (o *Value) SetExternalStatus(v PatchedValueExternalStatus) {
+func (o *Value) SetExternalStatus(v ValueExternalStatus) {
 	o.ExternalStatus.Set(&v)
 }
 
@@ -535,6 +675,30 @@ func (o *Value) SetSecret(v bool) {
 	o.Secret.Set(&v)
 }
 
+// GetReferencedProjects returns the ReferencedProjects field value
+func (o *Value) GetReferencedProjects() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+
+	return o.ReferencedProjects
+}
+
+// GetReferencedProjectsOk returns a tuple with the ReferencedProjects field value
+// and a boolean to check if the value has been set.
+func (o *Value) GetReferencedProjectsOk() ([]string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.ReferencedProjects, true
+}
+
+// SetReferencedProjects sets field value
+func (o *Value) SetReferencedProjects(v []string) {
+	o.ReferencedProjects = v
+}
+
 // GetReferencedParameters returns the ReferencedParameters field value
 func (o *Value) GetReferencedParameters() []string {
 	if o == nil {
@@ -608,27 +772,29 @@ func (o *Value) SetCreatedAt(v time.Time) {
 }
 
 // GetModifiedAt returns the ModifiedAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
 func (o *Value) GetModifiedAt() time.Time {
-	if o == nil {
+	if o == nil || o.ModifiedAt.Get() == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.ModifiedAt
+	return *o.ModifiedAt.Get()
 }
 
 // GetModifiedAtOk returns a tuple with the ModifiedAt field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *Value) GetModifiedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ModifiedAt, true
+	return o.ModifiedAt.Get(), o.ModifiedAt.IsSet()
 }
 
 // SetModifiedAt sets field value
 func (o *Value) SetModifiedAt(v time.Time) {
-	o.ModifiedAt = v
+	o.ModifiedAt.Set(&v)
 }
 
 func (o Value) MarshalJSON() ([]byte, error) {
@@ -643,18 +809,23 @@ func (o Value) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["url"] = o.Url
 	toSerialize["id"] = o.Id
+	toSerialize["ledger_id"] = o.LedgerId
+	toSerialize["active_environment"] = o.ActiveEnvironment
+	toSerialize["active_environment_id"] = o.ActiveEnvironmentId
+	toSerialize["active_environment_name"] = o.ActiveEnvironmentName
 	toSerialize["environment"] = o.Environment
+	toSerialize["environment_id"] = o.EnvironmentId
 	toSerialize["environment_name"] = o.EnvironmentName
-	toSerialize["earliest_tag"] = o.EarliestTag.Get()
 	toSerialize["parameter"] = o.Parameter
+	toSerialize["parameter_id"] = o.ParameterId
 	if !IsNil(o.External) {
 		toSerialize["external"] = o.External
 	}
 	if !IsNil(o.ExternalFqn) {
 		toSerialize["external_fqn"] = o.ExternalFqn
 	}
-	if !IsNil(o.ExternalFilter) {
-		toSerialize["external_filter"] = o.ExternalFilter
+	if o.ExternalFilter.IsSet() {
+		toSerialize["external_filter"] = o.ExternalFilter.Get()
 	}
 	toSerialize["external_error"] = o.ExternalError.Get()
 	toSerialize["external_status"] = o.ExternalStatus.Get()
@@ -667,10 +838,11 @@ func (o Value) ToMap() (map[string]interface{}, error) {
 	toSerialize["value"] = o.Value.Get()
 	toSerialize["evaluated"] = o.Evaluated
 	toSerialize["secret"] = o.Secret.Get()
+	toSerialize["referenced_projects"] = o.ReferencedProjects
 	toSerialize["referenced_parameters"] = o.ReferencedParameters
 	toSerialize["referenced_templates"] = o.ReferencedTemplates
 	toSerialize["created_at"] = o.CreatedAt
-	toSerialize["modified_at"] = o.ModifiedAt
+	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
 }
 

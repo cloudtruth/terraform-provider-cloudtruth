@@ -24,9 +24,9 @@ type ParameterCreate struct {
 	Name string `json:"name"`
 	// A description of the parameter.  You may find it helpful to document how this parameter is used to assist others when they need to maintain software that uses this content.
 	Description *string `json:"description,omitempty"`
-	// Indicates if this content is secret or not.  When a parameter is considered to be a secret, any internal values are stored in a dedicated vault for your organization for maximum security.  External values are inspected on-demand to ensure they align with the parameter's secret setting and if they do not, those external values are not allowed to be used.
+	// Indicates if this content is secret or not.  External values are inspected on-demand to ensure they align with the parameter's secret setting and if they do not, those external values are not allowed to be used.
 	Secret *bool `json:"secret,omitempty"`
-	// The type of this Parameter.
+	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.         
 	Type *string `json:"type,omitempty"`
 }
 
@@ -37,8 +37,6 @@ type ParameterCreate struct {
 func NewParameterCreate(name string) *ParameterCreate {
 	this := ParameterCreate{}
 	this.Name = name
-	var type_ string = "string"
-	this.Type = &type_
 	return &this
 }
 
@@ -47,8 +45,6 @@ func NewParameterCreate(name string) *ParameterCreate {
 // but it doesn't guarantee that properties required by API are set
 func NewParameterCreateWithDefaults() *ParameterCreate {
 	this := ParameterCreate{}
-	var type_ string = "string"
-	this.Type = &type_
 	return &this
 }
 

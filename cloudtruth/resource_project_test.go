@@ -9,6 +9,8 @@ import (
 
 const desc = "Just a description of a project"
 const updateDesc = "A new description of a project"
+const parameterNamePattern = "foo-*"
+const updateParameterNamePattern = "foobar-*"
 
 func TestAccResourceProjectBasic(t *testing.T) {
 	createProjName := fmt.Sprintf("TestProject-%s", uuid.New().String())
@@ -20,23 +22,19 @@ func TestAccResourceProjectBasic(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccResourceProjectCreateBasic(createProjName, desc),
+				Config: testAccResourceProjectCreateBasic(createProjName, desc, parameterNamePattern),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", createProjName),
 					resource.TestCheckResourceAttr(resourceName, "description", desc),
+					resource.TestCheckResourceAttr(resourceName, "parameter_name_pattern", parameterNamePattern),
 				),
 			},
-			/* This is leading to occasional timing issues which appear to be only affecting the tests
 			{
-				ResourceName:      resourceName,
-				ImportState:       true,
-				ImportStateVerify: true,
-			},*/
-			{
-				Config: testAccResourceProjectUpdateBasic(updateProjName, updateDesc),
+				Config: testAccResourceProjectUpdateBasic(updateProjName, updateDesc, updateParameterNamePattern),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", updateProjName),
 					resource.TestCheckResourceAttr(resourceName, "description", updateDesc),
+					resource.TestCheckResourceAttr(resourceName, "parameter_name_pattern", updateParameterNamePattern),
 				),
 			},
 		},
@@ -63,22 +61,24 @@ func TestAccResourceProjectNested(t *testing.T) {
 	})
 }
 
-func testAccResourceProjectCreateBasic(projName, desc string) string {
+func testAccResourceProjectCreateBasic(projName, desc, paramNamePattern string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_project" "basic" {
   		name        = "%s"
   		description = "%s"
+		parameter_name_pattern = "%s"
 	}
-	`, projName, desc)
+	`, projName, desc, paramNamePattern)
 }
 
-func testAccResourceProjectUpdateBasic(projName, desc string) string {
+func testAccResourceProjectUpdateBasic(projName, desc, paramNamePattern string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_project" "basic" {
   		name         = "%s"
   		description  =  "%s"
+		parameter_name_pattern = "%s"
 	}
-	`, projName, desc)
+	`, projName, desc, paramNamePattern)
 }
 
 func testAccResourceProjectNested(projectOne, projectTwo, projectThree string) string {
