@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the ImportCreateResponse type satisfies the MappedNullable interface at compile time
@@ -24,8 +23,6 @@ type ImportCreateResponse struct {
 	// Project parameter values after import
 	Parameter []ImportParameter `json:"parameter"`
 }
-
-type _ImportCreateResponse ImportCreateResponse
 
 // NewImportCreateResponse instantiates a new ImportCreateResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -81,41 +78,6 @@ func (o ImportCreateResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["parameter"] = o.Parameter
 	return toSerialize, nil
-}
-
-func (o *ImportCreateResponse) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"parameter",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varImportCreateResponse := _ImportCreateResponse{}
-
-	err = json.Unmarshal(bytes, &varImportCreateResponse)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ImportCreateResponse(varImportCreateResponse)
-
-	return err
 }
 
 type NullableImportCreateResponse struct {

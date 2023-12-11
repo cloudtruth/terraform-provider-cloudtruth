@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the Group type satisfies the MappedNullable interface at compile time
@@ -33,8 +32,6 @@ type Group struct {
 	CreatedAt time.Time `json:"created_at"`
 	ModifiedAt NullableTime `json:"modified_at"`
 }
-
-type _Group Group
 
 // NewGroup instantiates a new Group object
 // This constructor will assign default values to properties that have it defined,
@@ -257,46 +254,6 @@ func (o Group) ToMap() (map[string]interface{}, error) {
 	toSerialize["created_at"] = o.CreatedAt
 	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
-}
-
-func (o *Group) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"name",
-		"users",
-		"created_at",
-		"modified_at",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varGroup := _Group{}
-
-	err = json.Unmarshal(bytes, &varGroup)
-
-	if err != nil {
-		return err
-	}
-
-	*o = Group(varGroup)
-
-	return err
 }
 
 type NullableGroup struct {

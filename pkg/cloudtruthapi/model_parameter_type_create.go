@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the ParameterTypeCreate type satisfies the MappedNullable interface at compile time
@@ -28,8 +27,6 @@ type ParameterTypeCreate struct {
 	// The URL for this parameter type's parent
 	Parent string `json:"parent"`
 }
-
-type _ParameterTypeCreate ParameterTypeCreate
 
 // NewParameterTypeCreate instantiates a new ParameterTypeCreate object
 // This constructor will assign default values to properties that have it defined,
@@ -146,42 +143,6 @@ func (o ParameterTypeCreate) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["parent"] = o.Parent
 	return toSerialize, nil
-}
-
-func (o *ParameterTypeCreate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-		"parent",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varParameterTypeCreate := _ParameterTypeCreate{}
-
-	err = json.Unmarshal(bytes, &varParameterTypeCreate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ParameterTypeCreate(varParameterTypeCreate)
-
-	return err
 }
 
 type NullableParameterTypeCreate struct {

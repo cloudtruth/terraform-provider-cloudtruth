@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the ParameterTimelineEntryParameter type satisfies the MappedNullable interface at compile time
@@ -26,8 +25,6 @@ type ParameterTimelineEntryParameter struct {
 	// The parameter name.
 	Name string `json:"name"`
 }
-
-type _ParameterTimelineEntryParameter ParameterTimelineEntryParameter
 
 // NewParameterTimelineEntryParameter instantiates a new ParameterTimelineEntryParameter object
 // This constructor will assign default values to properties that have it defined,
@@ -111,42 +108,6 @@ func (o ParameterTimelineEntryParameter) ToMap() (map[string]interface{}, error)
 	toSerialize["parameter_id"] = o.ParameterId.Get()
 	toSerialize["name"] = o.Name
 	return toSerialize, nil
-}
-
-func (o *ParameterTimelineEntryParameter) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"parameter_id",
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varParameterTimelineEntryParameter := _ParameterTimelineEntryParameter{}
-
-	err = json.Unmarshal(bytes, &varParameterTimelineEntryParameter)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ParameterTimelineEntryParameter(varParameterTimelineEntryParameter)
-
-	return err
 }
 
 type NullableParameterTimelineEntryParameter struct {

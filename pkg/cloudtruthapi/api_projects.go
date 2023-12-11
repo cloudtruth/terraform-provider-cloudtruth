@@ -740,15 +740,9 @@ func (a *ProjectsAPIService) ProjectsParameterExportListExecute(r ApiProjectsPar
 	}
 	if r.explicitExport != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "explicit_export", r.explicitExport, "")
-	} else {
-		var defaultValue bool = false
-		r.explicitExport = &defaultValue
 	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
-	} else {
-		var defaultValue bool = false
-		r.maskSecrets = &defaultValue
 	}
 	if r.ordering != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "ordering", r.ordering, "")
@@ -1458,21 +1452,12 @@ func (a *ProjectsAPIService) ProjectsParametersDualityListExecute(r ApiProjectsP
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = true
-		r.evaluate = &defaultValue
 	}
 	if r.immediateParameters != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "immediate_parameters", r.immediateParameters, "")
-	} else {
-		var defaultValue bool = false
-		r.immediateParameters = &defaultValue
 	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
-	} else {
-		var defaultValue bool = false
-		r.maskSecrets = &defaultValue
 	}
 	if r.name != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
@@ -1518,9 +1503,6 @@ func (a *ProjectsAPIService) ProjectsParametersDualityListExecute(r ApiProjectsP
 	}
 	if r.values != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "values", r.values, "")
-	} else {
-		var defaultValue bool = true
-		r.values = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1790,21 +1772,12 @@ func (a *ProjectsAPIService) ProjectsParametersListExecute(r ApiProjectsParamete
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = true
-		r.evaluate = &defaultValue
 	}
 	if r.immediateParameters != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "immediate_parameters", r.immediateParameters, "")
-	} else {
-		var defaultValue bool = false
-		r.immediateParameters = &defaultValue
 	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
-	} else {
-		var defaultValue bool = false
-		r.maskSecrets = &defaultValue
 	}
 	if r.name != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
@@ -1841,9 +1814,6 @@ func (a *ProjectsAPIService) ProjectsParametersListExecute(r ApiProjectsParamete
 	}
 	if r.values != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "values", r.values, "")
-	} else {
-		var defaultValue bool = true
-		r.values = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -2361,30 +2331,18 @@ func (a *ProjectsAPIService) ProjectsParametersRetrieveExecute(r ApiProjectsPara
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = true
-		r.evaluate = &defaultValue
 	}
 	if r.immediateParameters != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "immediate_parameters", r.immediateParameters, "")
-	} else {
-		var defaultValue bool = false
-		r.immediateParameters = &defaultValue
 	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
-	} else {
-		var defaultValue bool = false
-		r.maskSecrets = &defaultValue
 	}
 	if r.tag != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
 	}
 	if r.values != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "values", r.values, "")
-	} else {
-		var defaultValue bool = true
-		r.values = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -3877,9 +3835,6 @@ func (a *ProjectsAPIService) ProjectsParametersValuesCreateExecute(r ApiProjects
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = true
-		r.evaluate = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -4039,9 +3994,6 @@ func (a *ProjectsAPIService) ProjectsParametersValuesDestroyExecute(r ApiProject
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = true
-		r.evaluate = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -4244,9 +4196,6 @@ func (a *ProjectsAPIService) ProjectsParametersValuesListExecute(r ApiProjectsPa
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = true
-		r.evaluate = &defaultValue
 	}
 	if r.exclude != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "exclude", r.exclude, "")
@@ -4256,9 +4205,6 @@ func (a *ProjectsAPIService) ProjectsParametersValuesListExecute(r ApiProjectsPa
 	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
-	} else {
-		var defaultValue bool = false
-		r.maskSecrets = &defaultValue
 	}
 	if r.page != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page", r.page, "")
@@ -4433,9 +4379,6 @@ func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdateExecute(r ApiP
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = true
-		r.evaluate = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -4635,9 +4578,6 @@ func (a *ProjectsAPIService) ProjectsParametersValuesRetrieveExecute(r ApiProjec
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = true
-		r.evaluate = &defaultValue
 	}
 	if r.exclude != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "exclude", r.exclude, "")
@@ -4647,9 +4587,6 @@ func (a *ProjectsAPIService) ProjectsParametersValuesRetrieveExecute(r ApiProjec
 	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
-	} else {
-		var defaultValue bool = false
-		r.maskSecrets = &defaultValue
 	}
 	if r.tag != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
@@ -4818,9 +4755,6 @@ func (a *ProjectsAPIService) ProjectsParametersValuesUpdateExecute(r ApiProjects
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = true
-		r.evaluate = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
@@ -5273,9 +5207,6 @@ func (a *ProjectsAPIService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsT
 	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
-	} else {
-		var defaultValue bool = false
-		r.maskSecrets = &defaultValue
 	}
 	if r.tag != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")
@@ -5766,15 +5697,9 @@ func (a *ProjectsAPIService) ProjectsTemplatesListExecute(r ApiProjectsTemplates
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = false
-		r.evaluate = &defaultValue
 	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
-	} else {
-		var defaultValue bool = false
-		r.maskSecrets = &defaultValue
 	}
 	if r.name != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "")
@@ -6128,15 +6053,9 @@ func (a *ProjectsAPIService) ProjectsTemplatesRetrieveExecute(r ApiProjectsTempl
 	}
 	if r.evaluate != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "evaluate", r.evaluate, "")
-	} else {
-		var defaultValue bool = true
-		r.evaluate = &defaultValue
 	}
 	if r.maskSecrets != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "mask_secrets", r.maskSecrets, "")
-	} else {
-		var defaultValue bool = false
-		r.maskSecrets = &defaultValue
 	}
 	if r.tag != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "")

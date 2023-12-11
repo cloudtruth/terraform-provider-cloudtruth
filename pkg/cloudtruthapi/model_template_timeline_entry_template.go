@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the TemplateTimelineEntryTemplate type satisfies the MappedNullable interface at compile time
@@ -29,8 +28,6 @@ type TemplateTimelineEntryTemplate struct {
 	// The content of the template.  Use mustache-style templating delimiters of `{{` and `}}` to reference parameter values by name for substitution into the template result.
 	Body *string `json:"body,omitempty"`
 }
-
-type _TemplateTimelineEntryTemplate TemplateTimelineEntryTemplate
 
 // NewTemplateTimelineEntryTemplate instantiates a new TemplateTimelineEntryTemplate object
 // This constructor will assign default values to properties that have it defined,
@@ -208,43 +205,6 @@ func (o TemplateTimelineEntryTemplate) ToMap() (map[string]interface{}, error) {
 		toSerialize["body"] = o.Body
 	}
 	return toSerialize, nil
-}
-
-func (o *TemplateTimelineEntryTemplate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"id",
-		"ledger_id",
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varTemplateTimelineEntryTemplate := _TemplateTimelineEntryTemplate{}
-
-	err = json.Unmarshal(bytes, &varTemplateTimelineEntryTemplate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = TemplateTimelineEntryTemplate(varTemplateTimelineEntryTemplate)
-
-	return err
 }
 
 type NullableTemplateTimelineEntryTemplate struct {

@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the GitHubPullTaskStep type satisfies the MappedNullable interface at compile time
@@ -63,8 +62,6 @@ type GitHubPullTaskStep struct {
 	CreatedAt time.Time `json:"created_at"`
 	ModifiedAt NullableTime `json:"modified_at"`
 }
-
-type _GitHubPullTaskStep GitHubPullTaskStep
 
 // NewGitHubPullTaskStep instantiates a new GitHubPullTaskStep object
 // This constructor will assign default values to properties that have it defined,
@@ -940,48 +937,6 @@ func (o GitHubPullTaskStep) ToMap() (map[string]interface{}, error) {
 	toSerialize["created_at"] = o.CreatedAt
 	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
-}
-
-func (o *GitHubPullTaskStep) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"success",
-		"environment",
-		"project",
-		"parameter",
-		"created_at",
-		"modified_at",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varGitHubPullTaskStep := _GitHubPullTaskStep{}
-
-	err = json.Unmarshal(bytes, &varGitHubPullTaskStep)
-
-	if err != nil {
-		return err
-	}
-
-	*o = GitHubPullTaskStep(varGitHubPullTaskStep)
-
-	return err
 }
 
 type NullableGitHubPullTaskStep struct {

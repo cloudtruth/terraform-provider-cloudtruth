@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the BackupDataSnapshot type satisfies the MappedNullable interface at compile time
@@ -27,8 +26,6 @@ type BackupDataSnapshot struct {
 	Projects map[string]BackupProject `json:"projects"`
 	Timestamp time.Time `json:"timestamp"`
 }
-
-type _BackupDataSnapshot BackupDataSnapshot
 
 // NewBackupDataSnapshot instantiates a new BackupDataSnapshot object
 // This constructor will assign default values to properties that have it defined,
@@ -162,44 +159,6 @@ func (o BackupDataSnapshot) ToMap() (map[string]interface{}, error) {
 	toSerialize["projects"] = o.Projects
 	toSerialize["timestamp"] = o.Timestamp
 	return toSerialize, nil
-}
-
-func (o *BackupDataSnapshot) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"environments",
-		"types",
-		"projects",
-		"timestamp",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varBackupDataSnapshot := _BackupDataSnapshot{}
-
-	err = json.Unmarshal(bytes, &varBackupDataSnapshot)
-
-	if err != nil {
-		return err
-	}
-
-	*o = BackupDataSnapshot(varBackupDataSnapshot)
-
-	return err
 }
 
 type NullableBackupDataSnapshot struct {

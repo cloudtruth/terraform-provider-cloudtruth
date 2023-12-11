@@ -123,39 +123,21 @@ func (a *UtilsAPIService) UtilsGeneratePasswordCreateExecute(r ApiUtilsGenerateP
 	parameterAddToHeaderOrQuery(localVarQueryParams, "length", r.length, "")
 	if r.requireHardwareGeneration != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "require_hardware_generation", r.requireHardwareGeneration, "")
-	} else {
-		var defaultValue bool = false
-		r.requireHardwareGeneration = &defaultValue
 	}
 	if r.requireLowercase != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "require_lowercase", r.requireLowercase, "")
-	} else {
-		var defaultValue bool = true
-		r.requireLowercase = &defaultValue
 	}
 	if r.requireNumbers != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "require_numbers", r.requireNumbers, "")
-	} else {
-		var defaultValue bool = true
-		r.requireNumbers = &defaultValue
 	}
 	if r.requireSpaces != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "require_spaces", r.requireSpaces, "")
-	} else {
-		var defaultValue bool = false
-		r.requireSpaces = &defaultValue
 	}
 	if r.requireSymbols != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "require_symbols", r.requireSymbols, "")
-	} else {
-		var defaultValue bool = false
-		r.requireSymbols = &defaultValue
 	}
 	if r.requireUppercase != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "require_uppercase", r.requireUppercase, "")
-	} else {
-		var defaultValue bool = true
-		r.requireUppercase = &defaultValue
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

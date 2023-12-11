@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the TemplatePreviewCreateRequest type satisfies the MappedNullable interface at compile time
@@ -24,8 +23,6 @@ type TemplatePreviewCreateRequest struct {
 	// The template body to instantiate on request, instantiated on response.
 	Body string `json:"body"`
 }
-
-type _TemplatePreviewCreateRequest TemplatePreviewCreateRequest
 
 // NewTemplatePreviewCreateRequest instantiates a new TemplatePreviewCreateRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -81,41 +78,6 @@ func (o TemplatePreviewCreateRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["body"] = o.Body
 	return toSerialize, nil
-}
-
-func (o *TemplatePreviewCreateRequest) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"body",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varTemplatePreviewCreateRequest := _TemplatePreviewCreateRequest{}
-
-	err = json.Unmarshal(bytes, &varTemplatePreviewCreateRequest)
-
-	if err != nil {
-		return err
-	}
-
-	*o = TemplatePreviewCreateRequest(varTemplatePreviewCreateRequest)
-
-	return err
 }
 
 type NullableTemplatePreviewCreateRequest struct {

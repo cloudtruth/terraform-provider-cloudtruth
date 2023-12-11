@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the Value type satisfies the MappedNullable interface at compile time
@@ -65,8 +64,6 @@ type Value struct {
 	CreatedAt time.Time `json:"created_at"`
 	ModifiedAt NullableTime `json:"modified_at"`
 }
-
-type _Value Value
 
 // NewValue instantiates a new Value object
 // This constructor will assign default values to properties that have it defined,
@@ -847,61 +844,6 @@ func (o Value) ToMap() (map[string]interface{}, error) {
 	toSerialize["created_at"] = o.CreatedAt
 	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
-}
-
-func (o *Value) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"ledger_id",
-		"active_environment",
-		"active_environment_id",
-		"active_environment_name",
-		"environment",
-		"environment_id",
-		"environment_name",
-		"parameter",
-		"parameter_id",
-		"external_error",
-		"external_status",
-		"value",
-		"evaluated",
-		"secret",
-		"referenced_projects",
-		"referenced_parameters",
-		"referenced_templates",
-		"created_at",
-		"modified_at",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varValue := _Value{}
-
-	err = json.Unmarshal(bytes, &varValue)
-
-	if err != nil {
-		return err
-	}
-
-	*o = Value(varValue)
-
-	return err
 }
 
 type NullableValue struct {

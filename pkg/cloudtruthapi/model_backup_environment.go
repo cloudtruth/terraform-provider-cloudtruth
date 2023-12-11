@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the BackupEnvironment type satisfies the MappedNullable interface at compile time
@@ -25,8 +24,6 @@ type BackupEnvironment struct {
 	Parent NullableString `json:"parent,omitempty"`
 	Description NullableString `json:"description,omitempty"`
 }
-
-type _BackupEnvironment BackupEnvironment
 
 // NewBackupEnvironment instantiates a new BackupEnvironment object
 // This constructor will assign default values to properties that have it defined,
@@ -172,41 +169,6 @@ func (o BackupEnvironment) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description.Get()
 	}
 	return toSerialize, nil
-}
-
-func (o *BackupEnvironment) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varBackupEnvironment := _BackupEnvironment{}
-
-	err = json.Unmarshal(bytes, &varBackupEnvironment)
-
-	if err != nil {
-		return err
-	}
-
-	*o = BackupEnvironment(varBackupEnvironment)
-
-	return err
 }
 
 type NullableBackupEnvironment struct {

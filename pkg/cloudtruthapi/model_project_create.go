@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the ProjectCreate type satisfies the MappedNullable interface at compile time
@@ -30,8 +29,6 @@ type ProjectCreate struct {
 	// Project dependencies allow projects to be used for shared configuration, for example a database used by many applications needs to advertise its port number.  Projects can depend on another project which will add the parameters from the parent project into the current project.  All of the parameter names between the two projects must be unique.  When retrieving values or rendering templates, all of the parameters from the parent project will also be available in the current project.
 	DependsOn NullableString `json:"depends_on,omitempty"`
 }
-
-type _ProjectCreate ProjectCreate
 
 // NewProjectCreate instantiates a new ProjectCreate object
 // This constructor will assign default values to properties that have it defined,
@@ -202,41 +199,6 @@ func (o ProjectCreate) ToMap() (map[string]interface{}, error) {
 		toSerialize["depends_on"] = o.DependsOn.Get()
 	}
 	return toSerialize, nil
-}
-
-func (o *ProjectCreate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varProjectCreate := _ProjectCreate{}
-
-	err = json.Unmarshal(bytes, &varProjectCreate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ProjectCreate(varProjectCreate)
-
-	return err
 }
 
 type NullableProjectCreate struct {

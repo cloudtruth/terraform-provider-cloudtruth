@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the DiscoveredContent type satisfies the MappedNullable interface at compile time
@@ -27,8 +26,6 @@ type DiscoveredContent struct {
 	ProjectName string `json:"project_name"`
 	ParameterName string `json:"parameter_name"`
 }
-
-type _DiscoveredContent DiscoveredContent
 
 // NewDiscoveredContent instantiates a new DiscoveredContent object
 // This constructor will assign default values to properties that have it defined,
@@ -188,45 +185,6 @@ func (o DiscoveredContent) ToMap() (map[string]interface{}, error) {
 	toSerialize["project_name"] = o.ProjectName
 	toSerialize["parameter_name"] = o.ParameterName
 	return toSerialize, nil
-}
-
-func (o *DiscoveredContent) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"venue_id",
-		"venue_name",
-		"environment_name",
-		"project_name",
-		"parameter_name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varDiscoveredContent := _DiscoveredContent{}
-
-	err = json.Unmarshal(bytes, &varDiscoveredContent)
-
-	if err != nil {
-		return err
-	}
-
-	*o = DiscoveredContent(varDiscoveredContent)
-
-	return err
 }
 
 type NullableDiscoveredContent struct {

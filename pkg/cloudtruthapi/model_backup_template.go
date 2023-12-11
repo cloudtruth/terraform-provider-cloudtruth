@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the BackupTemplate type satisfies the MappedNullable interface at compile time
@@ -25,8 +24,6 @@ type BackupTemplate struct {
 	Text string `json:"text"`
 	Description NullableString `json:"description"`
 }
-
-type _BackupTemplate BackupTemplate
 
 // NewBackupTemplate instantiates a new BackupTemplate object
 // This constructor will assign default values to properties that have it defined,
@@ -136,43 +133,6 @@ func (o BackupTemplate) ToMap() (map[string]interface{}, error) {
 	toSerialize["text"] = o.Text
 	toSerialize["description"] = o.Description.Get()
 	return toSerialize, nil
-}
-
-func (o *BackupTemplate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-		"text",
-		"description",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varBackupTemplate := _BackupTemplate{}
-
-	err = json.Unmarshal(bytes, &varBackupTemplate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = BackupTemplate(varBackupTemplate)
-
-	return err
 }
 
 type NullableBackupTemplate struct {

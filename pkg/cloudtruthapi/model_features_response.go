@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the FeaturesResponse type satisfies the MappedNullable interface at compile time
@@ -26,8 +25,6 @@ type FeaturesResponse struct {
 	AzureIntegration bool `json:"azure_integration"`
 	GithubIntegration bool `json:"github_integration"`
 }
-
-type _FeaturesResponse FeaturesResponse
 
 // NewFeaturesResponse instantiates a new FeaturesResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -161,44 +158,6 @@ func (o FeaturesResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["azure_integration"] = o.AzureIntegration
 	toSerialize["github_integration"] = o.GithubIntegration
 	return toSerialize, nil
-}
-
-func (o *FeaturesResponse) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"self_hosted",
-		"aws_integration",
-		"azure_integration",
-		"github_integration",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varFeaturesResponse := _FeaturesResponse{}
-
-	err = json.Unmarshal(bytes, &varFeaturesResponse)
-
-	if err != nil {
-		return err
-	}
-
-	*o = FeaturesResponse(varFeaturesResponse)
-
-	return err
 }
 
 type NullableFeaturesResponse struct {

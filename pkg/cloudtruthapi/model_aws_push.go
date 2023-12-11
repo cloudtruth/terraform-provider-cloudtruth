@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the AwsPush type satisfies the MappedNullable interface at compile time
@@ -55,8 +54,6 @@ type AwsPush struct {
 	// Defines a path through the integration to the location where values will be pushed.  The following mustache-style substitutions can be used in the string:    - ``{{ environment }}`` to insert the environment name   - ``{{ parameter }}`` to insert the parameter name   - ``{{ project }}`` to insert the project name   - ``{{ push }}`` to insert the push name   - ``{{ tag }}`` to insert the tag name  We recommend that you use project, environment, and parameter at a minimum to disambiguate your pushed resource identifiers.  If you include multiple projects in the push, the `project` substitution is required.  If you include multiple tags from different environments in the push, the `environment` substitution is required.  If you include multiple tags from the same environment in the push, the `tag` substitution is required.  In all cases, the `parameter` substitution is always required.
 	Resource NullableString `json:"resource"`
 }
-
-type _AwsPush AwsPush
 
 // NewAwsPush instantiates a new AwsPush object
 // This constructor will assign default values to properties that have it defined,
@@ -658,51 +655,6 @@ func (o AwsPush) ToMap() (map[string]interface{}, error) {
 	toSerialize["service"] = o.Service
 	toSerialize["resource"] = o.Resource.Get()
 	return toSerialize, nil
-}
-
-func (o *AwsPush) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"name",
-		"latest_task",
-		"created_at",
-		"modified_at",
-		"projects",
-		"tags",
-		"region",
-		"service",
-		"resource",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varAwsPush := _AwsPush{}
-
-	err = json.Unmarshal(bytes, &varAwsPush)
-
-	if err != nil {
-		return err
-	}
-
-	*o = AwsPush(varAwsPush)
-
-	return err
 }
 
 type NullableAwsPush struct {

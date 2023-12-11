@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the Tag type satisfies the MappedNullable interface at compile time
@@ -40,8 +39,6 @@ type Tag struct {
 	PushUrls []string `json:"push_urls"`
 	Usage TagReadUsage `json:"usage"`
 }
-
-type _Tag Tag
 
 // NewTag instantiates a new Tag object
 // This constructor will assign default values to properties that have it defined,
@@ -323,47 +320,6 @@ func (o Tag) ToMap() (map[string]interface{}, error) {
 	toSerialize["push_urls"] = o.PushUrls
 	toSerialize["usage"] = o.Usage
 	return toSerialize, nil
-}
-
-func (o *Tag) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"name",
-		"timestamp",
-		"pushes",
-		"push_urls",
-		"usage",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varTag := _Tag{}
-
-	err = json.Unmarshal(bytes, &varTag)
-
-	if err != nil {
-		return err
-	}
-
-	*o = Tag(varTag)
-
-	return err
 }
 
 type NullableTag struct {

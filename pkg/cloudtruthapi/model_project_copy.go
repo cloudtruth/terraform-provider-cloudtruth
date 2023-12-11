@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the ProjectCopy type satisfies the MappedNullable interface at compile time
@@ -32,8 +31,6 @@ type ProjectCopy struct {
 	// Project dependencies allow projects to be used for shared configuration, for example a database used by many applications needs to advertise its port number.  Projects can depend on another project which will add the parameters from the parent project into the current project.  All of the parameter names between the two projects must be unique.  When retrieving values or rendering templates, all of the parameters from the parent project will also be available in the current project.
 	DependsOn NullableString `json:"depends_on,omitempty"`
 }
-
-type _ProjectCopy ProjectCopy
 
 // NewProjectCopy instantiates a new ProjectCopy object
 // This constructor will assign default values to properties that have it defined,
@@ -240,41 +237,6 @@ func (o ProjectCopy) ToMap() (map[string]interface{}, error) {
 		toSerialize["depends_on"] = o.DependsOn.Get()
 	}
 	return toSerialize, nil
-}
-
-func (o *ProjectCopy) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varProjectCopy := _ProjectCopy{}
-
-	err = json.Unmarshal(bytes, &varProjectCopy)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ProjectCopy(varProjectCopy)
-
-	return err
 }
 
 type NullableProjectCopy struct {

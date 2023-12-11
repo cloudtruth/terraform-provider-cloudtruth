@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the ValueCreate type satisfies the MappedNullable interface at compile time
@@ -34,8 +33,6 @@ type ValueCreate struct {
 	// If `true`, apply template substitution rules to this value.  If `false`, this value is a literal value.  Note: secrets cannot be interpolated.
 	Interpolated *bool `json:"interpolated,omitempty"`
 }
-
-type _ValueCreate ValueCreate
 
 // NewValueCreate instantiates a new ValueCreate object
 // This constructor will assign default values to properties that have it defined,
@@ -276,41 +273,6 @@ func (o ValueCreate) ToMap() (map[string]interface{}, error) {
 		toSerialize["interpolated"] = o.Interpolated
 	}
 	return toSerialize, nil
-}
-
-func (o *ValueCreate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"environment",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varValueCreate := _ValueCreate{}
-
-	err = json.Unmarshal(bytes, &varValueCreate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ValueCreate(varValueCreate)
-
-	return err
 }
 
 type NullableValueCreate struct {

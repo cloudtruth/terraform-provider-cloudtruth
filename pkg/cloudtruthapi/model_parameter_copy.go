@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the ParameterCopy type satisfies the MappedNullable interface at compile time
@@ -28,8 +27,6 @@ type ParameterCopy struct {
 	// The project url.
 	Project string `json:"project"`
 }
-
-type _ParameterCopy ParameterCopy
 
 // NewParameterCopy instantiates a new ParameterCopy object
 // This constructor will assign default values to properties that have it defined,
@@ -146,42 +143,6 @@ func (o ParameterCopy) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["project"] = o.Project
 	return toSerialize, nil
-}
-
-func (o *ParameterCopy) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-		"project",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varParameterCopy := _ParameterCopy{}
-
-	err = json.Unmarshal(bytes, &varParameterCopy)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ParameterCopy(varParameterCopy)
-
-	return err
 }
 
 type NullableParameterCopy struct {

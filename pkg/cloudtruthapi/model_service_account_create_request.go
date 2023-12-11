@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the ServiceAccountCreateRequest type satisfies the MappedNullable interface at compile time
@@ -30,8 +29,6 @@ type ServiceAccountCreateRequest struct {
 	// The owner of the service account.
 	Owner *string `json:"owner,omitempty"`
 }
-
-type _ServiceAccountCreateRequest ServiceAccountCreateRequest
 
 // NewServiceAccountCreateRequest instantiates a new ServiceAccountCreateRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -192,41 +189,6 @@ func (o ServiceAccountCreateRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["owner"] = o.Owner
 	}
 	return toSerialize, nil
-}
-
-func (o *ServiceAccountCreateRequest) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varServiceAccountCreateRequest := _ServiceAccountCreateRequest{}
-
-	err = json.Unmarshal(bytes, &varServiceAccountCreateRequest)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ServiceAccountCreateRequest(varServiceAccountCreateRequest)
-
-	return err
 }
 
 type NullableServiceAccountCreateRequest struct {

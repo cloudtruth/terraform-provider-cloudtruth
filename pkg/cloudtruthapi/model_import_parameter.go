@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the ImportParameter type satisfies the MappedNullable interface at compile time
@@ -47,8 +46,6 @@ type ImportParameter struct {
 	// Action taken on environment value for parameter
 	Action string `json:"action"`
 }
-
-type _ImportParameter ImportParameter
 
 // NewImportParameter instantiates a new ImportParameter object
 // This constructor will assign default values to properties that have it defined,
@@ -483,47 +480,6 @@ func (o ImportParameter) ToMap() (map[string]interface{}, error) {
 	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	toSerialize["action"] = o.Action
 	return toSerialize, nil
-}
-
-func (o *ImportParameter) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"project_name",
-		"environment_name",
-		"parameter_name",
-		"value",
-		"created_at",
-		"modified_at",
-		"action",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varImportParameter := _ImportParameter{}
-
-	err = json.Unmarshal(bytes, &varImportParameter)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ImportParameter(varImportParameter)
-
-	return err
 }
 
 type NullableImportParameter struct {

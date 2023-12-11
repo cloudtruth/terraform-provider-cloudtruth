@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the AwsPushUpdate type satisfies the MappedNullable interface at compile time
@@ -46,8 +45,6 @@ type AwsPushUpdate struct {
 	// Include templates in the values being pushed.
 	IncludeTemplates *bool `json:"include_templates,omitempty"`
 }
-
-type _AwsPushUpdate AwsPushUpdate
 
 // NewAwsPushUpdate instantiates a new AwsPushUpdate object
 // This constructor will assign default values to properties that have it defined,
@@ -463,44 +460,6 @@ func (o AwsPushUpdate) ToMap() (map[string]interface{}, error) {
 		toSerialize["include_templates"] = o.IncludeTemplates
 	}
 	return toSerialize, nil
-}
-
-func (o *AwsPushUpdate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-		"projects",
-		"tags",
-		"resource",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varAwsPushUpdate := _AwsPushUpdate{}
-
-	err = json.Unmarshal(bytes, &varAwsPushUpdate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = AwsPushUpdate(varAwsPushUpdate)
-
-	return err
 }
 
 type NullableAwsPushUpdate struct {

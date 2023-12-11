@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the ParameterDuality type satisfies the MappedNullable interface at compile time
@@ -24,8 +23,6 @@ type ParameterDuality struct {
 	T1 NullableParameter `json:"t1"`
 	T2 NullableParameter `json:"t2"`
 }
-
-type _ParameterDuality ParameterDuality
 
 // NewParameterDuality instantiates a new ParameterDuality object
 // This constructor will assign default values to properties that have it defined,
@@ -111,42 +108,6 @@ func (o ParameterDuality) ToMap() (map[string]interface{}, error) {
 	toSerialize["t1"] = o.T1.Get()
 	toSerialize["t2"] = o.T2.Get()
 	return toSerialize, nil
-}
-
-func (o *ParameterDuality) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"t1",
-		"t2",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varParameterDuality := _ParameterDuality{}
-
-	err = json.Unmarshal(bytes, &varParameterDuality)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ParameterDuality(varParameterDuality)
-
-	return err
 }
 
 type NullableParameterDuality struct {

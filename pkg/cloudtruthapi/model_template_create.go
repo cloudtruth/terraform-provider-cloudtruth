@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the TemplateCreate type satisfies the MappedNullable interface at compile time
@@ -28,8 +27,6 @@ type TemplateCreate struct {
 	// The content of the template.  Use mustache-style templating delimiters of `{{` and `}}` to reference parameter values by name for substitution into the template result.
 	Body *string `json:"body,omitempty"`
 }
-
-type _TemplateCreate TemplateCreate
 
 // NewTemplateCreate instantiates a new TemplateCreate object
 // This constructor will assign default values to properties that have it defined,
@@ -155,41 +152,6 @@ func (o TemplateCreate) ToMap() (map[string]interface{}, error) {
 		toSerialize["body"] = o.Body
 	}
 	return toSerialize, nil
-}
-
-func (o *TemplateCreate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varTemplateCreate := _TemplateCreate{}
-
-	err = json.Unmarshal(bytes, &varTemplateCreate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = TemplateCreate(varTemplateCreate)
-
-	return err
 }
 
 type NullableTemplateCreate struct {

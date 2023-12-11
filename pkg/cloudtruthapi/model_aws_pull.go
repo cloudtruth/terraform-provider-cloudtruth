@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the AwsPull type satisfies the MappedNullable interface at compile time
@@ -46,8 +45,6 @@ type AwsPull struct {
 	// Defines a pattern matching string that contains either mustache or regular expression syntax (with named capture groups) that locate the environment, project, and parameter name of the content you are looking for.  If you are using mustache pattern matching, use:    - ``{{ environment }}`` to identify the environment name   - ``{{ parameter }}`` to identify the parameter name   - ``{{ project }}`` to identify the project name  If you are using a regular expression, use Python syntax with named capture groups that locate the `environment`, `project`, and `parameter`.
 	Resource NullableString `json:"resource"`
 }
-
-type _AwsPull AwsPull
 
 // NewAwsPull instantiates a new AwsPull object
 // This constructor will assign default values to properties that have it defined,
@@ -509,51 +506,6 @@ func (o AwsPull) ToMap() (map[string]interface{}, error) {
 	toSerialize["service"] = o.Service
 	toSerialize["resource"] = o.Resource.Get()
 	return toSerialize, nil
-}
-
-func (o *AwsPull) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"name",
-		"latest_task",
-		"created_at",
-		"modified_at",
-		"mapped_values",
-		"mode",
-		"region",
-		"service",
-		"resource",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varAwsPull := _AwsPull{}
-
-	err = json.Unmarshal(bytes, &varAwsPull)
-
-	if err != nil {
-		return err
-	}
-
-	*o = AwsPull(varAwsPull)
-
-	return err
 }
 
 type NullableAwsPull struct {

@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the GitHubPull type satisfies the MappedNullable interface at compile time
@@ -42,8 +41,6 @@ type GitHubPull struct {
 	MappedValues []ValueCreate `json:"mapped_values"`
 	Mode ModeEnum `json:"mode"`
 }
-
-type _GitHubPull GitHubPull
 
 // NewGitHubPull instantiates a new GitHubPull object
 // This constructor will assign default values to properties that have it defined,
@@ -425,48 +422,6 @@ func (o GitHubPull) ToMap() (map[string]interface{}, error) {
 	toSerialize["mapped_values"] = o.MappedValues
 	toSerialize["mode"] = o.Mode
 	return toSerialize, nil
-}
-
-func (o *GitHubPull) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"name",
-		"latest_task",
-		"created_at",
-		"modified_at",
-		"mapped_values",
-		"mode",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varGitHubPull := _GitHubPull{}
-
-	err = json.Unmarshal(bytes, &varGitHubPull)
-
-	if err != nil {
-		return err
-	}
-
-	*o = GitHubPull(varGitHubPull)
-
-	return err
 }
 
 type NullableGitHubPull struct {

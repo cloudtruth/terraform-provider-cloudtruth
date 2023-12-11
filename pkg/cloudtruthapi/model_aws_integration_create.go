@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the AwsIntegrationCreate type satisfies the MappedNullable interface at compile time
@@ -38,8 +37,6 @@ type AwsIntegrationCreate struct {
 	// The role that CloudTruth will assume when interacting with your AWS Account through this integration.  The role is configured by your AWS Account Administrator.  If your AWS Administrator provided you with a value use it, otherwise make your own role name and give it to your AWS Administrator.
 	AwsRoleName string `json:"aws_role_name"`
 }
-
-type _AwsIntegrationCreate AwsIntegrationCreate
 
 // NewAwsIntegrationCreate instantiates a new AwsIntegrationCreate object
 // This constructor will assign default values to properties that have it defined,
@@ -323,44 +320,6 @@ func (o AwsIntegrationCreate) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["aws_role_name"] = o.AwsRoleName
 	return toSerialize, nil
-}
-
-func (o *AwsIntegrationCreate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"aws_account_id",
-		"aws_enabled_regions",
-		"aws_enabled_services",
-		"aws_role_name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varAwsIntegrationCreate := _AwsIntegrationCreate{}
-
-	err = json.Unmarshal(bytes, &varAwsIntegrationCreate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = AwsIntegrationCreate(varAwsIntegrationCreate)
-
-	return err
 }
 
 type NullableAwsIntegrationCreate struct {

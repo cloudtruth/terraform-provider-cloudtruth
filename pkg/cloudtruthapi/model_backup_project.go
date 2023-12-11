@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the BackupProject type satisfies the MappedNullable interface at compile time
@@ -27,8 +26,6 @@ type BackupProject struct {
 	Parent NullableString `json:"parent,omitempty"`
 	Description NullableString `json:"description,omitempty"`
 }
-
-type _BackupProject BackupProject
 
 // NewBackupProject instantiates a new BackupProject object
 // This constructor will assign default values to properties that have it defined,
@@ -226,43 +223,6 @@ func (o BackupProject) ToMap() (map[string]interface{}, error) {
 		toSerialize["description"] = o.Description.Get()
 	}
 	return toSerialize, nil
-}
-
-func (o *BackupProject) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"parameters",
-		"templates",
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varBackupProject := _BackupProject{}
-
-	err = json.Unmarshal(bytes, &varBackupProject)
-
-	if err != nil {
-		return err
-	}
-
-	*o = BackupProject(varBackupProject)
-
-	return err
 }
 
 type NullableBackupProject struct {

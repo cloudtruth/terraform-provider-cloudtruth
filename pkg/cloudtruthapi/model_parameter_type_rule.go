@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the ParameterTypeRule type satisfies the MappedNullable interface at compile time
@@ -33,8 +32,6 @@ type ParameterTypeRule struct {
 	CreatedAt time.Time `json:"created_at"`
 	ModifiedAt NullableTime `json:"modified_at"`
 }
-
-type _ParameterTypeRule ParameterTypeRule
 
 // NewParameterTypeRule instantiates a new ParameterTypeRule object
 // This constructor will assign default values to properties that have it defined,
@@ -274,48 +271,6 @@ func (o ParameterTypeRule) ToMap() (map[string]interface{}, error) {
 	toSerialize["created_at"] = o.CreatedAt
 	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	return toSerialize, nil
-}
-
-func (o *ParameterTypeRule) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"ledger_id",
-		"parameter_type",
-		"type",
-		"constraint",
-		"created_at",
-		"modified_at",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varParameterTypeRule := _ParameterTypeRule{}
-
-	err = json.Unmarshal(bytes, &varParameterTypeRule)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ParameterTypeRule(varParameterTypeRule)
-
-	return err
 }
 
 type NullableParameterTypeRule struct {

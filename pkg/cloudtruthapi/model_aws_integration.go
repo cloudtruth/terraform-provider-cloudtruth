@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the AwsIntegration type satisfies the MappedNullable interface at compile time
@@ -53,8 +52,6 @@ type AwsIntegration struct {
 	// The role that CloudTruth will assume when interacting with your AWS Account through this integration.  The role is configured by your AWS Account Administrator.  If your AWS Administrator provided you with a value use it, otherwise make your own role name and give it to your AWS Administrator.
 	AwsRoleName string `json:"aws_role_name"`
 }
-
-type _AwsIntegration AwsIntegration
 
 // NewAwsIntegration instantiates a new AwsIntegration object
 // This constructor will assign default values to properties that have it defined,
@@ -593,55 +590,6 @@ func (o AwsIntegration) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["aws_role_name"] = o.AwsRoleName
 	return toSerialize, nil
-}
-
-func (o *AwsIntegration) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"name",
-		"status",
-		"status_detail",
-		"status_last_checked_at",
-		"created_at",
-		"modified_at",
-		"fqn",
-		"type",
-		"aws_account_id",
-		"aws_enabled_regions",
-		"aws_enabled_services",
-		"aws_external_id",
-		"aws_role_name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varAwsIntegration := _AwsIntegration{}
-
-	err = json.Unmarshal(bytes, &varAwsIntegration)
-
-	if err != nil {
-		return err
-	}
-
-	*o = AwsIntegration(varAwsIntegration)
-
-	return err
 }
 
 type NullableAwsIntegration struct {

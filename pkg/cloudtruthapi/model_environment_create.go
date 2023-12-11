@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the EnvironmentCreate type satisfies the MappedNullable interface at compile time
@@ -28,8 +27,6 @@ type EnvironmentCreate struct {
 	// Environments can inherit from a single parent environment which provides values for parameters when specific environments do not have a value set.  Every organization has one default environment that cannot be removed.
 	Parent NullableString `json:"parent,omitempty"`
 }
-
-type _EnvironmentCreate EnvironmentCreate
 
 // NewEnvironmentCreate instantiates a new EnvironmentCreate object
 // This constructor will assign default values to properties that have it defined,
@@ -165,41 +162,6 @@ func (o EnvironmentCreate) ToMap() (map[string]interface{}, error) {
 		toSerialize["parent"] = o.Parent.Get()
 	}
 	return toSerialize, nil
-}
-
-func (o *EnvironmentCreate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varEnvironmentCreate := _EnvironmentCreate{}
-
-	err = json.Unmarshal(bytes, &varEnvironmentCreate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = EnvironmentCreate(varEnvironmentCreate)
-
-	return err
 }
 
 type NullableEnvironmentCreate struct {

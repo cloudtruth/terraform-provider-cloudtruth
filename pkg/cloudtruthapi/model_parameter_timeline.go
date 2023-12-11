@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the ParameterTimeline type satisfies the MappedNullable interface at compile time
@@ -28,8 +27,6 @@ type ParameterTimeline struct {
 	NextAsOf *time.Time `json:"next_as_of,omitempty"`
 	Results []ParameterTimelineEntry `json:"results"`
 }
-
-type _ParameterTimeline ParameterTimeline
 
 // NewParameterTimeline instantiates a new ParameterTimeline object
 // This constructor will assign default values to properties that have it defined,
@@ -146,42 +143,6 @@ func (o ParameterTimeline) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["results"] = o.Results
 	return toSerialize, nil
-}
-
-func (o *ParameterTimeline) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"count",
-		"results",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varParameterTimeline := _ParameterTimeline{}
-
-	err = json.Unmarshal(bytes, &varParameterTimeline)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ParameterTimeline(varParameterTimeline)
-
-	return err
 }
 
 type NullableParameterTimeline struct {

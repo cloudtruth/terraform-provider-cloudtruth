@@ -75,7 +75,7 @@ pkg/cloudtruth/client.go: pkg/openapi.yml
 	docker run --rm \
 		-v "$(shell pwd)/pkg:/pkg" \
 		--user "$(shell id -u):$(shell id -g)" \
-		openapitools/openapi-generator-cli generate \
+		openapitools/openapi-generator-cli:v7.0.0 generate \
 		-i /pkg/openapi.yml \
 		-g go \
 		-o /pkg/cloudtruthapi \

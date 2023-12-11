@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the ParameterCreate type satisfies the MappedNullable interface at compile time
@@ -30,8 +29,6 @@ type ParameterCreate struct {
 	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.         
 	Type *string `json:"type,omitempty"`
 }
-
-type _ParameterCreate ParameterCreate
 
 // NewParameterCreate instantiates a new ParameterCreate object
 // This constructor will assign default values to properties that have it defined,
@@ -192,41 +189,6 @@ func (o ParameterCreate) ToMap() (map[string]interface{}, error) {
 		toSerialize["type"] = o.Type
 	}
 	return toSerialize, nil
-}
-
-func (o *ParameterCreate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varParameterCreate := _ParameterCreate{}
-
-	err = json.Unmarshal(bytes, &varParameterCreate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ParameterCreate(varParameterCreate)
-
-	return err
 }
 
 type NullableParameterCreate struct {

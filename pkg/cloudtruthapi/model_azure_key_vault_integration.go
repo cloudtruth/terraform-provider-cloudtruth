@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the AzureKeyVaultIntegration type satisfies the MappedNullable interface at compile time
@@ -45,8 +44,6 @@ type AzureKeyVaultIntegration struct {
 	// The Azure Tenant ID.
 	TenantId string `json:"tenant_id"`
 }
-
-type _AzureKeyVaultIntegration AzureKeyVaultIntegration
 
 // NewAzureKeyVaultIntegration instantiates a new AzureKeyVaultIntegration object
 // This constructor will assign default values to properties that have it defined,
@@ -462,52 +459,6 @@ func (o AzureKeyVaultIntegration) ToMap() (map[string]interface{}, error) {
 	toSerialize["vault_name"] = o.VaultName
 	toSerialize["tenant_id"] = o.TenantId
 	return toSerialize, nil
-}
-
-func (o *AzureKeyVaultIntegration) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"name",
-		"status",
-		"status_detail",
-		"status_last_checked_at",
-		"created_at",
-		"modified_at",
-		"fqn",
-		"type",
-		"vault_name",
-		"tenant_id",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varAzureKeyVaultIntegration := _AzureKeyVaultIntegration{}
-
-	err = json.Unmarshal(bytes, &varAzureKeyVaultIntegration)
-
-	if err != nil {
-		return err
-	}
-
-	*o = AzureKeyVaultIntegration(varAzureKeyVaultIntegration)
-
-	return err
 }
 
 type NullableAzureKeyVaultIntegration struct {

@@ -14,7 +14,6 @@ package cloudtruthapi
 import (
 	"encoding/json"
 	"time"
-	"fmt"
 )
 
 // checks if the ServiceAccountCreateResponse type satisfies the MappedNullable interface at compile time
@@ -35,8 +34,6 @@ type ServiceAccountCreateResponse struct {
 	// The API Key to use as a Bearer token for the service account.
 	Apikey string `json:"apikey"`
 }
-
-type _ServiceAccountCreateResponse ServiceAccountCreateResponse
 
 // NewServiceAccountCreateResponse instantiates a new ServiceAccountCreateResponse object
 // This constructor will assign default values to properties that have it defined,
@@ -332,47 +329,6 @@ func (o ServiceAccountCreateResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["last_used_at"] = o.LastUsedAt.Get()
 	toSerialize["apikey"] = o.Apikey
 	return toSerialize, nil
-}
-
-func (o *ServiceAccountCreateResponse) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"user",
-		"created_at",
-		"modified_at",
-		"last_used_at",
-		"apikey",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varServiceAccountCreateResponse := _ServiceAccountCreateResponse{}
-
-	err = json.Unmarshal(bytes, &varServiceAccountCreateResponse)
-
-	if err != nil {
-		return err
-	}
-
-	*o = ServiceAccountCreateResponse(varServiceAccountCreateResponse)
-
-	return err
 }
 
 type NullableServiceAccountCreateResponse struct {

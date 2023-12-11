@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the Invitation type satisfies the MappedNullable interface at compile time
@@ -40,8 +39,6 @@ type Invitation struct {
 	// The organization that the user will become a member of, should the user accept.
 	Organization string `json:"organization"`
 }
-
-type _Invitation Invitation
 
 // NewInvitation instantiates a new Invitation object
 // This constructor will assign default values to properties that have it defined,
@@ -333,50 +330,6 @@ func (o Invitation) ToMap() (map[string]interface{}, error) {
 	toSerialize["membership"] = o.Membership.Get()
 	toSerialize["organization"] = o.Organization
 	return toSerialize, nil
-}
-
-func (o *Invitation) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"url",
-		"id",
-		"email",
-		"role",
-		"inviter",
-		"inviter_name",
-		"state",
-		"state_detail",
-		"membership",
-		"organization",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varInvitation := _Invitation{}
-
-	err = json.Unmarshal(bytes, &varInvitation)
-
-	if err != nil {
-		return err
-	}
-
-	*o = Invitation(varInvitation)
-
-	return err
 }
 
 type NullableInvitation struct {

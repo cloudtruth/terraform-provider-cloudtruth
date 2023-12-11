@@ -13,7 +13,6 @@ package cloudtruthapi
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 // checks if the AzureKeyVaultPushUpdate type satisfies the MappedNullable interface at compile time
@@ -44,8 +43,6 @@ type AzureKeyVaultPushUpdate struct {
 	// Include secrets in the values being pushed.  This setting requires the destination to support secrets, otherwise the push will fail.
 	IncludeSecrets *bool `json:"include_secrets,omitempty"`
 }
-
-type _AzureKeyVaultPushUpdate AzureKeyVaultPushUpdate
 
 // NewAzureKeyVaultPushUpdate instantiates a new AzureKeyVaultPushUpdate object
 // This constructor will assign default values to properties that have it defined,
@@ -426,44 +423,6 @@ func (o AzureKeyVaultPushUpdate) ToMap() (map[string]interface{}, error) {
 		toSerialize["include_secrets"] = o.IncludeSecrets
 	}
 	return toSerialize, nil
-}
-
-func (o *AzureKeyVaultPushUpdate) UnmarshalJSON(bytes []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-		"projects",
-		"tags",
-		"resource",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(bytes, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varAzureKeyVaultPushUpdate := _AzureKeyVaultPushUpdate{}
-
-	err = json.Unmarshal(bytes, &varAzureKeyVaultPushUpdate)
-
-	if err != nil {
-		return err
-	}
-
-	*o = AzureKeyVaultPushUpdate(varAzureKeyVaultPushUpdate)
-
-	return err
 }
 
 type NullableAzureKeyVaultPushUpdate struct {
