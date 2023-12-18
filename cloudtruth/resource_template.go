@@ -13,7 +13,10 @@ import (
 
 func resourceTemplate() *schema.Resource {
 	return &schema.Resource{
-		Description:   "A CloudTruth Template.",
+		Description: `A CloudTruth Template. Use this to manage Templates in your CloudTruth project
+If you want to render a template in the context of a project and environment, use a cloudtruth_template
+data source instead. The value for a cloudtruth_template resource is the raw unevaluated template string.
+`,
 		CreateContext: resourceTemplateCreate,
 		ReadContext:   resourceTemplateRead,
 		UpdateContext: resourceTemplateUpdate,

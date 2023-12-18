@@ -3,12 +3,16 @@
 page_title: "cloudtruth_template Resource - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A CloudTruth Template.
+  A CloudTruth Template. Use this to manage Templates in your CloudTruth project
+  If you want to render a template in the context of a project and environment, use a cloudtruthtemplate
+  data source instead. The value for a cloudtruthtemplate resource is the raw unevaluated template string.
 ---
 
 # cloudtruth_template (Resource)
 
-A CloudTruth Template.
+A CloudTruth Template. Use this to manage Templates in your CloudTruth project
+If you want to render a template in the context of a project and environment, use a cloudtruth_template
+data source instead. The value for a cloudtruth_template resource is the raw unevaluated template string.
 
 
 
