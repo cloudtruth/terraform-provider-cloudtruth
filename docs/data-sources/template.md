@@ -3,12 +3,14 @@
 page_title: "cloudtruth_template Data Source - terraform-provider-cloudtruth"
 subcategory: ""
 description: |-
-  A CloudTruth template data source
+  A CloudTruth template data source. Use this to reference the rendered values from CloudTruth
+  Templates in the context of a project and environment.
 ---
 
 # cloudtruth_template (Data Source)
 
-A CloudTruth template data source
+A CloudTruth template data source. Use this to reference the rendered values from CloudTruth
+Templates in the context of a project and environment.
 
 
 

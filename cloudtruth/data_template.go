@@ -15,7 +15,8 @@ import (
 
 func dataCloudTruthTemplate() *schema.Resource {
 	return &schema.Resource{
-		Description: "A CloudTruth template data source",
+		Description: `A CloudTruth template data source. Use this to reference the rendered values from CloudTruth
+Templates in the context of a project and environment.`,
 		ReadContext: dataCloudTruthTemplateRead,
 		Schema: map[string]*schema.Schema{
 			"project": {
@@ -97,7 +98,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	body := template.GetBody()
 	tflog.Debug(ctx, fmt.Sprintf("dataCloudTruthTemplateRead: template body - %s", body))
 
-	previewBody, err := renderTemplateBody(ctx, name, body, *projID, meta)
+	previewBody, err := renderTemplateBody(ctx, name, body, *projID, *envID, meta)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -110,7 +111,7 @@ func dataCloudTruthTemplateRead(ctx context.Context, d *schema.ResourceData, met
 	return nil
 }
 
-func renderTemplateBody(ctx context.Context, name, body, projectID string, meta any) (*string, error) {
+func renderTemplateBody(ctx context.Context, name, body, projectID, envID string, meta any) (*string, error) {
 	tflog.Debug(ctx, "entering renderTemplateBody")
 	defer tflog.Debug(ctx, "exiting renderTemplateBody")
 	c := meta.(*cloudTruthClient)
@@ -121,7 +122,7 @@ func renderTemplateBody(ctx context.Context, name, body, projectID string, meta 
 	// We cannot use the TF Provider SDK's retry functionality because it only works with state change events
 	// so we employ a simple retry loop instead
 	for retryCount < loadCacheRetries {
-		previewCreate, r, err := c.openAPIClient.ProjectsAPI.ProjectsTemplatePreviewCreate(ctx, projectID).
+		previewCreate, r, err := c.openAPIClient.ProjectsAPI.ProjectsTemplatePreviewCreate(ctx, projectID).Environment(envID).
 			TemplatePreviewCreateRequest(*templatePrevReq).Execute()
 		if r.StatusCode >= 500 {
 			apiError = err
@@ -218,7 +219,7 @@ func dataCloudTruthTemplatesRead(ctx context.Context, d *schema.ResourceData, me
 		for _, res := range results {
 			templateName := res.GetName()
 			templateBody := res.GetBody()
-			previewBody, err := renderTemplateBody(ctx, templateName, templateBody, *projID, meta)
+			previewBody, err := renderTemplateBody(ctx, templateName, templateBody, *projID, *envID, meta)
 			if err != nil {
 				return diag.FromErr(fmt.Errorf("dataCloudTruthTemplatesRead: %w", err))
 			} else {
