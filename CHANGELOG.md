@@ -1,3 +1,12 @@
+## 0.7.0 (December 17, 2023)
+**BUG FIXES**
+* Fixes an issue where template data sources were ignoring the environment and using the default environment.
+
+**ENHANCEMENTS**
+* Added support for the pattern field in project resources
+* Added basic doc with concrete examples
+* Updated the Go version to 1.21.5. Also using updated the Go OpenAPI bindings for the CloudTruth API
+
 ## 0.5.11 (July 29, 2023)
 **BUG FIXES**
 * Fixes an issue where the AWS integration resource was not outputting the external AWS ID correctly
