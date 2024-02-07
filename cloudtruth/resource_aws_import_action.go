@@ -181,7 +181,8 @@ func resourceAWSImportActionRead(ctx context.Context, d *schema.ResourceData, me
 		var err error
 		awsPull, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPullsRetrieve(ctx, awsIntegrationID, importActionID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceAWSImportActionRead: error reading AWS import action %s", importActionName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceAWSImportActionRead: error reading AWS import action %s with ID %s",
+				importActionName, importActionID), r, err)
 		}
 		return nil
 	})

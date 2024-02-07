@@ -57,15 +57,12 @@ func resourceProjectCreate(ctx context.Context, d *schema.ResourceData, meta any
 	defer tflog.Debug(ctx, "exiting resourceProjectCreate")
 	c := meta.(*cloudTruthClient)
 	projectName := d.Get("name").(string)
-	//parameterNamePattern := d.Get("parameter_name_pattern").(string)
 	projectDesc := d.Get("description").(string)
 	projectCreate := cloudtruthapi.NewProjectCreate(projectName)
 	if projectDesc != "" {
 		projectCreate.SetDescription(projectDesc)
 	}
-	/*if parameterNamePattern != "" {
-		projectCreate.
-	}*/
+
 	projectParent := d.Get("parent").(string)
 	if projectParent != "" {
 		parent, err := c.getProjectURL(ctx, projectParent)
@@ -129,7 +126,8 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 		var err error
 		project, r, err = c.openAPIClient.ProjectsAPI.ProjectsRetrieve(ctx, projectID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceProjectRead: error reading project %s", projectName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceProjectRead: error reading project %s with ID %s",
+				projectName, projectID), r, err)
 		}
 		return nil
 	})
