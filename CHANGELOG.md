@@ -1,3 +1,7 @@
+## 0.7.1 (February 6, 2025)
+**ENHANCEMENTS**
+* Log resource IDs when read lookups fail
+
 ## 0.7.0 (December 17, 2023)
 **BUG FIXES**
 * Fixes an issue where template data sources were ignoring the environment and using the default environment.
