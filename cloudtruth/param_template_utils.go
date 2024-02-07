@@ -35,7 +35,7 @@ func parseProjectAndID(ctx context.Context, c *cloudTruthClient, projParamOrTemp
 }
 
 /*
-We cannot import Parameters or Templates solely by ID, the project must also be specified, therefore we
+We cannot import Parameters or Templates solely by ID, the project must also be specified, therefore we use
 this function instead of using schema.ImportStatePassthroughContext. We support this in the following formats:
 PROJECT_NAME.PARAMETER_ID or PROJECT_NAME.TEMPLATE_ID
 */
