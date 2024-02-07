@@ -114,7 +114,8 @@ func resourceEnvironmentRead(ctx context.Context, d *schema.ResourceData, meta a
 		var err error
 		env, r, err = c.openAPIClient.EnvironmentsAPI.EnvironmentsRetrieve(ctx, envID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceEnvironmentRead: error reading environment %s", envName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceEnvironmentRead: error reading environment %s with ID %s",
+				envName, envID), r, err)
 		}
 		return nil
 	})

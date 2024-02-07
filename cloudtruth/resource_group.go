@@ -114,7 +114,8 @@ func resourceGroupRead(ctx context.Context, d *schema.ResourceData, meta any) di
 		var err error
 		group, r, err = c.openAPIClient.GroupsAPI.GroupsRetrieve(ctx, groupID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceGroupRead: error reading group %s", groupName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceGroupRead: error reading group %s with ID %s",
+				groupName, groupID), r, err)
 		}
 		return nil
 	})

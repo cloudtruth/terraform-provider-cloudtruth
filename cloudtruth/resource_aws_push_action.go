@@ -204,7 +204,8 @@ func resourceAWSPushActionRead(ctx context.Context, d *schema.ResourceData, meta
 		var err error
 		awsPush, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsPushesRetrieve(ctx, awsIntegrationID, pushActionID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceAWSPushActionRead: error reading AWS push action %s", pushActionName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceAWSPushActionRead: error reading AWS push action %s with ID %s",
+				pushActionName, pushActionID), r, err)
 		}
 		return nil
 	})

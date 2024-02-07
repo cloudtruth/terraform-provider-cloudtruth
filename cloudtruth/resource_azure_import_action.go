@@ -160,7 +160,8 @@ func resourceAzureImportActionRead(ctx context.Context, d *schema.ResourceData, 
 		var err error
 		azureKeyVaultPull, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultPullsRetrieve(ctx, azureIntegrationID, importActionID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceAzureImportActionRead: error reading Azure import action %s", importActionName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceAzureImportActionRead: error reading Azure import action %s with ID ",
+				importActionName, importActionID), r, err)
 		}
 		return nil
 	})

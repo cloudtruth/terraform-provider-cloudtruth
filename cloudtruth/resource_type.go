@@ -188,7 +188,8 @@ func resourceTypeRead(ctx context.Context, d *schema.ResourceData, meta any) dia
 		var err error
 		parameterType, r, err = c.openAPIClient.TypesAPI.TypesRetrieve(ctx, typeID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceTypeRead: error reading type %s", typeName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceTypeRead: error reading type %s with ID %s",
+				typeName, typeID), r, err)
 		}
 		return nil
 	})

@@ -156,8 +156,8 @@ func resourceAWSIntegrationRead(ctx context.Context, d *schema.ResourceData, met
 		var err error
 		integration, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAwsRetrieve(ctx, integrationID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceAWSIntegrationRead: error reading AWS integration %s@%s",
-				role, accountID), r, err)
+			return handleAPIError(fmt.Sprintf("resourceAWSIntegrationRead: error reading AWS integration %s@%s with ID %s",
+				role, accountID, integrationID), r, err)
 		}
 		return nil
 	})

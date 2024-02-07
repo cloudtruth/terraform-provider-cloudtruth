@@ -129,7 +129,8 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, meta any) 
 		var err error
 		project, r, err = c.openAPIClient.ProjectsAPI.ProjectsRetrieve(ctx, projectID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceProjectRead: error reading project %s", projectName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceProjectRead: error reading project %s with ID %s",
+				projectName, projectID), r, err)
 		}
 		return nil
 	})

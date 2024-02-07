@@ -111,7 +111,8 @@ func resourceTemplateRead(ctx context.Context, d *schema.ResourceData, meta any)
 		var err error
 		template, r, err = c.openAPIClient.ProjectsAPI.ProjectsTemplatesRetrieve(ctx, templateID, *projID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceTemplateRead: error reading template %s", templateName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceTemplateRead: error reading template %s with ID %s",
+				templateName, templateID), r, err)
 		}
 		return nil
 	})

@@ -184,7 +184,8 @@ func resourceAzurePushActionRead(ctx context.Context, d *schema.ResourceData, me
 		var err error
 		azurePush, r, err = c.openAPIClient.IntegrationsAPI.IntegrationsAzureKeyVaultPushesRetrieve(ctx, azureIntegrationID, pushActionID).Execute()
 		if err != nil {
-			return handleAPIError(fmt.Sprintf("resourceAzurePushActionRead: error reading Azure push action %s", pushActionName), r, err)
+			return handleAPIError(fmt.Sprintf("resourceAzurePushActionRead: error reading Azure push action %s with ID",
+				pushActionName, pushActionID), r, err)
 		}
 		return nil
 	})
