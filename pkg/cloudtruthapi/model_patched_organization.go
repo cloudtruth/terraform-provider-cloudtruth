@@ -33,6 +33,7 @@ type PatchedOrganization struct {
 	// Multi-factor authentication for the organization
 	MfaEnabled *bool `json:"mfa_enabled,omitempty"`
 	Version *VersionEnum `json:"version,omitempty"`
+	NotificationConfig map[string]interface{} `json:"notification_config,omitempty"`
 	// Indicates if this Organization is the one currently targeted by the Bearer token used by the client to authorize.
 	Current *bool `json:"current,omitempty"`
 	Role *RoleEnum `json:"role,omitempty"`
@@ -284,6 +285,38 @@ func (o *PatchedOrganization) HasVersion() bool {
 // SetVersion gets a reference to the given VersionEnum and assigns it to the Version field.
 func (o *PatchedOrganization) SetVersion(v VersionEnum) {
 	o.Version = &v
+}
+
+// GetNotificationConfig returns the NotificationConfig field value if set, zero value otherwise.
+func (o *PatchedOrganization) GetNotificationConfig() map[string]interface{} {
+	if o == nil || IsNil(o.NotificationConfig) {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.NotificationConfig
+}
+
+// GetNotificationConfigOk returns a tuple with the NotificationConfig field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PatchedOrganization) GetNotificationConfigOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.NotificationConfig) {
+		return map[string]interface{}{}, false
+	}
+	return o.NotificationConfig, true
+}
+
+// HasNotificationConfig returns a boolean if a field has been set.
+func (o *PatchedOrganization) HasNotificationConfig() bool {
+	if o != nil && !IsNil(o.NotificationConfig) {
+		return true
+	}
+
+	return false
+}
+
+// SetNotificationConfig gets a reference to the given map[string]interface{} and assigns it to the NotificationConfig field.
+func (o *PatchedOrganization) SetNotificationConfig(v map[string]interface{}) {
+	o.NotificationConfig = v
 }
 
 // GetCurrent returns the Current field value if set, zero value otherwise.
@@ -654,6 +687,9 @@ func (o PatchedOrganization) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Version) {
 		toSerialize["version"] = o.Version
+	}
+	if !IsNil(o.NotificationConfig) {
+		toSerialize["notification_config"] = o.NotificationConfig
 	}
 	if !IsNil(o.Current) {
 		toSerialize["current"] = o.Current

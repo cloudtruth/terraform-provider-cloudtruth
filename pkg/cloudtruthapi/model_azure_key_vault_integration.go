@@ -39,6 +39,8 @@ type AzureKeyVaultIntegration struct {
 	Type string `json:"type"`
 	// Allow actions to write to the integration.
 	Writable *bool `json:"writable,omitempty"`
+	// A list of tags to be set on all integration resources.
+	ResourceTags map[string]interface{} `json:"resource_tags,omitempty"`
 	// The Azure Key Vault name.
 	VaultName string `json:"vault_name"`
 	// The Azure Tenant ID.
@@ -382,6 +384,38 @@ func (o *AzureKeyVaultIntegration) SetWritable(v bool) {
 	o.Writable = &v
 }
 
+// GetResourceTags returns the ResourceTags field value if set, zero value otherwise.
+func (o *AzureKeyVaultIntegration) GetResourceTags() map[string]interface{} {
+	if o == nil || IsNil(o.ResourceTags) {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.ResourceTags
+}
+
+// GetResourceTagsOk returns a tuple with the ResourceTags field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AzureKeyVaultIntegration) GetResourceTagsOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.ResourceTags) {
+		return map[string]interface{}{}, false
+	}
+	return o.ResourceTags, true
+}
+
+// HasResourceTags returns a boolean if a field has been set.
+func (o *AzureKeyVaultIntegration) HasResourceTags() bool {
+	if o != nil && !IsNil(o.ResourceTags) {
+		return true
+	}
+
+	return false
+}
+
+// SetResourceTags gets a reference to the given map[string]interface{} and assigns it to the ResourceTags field.
+func (o *AzureKeyVaultIntegration) SetResourceTags(v map[string]interface{}) {
+	o.ResourceTags = v
+}
+
 // GetVaultName returns the VaultName field value
 func (o *AzureKeyVaultIntegration) GetVaultName() string {
 	if o == nil {
@@ -455,6 +489,9 @@ func (o AzureKeyVaultIntegration) ToMap() (map[string]interface{}, error) {
 	toSerialize["type"] = o.Type
 	if !IsNil(o.Writable) {
 		toSerialize["writable"] = o.Writable
+	}
+	if !IsNil(o.ResourceTags) {
+		toSerialize["resource_tags"] = o.ResourceTags
 	}
 	toSerialize["vault_name"] = o.VaultName
 	toSerialize["tenant_id"] = o.TenantId

@@ -581,6 +581,143 @@ func (a *ServiceaccountsAPIService) ServiceaccountsPartialUpdateExecute(r ApiSer
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiServiceaccountsRekeyCreateRequest struct {
+	ctx context.Context
+	ApiService *ServiceaccountsAPIService
+	id string
+	serviceAccountRekeyRequest *ServiceAccountRekeyRequest
+}
+
+func (r ApiServiceaccountsRekeyCreateRequest) ServiceAccountRekeyRequest(serviceAccountRekeyRequest ServiceAccountRekeyRequest) ApiServiceaccountsRekeyCreateRequest {
+	r.serviceAccountRekeyRequest = &serviceAccountRekeyRequest
+	return r
+}
+
+func (r ApiServiceaccountsRekeyCreateRequest) Execute() (*ServiceAccountRekeyRequest, *http.Response, error) {
+	return r.ApiService.ServiceaccountsRekeyCreateExecute(r)
+}
+
+/*
+ServiceaccountsRekeyCreate Method for ServiceaccountsRekeyCreate
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id A unique value identifying this service account.
+ @return ApiServiceaccountsRekeyCreateRequest
+*/
+func (a *ServiceaccountsAPIService) ServiceaccountsRekeyCreate(ctx context.Context, id string) ApiServiceaccountsRekeyCreateRequest {
+	return ApiServiceaccountsRekeyCreateRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+// Execute executes the request
+//  @return ServiceAccountRekeyRequest
+func (a *ServiceaccountsAPIService) ServiceaccountsRekeyCreateExecute(r ApiServiceaccountsRekeyCreateRequest) (*ServiceAccountRekeyRequest, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ServiceAccountRekeyRequest
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceaccountsAPIService.ServiceaccountsRekeyCreate")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v1/serviceaccounts/{id}/rekey/"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json", "application/x-www-form-urlencoded", "multipart/form-data"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.serviceAccountRekeyRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["ApiKeyAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["Authorization"] = key
+			}
+		}
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["JWTAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["Authorization"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiServiceaccountsRetrieveRequest struct {
 	ctx context.Context
 	ApiService *ServiceaccountsAPIService
@@ -727,7 +864,13 @@ func (r ApiServiceaccountsUpdateRequest) Execute() (*ServiceAccountUpdateRequest
 }
 
 /*
-ServiceaccountsUpdate Method for ServiceaccountsUpdate
+ServiceaccountsUpdate Update a ServiceAccount user.
+
+
+            Updates a ServiceAccount.  A ServiceAccount is a user record intended
+            for machine use (such as a build system).  It does not have a username/password
+            but is instead accessed using an API key.
+            
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id A unique value identifying this service account.

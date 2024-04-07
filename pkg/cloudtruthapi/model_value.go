@@ -63,13 +63,14 @@ type Value struct {
 	ReferencedTemplates []string `json:"referenced_templates"`
 	CreatedAt time.Time `json:"created_at"`
 	ModifiedAt NullableTime `json:"modified_at"`
+	ExpiresAt NullableTime `json:"expires_at"`
 }
 
 // NewValue instantiates a new Value object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewValue(url string, id string, ledgerId string, activeEnvironment string, activeEnvironmentId string, activeEnvironmentName string, environment string, environmentId string, environmentName string, parameter string, parameterId string, externalError NullableString, externalStatus NullableValueExternalStatus, value NullableString, evaluated bool, secret NullableBool, referencedProjects []string, referencedParameters []string, referencedTemplates []string, createdAt time.Time, modifiedAt NullableTime) *Value {
+func NewValue(url string, id string, ledgerId string, activeEnvironment string, activeEnvironmentId string, activeEnvironmentName string, environment string, environmentId string, environmentName string, parameter string, parameterId string, externalError NullableString, externalStatus NullableValueExternalStatus, value NullableString, evaluated bool, secret NullableBool, referencedProjects []string, referencedParameters []string, referencedTemplates []string, createdAt time.Time, modifiedAt NullableTime, expiresAt NullableTime) *Value {
 	this := Value{}
 	this.Url = url
 	this.Id = id
@@ -92,6 +93,7 @@ func NewValue(url string, id string, ledgerId string, activeEnvironment string, 
 	this.ReferencedTemplates = referencedTemplates
 	this.CreatedAt = createdAt
 	this.ModifiedAt = modifiedAt
+	this.ExpiresAt = expiresAt
 	return &this
 }
 
@@ -797,6 +799,32 @@ func (o *Value) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
 
+// GetExpiresAt returns the ExpiresAt field value
+// If the value is explicit nil, the zero value for time.Time will be returned
+func (o *Value) GetExpiresAt() time.Time {
+	if o == nil || o.ExpiresAt.Get() == nil {
+		var ret time.Time
+		return ret
+	}
+
+	return *o.ExpiresAt.Get()
+}
+
+// GetExpiresAtOk returns a tuple with the ExpiresAt field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *Value) GetExpiresAtOk() (*time.Time, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.ExpiresAt.Get(), o.ExpiresAt.IsSet()
+}
+
+// SetExpiresAt sets field value
+func (o *Value) SetExpiresAt(v time.Time) {
+	o.ExpiresAt.Set(&v)
+}
+
 func (o Value) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -843,6 +871,7 @@ func (o Value) ToMap() (map[string]interface{}, error) {
 	toSerialize["referenced_templates"] = o.ReferencedTemplates
 	toSerialize["created_at"] = o.CreatedAt
 	toSerialize["modified_at"] = o.ModifiedAt.Get()
+	toSerialize["expires_at"] = o.ExpiresAt.Get()
 	return toSerialize, nil
 }
 

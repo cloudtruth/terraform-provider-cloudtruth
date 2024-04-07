@@ -28,6 +28,8 @@ type ParameterCreate struct {
 	Secret *bool `json:"secret,omitempty"`
 	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.         
 	Type *string `json:"type,omitempty"`
+	Expires NullableString `json:"expires,omitempty"`
+	ExpirationAction map[string]interface{} `json:"expiration_action,omitempty"`
 }
 
 // NewParameterCreate instantiates a new ParameterCreate object
@@ -168,6 +170,81 @@ func (o *ParameterCreate) SetType(v string) {
 	o.Type = &v
 }
 
+// GetExpires returns the Expires field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *ParameterCreate) GetExpires() string {
+	if o == nil || IsNil(o.Expires.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.Expires.Get()
+}
+
+// GetExpiresOk returns a tuple with the Expires field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ParameterCreate) GetExpiresOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Expires.Get(), o.Expires.IsSet()
+}
+
+// HasExpires returns a boolean if a field has been set.
+func (o *ParameterCreate) HasExpires() bool {
+	if o != nil && o.Expires.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetExpires gets a reference to the given NullableString and assigns it to the Expires field.
+func (o *ParameterCreate) SetExpires(v string) {
+	o.Expires.Set(&v)
+}
+// SetExpiresNil sets the value for Expires to be an explicit nil
+func (o *ParameterCreate) SetExpiresNil() {
+	o.Expires.Set(nil)
+}
+
+// UnsetExpires ensures that no value is present for Expires, not even an explicit nil
+func (o *ParameterCreate) UnsetExpires() {
+	o.Expires.Unset()
+}
+
+// GetExpirationAction returns the ExpirationAction field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *ParameterCreate) GetExpirationAction() map[string]interface{} {
+	if o == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.ExpirationAction
+}
+
+// GetExpirationActionOk returns a tuple with the ExpirationAction field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ParameterCreate) GetExpirationActionOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.ExpirationAction) {
+		return map[string]interface{}{}, false
+	}
+	return o.ExpirationAction, true
+}
+
+// HasExpirationAction returns a boolean if a field has been set.
+func (o *ParameterCreate) HasExpirationAction() bool {
+	if o != nil && IsNil(o.ExpirationAction) {
+		return true
+	}
+
+	return false
+}
+
+// SetExpirationAction gets a reference to the given map[string]interface{} and assigns it to the ExpirationAction field.
+func (o *ParameterCreate) SetExpirationAction(v map[string]interface{}) {
+	o.ExpirationAction = v
+}
+
 func (o ParameterCreate) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -187,6 +264,12 @@ func (o ParameterCreate) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Type) {
 		toSerialize["type"] = o.Type
+	}
+	if o.Expires.IsSet() {
+		toSerialize["expires"] = o.Expires.Get()
+	}
+	if o.ExpirationAction != nil {
+		toSerialize["expiration_action"] = o.ExpirationAction
 	}
 	return toSerialize, nil
 }
