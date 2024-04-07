@@ -27,6 +27,7 @@ type PatchedServiceAccount struct {
 	User *User `json:"user,omitempty"`
 	// An optional description of the process or system using the service account.
 	Description *string `json:"description,omitempty"`
+	Keys []ServiceAccountAPIKey `json:"keys,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	ModifiedAt NullableTime `json:"modified_at,omitempty"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
@@ -220,6 +221,38 @@ func (o *PatchedServiceAccount) SetDescription(v string) {
 	o.Description = &v
 }
 
+// GetKeys returns the Keys field value if set, zero value otherwise.
+func (o *PatchedServiceAccount) GetKeys() []ServiceAccountAPIKey {
+	if o == nil || IsNil(o.Keys) {
+		var ret []ServiceAccountAPIKey
+		return ret
+	}
+	return o.Keys
+}
+
+// GetKeysOk returns a tuple with the Keys field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PatchedServiceAccount) GetKeysOk() ([]ServiceAccountAPIKey, bool) {
+	if o == nil || IsNil(o.Keys) {
+		return nil, false
+	}
+	return o.Keys, true
+}
+
+// HasKeys returns a boolean if a field has been set.
+func (o *PatchedServiceAccount) HasKeys() bool {
+	if o != nil && !IsNil(o.Keys) {
+		return true
+	}
+
+	return false
+}
+
+// SetKeys gets a reference to the given []ServiceAccountAPIKey and assigns it to the Keys field.
+func (o *PatchedServiceAccount) SetKeys(v []ServiceAccountAPIKey) {
+	o.Keys = v
+}
+
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *PatchedServiceAccount) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
@@ -360,6 +393,9 @@ func (o PatchedServiceAccount) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.Keys) {
+		toSerialize["keys"] = o.Keys
 	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt

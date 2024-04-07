@@ -51,6 +51,8 @@ type PatchedAwsIntegration struct {
 	AwsKmsKeyId NullableString `json:"aws_kms_key_id,omitempty"`
 	// The role that CloudTruth will assume when interacting with your AWS Account through this integration.  The role is configured by your AWS Account Administrator.  If your AWS Administrator provided you with a value use it, otherwise make your own role name and give it to your AWS Administrator.
 	AwsRoleName *string `json:"aws_role_name,omitempty"`
+	// A list of tags to be set on all integration resources.
+	ResourceTags map[string]interface{} `json:"resource_tags,omitempty"`
 }
 
 // NewPatchedAwsIntegration instantiates a new PatchedAwsIntegration object
@@ -676,6 +678,38 @@ func (o *PatchedAwsIntegration) SetAwsRoleName(v string) {
 	o.AwsRoleName = &v
 }
 
+// GetResourceTags returns the ResourceTags field value if set, zero value otherwise.
+func (o *PatchedAwsIntegration) GetResourceTags() map[string]interface{} {
+	if o == nil || IsNil(o.ResourceTags) {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.ResourceTags
+}
+
+// GetResourceTagsOk returns a tuple with the ResourceTags field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PatchedAwsIntegration) GetResourceTagsOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.ResourceTags) {
+		return map[string]interface{}{}, false
+	}
+	return o.ResourceTags, true
+}
+
+// HasResourceTags returns a boolean if a field has been set.
+func (o *PatchedAwsIntegration) HasResourceTags() bool {
+	if o != nil && !IsNil(o.ResourceTags) {
+		return true
+	}
+
+	return false
+}
+
+// SetResourceTags gets a reference to the given map[string]interface{} and assigns it to the ResourceTags field.
+func (o *PatchedAwsIntegration) SetResourceTags(v map[string]interface{}) {
+	o.ResourceTags = v
+}
+
 func (o PatchedAwsIntegration) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -739,6 +773,9 @@ func (o PatchedAwsIntegration) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.AwsRoleName) {
 		toSerialize["aws_role_name"] = o.AwsRoleName
+	}
+	if !IsNil(o.ResourceTags) {
+		toSerialize["resource_tags"] = o.ResourceTags
 	}
 	return toSerialize, nil
 }

@@ -27,6 +27,7 @@ type ServiceAccountCreateResponse struct {
 	User User `json:"user"`
 	// An optional description of the process or system using the service account.
 	Description *string `json:"description,omitempty"`
+	Keys []ServiceAccountAPIKey `json:"keys"`
 	CreatedAt time.Time `json:"created_at"`
 	ModifiedAt NullableTime `json:"modified_at"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
@@ -39,11 +40,12 @@ type ServiceAccountCreateResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewServiceAccountCreateResponse(url string, id string, user User, createdAt time.Time, modifiedAt NullableTime, lastUsedAt NullableTime, apikey string) *ServiceAccountCreateResponse {
+func NewServiceAccountCreateResponse(url string, id string, user User, keys []ServiceAccountAPIKey, createdAt time.Time, modifiedAt NullableTime, lastUsedAt NullableTime, apikey string) *ServiceAccountCreateResponse {
 	this := ServiceAccountCreateResponse{}
 	this.Url = url
 	this.Id = id
 	this.User = user
+	this.Keys = keys
 	this.CreatedAt = createdAt
 	this.ModifiedAt = modifiedAt
 	this.LastUsedAt = lastUsedAt
@@ -205,6 +207,30 @@ func (o *ServiceAccountCreateResponse) SetDescription(v string) {
 	o.Description = &v
 }
 
+// GetKeys returns the Keys field value
+func (o *ServiceAccountCreateResponse) GetKeys() []ServiceAccountAPIKey {
+	if o == nil {
+		var ret []ServiceAccountAPIKey
+		return ret
+	}
+
+	return o.Keys
+}
+
+// GetKeysOk returns a tuple with the Keys field value
+// and a boolean to check if the value has been set.
+func (o *ServiceAccountCreateResponse) GetKeysOk() ([]ServiceAccountAPIKey, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Keys, true
+}
+
+// SetKeys sets field value
+func (o *ServiceAccountCreateResponse) SetKeys(v []ServiceAccountAPIKey) {
+	o.Keys = v
+}
+
 // GetCreatedAt returns the CreatedAt field value
 func (o *ServiceAccountCreateResponse) GetCreatedAt() time.Time {
 	if o == nil {
@@ -324,6 +350,7 @@ func (o ServiceAccountCreateResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
+	toSerialize["keys"] = o.Keys
 	toSerialize["created_at"] = o.CreatedAt
 	toSerialize["modified_at"] = o.ModifiedAt.Get()
 	toSerialize["last_used_at"] = o.LastUsedAt.Get()

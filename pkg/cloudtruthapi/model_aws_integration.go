@@ -51,6 +51,8 @@ type AwsIntegration struct {
 	AwsKmsKeyId NullableString `json:"aws_kms_key_id,omitempty"`
 	// The role that CloudTruth will assume when interacting with your AWS Account through this integration.  The role is configured by your AWS Account Administrator.  If your AWS Administrator provided you with a value use it, otherwise make your own role name and give it to your AWS Administrator.
 	AwsRoleName string `json:"aws_role_name"`
+	// A list of tags to be set on all integration resources.
+	ResourceTags map[string]interface{} `json:"resource_tags,omitempty"`
 }
 
 // NewAwsIntegration instantiates a new AwsIntegration object
@@ -555,6 +557,38 @@ func (o *AwsIntegration) SetAwsRoleName(v string) {
 	o.AwsRoleName = v
 }
 
+// GetResourceTags returns the ResourceTags field value if set, zero value otherwise.
+func (o *AwsIntegration) GetResourceTags() map[string]interface{} {
+	if o == nil || IsNil(o.ResourceTags) {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.ResourceTags
+}
+
+// GetResourceTagsOk returns a tuple with the ResourceTags field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AwsIntegration) GetResourceTagsOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.ResourceTags) {
+		return map[string]interface{}{}, false
+	}
+	return o.ResourceTags, true
+}
+
+// HasResourceTags returns a boolean if a field has been set.
+func (o *AwsIntegration) HasResourceTags() bool {
+	if o != nil && !IsNil(o.ResourceTags) {
+		return true
+	}
+
+	return false
+}
+
+// SetResourceTags gets a reference to the given map[string]interface{} and assigns it to the ResourceTags field.
+func (o *AwsIntegration) SetResourceTags(v map[string]interface{}) {
+	o.ResourceTags = v
+}
+
 func (o AwsIntegration) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -589,6 +623,9 @@ func (o AwsIntegration) ToMap() (map[string]interface{}, error) {
 		toSerialize["aws_kms_key_id"] = o.AwsKmsKeyId.Get()
 	}
 	toSerialize["aws_role_name"] = o.AwsRoleName
+	if !IsNil(o.ResourceTags) {
+		toSerialize["resource_tags"] = o.ResourceTags
+	}
 	return toSerialize, nil
 }
 

@@ -33,6 +33,7 @@ type Organization struct {
 	// Multi-factor authentication for the organization
 	MfaEnabled *bool `json:"mfa_enabled,omitempty"`
 	Version VersionEnum `json:"version"`
+	NotificationConfig map[string]interface{} `json:"notification_config,omitempty"`
 	// Indicates if this Organization is the one currently targeted by the Bearer token used by the client to authorize.
 	Current bool `json:"current"`
 	Role RoleEnum `json:"role"`
@@ -258,6 +259,38 @@ func (o *Organization) GetVersionOk() (*VersionEnum, bool) {
 // SetVersion sets field value
 func (o *Organization) SetVersion(v VersionEnum) {
 	o.Version = v
+}
+
+// GetNotificationConfig returns the NotificationConfig field value if set, zero value otherwise.
+func (o *Organization) GetNotificationConfig() map[string]interface{} {
+	if o == nil || IsNil(o.NotificationConfig) {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.NotificationConfig
+}
+
+// GetNotificationConfigOk returns a tuple with the NotificationConfig field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Organization) GetNotificationConfigOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.NotificationConfig) {
+		return map[string]interface{}{}, false
+	}
+	return o.NotificationConfig, true
+}
+
+// HasNotificationConfig returns a boolean if a field has been set.
+func (o *Organization) HasNotificationConfig() bool {
+	if o != nil && !IsNil(o.NotificationConfig) {
+		return true
+	}
+
+	return false
+}
+
+// SetNotificationConfig gets a reference to the given map[string]interface{} and assigns it to the NotificationConfig field.
+func (o *Organization) SetNotificationConfig(v map[string]interface{}) {
+	o.NotificationConfig = v
 }
 
 // GetCurrent returns the Current field value
@@ -507,6 +540,9 @@ func (o Organization) ToMap() (map[string]interface{}, error) {
 		toSerialize["mfa_enabled"] = o.MfaEnabled
 	}
 	toSerialize["version"] = o.Version
+	if !IsNil(o.NotificationConfig) {
+		toSerialize["notification_config"] = o.NotificationConfig
+	}
 	toSerialize["current"] = o.Current
 	toSerialize["role"] = o.Role
 	toSerialize["subscription_expires_at"] = o.SubscriptionExpiresAt.Get()

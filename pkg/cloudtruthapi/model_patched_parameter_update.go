@@ -34,6 +34,10 @@ type PatchedParameterUpdate struct {
 	Project *string `json:"project,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	ModifiedAt NullableTime `json:"modified_at,omitempty"`
+	Expires NullableString `json:"expires,omitempty"`
+	ExpirationAction map[string]interface{} `json:"expiration_action,omitempty"`
+	// If this parameter expires, the status of the last attempt to handle its expiration
+	ExpiredStatus map[string]interface{} `json:"expired_status,omitempty"`
 }
 
 // NewPatchedParameterUpdate instantiates a new PatchedParameterUpdate object
@@ -319,6 +323,114 @@ func (o *PatchedParameterUpdate) UnsetModifiedAt() {
 	o.ModifiedAt.Unset()
 }
 
+// GetExpires returns the Expires field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PatchedParameterUpdate) GetExpires() string {
+	if o == nil || IsNil(o.Expires.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.Expires.Get()
+}
+
+// GetExpiresOk returns a tuple with the Expires field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PatchedParameterUpdate) GetExpiresOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Expires.Get(), o.Expires.IsSet()
+}
+
+// HasExpires returns a boolean if a field has been set.
+func (o *PatchedParameterUpdate) HasExpires() bool {
+	if o != nil && o.Expires.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetExpires gets a reference to the given NullableString and assigns it to the Expires field.
+func (o *PatchedParameterUpdate) SetExpires(v string) {
+	o.Expires.Set(&v)
+}
+// SetExpiresNil sets the value for Expires to be an explicit nil
+func (o *PatchedParameterUpdate) SetExpiresNil() {
+	o.Expires.Set(nil)
+}
+
+// UnsetExpires ensures that no value is present for Expires, not even an explicit nil
+func (o *PatchedParameterUpdate) UnsetExpires() {
+	o.Expires.Unset()
+}
+
+// GetExpirationAction returns the ExpirationAction field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PatchedParameterUpdate) GetExpirationAction() map[string]interface{} {
+	if o == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.ExpirationAction
+}
+
+// GetExpirationActionOk returns a tuple with the ExpirationAction field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PatchedParameterUpdate) GetExpirationActionOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.ExpirationAction) {
+		return map[string]interface{}{}, false
+	}
+	return o.ExpirationAction, true
+}
+
+// HasExpirationAction returns a boolean if a field has been set.
+func (o *PatchedParameterUpdate) HasExpirationAction() bool {
+	if o != nil && IsNil(o.ExpirationAction) {
+		return true
+	}
+
+	return false
+}
+
+// SetExpirationAction gets a reference to the given map[string]interface{} and assigns it to the ExpirationAction field.
+func (o *PatchedParameterUpdate) SetExpirationAction(v map[string]interface{}) {
+	o.ExpirationAction = v
+}
+
+// GetExpiredStatus returns the ExpiredStatus field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PatchedParameterUpdate) GetExpiredStatus() map[string]interface{} {
+	if o == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.ExpiredStatus
+}
+
+// GetExpiredStatusOk returns a tuple with the ExpiredStatus field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PatchedParameterUpdate) GetExpiredStatusOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.ExpiredStatus) {
+		return map[string]interface{}{}, false
+	}
+	return o.ExpiredStatus, true
+}
+
+// HasExpiredStatus returns a boolean if a field has been set.
+func (o *PatchedParameterUpdate) HasExpiredStatus() bool {
+	if o != nil && IsNil(o.ExpiredStatus) {
+		return true
+	}
+
+	return false
+}
+
+// SetExpiredStatus gets a reference to the given map[string]interface{} and assigns it to the ExpiredStatus field.
+func (o *PatchedParameterUpdate) SetExpiredStatus(v map[string]interface{}) {
+	o.ExpiredStatus = v
+}
+
 func (o PatchedParameterUpdate) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -352,6 +464,15 @@ func (o PatchedParameterUpdate) ToMap() (map[string]interface{}, error) {
 	}
 	if o.ModifiedAt.IsSet() {
 		toSerialize["modified_at"] = o.ModifiedAt.Get()
+	}
+	if o.Expires.IsSet() {
+		toSerialize["expires"] = o.Expires.Get()
+	}
+	if o.ExpirationAction != nil {
+		toSerialize["expiration_action"] = o.ExpirationAction
+	}
+	if o.ExpiredStatus != nil {
+		toSerialize["expired_status"] = o.ExpiredStatus
 	}
 	return toSerialize, nil
 }

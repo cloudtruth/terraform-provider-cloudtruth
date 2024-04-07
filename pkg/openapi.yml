@@ -163,6 +163,7 @@ paths:
           enum:
           - create
           - delete
+          - expired
           - pull
           - push
           - update
@@ -7719,6 +7720,11 @@ paths:
           description: ''
     put:
       operationId: serviceaccounts_update
+      description: "\n            Updates a ServiceAccount.  A ServiceAccount is a\
+        \ user record intended\n            for machine use (such as a build system).\
+        \  It does not have a username/password\n            but is instead accessed\
+        \ using an API key.\n            "
+      summary: Update a ServiceAccount user.
       parameters:
       - in: path
         name: id
@@ -7801,6 +7807,40 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/serviceaccounts/{id}/rekey/:
+    post:
+      operationId: serviceaccounts_rekey_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this service account.
+        required: true
+      tags:
+      - serviceaccounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceAccountRekeyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceAccountRekeyRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceAccountRekeyRequest'
+      security:
+      - JWTAuth: []
+      - ApiKeyAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceAccountRekeyRequest'
+          description: ''
   /api/v1/types/:
     get:
       operationId: types_list
@@ -8584,6 +8624,10 @@ components:
           pattern: ^[\w+=,.@\-]+$
           maxLength: 64
           minLength: 2
+        resource_tags:
+          type: object
+          additionalProperties: {}
+          description: A list of tags to be set on all integration resources.
       required:
       - aws_account_id
       - aws_enabled_regions
@@ -8652,6 +8696,10 @@ components:
           pattern: ^[\w+=,.@\-]+$
           maxLength: 64
           minLength: 2
+        resource_tags:
+          type: object
+          additionalProperties: {}
+          description: A list of tags to be set on all integration resources.
       required:
       - aws_account_id
       - aws_enabled_regions
@@ -9444,6 +9492,10 @@ components:
         writable:
           type: boolean
           description: Allow actions to write to the integration.
+        resource_tags:
+          type: object
+          additionalProperties: {}
+          description: A list of tags to be set on all integration resources.
         vault_name:
           type: string
           readOnly: true
@@ -9475,6 +9527,10 @@ components:
         writable:
           type: boolean
           description: Allow actions to write to the integration.
+        resource_tags:
+          type: object
+          additionalProperties: {}
+          description: A list of tags to be set on all integration resources.
         vault_name:
           type: string
           description: The Azure Key Vault name.
@@ -11354,6 +11410,9 @@ components:
           - $ref: '#/components/schemas/VersionEnum'
           readOnly: true
           description: The current version of this Organization
+        notification_config:
+          type: object
+          additionalProperties: {}
         current:
           type: boolean
           readOnly: true
@@ -12300,8 +12359,23 @@ components:
           format: date-time
           readOnly: true
           nullable: true
+        expires:
+          type: string
+          nullable: true
+        expiration_action:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        expired_status:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          readOnly: true
+          description: If this parameter expires, the status of the last attempt to
+            handle its expiration
       required:
       - created_at
+      - expired_status
       - id
       - ledger_id
       - modified_at
@@ -12361,6 +12435,13 @@ components:
             \ will default to\n        a string for Parameters that are not overrides\
             \ or to the overridden\n        Parameter's type for Parameters that are\
             \ overrides.\n        "
+        expires:
+          type: string
+          nullable: true
+        expiration_action:
+          type: object
+          additionalProperties: {}
+          nullable: true
       required:
       - name
     ParameterDuality:
@@ -12874,8 +12955,23 @@ components:
           format: date-time
           readOnly: true
           nullable: true
+        expires:
+          type: string
+          nullable: true
+        expiration_action:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        expired_status:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          readOnly: true
+          description: If this parameter expires, the status of the last attempt to
+            handle its expiration
       required:
       - created_at
+      - expired_status
       - id
       - modified_at
       - name
@@ -12977,6 +13073,10 @@ components:
           pattern: ^[\w+=,.@\-]+$
           maxLength: 64
           minLength: 2
+        resource_tags:
+          type: object
+          additionalProperties: {}
+          description: A list of tags to be set on all integration resources.
     PatchedAwsPull:
       type: object
       description: |-
@@ -13204,6 +13304,10 @@ components:
         writable:
           type: boolean
           description: Allow actions to write to the integration.
+        resource_tags:
+          type: object
+          additionalProperties: {}
+          description: A list of tags to be set on all integration resources.
         vault_name:
           type: string
           readOnly: true
@@ -13676,6 +13780,9 @@ components:
           - $ref: '#/components/schemas/VersionEnum'
           readOnly: true
           description: The current version of this Organization
+        notification_config:
+          type: object
+          additionalProperties: {}
         current:
           type: boolean
           readOnly: true
@@ -13859,6 +13966,20 @@ components:
           format: date-time
           readOnly: true
           nullable: true
+        expires:
+          type: string
+          nullable: true
+        expiration_action:
+          type: object
+          additionalProperties: {}
+          nullable: true
+        expired_status:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          readOnly: true
+          description: If this parameter expires, the status of the last attempt to
+            handle its expiration
     PatchedProjectUpdate:
       type: object
       properties:
@@ -13926,6 +14047,11 @@ components:
           type: string
           description: An optional description of the process or system using the
             service account.
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceAccountAPIKey'
+          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -14304,6 +14430,11 @@ components:
           type: string
           description: An optional description of the process or system using the
             service account.
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceAccountAPIKey'
+          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -14323,10 +14454,43 @@ components:
       required:
       - created_at
       - id
+      - keys
       - last_used_at
       - modified_at
       - url
       - user
+    ServiceAccountAPIKey:
+      type: object
+      properties:
+        name:
+          type: string
+          description: A free-form name for the API key. Need not be unique. 50 characters
+            max.
+          maxLength: 50
+        prefix:
+          type: string
+          readOnly: true
+        revoked:
+          type: boolean
+          description: If the API key is revoked, clients cannot use it anymore. (This
+            cannot be undone.)
+        has_expired:
+          type: boolean
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        expiry_date:
+          type: string
+          format: date-time
+          nullable: true
+          title: Expires
+          description: Once API key expires, clients cannot use it anymore.
+      required:
+      - created
+      - has_expired
+      - prefix
     ServiceAccountCreateRequest:
       type: object
       properties:
@@ -14370,6 +14534,11 @@ components:
           type: string
           description: An optional description of the process or system using the
             service account.
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceAccountAPIKey'
+          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -14394,10 +14563,19 @@ components:
       - apikey
       - created_at
       - id
+      - keys
       - last_used_at
       - modified_at
       - url
       - user
+    ServiceAccountRekeyRequest:
+      type: object
+      properties:
+        expire_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: The date and time the previous API key will expire.
     ServiceAccountUpdateRequest:
       type: object
       properties:
@@ -15174,6 +15352,11 @@ components:
           format: date-time
           readOnly: true
           nullable: true
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
       required:
       - active_environment
       - active_environment_id
@@ -15183,6 +15366,7 @@ components:
       - environment_id
       - environment_name
       - evaluated
+      - expires_at
       - external_error
       - external_status
       - id
