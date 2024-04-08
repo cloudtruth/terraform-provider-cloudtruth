@@ -64,6 +64,11 @@ in the target AWS account`,
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"resource_tags": {
+				Description: "A list of tags to be set on all integration resources",
+				Type:        schema.TypeMap,
+				Computed:    true,
+			},
 		},
 	}
 }
