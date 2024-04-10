@@ -27,6 +27,7 @@ at least one service must be specified
 
 - `kms_key_id` (String) The ID of the KMS key which CloudTruth will use to decrypt content in the target AWS account (optional and
 needed only when the content is encryped with a non-default KMS key)
+- `resource_tags` (Map of String) A list of tags to be set on all integration resources
 - `writable` (Boolean) Whether or not the CloudTruth integration can write to the AWS service(s), defaults to false
 
 ### Read-Only
