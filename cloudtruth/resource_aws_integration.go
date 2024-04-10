@@ -62,7 +62,10 @@ at least one service must be specified`,
 				Description: "A list of tags to be set on all integration resources",
 				Type:        schema.TypeMap,
 				Optional:    true,
-				Default:     nil,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+				Default: nil,
 			},
 			"external_id": {
 				Description: `The generated external ID for the AWS integration, needed for CloudTruth to assume the specified role
@@ -242,10 +245,6 @@ func resourceAWSIntegrationUpdate(ctx context.Context, d *schema.ResourceData, m
 	}
 
 	if d.HasChange("aws_enabled_regions") {
-		x, y := d.GetChange("aws_enabled_regions")
-		fmt.Print(x)
-		fmt.Print(y)
-
 		rawRegions := d.Get("aws_enabled_regions").(*schema.Set)
 		regions, err := getIntegrationRegions(rawRegions.List())
 		if err != nil {
