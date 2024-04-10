@@ -1,4 +1,8 @@
-## 0.7.1 (February 6, 2025)
+## 0.7.2 (April 10, 2024)
+**ENHANCEMENTS**
+* Add support for resource tags in integrations
+
+## 0.7.1 (February 6, 2024)
 **ENHANCEMENTS**
 * Log resource IDs when read lookups fail
 
