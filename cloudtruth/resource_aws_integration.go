@@ -58,16 +58,17 @@ at least one service must be specified`,
 				Required: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
+			"resource_tags": {
+				Description: "A list of tags to be set on all integration resources",
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Default:     nil,
+			},
 			"external_id": {
 				Description: `The generated external ID for the AWS integration, needed for CloudTruth to assume the specified role
 in the target AWS account`,
 				Type:     schema.TypeString,
 				Computed: true,
-			},
-			"resource_tags": {
-				Description: "A list of tags to be set on all integration resources",
-				Type:        schema.TypeMap,
-				Computed:    true,
 			},
 		},
 	}
@@ -125,6 +126,10 @@ func resourceAWSIntegrationCreate(ctx context.Context, d *schema.ResourceData, m
 		intCreate.SetAwsKmsKeyId(kmsKeyID)
 	}
 	intCreate.SetWritable(d.Get("writable").(bool))
+	resourceTags := d.Get("resource_tags").(map[string]interface{})
+	if resourceTags != nil {
+		intCreate.SetResourceTags(resourceTags)
+	}
 
 	var integration *cloudtruthapi.AwsIntegration
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
@@ -195,6 +200,13 @@ func resourceAWSIntegrationRead(ctx context.Context, d *schema.ResourceData, met
 	if err != nil {
 		return diag.FromErr(err)
 	}
+	resourceTags := integration.GetResourceTags()
+	if resourceTags != nil {
+		err = d.Set("resourceTags", resourceTags)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
 	d.SetId(integrationID)
 	return nil
 }
@@ -249,6 +261,12 @@ func resourceAWSIntegrationUpdate(ctx context.Context, d *schema.ResourceData, m
 			return diag.FromErr(err)
 		}
 		patchedAwsIntegration.SetAwsEnabledServices(services)
+		hasChange = true
+	}
+
+	if d.HasChange("resource_tags") {
+		resourceTagMap := d.Get("resource_tags").(map[string]interface{})
+		patchedAwsIntegration.SetResourceTags(resourceTagMap)
 		hasChange = true
 	}
 
