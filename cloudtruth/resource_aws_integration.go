@@ -205,7 +205,7 @@ func resourceAWSIntegrationRead(ctx context.Context, d *schema.ResourceData, met
 	}
 	resourceTags := integration.GetResourceTags()
 	if resourceTags != nil {
-		err = d.Set("resourceTags", resourceTags)
+		err = d.Set("resource_tags", resourceTags)
 		if err != nil {
 			return diag.FromErr(err)
 		}
