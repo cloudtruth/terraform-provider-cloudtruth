@@ -473,16 +473,20 @@ func (c *cloudTruthClient) lookupType(ctx context.Context, typeName string) *clo
 /*
 Helper function for making API errors more useful
 API/server side errors are generally retryable
-client side errors are not retryable, and we extract the underlying API error
-so that we can present it to the end user
+client side errors are generally not retryable, except for 409 responses
+which can indicate that we have a race condition and should retry the operation
+In non-retryable cases, weextract the underlying API error so that we can present
+it to the end user
 */
 func handleAPIError(msg string, r *http.Response, err error) *retry.RetryError {
 	outErr := fmt.Errorf(msg, err)
 	if r == nil { // Can be nil when the context has been cancelled
 		return retry.NonRetryableError(outErr)
+	} else if r.StatusCode >= 409 { // Conflict, we should try again
+		return retry.RetryableError(outErr)
 	} else if r.StatusCode >= 500 { // server side error
 		return retry.RetryableError(outErr)
-	} else { // 4xx error
+	} else { // All other 4xx errors
 		outErr = fmt.Errorf("%s - %d client error: %s", msg, r.StatusCode, r.Body)
 		return retry.NonRetryableError(outErr)
 	}
