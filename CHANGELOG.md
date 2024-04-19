@@ -1,3 +1,7 @@
+## 0.7.3 (April 19, 2024)
+**BUG FIXES**
+* Fix occasional race conditions with nested project deletes
+
 ## 0.7.2 (April 10, 2024)
 **ENHANCEMENTS**
 * Add support for resource tags in integrations
