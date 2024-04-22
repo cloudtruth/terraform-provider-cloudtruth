@@ -102,14 +102,13 @@ jobs:
       run: |
         go test -timeout 60m -v -cover ./cloudtruth
 
-# DISABLED FOR NOW, RE-ENABLE WHEN DB CLEANUP IS DONE
-#    - name: TF acceptance tests (prod backend)
-#      timeout-minutes: 60
-#      env:
-#        TF_ACC: "1" # Enables provider acceptance test mode
-#        TF_VAR_cloudtruth_api_key: ${{ secrets.ACCEPTANCE_TEST_TOKEN }}
-#        CLOUDTRUTH_API_KEY: ${{ secrets.ACCEPTANCE_TEST_TOKEN }} # for tests without provider defs
-#        CLOUDTRUTH_PROJECT: AcceptanceTest
-#       CLOUDTRUTH_ENVIRONMENT: default
-#      run: |
-#        go test -timeout 60m -v -cover ./cloudtruth
+    - name: TF acceptance tests (prod backend)
+      timeout-minutes: 60
+      env:
+        TF_ACC: "1" # Enables provider acceptance test mode
+        TF_VAR_cloudtruth_api_key: ${{ secrets.ACCEPTANCE_TEST_TOKEN }}
+        CLOUDTRUTH_API_KEY: ${{ secrets.ACCEPTANCE_TEST_TOKEN }} # for tests without provider defs
+        CLOUDTRUTH_PROJECT: AcceptanceTest
+       CLOUDTRUTH_ENVIRONMENT: default
+      run: |
+        go test -timeout 60m -v -cover ./cloudtruth
