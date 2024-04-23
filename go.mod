@@ -7,7 +7,7 @@ replace github.com/cloudtruth/terraform-provider-cloudtruth => ./
 require (
 	github.com/cloudtruth/terraform-provider-cloudtruth v0.0.0
 	github.com/google/uuid v1.6.0
-	github.com/hashicorp/terraform-plugin-docs v0.19.0
+	github.com/hashicorp/terraform-plugin-docs v0.19.1
 	github.com/hashicorp/terraform-plugin-log v0.9.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.33.0
 	github.com/nav-inc/datetime v0.1.3
