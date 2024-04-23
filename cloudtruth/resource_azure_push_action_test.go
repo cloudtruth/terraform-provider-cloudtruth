@@ -19,7 +19,7 @@ func TestAccResourceAzurePushActionInvalid(t *testing.T) {
 			{
 				Config: testAccResourceAzurePushActionBasic(resourceName, pushActionName, accTestAzureIntegrationName, genericDesc,
 					false, false, true, true, true, true, true, createPushPattern),
-				ExpectError: regexp.MustCompile("one of `include_parameters` or `include_secrets` must be true"),
+				ExpectError: regexp.MustCompile("one of `include_parameters`, `include_secrets`, or `include_templates` must be true"),
 				SkipFunc:    isSelfHostedOrStaging,
 			},
 		},
