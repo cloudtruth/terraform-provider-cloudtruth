@@ -20,9 +20,9 @@ func TestAccResourceAWSPushActionInvalid(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationName, genericDesc,
-					false, false, true, true, true, true, true,
+					false, false, false, true, true, true, true,
 					createRegion, createService, createPushPattern),
-				ExpectError: regexp.MustCompile("one of `include_parameters` or `include_secrets` must be true"),
+				ExpectError: regexp.MustCompile("one of `include_parameters`, `include_secrets`, or `include_templates` must be true"),
 				SkipFunc:    isSelfHostedOrStaging,
 			},
 		},
