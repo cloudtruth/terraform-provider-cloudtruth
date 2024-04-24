@@ -1,3 +1,7 @@
+## 0.7.4 (April 24, 2024)
+**BUG FIXES**
+* An update to handle the underlying API change with push actions now requiring one of 3 (instead of 2) parameters to be true: `include_parameters`, `include_secrets` and `include_templates`"
+
 ## 0.7.3 (April 19, 2024)
 **BUG FIXES**
 * Fix occasional race conditions with nested project deletes
