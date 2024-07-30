@@ -27,7 +27,7 @@ jobs:
         go mod download
 
     - name: Lint
-      uses: golangci/golangci-lint-action@v6.0.1
+      uses: golangci/golangci-lint-action@v6.1.0
       with:
           args: -v --timeout 1h ./...
           skip-cache: true
