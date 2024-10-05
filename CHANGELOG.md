@@ -1,3 +1,7 @@
+## 0.7.5 (October 4, 2024)
+**BUG FIXES**
+* Fix a panic caused by incorrect type assertion with projects field on AWS and Azure Push Action resources.
+
 ## 0.7.4 (April 24, 2024)
 **BUG FIXES**
 * An update to handle the underlying API change with push actions now requiring one of 3 (instead of 2) parameters to be true: `include_parameters`, `include_secrets` and `include_templates`"
