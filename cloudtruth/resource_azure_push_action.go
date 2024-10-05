@@ -291,7 +291,8 @@ func resourceAzurePushActionUpdate(ctx context.Context, d *schema.ResourceData, 
 	}
 
 	if d.HasChange("projects") {
-		rawProjects := d.Get("projects").(*schema.Set).List()
+		// TEMP rawProjects := d.Get("projects").(*schema.Set).List()
+		rawProjects := d.Get("projects").([]interface{})
 		projects, err := getProjectURLs(ctx, c, rawProjects)
 		if err != nil {
 			return diag.FromErr(err)
