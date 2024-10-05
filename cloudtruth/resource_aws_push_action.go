@@ -310,8 +310,7 @@ func resourceAWSPushActionUpdate(ctx context.Context, d *schema.ResourceData, me
 	}
 
 	if d.HasChange("projects") {
-		// TEMP rawProjects := d.Get("projects").(*schema.Set).List()
-		rawProjects := d.Get("projects").([]interface{})
+		rawProjects := d.Get("projects").(*schema.Set).List()
 		projects, err := getProjectURLs(ctx, c, rawProjects)
 		if err != nil {
 			return diag.FromErr(err)
