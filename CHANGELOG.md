@@ -1,4 +1,4 @@
-## 0.7.5 (October 4, 2024)
+## 0.7.6 (October 4, 2024)
 **BUG FIXES**
 * Fix a panic caused by incorrect type assertion with projects field on AWS and Azure Push Action resources.
 
