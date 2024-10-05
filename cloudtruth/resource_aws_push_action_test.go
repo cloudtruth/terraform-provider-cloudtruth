@@ -14,6 +14,7 @@ func TestAccResourceAWSPushActionInvalid(t *testing.T) {
 	createService := "secretsmanager"
 	createRegion := "us-east-1"
 	createPushPattern := "/{{ environment }}/{{ project }}/{{ parameter }}"
+	createPushProject := "AcceptanceTest"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -21,7 +22,7 @@ func TestAccResourceAWSPushActionInvalid(t *testing.T) {
 			{
 				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationName, genericDesc,
 					false, false, false, true, true, true, true,
-					createRegion, createService, createPushPattern),
+					createRegion, createService, createPushPattern, createPushProject),
 				ExpectError: regexp.MustCompile("one of `include_parameters`, `include_secrets`, or `include_templates` must be true"),
 				SkipFunc:    isSelfHostedOrStaging,
 			},
@@ -35,6 +36,7 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 	createService := "secretsmanager"
 	createRegion := "us-east-1"
 	createPushPattern, updatePushPattern := "/{{ environment }}/{{ project }}/{{ parameter }}", "/some_prefix/{{ environment }}/{{ project }}/{{ parameter }}"
+	createPushProject, updatePushProjects := "AcceptanceTest", "PushTestProject"
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviderFactories,
 		PreCheck:          func() { testAccPreCheck(t) },
@@ -42,7 +44,7 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 			{
 				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationName, genericDesc,
 					true, false, true, true, true, true, true,
-					createRegion, createService, createPushPattern),
+					createRegion, createService, createPushPattern, createPushProject),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "name", pushActionName),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "region", createRegion),
@@ -54,12 +56,13 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "coerce", fmt.Sprint(true)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "force", fmt.Sprint(true)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "local", fmt.Sprint(true)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "projects.0", createPushProject),
 				),
 				SkipFunc: isSelfHostedOrStaging,
 			}, {
 				Config: testAccResourceAWSPushActionBasic(resourceName, pushActionName, accTestAWSIntegrationName, genericDesc,
 					false, true, false, false, false, false, false,
-					createRegion, createService, updatePushPattern),
+					createRegion, createService, updatePushPattern, updatePushProjects),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "name", pushActionName),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "region", createRegion),
@@ -71,12 +74,13 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "coerce", fmt.Sprint(false)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "force", fmt.Sprint(false)),
 					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "local", fmt.Sprint(false)),
+					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_aws_push_action.%s", resourceName), "projects.0", updatePushProjects),
 				),
 				SkipFunc: isSelfHostedOrStaging,
 			}, {
 				Config: testAccResourceAWSPushActionBadTag(resourceName, pushActionName, accTestAWSIntegrationName, genericDesc,
 					false, true, false, false, false, false, false,
-					createRegion, createService, updatePushPattern),
+					createRegion, createService, updatePushPattern, createPushProject),
 				ExpectError: regexp.MustCompile("did not find the tag"),
 				SkipFunc:    isSelfHostedOrStaging,
 			},
@@ -84,7 +88,7 @@ func TestAccResourceAWSPushActionBasic(t *testing.T) {
 	})
 }
 
-func testAccResourceAWSPushActionBasic(resource, name, intName, desc string, params, secrets, templates, coerce, force, local, dryRun bool, region, service, resourcePattern string) string {
+func testAccResourceAWSPushActionBasic(resource, name, intName, desc string, params, secrets, templates, coerce, force, local, dryRun bool, region, service, resourcePattern, projects string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_aws_push_action" "%s" {
   		name                 = "%s"
@@ -100,13 +104,13 @@ func testAccResourceAWSPushActionBasic(resource, name, intName, desc string, par
 		region               = "%s"
 		service              = "%s"
 		resource		     = "%s"
-		projects             = ["AcceptanceTest"]
+		projects             = ["%s"]
 		tags                 = ["default:EpochTime"]
 	}
-	`, resource, name, intName, desc, params, secrets, templates, coerce, force, local, dryRun, region, service, resourcePattern)
+	`, resource, name, intName, desc, params, secrets, templates, coerce, force, local, dryRun, region, service, resourcePattern, projects)
 }
 
-func testAccResourceAWSPushActionBadTag(resource, name, intName, desc string, params, secrets, templates, coerce, force, local, dryRun bool, region, service, resourcePattern string) string {
+func testAccResourceAWSPushActionBadTag(resource, name, intName, desc string, params, secrets, templates, coerce, force, local, dryRun bool, region, service, resourcePattern, projects string) string {
 	return fmt.Sprintf(`
 	resource "cloudtruth_aws_push_action" "%s" {
 		name                 = "%s"
@@ -122,8 +126,8 @@ func testAccResourceAWSPushActionBadTag(resource, name, intName, desc string, pa
 		region               = "%s"
 		service              = "%s"
 		resource             = "%s"
-		projects             = ["AcceptanceTest"]
+		projects             = ["%s"]
 		tags                 = ["default:xxx"]
 	}
-	`, resource, name, intName, desc, params, secrets, templates, coerce, force, local, dryRun, region, service, resourcePattern)
+	`, resource, name, intName, desc, params, secrets, templates, coerce, force, local, dryRun, region, service, resourcePattern, projects)
 }
