@@ -2,8 +2,8 @@ name: Tests
 on:
   push:
   # Run regular tests to confirm that no upstream API changes have broken the provider
-  #schedule:
-  #   - cron: '0 7 * * *'
+  schedule:
+     - cron: '0 7 * * *'
 
 jobs:
   build:
