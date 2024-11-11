@@ -1,7 +1,6 @@
 module terraform-provider-cloudtruth
 
-go 1.21
-toolchain go1.22.9
+go 1.23.3
 
 replace github.com/cloudtruth/terraform-provider-cloudtruth => ./
 
