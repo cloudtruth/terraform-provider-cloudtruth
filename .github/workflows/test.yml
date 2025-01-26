@@ -90,17 +90,17 @@ jobs:
       run: |
         go mod download
 
-    - name: TF acceptance tests (staging backend)
-      timeout-minutes: 60
-      env:
-        TF_ACC: "1" # Enables provider acceptance test mode
-        TF_VAR_cloudtruth_api_key: ${{ secrets.STAGING_ACCEPTANCE_TEST_TOKEN }}
-        CLOUDTRUTH_API_KEY: ${{ secrets.STAGING_ACCEPTANCE_TEST_TOKEN }} # for tests without provider defs
-        CLOUDTRUTH_PROJECT: AcceptanceTest
-        CLOUDTRUTH_ENVIRONMENT: default
-        CLOUDTRUTH_DOMAIN: api.staging.cloudtruth.io
-      run: |
-        go test -timeout 60m -v -cover ./cloudtruth
+    #- name: TF acceptance tests (staging backend)
+    #  timeout-minutes: 60
+    #  env:
+    #    TF_ACC: "1" # Enables provider acceptance test mode
+    #    TF_VAR_cloudtruth_api_key: ${{ secrets.STAGING_ACCEPTANCE_TEST_TOKEN }}
+    #    CLOUDTRUTH_API_KEY: ${{ secrets.STAGING_ACCEPTANCE_TEST_TOKEN }} # for tests without provider defs
+    #    CLOUDTRUTH_PROJECT: AcceptanceTest
+    #    CLOUDTRUTH_ENVIRONMENT: default
+    #    CLOUDTRUTH_DOMAIN: api.staging.cloudtruth.io
+    #  run: |
+    #    go test -timeout 60m -v -cover ./cloudtruth
 
     - name: TF acceptance tests (prod backend)
       timeout-minutes: 60
