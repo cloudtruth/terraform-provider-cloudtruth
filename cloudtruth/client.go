@@ -136,9 +136,9 @@ func (c *cloudTruthClient) lookupProject(ctx context.Context, projNameOrID strin
 		tflog.Debug(ctx, fmt.Sprintf("lookupProject: found project by name %s, with id %s", projNameOrID, val))
 		return &val, nil
 	} else {
-		if val, ok := c.projectIDs[projNameOrID]; ok {
-			tflog.Debug(ctx, fmt.Sprintf("lookupProject: found project by ID %s with name %s", projNameOrID, val))
-			return &val, nil
+		if _, ok := c.projectIDs[projNameOrID]; ok {
+			tflog.Debug(ctx, fmt.Sprintf("lookupProject: found project by ID %s", projNameOrID))
+			return &projNameOrID, nil
 		}
 	}
 	return nil, fmt.Errorf("lookupProject: project with name/ID %s not found", projNameOrID)

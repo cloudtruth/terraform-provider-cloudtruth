@@ -23,18 +23,18 @@ var _ MappedNullable = &PatchedAzureKeyVaultIntegration{}
 type PatchedAzureKeyVaultIntegration struct {
 	Url *string `json:"url,omitempty"`
 	// The unique identifier for the integration.
-	Id *string `json:"id,omitempty"`
+	Id   *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	// An optional description for the integration.
-	Description *string `json:"description,omitempty"`
-	Status *StatusEnum `json:"status,omitempty"`
+	Description *string     `json:"description,omitempty"`
+	Status      *StatusEnum `json:"status,omitempty"`
 	// If an error occurs, more details will be available in this field.
 	StatusDetail *string `json:"status_detail,omitempty"`
 	// The last time the status was evaluated.
 	StatusLastCheckedAt NullableTime `json:"status_last_checked_at,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt NullableTime `json:"modified_at,omitempty"`
-	Fqn *string `json:"fqn,omitempty"`
+	CreatedAt           *time.Time   `json:"created_at,omitempty"`
+	ModifiedAt          NullableTime `json:"modified_at,omitempty"`
+	Fqn                 *string      `json:"fqn,omitempty"`
 	// The type of integration.
 	Type *string `json:"type,omitempty"`
 	// Allow actions to write to the integration.
@@ -288,6 +288,7 @@ func (o *PatchedAzureKeyVaultIntegration) HasStatusLastCheckedAt() bool {
 func (o *PatchedAzureKeyVaultIntegration) SetStatusLastCheckedAt(v time.Time) {
 	o.StatusLastCheckedAt.Set(&v)
 }
+
 // SetStatusLastCheckedAtNil sets the value for StatusLastCheckedAt to be an explicit nil
 func (o *PatchedAzureKeyVaultIntegration) SetStatusLastCheckedAtNil() {
 	o.StatusLastCheckedAt.Set(nil)
@@ -362,6 +363,7 @@ func (o *PatchedAzureKeyVaultIntegration) HasModifiedAt() bool {
 func (o *PatchedAzureKeyVaultIntegration) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedAzureKeyVaultIntegration) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -565,7 +567,7 @@ func (o *PatchedAzureKeyVaultIntegration) SetTenantId(v string) {
 }
 
 func (o PatchedAzureKeyVaultIntegration) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -657,5 +659,3 @@ func (v *NullablePatchedAzureKeyVaultIntegration) UnmarshalJSON(src []byte) erro
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
