@@ -401,7 +401,7 @@ func resourceAzureIntegrationImport(ctx context.Context, d *schema.ResourceData,
 		}
 
 		if !found {
-			return retry.NonRetryableError(fmt.Errorf("Azure integration with ID %s not found", importID))
+			return retry.NonRetryableError(fmt.Errorf("azure integration with ID %s not found", importID))
 		}
 
 		return nil

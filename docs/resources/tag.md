@@ -33,6 +33,8 @@ A CloudTruth Tag - unique per environment, defaulting to the 'default' environme
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform init
 terraform import cloudtruth_tag.example ENVIRONMENT_NAME.TAG_ID
