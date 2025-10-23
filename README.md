@@ -1,10 +1,10 @@
-# CloudTruth Terraform Provider
+# CloudTruth by Sigma-Automate Terraform Provider
 
 [![Tests](https://github.com/cloudtruth/terraform-provider-cloudtruth/actions/workflows/test.yml/badge.svg)](https://github.com/cloudtruth/terraform-provider-cloudtruth/actions/workflows/test.yml)
 [![Release](https://img.shields.io/github/v/release/cloudtruth/terraform-provider-cloudtruth)](https://github.com/cloudtruth/terraform-provider-cloudtruth/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-The official [Terraform](https://www.terraform.io/) provider for [CloudTruth](https://cloudtruth.com/). Manage your CloudTruth configuration as code, enabling infrastructure as code practices for your application configuration and secrets management.
+The official [Terraform](https://www.terraform.io/) provider for [CloudTruth by Sigma-Automate](https://cloudtruth.com/). Manage your CloudTruth configuration as code, enabling infrastructure as code practices for your application configuration and secrets management.
 
 ## Features
 
@@ -223,9 +223,9 @@ For security concerns, please email security@cloudtruth.com instead of using the
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-## About CloudTruth
+## About CloudTruth by Sigma-Automate
 
-[CloudTruth](https://cloudtruth.com/) is a universal configuration and secrets management platform that helps teams:
+[CloudTruth by Sigma-Automate](https://cloudtruth.com/) is a universal configuration and secrets management platform that helps teams:
 
 - Centralize configuration across all environments
 - Eliminate configuration drift and errors
@@ -233,8 +233,6 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 - Maintain audit trails and access controls
 - Sync secrets with AWS, Azure, and other platforms
 
+CloudTruth is now part of [Sigma-Automate](https://sigma-automate.com/), bringing together best-in-class configuration management with enterprise automation solutions.
+
 Learn more at [cloudtruth.com](https://cloudtruth.com/) or try it free at [app.cloudtruth.com](https://app.cloudtruth.com/).
-
----
-
-**Made with ❤️ by [CloudTruth](https://cloudtruth.com/)**
