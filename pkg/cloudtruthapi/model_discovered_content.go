@@ -20,11 +20,11 @@ var _ MappedNullable = &DiscoveredContent{}
 
 // DiscoveredContent struct for DiscoveredContent
 type DiscoveredContent struct {
-	VenueId string `json:"venue_id"`
-	VenueName string `json:"venue_name"`
+	VenueId         string `json:"venue_id"`
+	VenueName       string `json:"venue_name"`
 	EnvironmentName string `json:"environment_name"`
-	ProjectName string `json:"project_name"`
-	ParameterName string `json:"parameter_name"`
+	ProjectName     string `json:"project_name"`
+	ParameterName   string `json:"parameter_name"`
 }
 
 // NewDiscoveredContent instantiates a new DiscoveredContent object
@@ -170,7 +170,7 @@ func (o *DiscoveredContent) SetParameterName(v string) {
 }
 
 func (o DiscoveredContent) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -222,5 +222,3 @@ func (v *NullableDiscoveredContent) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

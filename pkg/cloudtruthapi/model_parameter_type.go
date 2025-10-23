@@ -22,8 +22,8 @@ var _ MappedNullable = &ParameterType{}
 // ParameterType struct for ParameterType
 type ParameterType struct {
 	// The URL for the parameter type.
-	Url string `json:"url"`
-	Id string `json:"id"`
+	Url      string `json:"url"`
+	Id       string `json:"id"`
 	LedgerId string `json:"ledger_id"`
 	// The parameter type name.
 	Name string `json:"name"`
@@ -35,8 +35,8 @@ type ParameterType struct {
 	Parent NullableString `json:"parent"`
 	// Name of the parent ParameterType (if any).
 	ParentName NullableString `json:"parent_name"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	CreatedAt  time.Time      `json:"created_at"`
+	ModifiedAt NullableTime   `json:"modified_at"`
 }
 
 // NewParameterType instantiates a new ParameterType object
@@ -320,7 +320,7 @@ func (o *ParameterType) SetModifiedAt(v time.Time) {
 }
 
 func (o ParameterType) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -379,5 +379,3 @@ func (v *NullableParameterType) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

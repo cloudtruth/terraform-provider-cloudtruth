@@ -22,8 +22,8 @@ var _ MappedNullable = &Environment{}
 // Environment struct for Environment
 type Environment struct {
 	// The URL for the environment.
-	Url string `json:"url"`
-	Id string `json:"id"`
+	Url      string `json:"url"`
+	Id       string `json:"id"`
 	LedgerId string `json:"ledger_id"`
 	// The environment name.
 	Name string `json:"name"`
@@ -34,10 +34,10 @@ type Environment struct {
 	// This is the opposite of `parent`, see that field for more details.
 	Children []string `json:"children"`
 	// Indicates if access control is being enforced through grants.
-	AccessControlled *bool `json:"access_controlled,omitempty"`
-	Role NullableRoleEnum `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	AccessControlled *bool            `json:"access_controlled,omitempty"`
+	Role             NullableRoleEnum `json:"role"`
+	CreatedAt        time.Time        `json:"created_at"`
+	ModifiedAt       NullableTime     `json:"modified_at"`
 }
 
 // NewEnvironment instantiates a new Environment object
@@ -353,7 +353,7 @@ func (o *Environment) SetModifiedAt(v time.Time) {
 }
 
 func (o Environment) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -415,5 +415,3 @@ func (v *NullableEnvironment) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

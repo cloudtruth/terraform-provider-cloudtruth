@@ -27,10 +27,10 @@ type PatchedMembership struct {
 	// The user of the membership.
 	User *string `json:"user,omitempty"`
 	// The organization that the user is a member of.
-	Organization *string `json:"organization,omitempty"`
-	Role *RoleEnum `json:"role,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt NullableTime `json:"modified_at,omitempty"`
+	Organization *string      `json:"organization,omitempty"`
+	Role         *RoleEnum    `json:"role,omitempty"`
+	CreatedAt    *time.Time   `json:"created_at,omitempty"`
+	ModifiedAt   NullableTime `json:"modified_at,omitempty"`
 }
 
 // NewPatchedMembership instantiates a new PatchedMembership object
@@ -274,6 +274,7 @@ func (o *PatchedMembership) HasModifiedAt() bool {
 func (o *PatchedMembership) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedMembership) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -285,7 +286,7 @@ func (o *PatchedMembership) UnsetModifiedAt() {
 }
 
 func (o PatchedMembership) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -353,5 +354,3 @@ func (v *NullablePatchedMembership) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

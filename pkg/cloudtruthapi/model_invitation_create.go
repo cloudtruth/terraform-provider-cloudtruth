@@ -21,8 +21,8 @@ var _ MappedNullable = &InvitationCreate{}
 // InvitationCreate struct for InvitationCreate
 type InvitationCreate struct {
 	// The email address of the user to be invited.
-	Email string `json:"email"`
-	Role RoleEnum `json:"role"`
+	Email string   `json:"email"`
+	Role  RoleEnum `json:"role"`
 }
 
 // NewInvitationCreate instantiates a new InvitationCreate object
@@ -93,7 +93,7 @@ func (o *InvitationCreate) SetRole(v RoleEnum) {
 }
 
 func (o InvitationCreate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -142,5 +142,3 @@ func (v *NullableInvitationCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

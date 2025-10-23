@@ -21,7 +21,7 @@ type ModeEnum string
 
 // List of ModeEnum
 const (
-	MODEENUM_MAPPED ModeEnum = "mapped"
+	MODEENUM_MAPPED  ModeEnum = "mapped"
 	MODEENUM_PATTERN ModeEnum = "pattern"
 )
 
@@ -109,4 +109,3 @@ func (v *NullableModeEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

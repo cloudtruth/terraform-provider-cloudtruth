@@ -27,10 +27,10 @@ type PatchedGroup struct {
 	// The group name.
 	Name *string `json:"name,omitempty"`
 	// A description of the group.  You may find it helpful to document how this group is used to assist others when they need to maintain this organization.
-	Description *string `json:"description,omitempty"`
-	Users []string `json:"users,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt NullableTime `json:"modified_at,omitempty"`
+	Description *string      `json:"description,omitempty"`
+	Users       []string     `json:"users,omitempty"`
+	CreatedAt   *time.Time   `json:"created_at,omitempty"`
+	ModifiedAt  NullableTime `json:"modified_at,omitempty"`
 }
 
 // NewPatchedGroup instantiates a new PatchedGroup object
@@ -274,6 +274,7 @@ func (o *PatchedGroup) HasModifiedAt() bool {
 func (o *PatchedGroup) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedGroup) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -285,7 +286,7 @@ func (o *PatchedGroup) UnsetModifiedAt() {
 }
 
 func (o PatchedGroup) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -353,5 +354,3 @@ func (v *NullablePatchedGroup) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

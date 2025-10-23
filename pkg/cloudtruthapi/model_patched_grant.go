@@ -27,9 +27,9 @@ type PatchedGrant struct {
 	// The URI of a principal for the grant; this must reference a user or group.
 	Principal *string `json:"principal,omitempty"`
 	// The URI of a scope for the grant; this must reference a project or environment.
-	Scope *string `json:"scope,omitempty"`
-	Role *RoleEnum `json:"role,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	Scope      *string      `json:"scope,omitempty"`
+	Role       *RoleEnum    `json:"role,omitempty"`
+	CreatedAt  *time.Time   `json:"created_at,omitempty"`
 	ModifiedAt NullableTime `json:"modified_at,omitempty"`
 }
 
@@ -274,6 +274,7 @@ func (o *PatchedGrant) HasModifiedAt() bool {
 func (o *PatchedGrant) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedGrant) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -285,7 +286,7 @@ func (o *PatchedGrant) UnsetModifiedAt() {
 }
 
 func (o PatchedGrant) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -353,5 +354,3 @@ func (v *NullablePatchedGrant) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -20,7 +20,7 @@ var _ MappedNullable = &BackupExternalReference{}
 
 // BackupExternalReference External reference data at a point in time.
 type BackupExternalReference struct {
-	Fqn string `json:"fqn"`
+	Fqn      string         `json:"fqn"`
 	JmesPath NullableString `json:"jmes_path,omitempty"`
 }
 
@@ -98,6 +98,7 @@ func (o *BackupExternalReference) HasJmesPath() bool {
 func (o *BackupExternalReference) SetJmesPath(v string) {
 	o.JmesPath.Set(&v)
 }
+
 // SetJmesPathNil sets the value for JmesPath to be an explicit nil
 func (o *BackupExternalReference) SetJmesPathNil() {
 	o.JmesPath.Set(nil)
@@ -109,7 +110,7 @@ func (o *BackupExternalReference) UnsetJmesPath() {
 }
 
 func (o BackupExternalReference) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -160,5 +161,3 @@ func (v *NullableBackupExternalReference) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

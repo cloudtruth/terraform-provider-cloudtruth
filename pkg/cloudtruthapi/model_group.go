@@ -27,10 +27,10 @@ type Group struct {
 	// The group name.
 	Name string `json:"name"`
 	// A description of the group.  You may find it helpful to document how this group is used to assist others when they need to maintain this organization.
-	Description *string `json:"description,omitempty"`
-	Users []string `json:"users"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	Description *string      `json:"description,omitempty"`
+	Users       []string     `json:"users"`
+	CreatedAt   time.Time    `json:"created_at"`
+	ModifiedAt  NullableTime `json:"modified_at"`
 }
 
 // NewGroup instantiates a new Group object
@@ -235,7 +235,7 @@ func (o *Group) SetModifiedAt(v time.Time) {
 }
 
 func (o Group) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -291,5 +291,3 @@ func (v *NullableGroup) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

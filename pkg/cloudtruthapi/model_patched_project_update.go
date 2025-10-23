@@ -31,10 +31,10 @@ type PatchedProjectUpdate struct {
 	// Project dependencies allow projects to be used for shared configuration, for example a database used by many applications needs to advertise its port number.  Projects can depend on another project which will add the parameters from the parent project into the current project.  All of the parameter names between the two projects must be unique.  When retrieving values or rendering templates, all of the parameters from the parent project will also be available in the current project.
 	DependsOn NullableString `json:"depends_on,omitempty"`
 	// Indicates if access control is being enforced through grants.
-	AccessControlled *bool `json:"access_controlled,omitempty"`
-	Role NullableRoleEnum `json:"role,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt NullableTime `json:"modified_at,omitempty"`
+	AccessControlled *bool            `json:"access_controlled,omitempty"`
+	Role             NullableRoleEnum `json:"role,omitempty"`
+	CreatedAt        *time.Time       `json:"created_at,omitempty"`
+	ModifiedAt       NullableTime     `json:"modified_at,omitempty"`
 }
 
 // NewPatchedProjectUpdate instantiates a new PatchedProjectUpdate object
@@ -214,6 +214,7 @@ func (o *PatchedProjectUpdate) HasDependsOn() bool {
 func (o *PatchedProjectUpdate) SetDependsOn(v string) {
 	o.DependsOn.Set(&v)
 }
+
 // SetDependsOnNil sets the value for DependsOn to be an explicit nil
 func (o *PatchedProjectUpdate) SetDependsOnNil() {
 	o.DependsOn.Set(nil)
@@ -288,6 +289,7 @@ func (o *PatchedProjectUpdate) HasRole() bool {
 func (o *PatchedProjectUpdate) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
+
 // SetRoleNil sets the value for Role to be an explicit nil
 func (o *PatchedProjectUpdate) SetRoleNil() {
 	o.Role.Set(nil)
@@ -362,6 +364,7 @@ func (o *PatchedProjectUpdate) HasModifiedAt() bool {
 func (o *PatchedProjectUpdate) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedProjectUpdate) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -373,7 +376,7 @@ func (o *PatchedProjectUpdate) UnsetModifiedAt() {
 }
 
 func (o PatchedProjectUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -447,5 +450,3 @@ func (v *NullablePatchedProjectUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

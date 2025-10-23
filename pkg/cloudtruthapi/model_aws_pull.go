@@ -27,10 +27,10 @@ type AwsPull struct {
 	// The action name.
 	Name string `json:"name"`
 	// The optional description for the action.
-	Description *string `json:"description,omitempty"`
-	LatestTask NullableAwsPullLatestTask `json:"latest_task"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	Description *string                   `json:"description,omitempty"`
+	LatestTask  NullableAwsPullLatestTask `json:"latest_task"`
+	CreatedAt   time.Time                 `json:"created_at"`
+	ModifiedAt  NullableTime              `json:"modified_at"`
 	// Allow the pull to create environments.  Any automatically created environments will be children of the `default` environment.  If an environment needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
 	CreateEnvironments *bool `json:"create_environments,omitempty"`
 	// Allow the pull to create projects.  If a project needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
@@ -38,10 +38,10 @@ type AwsPull struct {
 	// When set to dry-run mode an action will report the changes that it would have made in task steps, however those changes are not actually performed.
 	DryRun *bool `json:"dry_run,omitempty"`
 	// Values being managed by a mapped pull.
-	MappedValues []ValueCreate `json:"mapped_values"`
-	Mode ModeEnum `json:"mode"`
-	Region AwsRegionEnum `json:"region"`
-	Service AwsServiceEnum `json:"service"`
+	MappedValues []ValueCreate  `json:"mapped_values"`
+	Mode         ModeEnum       `json:"mode"`
+	Region       AwsRegionEnum  `json:"region"`
+	Service      AwsServiceEnum `json:"service"`
 	// Defines a pattern matching string that contains either mustache or regular expression syntax (with named capture groups) that locate the environment, project, and parameter name of the content you are looking for.  If you are using mustache pattern matching, use:    - ``{{ environment }}`` to identify the environment name   - ``{{ parameter }}`` to identify the parameter name   - ``{{ project }}`` to identify the project name  If you are using a regular expression, use Python syntax with named capture groups that locate the `environment`, `project`, and `parameter`.
 	Resource NullableString `json:"resource"`
 }
@@ -473,7 +473,7 @@ func (o *AwsPull) SetResource(v string) {
 }
 
 func (o AwsPull) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -543,5 +543,3 @@ func (v *NullableAwsPull) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

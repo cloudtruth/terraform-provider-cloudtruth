@@ -27,10 +27,10 @@ type PatchedAwsPull struct {
 	// The action name.
 	Name *string `json:"name,omitempty"`
 	// The optional description for the action.
-	Description *string `json:"description,omitempty"`
-	LatestTask NullableAwsPullLatestTask `json:"latest_task,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt NullableTime `json:"modified_at,omitempty"`
+	Description *string                   `json:"description,omitempty"`
+	LatestTask  NullableAwsPullLatestTask `json:"latest_task,omitempty"`
+	CreatedAt   *time.Time                `json:"created_at,omitempty"`
+	ModifiedAt  NullableTime              `json:"modified_at,omitempty"`
 	// Allow the pull to create environments.  Any automatically created environments will be children of the `default` environment.  If an environment needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
 	CreateEnvironments *bool `json:"create_environments,omitempty"`
 	// Allow the pull to create projects.  If a project needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
@@ -38,10 +38,10 @@ type PatchedAwsPull struct {
 	// When set to dry-run mode an action will report the changes that it would have made in task steps, however those changes are not actually performed.
 	DryRun *bool `json:"dry_run,omitempty"`
 	// Values being managed by a mapped pull.
-	MappedValues []ValueCreate `json:"mapped_values,omitempty"`
-	Mode *ModeEnum `json:"mode,omitempty"`
-	Region *AwsRegionEnum `json:"region,omitempty"`
-	Service *AwsServiceEnum `json:"service,omitempty"`
+	MappedValues []ValueCreate   `json:"mapped_values,omitempty"`
+	Mode         *ModeEnum       `json:"mode,omitempty"`
+	Region       *AwsRegionEnum  `json:"region,omitempty"`
+	Service      *AwsServiceEnum `json:"service,omitempty"`
 	// Defines a pattern matching string that contains either mustache or regular expression syntax (with named capture groups) that locate the environment, project, and parameter name of the content you are looking for.  If you are using mustache pattern matching, use:    - ``{{ environment }}`` to identify the environment name   - ``{{ parameter }}`` to identify the parameter name   - ``{{ project }}`` to identify the project name  If you are using a regular expression, use Python syntax with named capture groups that locate the `environment`, `project`, and `parameter`.
 	Resource NullableString `json:"resource,omitempty"`
 }
@@ -223,6 +223,7 @@ func (o *PatchedAwsPull) HasLatestTask() bool {
 func (o *PatchedAwsPull) SetLatestTask(v AwsPullLatestTask) {
 	o.LatestTask.Set(&v)
 }
+
 // SetLatestTaskNil sets the value for LatestTask to be an explicit nil
 func (o *PatchedAwsPull) SetLatestTaskNil() {
 	o.LatestTask.Set(nil)
@@ -297,6 +298,7 @@ func (o *PatchedAwsPull) HasModifiedAt() bool {
 func (o *PatchedAwsPull) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedAwsPull) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -563,6 +565,7 @@ func (o *PatchedAwsPull) HasResource() bool {
 func (o *PatchedAwsPull) SetResource(v string) {
 	o.Resource.Set(&v)
 }
+
 // SetResourceNil sets the value for Resource to be an explicit nil
 func (o *PatchedAwsPull) SetResourceNil() {
 	o.Resource.Set(nil)
@@ -574,7 +577,7 @@ func (o *PatchedAwsPull) UnsetResource() {
 }
 
 func (o PatchedAwsPull) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -666,5 +669,3 @@ func (v *NullablePatchedAwsPull) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

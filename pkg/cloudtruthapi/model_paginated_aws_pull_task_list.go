@@ -20,10 +20,10 @@ var _ MappedNullable = &PaginatedAwsPullTaskList{}
 
 // PaginatedAwsPullTaskList struct for PaginatedAwsPullTaskList
 type PaginatedAwsPullTaskList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
+	Count    *int32         `json:"count,omitempty"`
+	Next     NullableString `json:"next,omitempty"`
 	Previous NullableString `json:"previous,omitempty"`
-	Results []AwsPullTask `json:"results,omitempty"`
+	Results  []AwsPullTask  `json:"results,omitempty"`
 }
 
 // NewPaginatedAwsPullTaskList instantiates a new PaginatedAwsPullTaskList object
@@ -107,6 +107,7 @@ func (o *PaginatedAwsPullTaskList) HasNext() bool {
 func (o *PaginatedAwsPullTaskList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedAwsPullTaskList) SetNextNil() {
 	o.Next.Set(nil)
@@ -149,6 +150,7 @@ func (o *PaginatedAwsPullTaskList) HasPrevious() bool {
 func (o *PaginatedAwsPullTaskList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedAwsPullTaskList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -192,7 +194,7 @@ func (o *PaginatedAwsPullTaskList) SetResults(v []AwsPullTask) {
 }
 
 func (o PaginatedAwsPullTaskList) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -251,5 +253,3 @@ func (v *NullablePaginatedAwsPullTaskList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

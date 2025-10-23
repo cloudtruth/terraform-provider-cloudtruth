@@ -35,9 +35,9 @@ type ValueUpdate struct {
 	// Indicates the value content is a secret.  Normally this is `true` when the parameter is a secret. It is possible for a parameter to be a secret with a external value that is not a secret.  It is not possible to convert a parameter from a secret to a non-secret if any of the values are external and a secret.  Clients can check this condition by leveraging this field.  It is also possible for a parameter to not be a secret but for this value to be dynamic and reference a Parameter that is a secret.  In this case, we indicate the value is a secret.
 	Secret NullableBool `json:"secret"`
 	// This is the actual content of the Value for the given parameter in the given environment.  If you request secret masking, no secret content will be included in the result and instead a series of asterisks will be used instead for the value.  Clients applying this value to a shell environment should set `<parameter_name>=<value>` even if `value` is the empty string.  If `value` is `null`, the client should unset that shell environment variable.
-	Value NullableString `json:"value"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	Value      NullableString `json:"value"`
+	CreatedAt  time.Time      `json:"created_at"`
+	ModifiedAt NullableTime   `json:"modified_at"`
 }
 
 // NewValueUpdate instantiates a new ValueUpdate object
@@ -214,6 +214,7 @@ func (o *ValueUpdate) HasInternalValue() bool {
 func (o *ValueUpdate) SetInternalValue(v string) {
 	o.InternalValue.Set(&v)
 }
+
 // SetInternalValueNil sets the value for InternalValue to be an explicit nil
 func (o *ValueUpdate) SetInternalValueNil() {
 	o.InternalValue.Set(nil)
@@ -359,7 +360,7 @@ func (o *ValueUpdate) SetModifiedAt(v time.Time) {
 }
 
 func (o ValueUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -426,5 +427,3 @@ func (v *NullableValueUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

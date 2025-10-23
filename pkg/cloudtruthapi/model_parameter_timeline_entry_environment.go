@@ -123,7 +123,7 @@ func (o *ParameterTimelineEntryEnvironment) SetOverride(v bool) {
 }
 
 func (o ParameterTimelineEntryEnvironment) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -173,5 +173,3 @@ func (v *NullableParameterTimelineEntryEnvironment) UnmarshalJSON(src []byte) er
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

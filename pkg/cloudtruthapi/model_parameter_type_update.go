@@ -29,9 +29,9 @@ type ParameterTypeUpdate struct {
 	// The URL for this parameter type's parent
 	Parent string `json:"parent"`
 	// Rules applied to this parameter.
-	Rules []ParameterTypeRule `json:"rules"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	Rules      []ParameterTypeRule `json:"rules"`
+	CreatedAt  time.Time           `json:"created_at"`
+	ModifiedAt NullableTime        `json:"modified_at"`
 }
 
 // NewParameterTypeUpdate instantiates a new ParameterTypeUpdate object
@@ -236,7 +236,7 @@ func (o *ParameterTypeUpdate) SetModifiedAt(v time.Time) {
 }
 
 func (o ParameterTypeUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -292,5 +292,3 @@ func (v *NullableParameterTypeUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

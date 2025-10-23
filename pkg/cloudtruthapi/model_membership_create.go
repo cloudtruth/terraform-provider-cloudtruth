@@ -21,7 +21,7 @@ var _ MappedNullable = &MembershipCreate{}
 // MembershipCreate struct for MembershipCreate
 type MembershipCreate struct {
 	// The user of the membership.
-	User string `json:"user"`
+	User string   `json:"user"`
 	Role RoleEnum `json:"role"`
 }
 
@@ -93,7 +93,7 @@ func (o *MembershipCreate) SetRole(v RoleEnum) {
 }
 
 func (o MembershipCreate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -142,5 +142,3 @@ func (v *NullableMembershipCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

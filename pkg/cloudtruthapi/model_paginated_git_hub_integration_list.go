@@ -20,10 +20,10 @@ var _ MappedNullable = &PaginatedGitHubIntegrationList{}
 
 // PaginatedGitHubIntegrationList struct for PaginatedGitHubIntegrationList
 type PaginatedGitHubIntegrationList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
-	Previous NullableString `json:"previous,omitempty"`
-	Results []GitHubIntegration `json:"results,omitempty"`
+	Count    *int32              `json:"count,omitempty"`
+	Next     NullableString      `json:"next,omitempty"`
+	Previous NullableString      `json:"previous,omitempty"`
+	Results  []GitHubIntegration `json:"results,omitempty"`
 }
 
 // NewPaginatedGitHubIntegrationList instantiates a new PaginatedGitHubIntegrationList object
@@ -107,6 +107,7 @@ func (o *PaginatedGitHubIntegrationList) HasNext() bool {
 func (o *PaginatedGitHubIntegrationList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedGitHubIntegrationList) SetNextNil() {
 	o.Next.Set(nil)
@@ -149,6 +150,7 @@ func (o *PaginatedGitHubIntegrationList) HasPrevious() bool {
 func (o *PaginatedGitHubIntegrationList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedGitHubIntegrationList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -192,7 +194,7 @@ func (o *PaginatedGitHubIntegrationList) SetResults(v []GitHubIntegration) {
 }
 
 func (o PaginatedGitHubIntegrationList) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -251,5 +253,3 @@ func (v *NullablePaginatedGitHubIntegrationList) UnmarshalJSON(src []byte) error
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

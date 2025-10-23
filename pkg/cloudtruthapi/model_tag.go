@@ -36,8 +36,8 @@ type Tag struct {
 	// Deprecated. Use `push_urls` instead.
 	Pushes []AwsPush `json:"pushes"`
 	// Push actions associated with the tag.
-	PushUrls []string `json:"push_urls"`
-	Usage TagReadUsage `json:"usage"`
+	PushUrls []string     `json:"push_urls"`
+	Usage    TagReadUsage `json:"usage"`
 }
 
 // NewTag instantiates a new Tag object
@@ -297,7 +297,7 @@ func (o *Tag) SetUsage(v TagReadUsage) {
 }
 
 func (o Tag) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -357,5 +357,3 @@ func (v *NullableTag) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

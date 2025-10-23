@@ -168,6 +168,7 @@ func (o *ProjectCreate) HasDependsOn() bool {
 func (o *ProjectCreate) SetDependsOn(v string) {
 	o.DependsOn.Set(&v)
 }
+
 // SetDependsOnNil sets the value for DependsOn to be an explicit nil
 func (o *ProjectCreate) SetDependsOnNil() {
 	o.DependsOn.Set(nil)
@@ -179,7 +180,7 @@ func (o *ProjectCreate) UnsetDependsOn() {
 }
 
 func (o ProjectCreate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -236,5 +237,3 @@ func (v *NullableProjectCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

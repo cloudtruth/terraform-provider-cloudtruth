@@ -31,10 +31,10 @@ type ProjectUpdate struct {
 	// Project dependencies allow projects to be used for shared configuration, for example a database used by many applications needs to advertise its port number.  Projects can depend on another project which will add the parameters from the parent project into the current project.  All of the parameter names between the two projects must be unique.  When retrieving values or rendering templates, all of the parameters from the parent project will also be available in the current project.
 	DependsOn NullableString `json:"depends_on,omitempty"`
 	// Indicates if access control is being enforced through grants.
-	AccessControlled *bool `json:"access_controlled,omitempty"`
-	Role NullableRoleEnum `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	AccessControlled *bool            `json:"access_controlled,omitempty"`
+	Role             NullableRoleEnum `json:"role"`
+	CreatedAt        time.Time        `json:"created_at"`
+	ModifiedAt       NullableTime     `json:"modified_at"`
 }
 
 // NewProjectUpdate instantiates a new ProjectUpdate object
@@ -203,6 +203,7 @@ func (o *ProjectUpdate) HasDependsOn() bool {
 func (o *ProjectUpdate) SetDependsOn(v string) {
 	o.DependsOn.Set(&v)
 }
+
 // SetDependsOnNil sets the value for DependsOn to be an explicit nil
 func (o *ProjectUpdate) SetDependsOnNil() {
 	o.DependsOn.Set(nil)
@@ -322,7 +323,7 @@ func (o *ProjectUpdate) SetModifiedAt(v time.Time) {
 }
 
 func (o ProjectUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -386,5 +387,3 @@ func (v *NullableProjectUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

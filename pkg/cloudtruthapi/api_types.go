@@ -20,13 +20,12 @@ import (
 	"strings"
 )
 
-
 // TypesAPIService TypesAPI service
 type TypesAPIService service
 
 type ApiTypesCreateRequest struct {
-	ctx context.Context
-	ApiService *TypesAPIService
+	ctx                 context.Context
+	ApiService          *TypesAPIService
 	parameterTypeCreate *ParameterTypeCreate
 }
 
@@ -42,24 +41,25 @@ func (r ApiTypesCreateRequest) Execute() (*ParameterType, *http.Response, error)
 /*
 TypesCreate Method for TypesCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTypesCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiTypesCreateRequest
 */
 func (a *TypesAPIService) TypesCreate(ctx context.Context) ApiTypesCreateRequest {
 	return ApiTypesCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterType
+//
+//	@return ParameterType
 func (a *TypesAPIService) TypesCreateExecute(r ApiTypesCreateRequest) (*ParameterType, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterType
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterType
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesCreate")
@@ -161,9 +161,9 @@ func (a *TypesAPIService) TypesCreateExecute(r ApiTypesCreateRequest) (*Paramete
 }
 
 type ApiTypesDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TypesAPIService
-	id string
+	id         string
 }
 
 func (r ApiTypesDestroyRequest) Execute() (*http.Response, error) {
@@ -173,24 +173,24 @@ func (r ApiTypesDestroyRequest) Execute() (*http.Response, error) {
 /*
 TypesDestroy Method for TypesDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiTypesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiTypesDestroyRequest
 */
 func (a *TypesAPIService) TypesDestroy(ctx context.Context, id string) ApiTypesDestroyRequest {
 	return ApiTypesDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *TypesAPIService) TypesDestroyExecute(r ApiTypesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesDestroy")
@@ -279,14 +279,14 @@ func (a *TypesAPIService) TypesDestroyExecute(r ApiTypesDestroyRequest) (*http.R
 }
 
 type ApiTypesListRequest struct {
-	ctx context.Context
-	ApiService *TypesAPIService
+	ctx                  context.Context
+	ApiService           *TypesAPIService
 	descriptionIcontains *string
-	nameIcontains *string
-	nameIexact *string
-	ordering *string
-	page *int32
-	pageSize *int32
+	nameIcontains        *string
+	nameIexact           *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
 }
 
 func (r ApiTypesListRequest) DescriptionIcontains(descriptionIcontains string) ApiTypesListRequest {
@@ -329,24 +329,25 @@ func (r ApiTypesListRequest) Execute() (*PaginatedParameterTypeList, *http.Respo
 /*
 TypesList Method for TypesList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTypesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiTypesListRequest
 */
 func (a *TypesAPIService) TypesList(ctx context.Context) ApiTypesListRequest {
 	return ApiTypesListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedParameterTypeList
+//
+//	@return PaginatedParameterTypeList
 func (a *TypesAPIService) TypesListExecute(r ApiTypesListRequest) (*PaginatedParameterTypeList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedParameterTypeList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedParameterTypeList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesList")
@@ -461,9 +462,9 @@ func (a *TypesAPIService) TypesListExecute(r ApiTypesListRequest) (*PaginatedPar
 }
 
 type ApiTypesPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *TypesAPIService
-	id string
+	ctx                        context.Context
+	ApiService                 *TypesAPIService
+	id                         string
 	patchedParameterTypeUpdate *PatchedParameterTypeUpdate
 }
 
@@ -479,26 +480,27 @@ func (r ApiTypesPartialUpdateRequest) Execute() (*ParameterTypeUpdate, *http.Res
 /*
 TypesPartialUpdate Method for TypesPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiTypesPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiTypesPartialUpdateRequest
 */
 func (a *TypesAPIService) TypesPartialUpdate(ctx context.Context, id string) ApiTypesPartialUpdateRequest {
 	return ApiTypesPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterTypeUpdate
+//
+//	@return ParameterTypeUpdate
 func (a *TypesAPIService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateRequest) (*ParameterTypeUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeUpdate
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTypeUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesPartialUpdate")
@@ -598,9 +600,9 @@ func (a *TypesAPIService) TypesPartialUpdateExecute(r ApiTypesPartialUpdateReque
 }
 
 type ApiTypesRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TypesAPIService
-	id string
+	id         string
 }
 
 func (r ApiTypesRetrieveRequest) Execute() (*ParameterType, *http.Response, error) {
@@ -610,26 +612,27 @@ func (r ApiTypesRetrieveRequest) Execute() (*ParameterType, *http.Response, erro
 /*
 TypesRetrieve Method for TypesRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter type ledger.
- @return ApiTypesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter type ledger.
+	@return ApiTypesRetrieveRequest
 */
 func (a *TypesAPIService) TypesRetrieve(ctx context.Context, id string) ApiTypesRetrieveRequest {
 	return ApiTypesRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterType
+//
+//	@return ParameterType
 func (a *TypesAPIService) TypesRetrieveExecute(r ApiTypesRetrieveRequest) (*ParameterType, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterType
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterType
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRetrieve")
@@ -727,9 +730,9 @@ func (a *TypesAPIService) TypesRetrieveExecute(r ApiTypesRetrieveRequest) (*Para
 }
 
 type ApiTypesRulesCreateRequest struct {
-	ctx context.Context
-	ApiService *TypesAPIService
-	parametertypePk string
+	ctx                     context.Context
+	ApiService              *TypesAPIService
+	parametertypePk         string
 	parameterTypeRuleCreate *ParameterTypeRuleCreate
 }
 
@@ -745,26 +748,27 @@ func (r ApiTypesRulesCreateRequest) Execute() (*ParameterTypeRule, *http.Respons
 /*
 TypesRulesCreate Method for TypesRulesCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesCreateRequest
 */
 func (a *TypesAPIService) TypesRulesCreate(ctx context.Context, parametertypePk string) ApiTypesRulesCreateRequest {
 	return ApiTypesRulesCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:      a,
+		ctx:             ctx,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterTypeRule
+//
+//	@return ParameterTypeRule
 func (a *TypesAPIService) TypesRulesCreateExecute(r ApiTypesRulesCreateRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeRule
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTypeRule
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesCreate")
@@ -867,9 +871,9 @@ func (a *TypesAPIService) TypesRulesCreateExecute(r ApiTypesRulesCreateRequest) 
 }
 
 type ApiTypesRulesDestroyRequest struct {
-	ctx context.Context
-	ApiService *TypesAPIService
-	id string
+	ctx             context.Context
+	ApiService      *TypesAPIService
+	id              string
 	parametertypePk string
 }
 
@@ -880,16 +884,16 @@ func (r ApiTypesRulesDestroyRequest) Execute() (*http.Response, error) {
 /*
 TypesRulesDestroy Method for TypesRulesDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter type rule.
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter type rule.
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesDestroyRequest
 */
 func (a *TypesAPIService) TypesRulesDestroy(ctx context.Context, id string, parametertypePk string) ApiTypesRulesDestroyRequest {
 	return ApiTypesRulesDestroyRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:      a,
+		ctx:             ctx,
+		id:              id,
 		parametertypePk: parametertypePk,
 	}
 }
@@ -897,9 +901,9 @@ func (a *TypesAPIService) TypesRulesDestroy(ctx context.Context, id string, para
 // Execute executes the request
 func (a *TypesAPIService) TypesRulesDestroyExecute(r ApiTypesRulesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesDestroy")
@@ -989,13 +993,13 @@ func (a *TypesAPIService) TypesRulesDestroyExecute(r ApiTypesRulesDestroyRequest
 }
 
 type ApiTypesRulesListRequest struct {
-	ctx context.Context
-	ApiService *TypesAPIService
+	ctx             context.Context
+	ApiService      *TypesAPIService
 	parametertypePk string
-	ordering *string
-	page *int32
-	pageSize *int32
-	type_ *string
+	ordering        *string
+	page            *int32
+	pageSize        *int32
+	type_           *string
 }
 
 // Which field to use when ordering the results.
@@ -1028,26 +1032,27 @@ func (r ApiTypesRulesListRequest) Execute() (*PaginatedParameterTypeRuleList, *h
 /*
 TypesRulesList Method for TypesRulesList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesListRequest
 */
 func (a *TypesAPIService) TypesRulesList(ctx context.Context, parametertypePk string) ApiTypesRulesListRequest {
 	return ApiTypesRulesListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:      a,
+		ctx:             ctx,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedParameterTypeRuleList
+//
+//	@return PaginatedParameterTypeRuleList
 func (a *TypesAPIService) TypesRulesListExecute(r ApiTypesRulesListRequest) (*PaginatedParameterTypeRuleList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedParameterTypeRuleList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedParameterTypeRuleList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesList")
@@ -1157,10 +1162,10 @@ func (a *TypesAPIService) TypesRulesListExecute(r ApiTypesRulesListRequest) (*Pa
 }
 
 type ApiTypesRulesPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *TypesAPIService
-	id string
-	parametertypePk string
+	ctx                            context.Context
+	ApiService                     *TypesAPIService
+	id                             string
+	parametertypePk                string
 	patchedParameterTypeRuleUpdate *PatchedParameterTypeRuleUpdate
 }
 
@@ -1176,28 +1181,29 @@ func (r ApiTypesRulesPartialUpdateRequest) Execute() (*ParameterTypeRuleUpdate, 
 /*
 TypesRulesPartialUpdate Method for TypesRulesPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter type rule.
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter type rule.
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesPartialUpdateRequest
 */
 func (a *TypesAPIService) TypesRulesPartialUpdate(ctx context.Context, id string, parametertypePk string) ApiTypesRulesPartialUpdateRequest {
 	return ApiTypesRulesPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:      a,
+		ctx:             ctx,
+		id:              id,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterTypeRuleUpdate
+//
+//	@return ParameterTypeRuleUpdate
 func (a *TypesAPIService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialUpdateRequest) (*ParameterTypeRuleUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeRuleUpdate
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTypeRuleUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesPartialUpdate")
@@ -1298,9 +1304,9 @@ func (a *TypesAPIService) TypesRulesPartialUpdateExecute(r ApiTypesRulesPartialU
 }
 
 type ApiTypesRulesRetrieveRequest struct {
-	ctx context.Context
-	ApiService *TypesAPIService
-	id string
+	ctx             context.Context
+	ApiService      *TypesAPIService
+	id              string
 	parametertypePk string
 }
 
@@ -1311,28 +1317,29 @@ func (r ApiTypesRulesRetrieveRequest) Execute() (*ParameterTypeRule, *http.Respo
 /*
 TypesRulesRetrieve Method for TypesRulesRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter type rule ledger.
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter type rule ledger.
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesRetrieveRequest
 */
 func (a *TypesAPIService) TypesRulesRetrieve(ctx context.Context, id string, parametertypePk string) ApiTypesRulesRetrieveRequest {
 	return ApiTypesRulesRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:      a,
+		ctx:             ctx,
+		id:              id,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterTypeRule
+//
+//	@return ParameterTypeRule
 func (a *TypesAPIService) TypesRulesRetrieveExecute(r ApiTypesRulesRetrieveRequest) (*ParameterTypeRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeRule
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTypeRule
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesRetrieve")
@@ -1431,10 +1438,10 @@ func (a *TypesAPIService) TypesRulesRetrieveExecute(r ApiTypesRulesRetrieveReque
 }
 
 type ApiTypesRulesUpdateRequest struct {
-	ctx context.Context
-	ApiService *TypesAPIService
-	id string
-	parametertypePk string
+	ctx                     context.Context
+	ApiService              *TypesAPIService
+	id                      string
+	parametertypePk         string
 	parameterTypeRuleUpdate *ParameterTypeRuleUpdate
 }
 
@@ -1450,28 +1457,29 @@ func (r ApiTypesRulesUpdateRequest) Execute() (*ParameterTypeRuleUpdate, *http.R
 /*
 TypesRulesUpdate Method for TypesRulesUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter type rule.
- @param parametertypePk The parameter type id.
- @return ApiTypesRulesUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter type rule.
+	@param parametertypePk The parameter type id.
+	@return ApiTypesRulesUpdateRequest
 */
 func (a *TypesAPIService) TypesRulesUpdate(ctx context.Context, id string, parametertypePk string) ApiTypesRulesUpdateRequest {
 	return ApiTypesRulesUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:      a,
+		ctx:             ctx,
+		id:              id,
 		parametertypePk: parametertypePk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterTypeRuleUpdate
+//
+//	@return ParameterTypeRuleUpdate
 func (a *TypesAPIService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) (*ParameterTypeRuleUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeRuleUpdate
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTypeRuleUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesRulesUpdate")
@@ -1575,9 +1583,9 @@ func (a *TypesAPIService) TypesRulesUpdateExecute(r ApiTypesRulesUpdateRequest) 
 }
 
 type ApiTypesUpdateRequest struct {
-	ctx context.Context
-	ApiService *TypesAPIService
-	id string
+	ctx                 context.Context
+	ApiService          *TypesAPIService
+	id                  string
 	parameterTypeUpdate *ParameterTypeUpdate
 }
 
@@ -1593,26 +1601,27 @@ func (r ApiTypesUpdateRequest) Execute() (*ParameterTypeUpdate, *http.Response, 
 /*
 TypesUpdate Method for TypesUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiTypesUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiTypesUpdateRequest
 */
 func (a *TypesAPIService) TypesUpdate(ctx context.Context, id string) ApiTypesUpdateRequest {
 	return ApiTypesUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterTypeUpdate
+//
+//	@return ParameterTypeUpdate
 func (a *TypesAPIService) TypesUpdateExecute(r ApiTypesUpdateRequest) (*ParameterTypeUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTypeUpdate
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTypeUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TypesAPIService.TypesUpdate")

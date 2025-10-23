@@ -23,7 +23,7 @@ type GitHubIntegrationCreate struct {
 	// An optional description for the integration.
 	Description *string `json:"description,omitempty"`
 	// Allow actions to write to the integration.
-	Writable *bool `json:"writable,omitempty"`
+	Writable         *bool `json:"writable,omitempty"`
 	GhInstallationId int32 `json:"gh_installation_id"`
 }
 
@@ -134,7 +134,7 @@ func (o *GitHubIntegrationCreate) SetGhInstallationId(v int32) {
 }
 
 func (o GitHubIntegrationCreate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -188,5 +188,3 @@ func (v *NullableGitHubIntegrationCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

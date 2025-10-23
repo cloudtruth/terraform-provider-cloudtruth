@@ -24,8 +24,8 @@ type PatchedInvitation struct {
 	// The unique identifier of an invitation.
 	Id *string `json:"id,omitempty"`
 	// The email address of the user to be invited.
-	Email *string `json:"email,omitempty"`
-	Role *RoleEnum `json:"role,omitempty"`
+	Email *string   `json:"email,omitempty"`
+	Role  *RoleEnum `json:"role,omitempty"`
 	// The user that created the invitation.
 	Inviter *string `json:"inviter,omitempty"`
 	// The name of the user that created the invitation.
@@ -345,6 +345,7 @@ func (o *PatchedInvitation) HasMembership() bool {
 func (o *PatchedInvitation) SetMembership(v string) {
 	o.Membership.Set(&v)
 }
+
 // SetMembershipNil sets the value for Membership to be an explicit nil
 func (o *PatchedInvitation) SetMembershipNil() {
 	o.Membership.Set(nil)
@@ -388,7 +389,7 @@ func (o *PatchedInvitation) SetOrganization(v string) {
 }
 
 func (o PatchedInvitation) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -465,5 +466,3 @@ func (v *NullablePatchedInvitation) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

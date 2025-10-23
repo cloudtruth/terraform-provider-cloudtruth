@@ -31,10 +31,10 @@ type PatchedEnvironmentUpdate struct {
 	// This is the opposite of `parent`, see that field for more details.
 	Children []string `json:"children,omitempty"`
 	// Indicates if access control is being enforced through grants.
-	AccessControlled *bool `json:"access_controlled,omitempty"`
-	Role NullableRoleEnum `json:"role,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt NullableTime `json:"modified_at,omitempty"`
+	AccessControlled *bool            `json:"access_controlled,omitempty"`
+	Role             NullableRoleEnum `json:"role,omitempty"`
+	CreatedAt        *time.Time       `json:"created_at,omitempty"`
+	ModifiedAt       NullableTime     `json:"modified_at,omitempty"`
 }
 
 // NewPatchedEnvironmentUpdate instantiates a new PatchedEnvironmentUpdate object
@@ -182,6 +182,7 @@ func (o *PatchedEnvironmentUpdate) HasParent() bool {
 func (o *PatchedEnvironmentUpdate) SetParent(v string) {
 	o.Parent.Set(&v)
 }
+
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *PatchedEnvironmentUpdate) SetParentNil() {
 	o.Parent.Set(nil)
@@ -288,6 +289,7 @@ func (o *PatchedEnvironmentUpdate) HasRole() bool {
 func (o *PatchedEnvironmentUpdate) SetRole(v RoleEnum) {
 	o.Role.Set(&v)
 }
+
 // SetRoleNil sets the value for Role to be an explicit nil
 func (o *PatchedEnvironmentUpdate) SetRoleNil() {
 	o.Role.Set(nil)
@@ -362,6 +364,7 @@ func (o *PatchedEnvironmentUpdate) HasModifiedAt() bool {
 func (o *PatchedEnvironmentUpdate) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedEnvironmentUpdate) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -373,7 +376,7 @@ func (o *PatchedEnvironmentUpdate) UnsetModifiedAt() {
 }
 
 func (o PatchedEnvironmentUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -447,5 +450,3 @@ func (v *NullablePatchedEnvironmentUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

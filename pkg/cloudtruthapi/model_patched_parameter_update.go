@@ -28,13 +28,13 @@ type PatchedParameterUpdate struct {
 	Description *string `json:"description,omitempty"`
 	// Indicates if this content is secret or not.  External values are inspected on-demand to ensure they align with the parameter's secret setting and if they do not, those external values are not allowed to be used.
 	Secret *bool `json:"secret,omitempty"`
-	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.         
+	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.
 	Type *string `json:"type,omitempty"`
 	// The project url.
-	Project *string `json:"project,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt NullableTime `json:"modified_at,omitempty"`
-	Expires NullableString `json:"expires,omitempty"`
+	Project          *string                `json:"project,omitempty"`
+	CreatedAt        *time.Time             `json:"created_at,omitempty"`
+	ModifiedAt       NullableTime           `json:"modified_at,omitempty"`
+	Expires          NullableString         `json:"expires,omitempty"`
 	ExpirationAction map[string]interface{} `json:"expiration_action,omitempty"`
 	// If this parameter expires, the status of the last attempt to handle its expiration
 	ExpiredStatus map[string]interface{} `json:"expired_status,omitempty"`
@@ -313,6 +313,7 @@ func (o *PatchedParameterUpdate) HasModifiedAt() bool {
 func (o *PatchedParameterUpdate) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedParameterUpdate) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -355,6 +356,7 @@ func (o *PatchedParameterUpdate) HasExpires() bool {
 func (o *PatchedParameterUpdate) SetExpires(v string) {
 	o.Expires.Set(&v)
 }
+
 // SetExpiresNil sets the value for Expires to be an explicit nil
 func (o *PatchedParameterUpdate) SetExpiresNil() {
 	o.Expires.Set(nil)
@@ -432,7 +434,7 @@ func (o *PatchedParameterUpdate) SetExpiredStatus(v map[string]interface{}) {
 }
 
 func (o PatchedParameterUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -512,5 +514,3 @@ func (v *NullablePatchedParameterUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

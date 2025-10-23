@@ -21,15 +21,15 @@ var _ MappedNullable = &ServiceAccountCreateResponse{}
 
 // ServiceAccountCreateResponse struct for ServiceAccountCreateResponse
 type ServiceAccountCreateResponse struct {
-	Url string `json:"url"`
-	Id string `json:"id"`
+	Url   string         `json:"url"`
+	Id    string         `json:"id"`
 	Owner NullableString `json:"owner,omitempty"`
-	User User `json:"user"`
+	User  User           `json:"user"`
 	// An optional description of the process or system using the service account.
-	Description *string `json:"description,omitempty"`
-	Keys []ServiceAccountAPIKey `json:"keys"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	Description *string                `json:"description,omitempty"`
+	Keys        []ServiceAccountAPIKey `json:"keys"`
+	CreatedAt   time.Time              `json:"created_at"`
+	ModifiedAt  NullableTime           `json:"modified_at"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
 	LastUsedAt NullableTime `json:"last_used_at"`
 	// The API Key to use as a Bearer token for the service account.
@@ -141,6 +141,7 @@ func (o *ServiceAccountCreateResponse) HasOwner() bool {
 func (o *ServiceAccountCreateResponse) SetOwner(v string) {
 	o.Owner.Set(&v)
 }
+
 // SetOwnerNil sets the value for Owner to be an explicit nil
 func (o *ServiceAccountCreateResponse) SetOwnerNil() {
 	o.Owner.Set(nil)
@@ -332,7 +333,7 @@ func (o *ServiceAccountCreateResponse) SetApikey(v string) {
 }
 
 func (o ServiceAccountCreateResponse) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -393,5 +394,3 @@ func (v *NullableServiceAccountCreateResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

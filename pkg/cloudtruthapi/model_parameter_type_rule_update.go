@@ -23,11 +23,11 @@ var _ MappedNullable = &ParameterTypeRuleUpdate{}
 type ParameterTypeRuleUpdate struct {
 	Id string `json:"id"`
 	// The type this rule is for.
-	ParameterType string `json:"parameter_type"`
-	Type ParameterRuleTypeEnum `json:"type"`
-	Constraint string `json:"constraint"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	ParameterType string                `json:"parameter_type"`
+	Type          ParameterRuleTypeEnum `json:"type"`
+	Constraint    string                `json:"constraint"`
+	CreatedAt     time.Time             `json:"created_at"`
+	ModifiedAt    NullableTime          `json:"modified_at"`
 }
 
 // NewParameterTypeRuleUpdate instantiates a new ParameterTypeRuleUpdate object
@@ -200,7 +200,7 @@ func (o *ParameterTypeRuleUpdate) SetModifiedAt(v time.Time) {
 }
 
 func (o ParameterTypeRuleUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -253,5 +253,3 @@ func (v *NullableParameterTypeRuleUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

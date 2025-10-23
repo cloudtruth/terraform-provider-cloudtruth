@@ -29,8 +29,8 @@ type PatchedTemplateUpdate struct {
 	// If true, the `body` field has undergone evaluation.
 	Evaluated *bool `json:"evaluated,omitempty"`
 	// The content of the template.  Use mustache-style templating delimiters of `{{` and `}}` to reference parameter values by name for substitution into the template result.
-	Body *string `json:"body,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	Body       *string      `json:"body,omitempty"`
+	CreatedAt  *time.Time   `json:"created_at,omitempty"`
 	ModifiedAt NullableTime `json:"modified_at,omitempty"`
 }
 
@@ -275,6 +275,7 @@ func (o *PatchedTemplateUpdate) HasModifiedAt() bool {
 func (o *PatchedTemplateUpdate) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedTemplateUpdate) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -286,7 +287,7 @@ func (o *PatchedTemplateUpdate) UnsetModifiedAt() {
 }
 
 func (o PatchedTemplateUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -354,5 +355,3 @@ func (v *NullablePatchedTemplateUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

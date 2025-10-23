@@ -19,20 +19,19 @@ import (
 	"net/url"
 )
 
-
 // UtilsAPIService UtilsAPI service
 type UtilsAPIService service
 
 type ApiUtilsGeneratePasswordCreateRequest struct {
-	ctx context.Context
-	ApiService *UtilsAPIService
-	length *int32
+	ctx                       context.Context
+	ApiService                *UtilsAPIService
+	length                    *int32
 	requireHardwareGeneration *bool
-	requireLowercase *bool
-	requireNumbers *bool
-	requireSpaces *bool
-	requireSymbols *bool
-	requireUppercase *bool
+	requireLowercase          *bool
+	requireNumbers            *bool
+	requireSpaces             *bool
+	requireSymbols            *bool
+	requireUppercase          *bool
 }
 
 // The length of the password to generate.  Minimum of 8, maximum of 4095.
@@ -86,24 +85,25 @@ UtilsGeneratePasswordCreate Get a randomly generated password using AWS Secrets 
 
 Endpoint for accessing utility functions
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUtilsGeneratePasswordCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUtilsGeneratePasswordCreateRequest
 */
 func (a *UtilsAPIService) UtilsGeneratePasswordCreate(ctx context.Context) ApiUtilsGeneratePasswordCreateRequest {
 	return ApiUtilsGeneratePasswordCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return GeneratedPasswordResponse
+//
+//	@return GeneratedPasswordResponse
 func (a *UtilsAPIService) UtilsGeneratePasswordCreateExecute(r ApiUtilsGeneratePasswordCreateRequest) (*GeneratedPasswordResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GeneratedPasswordResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GeneratedPasswordResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UtilsAPIService.UtilsGeneratePasswordCreate")

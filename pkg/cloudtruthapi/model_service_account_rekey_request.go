@@ -74,6 +74,7 @@ func (o *ServiceAccountRekeyRequest) HasExpireAt() bool {
 func (o *ServiceAccountRekeyRequest) SetExpireAt(v time.Time) {
 	o.ExpireAt.Set(&v)
 }
+
 // SetExpireAtNil sets the value for ExpireAt to be an explicit nil
 func (o *ServiceAccountRekeyRequest) SetExpireAtNil() {
 	o.ExpireAt.Set(nil)
@@ -85,7 +86,7 @@ func (o *ServiceAccountRekeyRequest) UnsetExpireAt() {
 }
 
 func (o ServiceAccountRekeyRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -135,5 +136,3 @@ func (v *NullableServiceAccountRekeyRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

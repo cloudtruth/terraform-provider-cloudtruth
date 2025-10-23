@@ -139,6 +139,7 @@ func (o *ImportCreateRequest) HasEnvironment() bool {
 func (o *ImportCreateRequest) SetEnvironment(v string) {
 	o.Environment.Set(&v)
 }
+
 // SetEnvironmentNil sets the value for Environment to be an explicit nil
 func (o *ImportCreateRequest) SetEnvironmentNil() {
 	o.Environment.Set(nil)
@@ -382,7 +383,7 @@ func (o *ImportCreateRequest) SetInheritOnSame(v bool) {
 }
 
 func (o ImportCreateRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -451,5 +452,3 @@ func (v *NullableImportCreateRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

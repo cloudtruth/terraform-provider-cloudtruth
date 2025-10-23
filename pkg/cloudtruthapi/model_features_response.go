@@ -20,9 +20,9 @@ var _ MappedNullable = &FeaturesResponse{}
 
 // FeaturesResponse struct for FeaturesResponse
 type FeaturesResponse struct {
-	SelfHosted bool `json:"self_hosted"`
-	AwsIntegration bool `json:"aws_integration"`
-	AzureIntegration bool `json:"azure_integration"`
+	SelfHosted        bool `json:"self_hosted"`
+	AwsIntegration    bool `json:"aws_integration"`
+	AzureIntegration  bool `json:"azure_integration"`
 	GithubIntegration bool `json:"github_integration"`
 }
 
@@ -144,7 +144,7 @@ func (o *FeaturesResponse) SetGithubIntegration(v bool) {
 }
 
 func (o FeaturesResponse) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -195,5 +195,3 @@ func (v *NullableFeaturesResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

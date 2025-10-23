@@ -21,25 +21,24 @@ import (
 	"time"
 )
 
-
 // AuditAPIService AuditAPI service
 type AuditAPIService service
 
 type ApiAuditListRequest struct {
-	ctx context.Context
-	ApiService *AuditAPIService
-	action *string
-	earliest *time.Time
+	ctx           context.Context
+	ApiService    *AuditAPIService
+	action        *string
+	earliest      *time.Time
 	environmentId *string
-	latest *time.Time
-	objectId *string
-	objectType *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	parameterId *string
-	projectId *string
-	userId *string
+	latest        *time.Time
+	objectId      *string
+	objectType    *string
+	ordering      *string
+	page          *int32
+	pageSize      *int32
+	parameterId   *string
+	projectId     *string
+	userId        *string
 }
 
 // The action that was taken.
@@ -118,24 +117,25 @@ AuditList Method for AuditList
 
 A searchable log of all the actions taken by users and service accounts within the organization.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAuditListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiAuditListRequest
 */
 func (a *AuditAPIService) AuditList(ctx context.Context) ApiAuditListRequest {
 	return ApiAuditListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedAuditTrailList
+//
+//	@return PaginatedAuditTrailList
 func (a *AuditAPIService) AuditListExecute(r ApiAuditListRequest) (*PaginatedAuditTrailList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedAuditTrailList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedAuditTrailList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuditAPIService.AuditList")
@@ -268,9 +268,9 @@ func (a *AuditAPIService) AuditListExecute(r ApiAuditListRequest) (*PaginatedAud
 }
 
 type ApiAuditRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *AuditAPIService
-	id string
+	id         string
 }
 
 func (r ApiAuditRetrieveRequest) Execute() (*AuditTrail, *http.Response, error) {
@@ -282,26 +282,27 @@ AuditRetrieve Method for AuditRetrieve
 
 Retrieve one record from the audit log.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiAuditRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiAuditRetrieveRequest
 */
 func (a *AuditAPIService) AuditRetrieve(ctx context.Context, id string) ApiAuditRetrieveRequest {
 	return ApiAuditRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return AuditTrail
+//
+//	@return AuditTrail
 func (a *AuditAPIService) AuditRetrieveExecute(r ApiAuditRetrieveRequest) (*AuditTrail, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AuditTrail
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AuditTrail
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuditAPIService.AuditRetrieve")
@@ -399,7 +400,7 @@ func (a *AuditAPIService) AuditRetrieveExecute(r ApiAuditRetrieveRequest) (*Audi
 }
 
 type ApiAuditSummaryRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *AuditAPIService
 }
 
@@ -412,24 +413,25 @@ AuditSummaryRetrieve Method for AuditSummaryRetrieve
 
 Summary information about the organization's audit trail.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAuditSummaryRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiAuditSummaryRetrieveRequest
 */
 func (a *AuditAPIService) AuditSummaryRetrieve(ctx context.Context) ApiAuditSummaryRetrieveRequest {
 	return ApiAuditSummaryRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return AuditTrailSummary
+//
+//	@return AuditTrailSummary
 func (a *AuditAPIService) AuditSummaryRetrieveExecute(r ApiAuditSummaryRetrieveRequest) (*AuditTrailSummary, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AuditTrailSummary
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AuditTrailSummary
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuditAPIService.AuditSummaryRetrieve")

@@ -19,16 +19,15 @@ import (
 	"net/url"
 )
 
-
 // ImportAPIService ImportAPI service
 type ImportAPIService service
 
 type ApiImportCreateRequest struct {
-	ctx context.Context
-	ApiService *ImportAPIService
+	ctx                 context.Context
+	ApiService          *ImportAPIService
 	importCreateRequest *ImportCreateRequest
-	maskSecrets *bool
-	preview *bool
+	maskSecrets         *bool
+	preview             *bool
 }
 
 func (r ApiImportCreateRequest) ImportCreateRequest(importCreateRequest ImportCreateRequest) ApiImportCreateRequest {
@@ -57,24 +56,25 @@ ImportCreate Method for ImportCreate
 
 Import parameters from the provided data.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiImportCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiImportCreateRequest
 */
 func (a *ImportAPIService) ImportCreate(ctx context.Context) ApiImportCreateRequest {
 	return ApiImportCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ImportCreateResponse
+//
+//	@return ImportCreateResponse
 func (a *ImportAPIService) ImportCreateExecute(r ApiImportCreateRequest) (*ImportCreateResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ImportCreateResponse
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ImportCreateResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ImportAPIService.ImportCreate")

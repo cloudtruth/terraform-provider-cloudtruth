@@ -20,8 +20,8 @@ var _ MappedNullable = &BackupEnvironment{}
 
 // BackupEnvironment Basic environment data at a point in time.
 type BackupEnvironment struct {
-	Name string `json:"name"`
-	Parent NullableString `json:"parent,omitempty"`
+	Name        string         `json:"name"`
+	Parent      NullableString `json:"parent,omitempty"`
 	Description NullableString `json:"description,omitempty"`
 }
 
@@ -99,6 +99,7 @@ func (o *BackupEnvironment) HasParent() bool {
 func (o *BackupEnvironment) SetParent(v string) {
 	o.Parent.Set(&v)
 }
+
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *BackupEnvironment) SetParentNil() {
 	o.Parent.Set(nil)
@@ -141,6 +142,7 @@ func (o *BackupEnvironment) HasDescription() bool {
 func (o *BackupEnvironment) SetDescription(v string) {
 	o.Description.Set(&v)
 }
+
 // SetDescriptionNil sets the value for Description to be an explicit nil
 func (o *BackupEnvironment) SetDescriptionNil() {
 	o.Description.Set(nil)
@@ -152,7 +154,7 @@ func (o *BackupEnvironment) UnsetDescription() {
 }
 
 func (o BackupEnvironment) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -206,5 +208,3 @@ func (v *NullableBackupEnvironment) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

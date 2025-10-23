@@ -22,8 +22,8 @@ var _ MappedNullable = &Value{}
 // Value A value for a parameter in a given environment.
 type Value struct {
 	// The value url.
-	Url string `json:"url"`
-	Id string `json:"id"`
+	Url      string `json:"url"`
+	Id       string `json:"id"`
 	LedgerId string `json:"ledger_id"`
 	// The active environment this Value is viewed under
 	ActiveEnvironment string `json:"active_environment"`
@@ -40,15 +40,15 @@ type Value struct {
 	// The parameter this value is for.
 	Parameter string `json:"parameter"`
 	// The parameter id for this value.
-	ParameterId string `json:"parameter_id"`
-	External *bool `json:"external,omitempty"`
-	ExternalFqn *string `json:"external_fqn,omitempty"`
+	ParameterId    string         `json:"parameter_id"`
+	External       *bool          `json:"external,omitempty"`
+	ExternalFqn    *string        `json:"external_fqn,omitempty"`
 	ExternalFilter NullableString `json:"external_filter,omitempty"`
 	// This field is deprecated and unused.
-	ExternalError NullableString `json:"external_error"`
+	ExternalError  NullableString              `json:"external_error"`
 	ExternalStatus NullableValueExternalStatus `json:"external_status"`
-	InternalValue NullableString `json:"internal_value,omitempty"`
-	Interpolated *bool `json:"interpolated,omitempty"`
+	InternalValue  NullableString              `json:"internal_value,omitempty"`
+	Interpolated   *bool                       `json:"interpolated,omitempty"`
 	// This is the actual content of the Value for the given parameter in the given environment.  If you request secret masking, no secret content will be included in the result and instead a series of asterisks will be used instead for the value.  Clients applying this value to a shell environment should set `<parameter_name>=<value>` even if `value` is the empty string.  If `value` is `null`, the client should unset that shell environment variable.
 	Value NullableString `json:"value"`
 	// If true, the `value` field has undergone template evaluation.
@@ -60,10 +60,10 @@ type Value struct {
 	// The parameters this value references, if dynamic.  this field is not valid for history requests.
 	ReferencedParameters []string `json:"referenced_parameters"`
 	// The templates this value references, if dynamic.  This field is not valid for history requests.
-	ReferencedTemplates []string `json:"referenced_templates"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
-	ExpiresAt NullableTime `json:"expires_at"`
+	ReferencedTemplates []string     `json:"referenced_templates"`
+	CreatedAt           time.Time    `json:"created_at"`
+	ModifiedAt          NullableTime `json:"modified_at"`
+	ExpiresAt           NullableTime `json:"expires_at"`
 }
 
 // NewValue instantiates a new Value object
@@ -465,6 +465,7 @@ func (o *Value) HasExternalFilter() bool {
 func (o *Value) SetExternalFilter(v string) {
 	o.ExternalFilter.Set(&v)
 }
+
 // SetExternalFilterNil sets the value for ExternalFilter to be an explicit nil
 func (o *Value) SetExternalFilterNil() {
 	o.ExternalFilter.Set(nil)
@@ -559,6 +560,7 @@ func (o *Value) HasInternalValue() bool {
 func (o *Value) SetInternalValue(v string) {
 	o.InternalValue.Set(&v)
 }
+
 // SetInternalValueNil sets the value for InternalValue to be an explicit nil
 func (o *Value) SetInternalValueNil() {
 	o.InternalValue.Set(nil)
@@ -826,7 +828,7 @@ func (o *Value) SetExpiresAt(v time.Time) {
 }
 
 func (o Value) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -910,5 +912,3 @@ func (v *NullableValue) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

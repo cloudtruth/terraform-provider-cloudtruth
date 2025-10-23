@@ -26,9 +26,9 @@ type ParameterCreate struct {
 	Description *string `json:"description,omitempty"`
 	// Indicates if this content is secret or not.  External values are inspected on-demand to ensure they align with the parameter's secret setting and if they do not, those external values are not allowed to be used.
 	Secret *bool `json:"secret,omitempty"`
-	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.         
-	Type *string `json:"type,omitempty"`
-	Expires NullableString `json:"expires,omitempty"`
+	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.
+	Type             *string                `json:"type,omitempty"`
+	Expires          NullableString         `json:"expires,omitempty"`
 	ExpirationAction map[string]interface{} `json:"expiration_action,omitempty"`
 }
 
@@ -202,6 +202,7 @@ func (o *ParameterCreate) HasExpires() bool {
 func (o *ParameterCreate) SetExpires(v string) {
 	o.Expires.Set(&v)
 }
+
 // SetExpiresNil sets the value for Expires to be an explicit nil
 func (o *ParameterCreate) SetExpiresNil() {
 	o.Expires.Set(nil)
@@ -246,7 +247,7 @@ func (o *ParameterCreate) SetExpirationAction(v map[string]interface{}) {
 }
 
 func (o ParameterCreate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -309,5 +310,3 @@ func (v *NullableParameterCreate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

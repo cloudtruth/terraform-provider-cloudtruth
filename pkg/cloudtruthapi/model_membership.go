@@ -27,10 +27,10 @@ type Membership struct {
 	// The user of the membership.
 	User string `json:"user"`
 	// The organization that the user is a member of.
-	Organization string `json:"organization"`
-	Role RoleEnum `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	Organization string       `json:"organization"`
+	Role         RoleEnum     `json:"role"`
+	CreatedAt    time.Time    `json:"created_at"`
+	ModifiedAt   NullableTime `json:"modified_at"`
 }
 
 // NewMembership instantiates a new Membership object
@@ -228,7 +228,7 @@ func (o *Membership) SetModifiedAt(v time.Time) {
 }
 
 func (o Membership) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -282,5 +282,3 @@ func (v *NullableMembership) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

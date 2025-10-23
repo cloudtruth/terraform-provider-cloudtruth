@@ -22,12 +22,12 @@ var _ MappedNullable = &ParameterTimelineEntry{}
 // ParameterTimelineEntry Details about a single change.
 type ParameterTimelineEntry struct {
 	HistoryType HistoryTypeEnum `json:"history_type"`
-	ModifiedAt NullableTime `json:"modified_at"`
-	ModifiedBy *string `json:"modified_by,omitempty"`
+	ModifiedAt  NullableTime    `json:"modified_at"`
+	ModifiedBy  *string         `json:"modified_by,omitempty"`
 	// The affected environment(s).
-	HistoryEnvironments []ParameterTimelineEntryEnvironment `json:"history_environments"`
-	HistoryModel HistoryModelEnum `json:"history_model"`
-	HistoryParameter ParameterTimelineEntryHistoryParameter `json:"history_parameter"`
+	HistoryEnvironments []ParameterTimelineEntryEnvironment    `json:"history_environments"`
+	HistoryModel        HistoryModelEnum                       `json:"history_model"`
+	HistoryParameter    ParameterTimelineEntryHistoryParameter `json:"history_parameter"`
 }
 
 // NewParameterTimelineEntry instantiates a new ParameterTimelineEntry object
@@ -207,7 +207,7 @@ func (o *ParameterTimelineEntry) SetHistoryParameter(v ParameterTimelineEntryHis
 }
 
 func (o ParameterTimelineEntry) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -262,5 +262,3 @@ func (v *NullableParameterTimelineEntry) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

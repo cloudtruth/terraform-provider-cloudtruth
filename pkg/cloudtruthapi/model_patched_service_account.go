@@ -21,15 +21,15 @@ var _ MappedNullable = &PatchedServiceAccount{}
 
 // PatchedServiceAccount struct for PatchedServiceAccount
 type PatchedServiceAccount struct {
-	Url *string `json:"url,omitempty"`
-	Id *string `json:"id,omitempty"`
+	Url   *string        `json:"url,omitempty"`
+	Id    *string        `json:"id,omitempty"`
 	Owner NullableString `json:"owner,omitempty"`
-	User *User `json:"user,omitempty"`
+	User  *User          `json:"user,omitempty"`
 	// An optional description of the process or system using the service account.
-	Description *string `json:"description,omitempty"`
-	Keys []ServiceAccountAPIKey `json:"keys,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt NullableTime `json:"modified_at,omitempty"`
+	Description *string                `json:"description,omitempty"`
+	Keys        []ServiceAccountAPIKey `json:"keys,omitempty"`
+	CreatedAt   *time.Time             `json:"created_at,omitempty"`
+	ModifiedAt  NullableTime           `json:"modified_at,omitempty"`
 	// The most recent date and time the service account was used.  It will be null if the service account has not been used.
 	LastUsedAt NullableTime `json:"last_used_at,omitempty"`
 }
@@ -147,6 +147,7 @@ func (o *PatchedServiceAccount) HasOwner() bool {
 func (o *PatchedServiceAccount) SetOwner(v string) {
 	o.Owner.Set(&v)
 }
+
 // SetOwnerNil sets the value for Owner to be an explicit nil
 func (o *PatchedServiceAccount) SetOwnerNil() {
 	o.Owner.Set(nil)
@@ -317,6 +318,7 @@ func (o *PatchedServiceAccount) HasModifiedAt() bool {
 func (o *PatchedServiceAccount) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedServiceAccount) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -359,6 +361,7 @@ func (o *PatchedServiceAccount) HasLastUsedAt() bool {
 func (o *PatchedServiceAccount) SetLastUsedAt(v time.Time) {
 	o.LastUsedAt.Set(&v)
 }
+
 // SetLastUsedAtNil sets the value for LastUsedAt to be an explicit nil
 func (o *PatchedServiceAccount) SetLastUsedAtNil() {
 	o.LastUsedAt.Set(nil)
@@ -370,7 +373,7 @@ func (o *PatchedServiceAccount) UnsetLastUsedAt() {
 }
 
 func (o PatchedServiceAccount) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -444,5 +447,3 @@ func (v *NullablePatchedServiceAccount) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

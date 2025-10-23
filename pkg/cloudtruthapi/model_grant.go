@@ -27,9 +27,9 @@ type Grant struct {
 	// The URI of a principal for the grant; this must reference a user or group.
 	Principal string `json:"principal"`
 	// The URI of a scope for the grant; this must reference a project or environment.
-	Scope string `json:"scope"`
-	Role RoleEnum `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
+	Scope      string       `json:"scope"`
+	Role       RoleEnum     `json:"role"`
+	CreatedAt  time.Time    `json:"created_at"`
 	ModifiedAt NullableTime `json:"modified_at"`
 }
 
@@ -228,7 +228,7 @@ func (o *Grant) SetModifiedAt(v time.Time) {
 }
 
 func (o Grant) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -282,5 +282,3 @@ func (v *NullableGrant) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
