@@ -249,9 +249,18 @@ func resourceAzureIntegrationRead(ctx context.Context, d *schema.ResourceData, m
 	}
 
 	// Set all fields from the API response
-	if err := d.Set("description", integration.GetDescription()); err != nil {
-		return diag.FromErr(err)
+	// Use GetDescriptionOk to properly handle optional pointer fields
+	if desc, ok := integration.GetDescriptionOk(); ok && desc != nil {
+		if err := d.Set("description", *desc); err != nil {
+			return diag.FromErr(err)
+		}
+	} else {
+		// If description is not set in API response, set empty string to match Terraform's optional field behavior
+		if err := d.Set("description", ""); err != nil {
+			return diag.FromErr(err)
+		}
 	}
+
 	if err := d.Set("writable", integration.GetWritable()); err != nil {
 		return diag.FromErr(err)
 	}
@@ -259,6 +268,11 @@ func resourceAzureIntegrationRead(ctx context.Context, d *schema.ResourceData, m
 	resourceTags := integration.GetResourceTags()
 	if len(resourceTags) > 0 {
 		if err := d.Set("resource_tags", resourceTags); err != nil {
+			return diag.FromErr(err)
+		}
+	} else {
+		// Clear resource_tags from state if empty
+		if err := d.Set("resource_tags", nil); err != nil {
 			return diag.FromErr(err)
 		}
 	}
