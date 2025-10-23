@@ -239,11 +239,12 @@ func getProjects(ctx context.Context, projects []string, meta any) ([]string, er
 			projID = p
 		}
 
-		projName, err := c.lookupProject(ctx, projID)
-		if err != nil {
-			return nil, err
+		// Look up the project name from the ID using the projectIDs cache (ID -> name map)
+		projName, ok := c.projectIDs[projID]
+		if !ok {
+			return nil, fmt.Errorf("project with ID %s not found in cache", projID)
 		}
-		outProjects = append(outProjects, *projName)
+		outProjects = append(outProjects, projName)
 	}
 	return outProjects, nil
 }
