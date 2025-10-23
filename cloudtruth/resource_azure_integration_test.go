@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"math/rand"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -248,7 +249,8 @@ func TestAccResourceAzureIntegrationValidation(t *testing.T) {
 			}
 
 			if tc.expectError {
-				testStep.ExpectError = nil // Will be checked by the test framework
+				// Use a regex pattern that matches any error containing the expected substring
+				testStep.ExpectError = regexp.MustCompile(regexp.QuoteMeta(tc.errorContains))
 			}
 
 			resource.Test(t, resource.TestCase{
