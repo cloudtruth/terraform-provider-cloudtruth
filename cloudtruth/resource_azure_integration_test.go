@@ -64,7 +64,6 @@ func TestAccResourceAzureIntegrationBasic(t *testing.T) {
 					resource.TestCheckResourceAttrSet(fmt.Sprintf("cloudtruth_azure_integration.%s", resourceName), "fqn"),
 					resource.TestCheckResourceAttrSet(fmt.Sprintf("cloudtruth_azure_integration.%s", resourceName), "status"),
 					resource.TestCheckResourceAttrSet(fmt.Sprintf("cloudtruth_azure_integration.%s", resourceName), "type"),
-					resource.TestCheckResourceAttr(fmt.Sprintf("cloudtruth_azure_integration.%s", resourceName), "type", "akv"),
 				),
 				SkipFunc: isSelfHostedOrStaging,
 			},

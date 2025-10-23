@@ -64,6 +64,9 @@ func lookupAzureIntegration(ctx context.Context, intName string, c *cloudTruthCl
 	tflog.Debug(ctx, "entering lookupAzureIntegration")
 	defer tflog.Debug(ctx, "exiting lookupAzureIntegration")
 	nameSegments := strings.Split(intName, "@")
+	if len(nameSegments) != 2 {
+		return nil, fmt.Errorf("lookupAzureIntegration: invalid Azure integration name format, expected 'vault_name@tenant_id', got: %s", intName)
+	}
 	vaultName, tenantID := nameSegments[0], nameSegments[1]
 	var integrations *cloudtruthapi.PaginatedAzureKeyVaultIntegrationList
 	retryError := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
