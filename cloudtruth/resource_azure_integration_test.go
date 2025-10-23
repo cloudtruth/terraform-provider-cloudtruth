@@ -250,7 +250,7 @@ func TestAccResourceAzureIntegrationValidation(t *testing.T) {
 
 			if tc.expectError {
 				// Use a regex pattern that matches any error containing the expected substring
-				testStep.ExpectError = regexp.MustCompile(regexp.QuoteMeta(tc.errorContains))
+				testStep.ExpectError = regexp.MustCompile(".*" + regexp.QuoteMeta(tc.errorContains) + ".*")
 			}
 
 			resource.Test(t, resource.TestCase{

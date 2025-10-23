@@ -172,10 +172,23 @@ func getTags(ctx context.Context, tags []string, meta any) ([]string, error) {
 	var apiError error
 	outTags := make([]string, 0)
 	for _, t := range tags {
-		// tag URLs look like this:
-		// https://api.cloudtruth.io/api/v1/environments/e54d1802-1c46-49b0-b1ed-9417bac082a3/tags/7682da06-4342-47ae-9520-ded6870c2368/
-		tagSegments := strings.Split(t, "/")
-		envID, tagID := tagSegments[6], tagSegments[8]
+		var envID, tagID string
+
+		// API may return either full URLs or potentially other formats
+		if strings.Contains(t, "/") {
+			// tag URLs look like this:
+			// https://api.cloudtruth.io/api/v1/environments/e54d1802-1c46-49b0-b1ed-9417bac082a3/tags/7682da06-4342-47ae-9520-ded6870c2368/
+			tagSegments := strings.Split(t, "/")
+			if len(tagSegments) < 9 {
+				return nil, fmt.Errorf("invalid tag URL format: %s", t)
+			}
+			envID, tagID = tagSegments[6], tagSegments[8]
+		} else {
+			// For non-URL formats, would need to determine the format
+			// This is a fallback - current API still returns URLs for tags
+			return nil, fmt.Errorf("unexpected tag format (expected URL): %s", t)
+		}
+
 		envName, err := c.lookupEnvironment(ctx, envID)
 		if err != nil {
 			return nil, err
@@ -208,19 +221,27 @@ func getProjects(ctx context.Context, projects []string, meta any) ([]string, er
 	tflog.Debug(ctx, "entering getProjects")
 	defer tflog.Debug(ctx, "exiting getProjects")
 	c := meta.(*cloudTruthClient)
-	var apiError error
 	outProjects := make([]string, 0)
 	for _, p := range projects {
-		// project URLs look like this:
-		// https://api.cloudtruth.io/api/v1/projects/1bdbafff-66f6-4491-b3e2-cc1d1bf95918/
-		projSegments := strings.Split(p, "/")
-		projID := projSegments[6]
+		var projID string
+
+		// API may return either full URLs or just UUIDs
+		if strings.Contains(p, "/") {
+			// project URLs look like this:
+			// https://api.cloudtruth.io/api/v1/projects/1bdbafff-66f6-4491-b3e2-cc1d1bf95918/
+			projSegments := strings.Split(p, "/")
+			if len(projSegments) < 7 {
+				return nil, fmt.Errorf("invalid project URL format: %s", p)
+			}
+			projID = projSegments[6]
+		} else {
+			// Just a UUID
+			projID = p
+		}
+
 		projName, err := c.lookupProject(ctx, projID)
 		if err != nil {
 			return nil, err
-		}
-		if apiError != nil {
-			return nil, apiError
 		}
 		outProjects = append(outProjects, *projName)
 	}
