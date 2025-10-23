@@ -24,8 +24,8 @@ type Invitation struct {
 	// The unique identifier of an invitation.
 	Id string `json:"id"`
 	// The email address of the user to be invited.
-	Email string `json:"email"`
-	Role RoleEnum `json:"role"`
+	Email string   `json:"email"`
+	Role  RoleEnum `json:"role"`
 	// The user that created the invitation.
 	Inviter string `json:"inviter"`
 	// The name of the user that created the invitation.
@@ -310,7 +310,7 @@ func (o *Invitation) SetOrganization(v string) {
 }
 
 func (o Invitation) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -367,5 +367,3 @@ func (v *NullableInvitation) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -20,10 +20,10 @@ var _ MappedNullable = &PaginatedAwsPushList{}
 
 // PaginatedAwsPushList struct for PaginatedAwsPushList
 type PaginatedAwsPushList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
+	Count    *int32         `json:"count,omitempty"`
+	Next     NullableString `json:"next,omitempty"`
 	Previous NullableString `json:"previous,omitempty"`
-	Results []AwsPush `json:"results,omitempty"`
+	Results  []AwsPush      `json:"results,omitempty"`
 }
 
 // NewPaginatedAwsPushList instantiates a new PaginatedAwsPushList object
@@ -107,6 +107,7 @@ func (o *PaginatedAwsPushList) HasNext() bool {
 func (o *PaginatedAwsPushList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedAwsPushList) SetNextNil() {
 	o.Next.Set(nil)
@@ -149,6 +150,7 @@ func (o *PaginatedAwsPushList) HasPrevious() bool {
 func (o *PaginatedAwsPushList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedAwsPushList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -192,7 +194,7 @@ func (o *PaginatedAwsPushList) SetResults(v []AwsPush) {
 }
 
 func (o PaginatedAwsPushList) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -251,5 +253,3 @@ func (v *NullablePaginatedAwsPushList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

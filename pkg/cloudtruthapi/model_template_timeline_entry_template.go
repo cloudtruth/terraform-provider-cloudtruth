@@ -20,10 +20,10 @@ var _ MappedNullable = &TemplateTimelineEntryTemplate{}
 
 // TemplateTimelineEntryTemplate Helper methods for all views or serializers that expose template concepts.
 type TemplateTimelineEntryTemplate struct {
-	Id string `json:"id"`
+	Id       string `json:"id"`
 	LedgerId string `json:"ledger_id"`
 	// The parameter name.
-	Name string `json:"name"`
+	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
 	// The content of the template.  Use mustache-style templating delimiters of `{{` and `}}` to reference parameter values by name for substitution into the template result.
 	Body *string `json:"body,omitempty"`
@@ -186,7 +186,7 @@ func (o *TemplateTimelineEntryTemplate) SetBody(v string) {
 }
 
 func (o TemplateTimelineEntryTemplate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -242,5 +242,3 @@ func (v *NullableTemplateTimelineEntryTemplate) UnmarshalJSON(src []byte) error 
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

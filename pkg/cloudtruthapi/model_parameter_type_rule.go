@@ -22,15 +22,15 @@ var _ MappedNullable = &ParameterTypeRule{}
 // ParameterTypeRule A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead of primary key relationships.  Specifically:  * A 'url' field is included instead of the 'id' field. * Relationships to other instances are hyperlinks, instead of primary keys.  NOTE: this only works with DRF 3.1.0 and above.
 type ParameterTypeRule struct {
 	// The URL for the project.
-	Url string `json:"url"`
-	Id string `json:"id"`
+	Url      string `json:"url"`
+	Id       string `json:"id"`
 	LedgerId string `json:"ledger_id"`
 	// The type this rule is for.
-	ParameterType string `json:"parameter_type"`
-	Type ParameterRuleTypeEnum `json:"type"`
-	Constraint string `json:"constraint"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	ParameterType string                `json:"parameter_type"`
+	Type          ParameterRuleTypeEnum `json:"type"`
+	Constraint    string                `json:"constraint"`
+	CreatedAt     time.Time             `json:"created_at"`
+	ModifiedAt    NullableTime          `json:"modified_at"`
 }
 
 // NewParameterTypeRule instantiates a new ParameterTypeRule object
@@ -253,7 +253,7 @@ func (o *ParameterTypeRule) SetModifiedAt(v time.Time) {
 }
 
 func (o ParameterTypeRule) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -308,5 +308,3 @@ func (v *NullableParameterTypeRule) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

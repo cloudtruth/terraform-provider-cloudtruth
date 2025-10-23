@@ -22,14 +22,14 @@ var _ MappedNullable = &Parameter{}
 // Parameter A single parameter inside of a project.
 type Parameter struct {
 	// The parameter url.
-	Url string `json:"url"`
-	Id string `json:"id"`
+	Url      string `json:"url"`
+	Id       string `json:"id"`
 	LedgerId string `json:"ledger_id"`
 	// The parameter name.
-	Name string `json:"name"`
+	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
-	Secret bool `json:"secret"`
-	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.         
+	Secret      bool    `json:"secret"`
+	//          The type of this Parameter.  If not provided, this will default to         a string for Parameters that are not overrides or to the overridden         Parameter's type for Parameters that are overrides.
 	Type *string `json:"type,omitempty"`
 	// Rules applied to this parameter.
 	Rules []ParameterRule `json:"rules"`
@@ -41,15 +41,15 @@ type Parameter struct {
 	ReferencingTemplates []string `json:"referencing_templates"`
 	// Dynamic values that reference this Parameter.  This field is not valid for history requests.
 	ReferencingValues []string `json:"referencing_values"`
-	//              This dictionary has keys that correspond to environment urls, and values             that correspond to the effective value for this parameter in that environment.             Each parameter has an effective value in every environment based on             project dependencies and environment inheritance.              The effective value is found by looking (within the keyed environment) up             the project dependencies by parameter name.  If a value is not found, the             parent environment is consulted with the same logic to locate a value.  It             is possible for there to be a `null` value record for an environment, which             means there is no value set; it is also possible for there to be a value record             with a `value` of `null`, which means the value was explicitly set to `null`.              If the value's parameter does not match the enclosing parameter (holding the             values array) then that value is flowing in through project dependencies.             Clients must recognize this in case the user asks to modify the value; in this             case the client must POST a new Value to the current parameter to override the             value coming in from the project dependency.              If the Value.environment matches the key, then it is an explicit value set for             that environment.  If they differ, the value was obtained from a parent             environment (directly or indirectly).  If the value is None then no value has             ever been set in any environment for this parameter within all the project             dependencies.         
+	//              This dictionary has keys that correspond to environment urls, and values             that correspond to the effective value for this parameter in that environment.             Each parameter has an effective value in every environment based on             project dependencies and environment inheritance.              The effective value is found by looking (within the keyed environment) up             the project dependencies by parameter name.  If a value is not found, the             parent environment is consulted with the same logic to locate a value.  It             is possible for there to be a `null` value record for an environment, which             means there is no value set; it is also possible for there to be a value record             with a `value` of `null`, which means the value was explicitly set to `null`.              If the value's parameter does not match the enclosing parameter (holding the             values array) then that value is flowing in through project dependencies.             Clients must recognize this in case the user asks to modify the value; in this             case the client must POST a new Value to the current parameter to override the             value coming in from the project dependency.              If the Value.environment matches the key, then it is an explicit value set for             that environment.  If they differ, the value was obtained from a parent             environment (directly or indirectly).  If the value is None then no value has             ever been set in any environment for this parameter within all the project             dependencies.
 	Values map[string]Value `json:"values"`
-	//          Identical to values, except the dictionary is flattened to a list.         Note that in this case, the environment in the Value is the environment         asked for, not the environment where it was obtained.         
+	//          Identical to values, except the dictionary is flattened to a list.         Note that in this case, the environment in the Value is the environment         asked for, not the environment where it was obtained.
 	ValuesFlat []Value `json:"values_flat"`
 	// If this parameter's project depends on another project which provides a parameter of the same name, this parameter overrides the one provided by the dependee.  You can use this field to determine if there will be side-effects the user should know about when deleting a parameter.  Deleting a parameter that overrides another one due to an identical name will uncover the one from the dependee project.
-	Overrides NullableString `json:"overrides"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
-	Expires NullableString `json:"expires,omitempty"`
+	Overrides        NullableString         `json:"overrides"`
+	CreatedAt        time.Time              `json:"created_at"`
+	ModifiedAt       NullableTime           `json:"modified_at"`
+	Expires          NullableString         `json:"expires,omitempty"`
 	ExpirationAction map[string]interface{} `json:"expiration_action,omitempty"`
 	// If this parameter expires, the status of the last attempt to handle its expiration
 	ExpiredStatus map[string]interface{} `json:"expired_status"`
@@ -548,6 +548,7 @@ func (o *Parameter) HasExpires() bool {
 func (o *Parameter) SetExpires(v string) {
 	o.Expires.Set(&v)
 }
+
 // SetExpiresNil sets the value for Expires to be an explicit nil
 func (o *Parameter) SetExpiresNil() {
 	o.Expires.Set(nil)
@@ -618,7 +619,7 @@ func (o *Parameter) SetExpiredStatus(v map[string]interface{}) {
 }
 
 func (o Parameter) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -695,5 +696,3 @@ func (v *NullableParameter) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

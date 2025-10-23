@@ -31,10 +31,10 @@ type EnvironmentUpdate struct {
 	// This is the opposite of `parent`, see that field for more details.
 	Children []string `json:"children"`
 	// Indicates if access control is being enforced through grants.
-	AccessControlled *bool `json:"access_controlled,omitempty"`
-	Role NullableRoleEnum `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	AccessControlled *bool            `json:"access_controlled,omitempty"`
+	Role             NullableRoleEnum `json:"role"`
+	CreatedAt        time.Time        `json:"created_at"`
+	ModifiedAt       NullableTime     `json:"modified_at"`
 }
 
 // NewEnvironmentUpdate instantiates a new EnvironmentUpdate object
@@ -172,6 +172,7 @@ func (o *EnvironmentUpdate) HasParent() bool {
 func (o *EnvironmentUpdate) SetParent(v string) {
 	o.Parent.Set(&v)
 }
+
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *EnvironmentUpdate) SetParentNil() {
 	o.Parent.Set(nil)
@@ -315,7 +316,7 @@ func (o *EnvironmentUpdate) SetModifiedAt(v time.Time) {
 }
 
 func (o EnvironmentUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -377,5 +378,3 @@ func (v *NullableEnvironmentUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

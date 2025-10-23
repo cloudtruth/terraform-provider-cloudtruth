@@ -20,7 +20,7 @@ var _ MappedNullable = &AwsIntegrationScan{}
 
 // AwsIntegrationScan struct for AwsIntegrationScan
 type AwsIntegrationScan struct {
-	Region AwsRegionEnum `json:"region"`
+	Region  AwsRegionEnum  `json:"region"`
 	Service AwsServiceEnum `json:"service"`
 	// Defines a pattern matching string that contains either mustache or regular expression syntax (with named capture groups) that locate the environment, project, and parameter name of the content you are looking for.  If you are using mustache pattern matching, use:    - ``{{ environment }}`` to identify the environment name   - ``{{ parameter }}`` to identify the parameter name   - ``{{ project }}`` to identify the project name  If you are using a regular expression, use Python syntax with named capture groups that locate the `environment`, `project`, and `parameter`.
 	Resource NullableString `json:"resource"`
@@ -121,7 +121,7 @@ func (o *AwsIntegrationScan) SetResource(v string) {
 }
 
 func (o AwsIntegrationScan) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -171,5 +171,3 @@ func (v *NullableAwsIntegrationScan) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

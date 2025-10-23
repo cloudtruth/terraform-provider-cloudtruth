@@ -74,7 +74,7 @@ func (o *AzureKeyVaultPullSyncActionRequest) SetDryRun(v bool) {
 }
 
 func (o AzureKeyVaultPullSyncActionRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -124,5 +124,3 @@ func (v *NullableAzureKeyVaultPullSyncActionRequest) UnmarshalJSON(src []byte) e
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

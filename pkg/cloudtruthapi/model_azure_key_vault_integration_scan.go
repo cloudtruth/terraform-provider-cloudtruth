@@ -69,7 +69,7 @@ func (o *AzureKeyVaultIntegrationScan) SetResource(v string) {
 }
 
 func (o AzureKeyVaultIntegrationScan) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -117,5 +117,3 @@ func (v *NullableAzureKeyVaultIntegrationScan) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

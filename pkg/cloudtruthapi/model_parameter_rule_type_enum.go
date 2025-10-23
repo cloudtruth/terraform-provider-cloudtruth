@@ -21,11 +21,11 @@ type ParameterRuleTypeEnum string
 
 // List of ParameterRuleTypeEnum
 const (
-	PARAMETERRULETYPEENUM_MIN ParameterRuleTypeEnum = "min"
-	PARAMETERRULETYPEENUM_MAX ParameterRuleTypeEnum = "max"
+	PARAMETERRULETYPEENUM_MIN     ParameterRuleTypeEnum = "min"
+	PARAMETERRULETYPEENUM_MAX     ParameterRuleTypeEnum = "max"
 	PARAMETERRULETYPEENUM_MIN_LEN ParameterRuleTypeEnum = "min_len"
 	PARAMETERRULETYPEENUM_MAX_LEN ParameterRuleTypeEnum = "max_len"
-	PARAMETERRULETYPEENUM_REGEX ParameterRuleTypeEnum = "regex"
+	PARAMETERRULETYPEENUM_REGEX   ParameterRuleTypeEnum = "regex"
 )
 
 // All allowed values of ParameterRuleTypeEnum enum
@@ -115,4 +115,3 @@ func (v *NullableParameterRuleTypeEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

@@ -25,18 +25,18 @@ type AuditTrailUser struct {
 	// The unique identifier of a user.
 	Id string `json:"id"`
 	// The type of user record.
-	Type *string `json:"type,omitempty"`
+	Type *string        `json:"type,omitempty"`
 	Name NullableString `json:"name"`
 	// The user's organization name.
 	OrganizationName NullableString `json:"organization_name"`
 	// Membership identifier for user.
 	MembershipId NullableString `json:"membership_id"`
 	// The user's role in the current organization (defined by the request authorization header).
-	Role NullableString `json:"role"`
-	Email NullableString `json:"email"`
+	Role       NullableString `json:"role"`
+	Email      NullableString `json:"email"`
 	PictureUrl NullableString `json:"picture_url"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	CreatedAt  time.Time      `json:"created_at"`
+	ModifiedAt NullableTime   `json:"modified_at"`
 }
 
 // NewAuditTrailUser instantiates a new AuditTrailUser object
@@ -353,7 +353,7 @@ func (o *AuditTrailUser) SetModifiedAt(v time.Time) {
 }
 
 func (o AuditTrailUser) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -413,5 +413,3 @@ func (v *NullableAuditTrailUser) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

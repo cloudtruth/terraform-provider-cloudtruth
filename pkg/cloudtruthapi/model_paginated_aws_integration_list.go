@@ -20,10 +20,10 @@ var _ MappedNullable = &PaginatedAwsIntegrationList{}
 
 // PaginatedAwsIntegrationList struct for PaginatedAwsIntegrationList
 type PaginatedAwsIntegrationList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
-	Previous NullableString `json:"previous,omitempty"`
-	Results []AwsIntegration `json:"results,omitempty"`
+	Count    *int32           `json:"count,omitempty"`
+	Next     NullableString   `json:"next,omitempty"`
+	Previous NullableString   `json:"previous,omitempty"`
+	Results  []AwsIntegration `json:"results,omitempty"`
 }
 
 // NewPaginatedAwsIntegrationList instantiates a new PaginatedAwsIntegrationList object
@@ -107,6 +107,7 @@ func (o *PaginatedAwsIntegrationList) HasNext() bool {
 func (o *PaginatedAwsIntegrationList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedAwsIntegrationList) SetNextNil() {
 	o.Next.Set(nil)
@@ -149,6 +150,7 @@ func (o *PaginatedAwsIntegrationList) HasPrevious() bool {
 func (o *PaginatedAwsIntegrationList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedAwsIntegrationList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -192,7 +194,7 @@ func (o *PaginatedAwsIntegrationList) SetResults(v []AwsIntegration) {
 }
 
 func (o PaginatedAwsIntegrationList) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -251,5 +253,3 @@ func (v *NullablePaginatedAwsIntegrationList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

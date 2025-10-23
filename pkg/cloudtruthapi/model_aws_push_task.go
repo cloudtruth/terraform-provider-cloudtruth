@@ -27,14 +27,14 @@ type AwsPushTask struct {
 	// The reason why this task was triggered.
 	Reason NullableString `json:"reason,omitempty"`
 	// Indicates task steps were only simulated, not actually performed.
-	DryRun *bool `json:"dry_run,omitempty"`
-	State *StateEnum `json:"state,omitempty"`
+	DryRun *bool      `json:"dry_run,omitempty"`
+	State  *StateEnum `json:"state,omitempty"`
 	// If an error occurs early during processing, before attempting to process values, this code may be helpful in determining the problem.
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// If an error occurs early during processing, before attempting to process values, this detail may be helpful in determining the problem.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	ModifiedAt  NullableTime   `json:"modified_at"`
 }
 
 // NewAwsPushTask instantiates a new AwsPushTask object
@@ -138,6 +138,7 @@ func (o *AwsPushTask) HasReason() bool {
 func (o *AwsPushTask) SetReason(v string) {
 	o.Reason.Set(&v)
 }
+
 // SetReasonNil sets the value for Reason to be an explicit nil
 func (o *AwsPushTask) SetReasonNil() {
 	o.Reason.Set(nil)
@@ -244,6 +245,7 @@ func (o *AwsPushTask) HasErrorCode() bool {
 func (o *AwsPushTask) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
+
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *AwsPushTask) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -286,6 +288,7 @@ func (o *AwsPushTask) HasErrorDetail() bool {
 func (o *AwsPushTask) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
+
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *AwsPushTask) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -347,7 +350,7 @@ func (o *AwsPushTask) SetModifiedAt(v time.Time) {
 }
 
 func (o AwsPushTask) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -413,5 +416,3 @@ func (v *NullableAwsPushTask) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

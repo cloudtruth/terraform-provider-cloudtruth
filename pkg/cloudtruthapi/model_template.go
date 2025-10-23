@@ -22,8 +22,8 @@ var _ MappedNullable = &Template{}
 // Template A parameter template in a given project, optionally instantiated against an environment.
 type Template struct {
 	// The templates this value references, if interpolated.
-	Url string `json:"url"`
-	Id string `json:"id"`
+	Url      string `json:"url"`
+	Id       string `json:"id"`
 	LedgerId string `json:"ledger_id"`
 	// The template name.
 	Name string `json:"name"`
@@ -44,8 +44,8 @@ type Template struct {
 	// The dynamic values that reference this template.  This field is not valid for history requests.
 	ReferencingValues []string `json:"referencing_values"`
 	// If True, this template contains secrets.
-	HasSecret bool `json:"has_secret"`
-	CreatedAt time.Time `json:"created_at"`
+	HasSecret  bool         `json:"has_secret"`
+	CreatedAt  time.Time    `json:"created_at"`
 	ModifiedAt NullableTime `json:"modified_at"`
 }
 
@@ -458,7 +458,7 @@ func (o *Template) SetModifiedAt(v time.Time) {
 }
 
 func (o Template) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -524,5 +524,3 @@ func (v *NullableTemplate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

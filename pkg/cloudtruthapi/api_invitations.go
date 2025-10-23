@@ -20,14 +20,13 @@ import (
 	"strings"
 )
 
-
 // InvitationsAPIService InvitationsAPI service
 type InvitationsAPIService service
 
 type ApiInvitationsAcceptCreateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *InvitationsAPIService
-	id string
+	id         string
 }
 
 func (r ApiInvitationsAcceptCreateRequest) Execute() (*Invitation, *http.Response, error) {
@@ -46,26 +45,27 @@ On success the client receives the invitation record as it was updated.
 The client should then regenerate the JWT with the organization scope and
 proceed to the default landing page.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id The invitation ID.
- @return ApiInvitationsAcceptCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id The invitation ID.
+	@return ApiInvitationsAcceptCreateRequest
 */
 func (a *InvitationsAPIService) InvitationsAcceptCreate(ctx context.Context, id string) ApiInvitationsAcceptCreateRequest {
 	return ApiInvitationsAcceptCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsAPIService) InvitationsAcceptCreateExecute(r ApiInvitationsAcceptCreateRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Invitation
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Invitation
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsAcceptCreate")
@@ -163,8 +163,8 @@ func (a *InvitationsAPIService) InvitationsAcceptCreateExecute(r ApiInvitationsA
 }
 
 type ApiInvitationsCreateRequest struct {
-	ctx context.Context
-	ApiService *InvitationsAPIService
+	ctx              context.Context
+	ApiService       *InvitationsAPIService
 	invitationCreate *InvitationCreate
 }
 
@@ -182,24 +182,25 @@ InvitationsCreate Create an invitation.
 
 Extend an invitation for someone else to join your organization.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvitationsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiInvitationsCreateRequest
 */
 func (a *InvitationsAPIService) InvitationsCreate(ctx context.Context) ApiInvitationsCreateRequest {
 	return ApiInvitationsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsAPIService) InvitationsCreateExecute(r ApiInvitationsCreateRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Invitation
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Invitation
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsCreate")
@@ -301,9 +302,9 @@ func (a *InvitationsAPIService) InvitationsCreateExecute(r ApiInvitationsCreateR
 }
 
 type ApiInvitationsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *InvitationsAPIService
-	id string
+	id         string
 }
 
 func (r ApiInvitationsDestroyRequest) Execute() (*http.Response, error) {
@@ -313,24 +314,24 @@ func (r ApiInvitationsDestroyRequest) Execute() (*http.Response, error) {
 /*
 InvitationsDestroy Method for InvitationsDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiInvitationsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiInvitationsDestroyRequest
 */
 func (a *InvitationsAPIService) InvitationsDestroy(ctx context.Context, id string) ApiInvitationsDestroyRequest {
 	return ApiInvitationsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *InvitationsAPIService) InvitationsDestroyExecute(r ApiInvitationsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsDestroy")
@@ -419,14 +420,14 @@ func (a *InvitationsAPIService) InvitationsDestroyExecute(r ApiInvitationsDestro
 }
 
 type ApiInvitationsListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *InvitationsAPIService
-	email *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	role *string
-	state *string
+	email      *string
+	ordering   *string
+	page       *int32
+	pageSize   *int32
+	role       *string
+	state      *string
 }
 
 func (r ApiInvitationsListRequest) Email(email string) ApiInvitationsListRequest {
@@ -471,24 +472,25 @@ func (r ApiInvitationsListRequest) Execute() (*PaginatedInvitationList, *http.Re
 /*
 InvitationsList Method for InvitationsList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInvitationsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiInvitationsListRequest
 */
 func (a *InvitationsAPIService) InvitationsList(ctx context.Context) ApiInvitationsListRequest {
 	return ApiInvitationsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedInvitationList
+//
+//	@return PaginatedInvitationList
 func (a *InvitationsAPIService) InvitationsListExecute(r ApiInvitationsListRequest) (*PaginatedInvitationList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedInvitationList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedInvitationList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsList")
@@ -603,9 +605,9 @@ func (a *InvitationsAPIService) InvitationsListExecute(r ApiInvitationsListReque
 }
 
 type ApiInvitationsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *InvitationsAPIService
-	id string
+	ctx               context.Context
+	ApiService        *InvitationsAPIService
+	id                string
 	patchedInvitation *PatchedInvitation
 }
 
@@ -621,26 +623,27 @@ func (r ApiInvitationsPartialUpdateRequest) Execute() (*Invitation, *http.Respon
 /*
 InvitationsPartialUpdate Method for InvitationsPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiInvitationsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiInvitationsPartialUpdateRequest
 */
 func (a *InvitationsAPIService) InvitationsPartialUpdate(ctx context.Context, id string) ApiInvitationsPartialUpdateRequest {
 	return ApiInvitationsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsAPIService) InvitationsPartialUpdateExecute(r ApiInvitationsPartialUpdateRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Invitation
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Invitation
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsPartialUpdate")
@@ -740,9 +743,9 @@ func (a *InvitationsAPIService) InvitationsPartialUpdateExecute(r ApiInvitations
 }
 
 type ApiInvitationsResendCreateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *InvitationsAPIService
-	id string
+	id         string
 }
 
 func (r ApiInvitationsResendCreateRequest) Execute() (*Invitation, *http.Response, error) {
@@ -754,26 +757,27 @@ InvitationsResendCreate Resend an invitation.
 
 Re-send an invitation to the recipient.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id The invitation ID.
- @return ApiInvitationsResendCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id The invitation ID.
+	@return ApiInvitationsResendCreateRequest
 */
 func (a *InvitationsAPIService) InvitationsResendCreate(ctx context.Context, id string) ApiInvitationsResendCreateRequest {
 	return ApiInvitationsResendCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsAPIService) InvitationsResendCreateExecute(r ApiInvitationsResendCreateRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Invitation
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Invitation
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsResendCreate")
@@ -871,9 +875,9 @@ func (a *InvitationsAPIService) InvitationsResendCreateExecute(r ApiInvitationsR
 }
 
 type ApiInvitationsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *InvitationsAPIService
-	id string
+	id         string
 }
 
 func (r ApiInvitationsRetrieveRequest) Execute() (*Invitation, *http.Response, error) {
@@ -883,26 +887,27 @@ func (r ApiInvitationsRetrieveRequest) Execute() (*Invitation, *http.Response, e
 /*
 InvitationsRetrieve Method for InvitationsRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiInvitationsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiInvitationsRetrieveRequest
 */
 func (a *InvitationsAPIService) InvitationsRetrieve(ctx context.Context, id string) ApiInvitationsRetrieveRequest {
 	return ApiInvitationsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsAPIService) InvitationsRetrieveExecute(r ApiInvitationsRetrieveRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Invitation
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Invitation
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsRetrieve")
@@ -1000,9 +1005,9 @@ func (a *InvitationsAPIService) InvitationsRetrieveExecute(r ApiInvitationsRetri
 }
 
 type ApiInvitationsUpdateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *InvitationsAPIService
-	id string
+	id         string
 	invitation *Invitation
 }
 
@@ -1018,26 +1023,27 @@ func (r ApiInvitationsUpdateRequest) Execute() (*Invitation, *http.Response, err
 /*
 InvitationsUpdate Method for InvitationsUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiInvitationsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiInvitationsUpdateRequest
 */
 func (a *InvitationsAPIService) InvitationsUpdate(ctx context.Context, id string) ApiInvitationsUpdateRequest {
 	return ApiInvitationsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Invitation
+//
+//	@return Invitation
 func (a *InvitationsAPIService) InvitationsUpdateExecute(r ApiInvitationsUpdateRequest) (*Invitation, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Invitation
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Invitation
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InvitationsAPIService.InvitationsUpdate")

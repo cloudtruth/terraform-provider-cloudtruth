@@ -56,6 +56,7 @@ func New(version string) func() *schema.Provider {
 				"cloudtruth_aws_push_action":     resourceAWSPushAction(),
 				"cloudtruth_aws_integration":     resourceAWSIntegration(),
 				"cloudtruth_azure_import_action": resourceAzureImportAction(),
+				"cloudtruth_azure_integration":   resourceAzureIntegration(),
 				"cloudtruth_azure_push_action":   resourceAzurePushAction(),
 				"cloudtruth_access_grant":        resourceAccessGrant(),
 				"cloudtruth_environment":         resourceEnvironment(),

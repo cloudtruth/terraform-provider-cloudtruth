@@ -21,14 +21,13 @@ import (
 	"time"
 )
 
-
 // EnvironmentsAPIService EnvironmentsAPI service
 type EnvironmentsAPIService service
 
 type ApiEnvironmentsCopyCreateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
-	id string
+	ctx             context.Context
+	ApiService      *EnvironmentsAPIService
+	id              string
 	environmentCopy *EnvironmentCopy
 }
 
@@ -44,26 +43,27 @@ func (r ApiEnvironmentsCopyCreateRequest) Execute() (*Environment, *http.Respons
 /*
 EnvironmentsCopyCreate Method for EnvironmentsCopyCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiEnvironmentsCopyCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiEnvironmentsCopyCreateRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsCopyCreate(ctx context.Context, id string) ApiEnvironmentsCopyCreateRequest {
 	return ApiEnvironmentsCopyCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Environment
+//
+//	@return Environment
 func (a *EnvironmentsAPIService) EnvironmentsCopyCreateExecute(r ApiEnvironmentsCopyCreateRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Environment
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Environment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsCopyCreate")
@@ -166,8 +166,8 @@ func (a *EnvironmentsAPIService) EnvironmentsCopyCreateExecute(r ApiEnvironments
 }
 
 type ApiEnvironmentsCreateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
+	ctx               context.Context
+	ApiService        *EnvironmentsAPIService
 	environmentCreate *EnvironmentCreate
 }
 
@@ -183,24 +183,25 @@ func (r ApiEnvironmentsCreateRequest) Execute() (*Environment, *http.Response, e
 /*
 EnvironmentsCreate Method for EnvironmentsCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiEnvironmentsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiEnvironmentsCreateRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsCreate(ctx context.Context) ApiEnvironmentsCreateRequest {
 	return ApiEnvironmentsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return Environment
+//
+//	@return Environment
 func (a *EnvironmentsAPIService) EnvironmentsCreateExecute(r ApiEnvironmentsCreateRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Environment
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Environment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsCreate")
@@ -302,9 +303,9 @@ func (a *EnvironmentsAPIService) EnvironmentsCreateExecute(r ApiEnvironmentsCrea
 }
 
 type ApiEnvironmentsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *EnvironmentsAPIService
-	id string
+	id         string
 }
 
 func (r ApiEnvironmentsDestroyRequest) Execute() (*http.Response, error) {
@@ -314,24 +315,24 @@ func (r ApiEnvironmentsDestroyRequest) Execute() (*http.Response, error) {
 /*
 EnvironmentsDestroy Method for EnvironmentsDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiEnvironmentsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiEnvironmentsDestroyRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsDestroy(ctx context.Context, id string) ApiEnvironmentsDestroyRequest {
 	return ApiEnvironmentsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *EnvironmentsAPIService) EnvironmentsDestroyExecute(r ApiEnvironmentsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsDestroy")
@@ -420,14 +421,14 @@ func (a *EnvironmentsAPIService) EnvironmentsDestroyExecute(r ApiEnvironmentsDes
 }
 
 type ApiEnvironmentsListRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
+	ctx                  context.Context
+	ApiService           *EnvironmentsAPIService
 	descriptionIcontains *string
-	name *string
-	nameIcontains *string
-	ordering *string
-	page *int32
-	pageSize *int32
+	name                 *string
+	nameIcontains        *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
 }
 
 func (r ApiEnvironmentsListRequest) DescriptionIcontains(descriptionIcontains string) ApiEnvironmentsListRequest {
@@ -470,24 +471,25 @@ func (r ApiEnvironmentsListRequest) Execute() (*PaginatedEnvironmentList, *http.
 /*
 EnvironmentsList Method for EnvironmentsList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiEnvironmentsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiEnvironmentsListRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsList(ctx context.Context) ApiEnvironmentsListRequest {
 	return ApiEnvironmentsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedEnvironmentList
+//
+//	@return PaginatedEnvironmentList
 func (a *EnvironmentsAPIService) EnvironmentsListExecute(r ApiEnvironmentsListRequest) (*PaginatedEnvironmentList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedEnvironmentList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedEnvironmentList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsList")
@@ -602,9 +604,9 @@ func (a *EnvironmentsAPIService) EnvironmentsListExecute(r ApiEnvironmentsListRe
 }
 
 type ApiEnvironmentsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
-	id string
+	ctx                      context.Context
+	ApiService               *EnvironmentsAPIService
+	id                       string
 	patchedEnvironmentUpdate *PatchedEnvironmentUpdate
 }
 
@@ -620,26 +622,27 @@ func (r ApiEnvironmentsPartialUpdateRequest) Execute() (*EnvironmentUpdate, *htt
 /*
 EnvironmentsPartialUpdate Method for EnvironmentsPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiEnvironmentsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiEnvironmentsPartialUpdateRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsPartialUpdate(ctx context.Context, id string) ApiEnvironmentsPartialUpdateRequest {
 	return ApiEnvironmentsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return EnvironmentUpdate
+//
+//	@return EnvironmentUpdate
 func (a *EnvironmentsAPIService) EnvironmentsPartialUpdateExecute(r ApiEnvironmentsPartialUpdateRequest) (*EnvironmentUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *EnvironmentUpdate
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *EnvironmentUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsPartialUpdate")
@@ -739,12 +742,12 @@ func (a *EnvironmentsAPIService) EnvironmentsPartialUpdateExecute(r ApiEnvironme
 }
 
 type ApiEnvironmentsPushesListRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
+	ctx           context.Context
+	ApiService    *EnvironmentsAPIService
 	environmentPk string
-	ordering *string
-	page *int32
-	pageSize *int32
+	ordering      *string
+	page          *int32
+	pageSize      *int32
 }
 
 // Which field to use when ordering the results.
@@ -774,26 +777,27 @@ EnvironmentsPushesList List push operations.
 
 The push operations that this environment was involved in.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @return ApiEnvironmentsPushesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@return ApiEnvironmentsPushesListRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsPushesList(ctx context.Context, environmentPk string) ApiEnvironmentsPushesListRequest {
 	return ApiEnvironmentsPushesListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedTaskStepList
+//
+//	@return PaginatedTaskStepList
 func (a *EnvironmentsAPIService) EnvironmentsPushesListExecute(r ApiEnvironmentsPushesListRequest) (*PaginatedTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedTaskStepList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedTaskStepList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsPushesList")
@@ -900,9 +904,9 @@ func (a *EnvironmentsAPIService) EnvironmentsPushesListExecute(r ApiEnvironments
 }
 
 type ApiEnvironmentsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *EnvironmentsAPIService
-	id string
+	id         string
 }
 
 func (r ApiEnvironmentsRetrieveRequest) Execute() (*Environment, *http.Response, error) {
@@ -912,26 +916,27 @@ func (r ApiEnvironmentsRetrieveRequest) Execute() (*Environment, *http.Response,
 /*
 EnvironmentsRetrieve Method for EnvironmentsRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this environment ledger.
- @return ApiEnvironmentsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this environment ledger.
+	@return ApiEnvironmentsRetrieveRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsRetrieve(ctx context.Context, id string) ApiEnvironmentsRetrieveRequest {
 	return ApiEnvironmentsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Environment
+//
+//	@return Environment
 func (a *EnvironmentsAPIService) EnvironmentsRetrieveExecute(r ApiEnvironmentsRetrieveRequest) (*Environment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Environment
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Environment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsRetrieve")
@@ -1029,10 +1034,10 @@ func (a *EnvironmentsAPIService) EnvironmentsRetrieveExecute(r ApiEnvironmentsRe
 }
 
 type ApiEnvironmentsTagsCreateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
+	ctx           context.Context
+	ApiService    *EnvironmentsAPIService
 	environmentPk string
-	tagCreate *TagCreate
+	tagCreate     *TagCreate
 }
 
 func (r ApiEnvironmentsTagsCreateRequest) TagCreate(tagCreate TagCreate) ApiEnvironmentsTagsCreateRequest {
@@ -1052,26 +1057,27 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @return ApiEnvironmentsTagsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@return ApiEnvironmentsTagsCreateRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsTagsCreate(ctx context.Context, environmentPk string) ApiEnvironmentsTagsCreateRequest {
 	return ApiEnvironmentsTagsCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
 	}
 }
 
 // Execute executes the request
-//  @return Tag
+//
+//	@return Tag
 func (a *EnvironmentsAPIService) EnvironmentsTagsCreateExecute(r ApiEnvironmentsTagsCreateRequest) (*Tag, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Tag
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Tag
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsCreate")
@@ -1174,10 +1180,10 @@ func (a *EnvironmentsAPIService) EnvironmentsTagsCreateExecute(r ApiEnvironments
 }
 
 type ApiEnvironmentsTagsDestroyRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
+	ctx           context.Context
+	ApiService    *EnvironmentsAPIService
 	environmentPk string
-	id string
+	id            string
 }
 
 func (r ApiEnvironmentsTagsDestroyRequest) Execute() (*http.Response, error) {
@@ -1192,26 +1198,26 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @param id
- @return ApiEnvironmentsTagsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@param id
+	@return ApiEnvironmentsTagsDestroyRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsTagsDestroy(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsDestroyRequest {
 	return ApiEnvironmentsTagsDestroyRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
-		id: id,
+		id:            id,
 	}
 }
 
 // Execute executes the request
 func (a *EnvironmentsAPIService) EnvironmentsTagsDestroyExecute(r ApiEnvironmentsTagsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsDestroy")
@@ -1301,18 +1307,18 @@ func (a *EnvironmentsAPIService) EnvironmentsTagsDestroyExecute(r ApiEnvironment
 }
 
 type ApiEnvironmentsTagsListRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
-	environmentPk string
+	ctx                  context.Context
+	ApiService           *EnvironmentsAPIService
+	environmentPk        string
 	descriptionIcontains *string
-	name *string
-	nameIcontains *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	timestamp *time.Time
-	timestampGte *time.Time
-	timestampLte *time.Time
+	name                 *string
+	nameIcontains        *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
+	timestamp            *time.Time
+	timestampGte         *time.Time
+	timestampLte         *time.Time
 }
 
 func (r ApiEnvironmentsTagsListRequest) DescriptionIcontains(descriptionIcontains string) ApiEnvironmentsTagsListRequest {
@@ -1375,26 +1381,27 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @return ApiEnvironmentsTagsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@return ApiEnvironmentsTagsListRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsTagsList(ctx context.Context, environmentPk string) ApiEnvironmentsTagsListRequest {
 	return ApiEnvironmentsTagsListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedTagList
+//
+//	@return PaginatedTagList
 func (a *EnvironmentsAPIService) EnvironmentsTagsListExecute(r ApiEnvironmentsTagsListRequest) (*PaginatedTagList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedTagList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedTagList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsList")
@@ -1519,10 +1526,10 @@ func (a *EnvironmentsAPIService) EnvironmentsTagsListExecute(r ApiEnvironmentsTa
 }
 
 type ApiEnvironmentsTagsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
-	environmentPk string
-	id string
+	ctx              context.Context
+	ApiService       *EnvironmentsAPIService
+	environmentPk    string
+	id               string
 	patchedTagUpdate *PatchedTagUpdate
 }
 
@@ -1543,28 +1550,29 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @param id
- @return ApiEnvironmentsTagsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@param id
+	@return ApiEnvironmentsTagsPartialUpdateRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsTagsPartialUpdate(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsPartialUpdateRequest {
 	return ApiEnvironmentsTagsPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
-		id: id,
+		id:            id,
 	}
 }
 
 // Execute executes the request
-//  @return TagUpdate
+//
+//	@return TagUpdate
 func (a *EnvironmentsAPIService) EnvironmentsTagsPartialUpdateExecute(r ApiEnvironmentsTagsPartialUpdateRequest) (*TagUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *TagUpdate
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TagUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsPartialUpdate")
@@ -1665,10 +1673,10 @@ func (a *EnvironmentsAPIService) EnvironmentsTagsPartialUpdateExecute(r ApiEnvir
 }
 
 type ApiEnvironmentsTagsRetrieveRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
+	ctx           context.Context
+	ApiService    *EnvironmentsAPIService
 	environmentPk string
-	id string
+	id            string
 }
 
 func (r ApiEnvironmentsTagsRetrieveRequest) Execute() (*Tag, *http.Response, error) {
@@ -1683,28 +1691,29 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @param id
- @return ApiEnvironmentsTagsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@param id
+	@return ApiEnvironmentsTagsRetrieveRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsTagsRetrieve(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsRetrieveRequest {
 	return ApiEnvironmentsTagsRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
-		id: id,
+		id:            id,
 	}
 }
 
 // Execute executes the request
-//  @return Tag
+//
+//	@return Tag
 func (a *EnvironmentsAPIService) EnvironmentsTagsRetrieveExecute(r ApiEnvironmentsTagsRetrieveRequest) (*Tag, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Tag
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Tag
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsRetrieve")
@@ -1803,11 +1812,11 @@ func (a *EnvironmentsAPIService) EnvironmentsTagsRetrieveExecute(r ApiEnvironmen
 }
 
 type ApiEnvironmentsTagsUpdateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
+	ctx           context.Context
+	ApiService    *EnvironmentsAPIService
 	environmentPk string
-	id string
-	tagUpdate *TagUpdate
+	id            string
+	tagUpdate     *TagUpdate
 }
 
 func (r ApiEnvironmentsTagsUpdateRequest) TagUpdate(tagUpdate TagUpdate) ApiEnvironmentsTagsUpdateRequest {
@@ -1827,28 +1836,29 @@ Tags allow you to name stable points in time for your configuration.
 Any query API that accepts an `as_of` option will also accept a `tag`
 option however they are mutually exclusive.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param environmentPk
- @param id
- @return ApiEnvironmentsTagsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param environmentPk
+	@param id
+	@return ApiEnvironmentsTagsUpdateRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsTagsUpdate(ctx context.Context, environmentPk string, id string) ApiEnvironmentsTagsUpdateRequest {
 	return ApiEnvironmentsTagsUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		environmentPk: environmentPk,
-		id: id,
+		id:            id,
 	}
 }
 
 // Execute executes the request
-//  @return TagUpdate
+//
+//	@return TagUpdate
 func (a *EnvironmentsAPIService) EnvironmentsTagsUpdateExecute(r ApiEnvironmentsTagsUpdateRequest) (*TagUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *TagUpdate
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TagUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsTagsUpdate")
@@ -1952,9 +1962,9 @@ func (a *EnvironmentsAPIService) EnvironmentsTagsUpdateExecute(r ApiEnvironments
 }
 
 type ApiEnvironmentsUpdateRequest struct {
-	ctx context.Context
-	ApiService *EnvironmentsAPIService
-	id string
+	ctx               context.Context
+	ApiService        *EnvironmentsAPIService
+	id                string
 	environmentUpdate *EnvironmentUpdate
 }
 
@@ -1970,26 +1980,27 @@ func (r ApiEnvironmentsUpdateRequest) Execute() (*EnvironmentUpdate, *http.Respo
 /*
 EnvironmentsUpdate Method for EnvironmentsUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiEnvironmentsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiEnvironmentsUpdateRequest
 */
 func (a *EnvironmentsAPIService) EnvironmentsUpdate(ctx context.Context, id string) ApiEnvironmentsUpdateRequest {
 	return ApiEnvironmentsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return EnvironmentUpdate
+//
+//	@return EnvironmentUpdate
 func (a *EnvironmentsAPIService) EnvironmentsUpdateExecute(r ApiEnvironmentsUpdateRequest) (*EnvironmentUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *EnvironmentUpdate
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *EnvironmentUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EnvironmentsAPIService.EnvironmentsUpdate")

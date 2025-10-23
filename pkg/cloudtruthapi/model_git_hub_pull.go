@@ -27,10 +27,10 @@ type GitHubPull struct {
 	// The action name.
 	Name string `json:"name"`
 	// The optional description for the action.
-	Description *string `json:"description,omitempty"`
-	LatestTask NullableGitHubPullLatestTask `json:"latest_task"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	Description *string                      `json:"description,omitempty"`
+	LatestTask  NullableGitHubPullLatestTask `json:"latest_task"`
+	CreatedAt   time.Time                    `json:"created_at"`
+	ModifiedAt  NullableTime                 `json:"modified_at"`
 	// Allow the pull to create environments.  Any automatically created environments will be children of the `default` environment.  If an environment needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
 	CreateEnvironments *bool `json:"create_environments,omitempty"`
 	// Allow the pull to create projects.  If a project needs to be created but the action does not allow it, a task step will be added with a null operation, and success_detail will indicate the action did not allow it.
@@ -39,7 +39,7 @@ type GitHubPull struct {
 	DryRun *bool `json:"dry_run,omitempty"`
 	// Values being managed by a mapped pull.
 	MappedValues []ValueCreate `json:"mapped_values"`
-	Mode ModeEnum `json:"mode"`
+	Mode         ModeEnum      `json:"mode"`
 }
 
 // NewGitHubPull instantiates a new GitHubPull object
@@ -392,7 +392,7 @@ func (o *GitHubPull) SetMode(v ModeEnum) {
 }
 
 func (o GitHubPull) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -459,5 +459,3 @@ func (v *NullableGitHubPull) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

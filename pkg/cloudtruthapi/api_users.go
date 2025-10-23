@@ -20,12 +20,11 @@ import (
 	"strings"
 )
 
-
 // UsersAPIService UsersAPI service
 type UsersAPIService service
 
 type ApiUsersCurrentRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UsersAPIService
 }
 
@@ -38,24 +37,25 @@ UsersCurrentRetrieve Current user information
 
 Get user information about the current user.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUsersCurrentRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUsersCurrentRetrieveRequest
 */
 func (a *UsersAPIService) UsersCurrentRetrieve(ctx context.Context) ApiUsersCurrentRetrieveRequest {
 	return ApiUsersCurrentRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return User
+//
+//	@return User
 func (a *UsersAPIService) UsersCurrentRetrieveExecute(r ApiUsersCurrentRetrieveRequest) (*User, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *User
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *User
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UsersAPIService.UsersCurrentRetrieve")
@@ -152,9 +152,9 @@ func (a *UsersAPIService) UsersCurrentRetrieveExecute(r ApiUsersCurrentRetrieveR
 }
 
 type ApiUsersDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UsersAPIService
-	id string
+	id         string
 }
 
 func (r ApiUsersDestroyRequest) Execute() (*http.Response, error) {
@@ -174,25 +174,24 @@ Delete the specified user.  This removes all access the User may have to any Org
 - The bearer token must belong to the user being deleted.
 - All of the memberships related to the User will be deleted, so all the membership deletion pre-conditions must also be met.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiUsersDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiUsersDestroyRequest
 */
 func (a *UsersAPIService) UsersDestroy(ctx context.Context, id string) ApiUsersDestroyRequest {
 	return ApiUsersDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *UsersAPIService) UsersDestroyExecute(r ApiUsersDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UsersAPIService.UsersDestroy")
@@ -281,12 +280,12 @@ func (a *UsersAPIService) UsersDestroyExecute(r ApiUsersDestroyRequest) (*http.R
 }
 
 type ApiUsersListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UsersAPIService
-	ordering *string
-	page *int32
-	pageSize *int32
-	type_ *string
+	ordering   *string
+	page       *int32
+	pageSize   *int32
+	type_      *string
 }
 
 // Which field to use when ordering the results.
@@ -319,24 +318,25 @@ func (r ApiUsersListRequest) Execute() (*PaginatedUserList, *http.Response, erro
 /*
 UsersList Method for UsersList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUsersListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUsersListRequest
 */
 func (a *UsersAPIService) UsersList(ctx context.Context) ApiUsersListRequest {
 	return ApiUsersListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedUserList
+//
+//	@return PaginatedUserList
 func (a *UsersAPIService) UsersListExecute(r ApiUsersListRequest) (*PaginatedUserList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedUserList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedUserList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UsersAPIService.UsersList")
@@ -445,9 +445,9 @@ func (a *UsersAPIService) UsersListExecute(r ApiUsersListRequest) (*PaginatedUse
 }
 
 type ApiUsersRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UsersAPIService
-	id string
+	id         string
 }
 
 func (r ApiUsersRetrieveRequest) Execute() (*User, *http.Response, error) {
@@ -457,26 +457,27 @@ func (r ApiUsersRetrieveRequest) Execute() (*User, *http.Response, error) {
 /*
 UsersRetrieve Method for UsersRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiUsersRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiUsersRetrieveRequest
 */
 func (a *UsersAPIService) UsersRetrieve(ctx context.Context, id string) ApiUsersRetrieveRequest {
 	return ApiUsersRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return User
+//
+//	@return User
 func (a *UsersAPIService) UsersRetrieveExecute(r ApiUsersRetrieveRequest) (*User, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *User
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *User
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UsersAPIService.UsersRetrieve")

@@ -21,10 +21,10 @@ type RoleEnum string
 
 // List of RoleEnum
 const (
-	ROLEENUM_OWNER RoleEnum = "OWNER"
-	ROLEENUM_ADMIN RoleEnum = "ADMIN"
+	ROLEENUM_OWNER   RoleEnum = "OWNER"
+	ROLEENUM_ADMIN   RoleEnum = "ADMIN"
 	ROLEENUM_CONTRIB RoleEnum = "CONTRIB"
-	ROLEENUM_VIEWER RoleEnum = "VIEWER"
+	ROLEENUM_VIEWER  RoleEnum = "VIEWER"
 )
 
 // All allowed values of RoleEnum enum
@@ -113,4 +113,3 @@ func (v *NullableRoleEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

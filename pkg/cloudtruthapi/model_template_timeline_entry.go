@@ -21,9 +21,9 @@ var _ MappedNullable = &TemplateTimelineEntry{}
 
 // TemplateTimelineEntry Details about a single change.
 type TemplateTimelineEntry struct {
-	HistoryType HistoryTypeEnum `json:"history_type"`
-	ModifiedAt NullableTime `json:"modified_at"`
-	ModifiedBy *string `json:"modified_by,omitempty"`
+	HistoryType     HistoryTypeEnum                      `json:"history_type"`
+	ModifiedAt      NullableTime                         `json:"modified_at"`
+	ModifiedBy      *string                              `json:"modified_by,omitempty"`
 	HistoryTemplate TemplateTimelineEntryHistoryTemplate `json:"history_template"`
 }
 
@@ -154,7 +154,7 @@ func (o *TemplateTimelineEntry) SetHistoryTemplate(v TemplateTimelineEntryHistor
 }
 
 func (o TemplateTimelineEntry) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -207,5 +207,3 @@ func (v *NullableTemplateTimelineEntry) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

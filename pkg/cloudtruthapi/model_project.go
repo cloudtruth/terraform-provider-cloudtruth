@@ -22,8 +22,8 @@ var _ MappedNullable = &Project{}
 // Project struct for Project
 type Project struct {
 	// The URL for the project.
-	Url string `json:"url"`
-	Id string `json:"id"`
+	Url      string `json:"url"`
+	Id       string `json:"id"`
 	LedgerId string `json:"ledger_id"`
 	// The project name.
 	Name string `json:"name"`
@@ -36,13 +36,13 @@ type Project struct {
 	// Project dependencies allow projects to be used for shared configuration, for example a database used by many applications needs to advertise its port number.  Projects can depend on another project which will add the parameters from the parent project into the current project.  All of the parameter names between the two projects must be unique.  When retrieving values or rendering templates, all of the parameters from the parent project will also be available in the current project.
 	DependsOn NullableString `json:"depends_on"`
 	// Indicates if access control is being enforced through grants.
-	AccessControlled *bool `json:"access_controlled,omitempty"`
-	Role NullableRoleEnum `json:"role"`
+	AccessControlled *bool            `json:"access_controlled,omitempty"`
+	Role             NullableRoleEnum `json:"role"`
 	// Deprecated. Blank.
 	Pushes []string `json:"pushes"`
 	// Deprecated. Blank.
-	PushUrls []string `json:"push_urls"`
-	CreatedAt time.Time `json:"created_at"`
+	PushUrls   []string     `json:"push_urls"`
+	CreatedAt  time.Time    `json:"created_at"`
 	ModifiedAt NullableTime `json:"modified_at"`
 }
 
@@ -441,7 +441,7 @@ func (o *Project) SetModifiedAt(v time.Time) {
 }
 
 func (o Project) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -508,5 +508,3 @@ func (v *NullableProject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

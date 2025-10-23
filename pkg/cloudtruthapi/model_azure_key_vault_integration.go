@@ -23,18 +23,18 @@ var _ MappedNullable = &AzureKeyVaultIntegration{}
 type AzureKeyVaultIntegration struct {
 	Url string `json:"url"`
 	// The unique identifier for the integration.
-	Id string `json:"id"`
+	Id   string `json:"id"`
 	Name string `json:"name"`
 	// An optional description for the integration.
-	Description *string `json:"description,omitempty"`
-	Status StatusEnum `json:"status"`
+	Description *string    `json:"description,omitempty"`
+	Status      StatusEnum `json:"status"`
 	// If an error occurs, more details will be available in this field.
 	StatusDetail string `json:"status_detail"`
 	// The last time the status was evaluated.
 	StatusLastCheckedAt NullableTime `json:"status_last_checked_at"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
-	Fqn string `json:"fqn"`
+	CreatedAt           time.Time    `json:"created_at"`
+	ModifiedAt          NullableTime `json:"modified_at"`
+	Fqn                 string       `json:"fqn"`
 	// The type of integration.
 	Type string `json:"type"`
 	// Allow actions to write to the integration.
@@ -465,7 +465,7 @@ func (o *AzureKeyVaultIntegration) SetTenantId(v string) {
 }
 
 func (o AzureKeyVaultIntegration) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -533,5 +533,3 @@ func (v *NullableAzureKeyVaultIntegration) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -20,11 +20,11 @@ var _ MappedNullable = &BackupProject{}
 
 // BackupProject Environment, parameter-type, and project (including parameters and values) data at a point in time.
 type BackupProject struct {
-	Parameters map[string]BackupParameter `json:"parameters"`
-	Templates map[string]BackupTemplate `json:"templates"`
-	Name string `json:"name"`
-	Parent NullableString `json:"parent,omitempty"`
-	Description NullableString `json:"description,omitempty"`
+	Parameters  map[string]BackupParameter `json:"parameters"`
+	Templates   map[string]BackupTemplate  `json:"templates"`
+	Name        string                     `json:"name"`
+	Parent      NullableString             `json:"parent,omitempty"`
+	Description NullableString             `json:"description,omitempty"`
 }
 
 // NewBackupProject instantiates a new BackupProject object
@@ -151,6 +151,7 @@ func (o *BackupProject) HasParent() bool {
 func (o *BackupProject) SetParent(v string) {
 	o.Parent.Set(&v)
 }
+
 // SetParentNil sets the value for Parent to be an explicit nil
 func (o *BackupProject) SetParentNil() {
 	o.Parent.Set(nil)
@@ -193,6 +194,7 @@ func (o *BackupProject) HasDescription() bool {
 func (o *BackupProject) SetDescription(v string) {
 	o.Description.Set(&v)
 }
+
 // SetDescriptionNil sets the value for Description to be an explicit nil
 func (o *BackupProject) SetDescriptionNil() {
 	o.Description.Set(nil)
@@ -204,7 +206,7 @@ func (o *BackupProject) UnsetDescription() {
 }
 
 func (o BackupProject) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -260,5 +262,3 @@ func (v *NullableBackupProject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

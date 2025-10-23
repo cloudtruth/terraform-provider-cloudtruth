@@ -27,10 +27,10 @@ type AwsPush struct {
 	// The action name.
 	Name string `json:"name"`
 	// The optional description for the action.
-	Description *string `json:"description,omitempty"`
-	LatestTask NullableAwsPushLatestTask `json:"latest_task"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	Description *string                   `json:"description,omitempty"`
+	LatestTask  NullableAwsPushLatestTask `json:"latest_task"`
+	CreatedAt   time.Time                 `json:"created_at"`
+	ModifiedAt  NullableTime              `json:"modified_at"`
 	// This setting allows parameters (non-secrets) to be pushed to a destination that only supports storing secrets.  This may increase your overall cost from the cloud provider as some cloud providers charge a premium for secrets-only storage.
 	CoerceParameters *bool `json:"coerce_parameters,omitempty"`
 	// Include parameters (non-secrets) in the values being pushed.  This setting requires the destination to support parameters or for the `coerce_parameters` flag to be enabled, otherwise the push will fail.
@@ -48,8 +48,8 @@ type AwsPush struct {
 	// Projects that are included in the push.
 	Projects []string `json:"projects"`
 	// Tags are used to select parameters by environment from the projects included in the push.  You cannot have two tags from the same environment in the same push.
-	Tags []string `json:"tags"`
-	Region AwsRegionEnum `json:"region"`
+	Tags    []string       `json:"tags"`
+	Region  AwsRegionEnum  `json:"region"`
 	Service AwsServiceEnum `json:"service"`
 	// Defines a path through the integration to the location where values will be pushed.  The following mustache-style substitutions can be used in the string:    - ``{{ environment }}`` to insert the environment name   - ``{{ parameter }}`` to insert the parameter name   - ``{{ project }}`` to insert the project name   - ``{{ push }}`` to insert the push name   - ``{{ tag }}`` to insert the tag name  We recommend that you use project, environment, and parameter at a minimum to disambiguate your pushed resource identifiers.  If you include multiple projects in the push, the `project` substitution is required.  If you include multiple tags from different environments in the push, the `environment` substitution is required.  If you include multiple tags from the same environment in the push, the `tag` substitution is required.  In all cases, the `parameter` substitution is always required.
 	Resource NullableString `json:"resource"`
@@ -610,7 +610,7 @@ func (o *AwsPush) SetResource(v string) {
 }
 
 func (o AwsPush) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -692,5 +692,3 @@ func (v *NullableAwsPush) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

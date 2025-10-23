@@ -20,10 +20,10 @@ var _ MappedNullable = &PaginatedEnvironmentList{}
 
 // PaginatedEnvironmentList struct for PaginatedEnvironmentList
 type PaginatedEnvironmentList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
+	Count    *int32         `json:"count,omitempty"`
+	Next     NullableString `json:"next,omitempty"`
 	Previous NullableString `json:"previous,omitempty"`
-	Results []Environment `json:"results,omitempty"`
+	Results  []Environment  `json:"results,omitempty"`
 }
 
 // NewPaginatedEnvironmentList instantiates a new PaginatedEnvironmentList object
@@ -107,6 +107,7 @@ func (o *PaginatedEnvironmentList) HasNext() bool {
 func (o *PaginatedEnvironmentList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedEnvironmentList) SetNextNil() {
 	o.Next.Set(nil)
@@ -149,6 +150,7 @@ func (o *PaginatedEnvironmentList) HasPrevious() bool {
 func (o *PaginatedEnvironmentList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedEnvironmentList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -192,7 +194,7 @@ func (o *PaginatedEnvironmentList) SetResults(v []Environment) {
 }
 
 func (o PaginatedEnvironmentList) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -251,5 +253,3 @@ func (v *NullablePaginatedEnvironmentList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

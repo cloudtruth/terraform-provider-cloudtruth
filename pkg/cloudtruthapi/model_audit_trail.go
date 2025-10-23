@@ -29,11 +29,11 @@ type AuditTrail struct {
 	// The id of the object associated with the action.
 	ObjectId string `json:"object_id"`
 	// The name of the object associated with the action, if applicable.
-	ObjectName string `json:"object_name"`
+	ObjectName string         `json:"object_name"`
 	ObjectType ObjectTypeEnum `json:"object_type"`
 	// The timestamp of the activity that was audited.
-	Timestamp time.Time `json:"timestamp"`
-	User AuditTrailUser `json:"user"`
+	Timestamp time.Time      `json:"timestamp"`
+	User      AuditTrailUser `json:"user"`
 }
 
 // NewAuditTrail instantiates a new AuditTrail object
@@ -254,7 +254,7 @@ func (o *AuditTrail) SetUser(v AuditTrailUser) {
 }
 
 func (o AuditTrail) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -309,5 +309,3 @@ func (v *NullableAuditTrail) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

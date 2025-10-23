@@ -35,9 +35,9 @@ type PatchedValueUpdate struct {
 	// Indicates the value content is a secret.  Normally this is `true` when the parameter is a secret. It is possible for a parameter to be a secret with a external value that is not a secret.  It is not possible to convert a parameter from a secret to a non-secret if any of the values are external and a secret.  Clients can check this condition by leveraging this field.  It is also possible for a parameter to not be a secret but for this value to be dynamic and reference a Parameter that is a secret.  In this case, we indicate the value is a secret.
 	Secret NullableBool `json:"secret,omitempty"`
 	// This is the actual content of the Value for the given parameter in the given environment.  If you request secret masking, no secret content will be included in the result and instead a series of asterisks will be used instead for the value.  Clients applying this value to a shell environment should set `<parameter_name>=<value>` even if `value` is the empty string.  If `value` is `null`, the client should unset that shell environment variable.
-	Value NullableString `json:"value,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt NullableTime `json:"modified_at,omitempty"`
+	Value      NullableString `json:"value,omitempty"`
+	CreatedAt  *time.Time     `json:"created_at,omitempty"`
+	ModifiedAt NullableTime   `json:"modified_at,omitempty"`
 }
 
 // NewPatchedValueUpdate instantiates a new PatchedValueUpdate object
@@ -217,6 +217,7 @@ func (o *PatchedValueUpdate) HasInternalValue() bool {
 func (o *PatchedValueUpdate) SetInternalValue(v string) {
 	o.InternalValue.Set(&v)
 }
+
 // SetInternalValueNil sets the value for InternalValue to be an explicit nil
 func (o *PatchedValueUpdate) SetInternalValueNil() {
 	o.InternalValue.Set(nil)
@@ -291,6 +292,7 @@ func (o *PatchedValueUpdate) HasSecret() bool {
 func (o *PatchedValueUpdate) SetSecret(v bool) {
 	o.Secret.Set(&v)
 }
+
 // SetSecretNil sets the value for Secret to be an explicit nil
 func (o *PatchedValueUpdate) SetSecretNil() {
 	o.Secret.Set(nil)
@@ -333,6 +335,7 @@ func (o *PatchedValueUpdate) HasValue() bool {
 func (o *PatchedValueUpdate) SetValue(v string) {
 	o.Value.Set(&v)
 }
+
 // SetValueNil sets the value for Value to be an explicit nil
 func (o *PatchedValueUpdate) SetValueNil() {
 	o.Value.Set(nil)
@@ -407,6 +410,7 @@ func (o *PatchedValueUpdate) HasModifiedAt() bool {
 func (o *PatchedValueUpdate) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedValueUpdate) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -418,7 +422,7 @@ func (o *PatchedValueUpdate) UnsetModifiedAt() {
 }
 
 func (o PatchedValueUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -495,5 +499,3 @@ func (v *NullablePatchedValueUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

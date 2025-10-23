@@ -20,14 +20,13 @@ import (
 	"strings"
 )
 
-
 // GrantsAPIService GrantsAPI service
 type GrantsAPIService service
 
 type ApiGrantsCreateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsAPIService
-	grant *Grant
+	grant      *Grant
 }
 
 func (r ApiGrantsCreateRequest) Grant(grant Grant) ApiGrantsCreateRequest {
@@ -48,24 +47,25 @@ Grants are part of the role-based access control feature set, so
 if your subscription does not have support for it, these paths
 will return a 403 Forbidden error.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGrantsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiGrantsCreateRequest
 */
 func (a *GrantsAPIService) GrantsCreate(ctx context.Context) ApiGrantsCreateRequest {
 	return ApiGrantsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return Grant
+//
+//	@return Grant
 func (a *GrantsAPIService) GrantsCreateExecute(r ApiGrantsCreateRequest) (*Grant, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Grant
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Grant
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsAPIService.GrantsCreate")
@@ -167,9 +167,9 @@ func (a *GrantsAPIService) GrantsCreateExecute(r ApiGrantsCreateRequest) (*Grant
 }
 
 type ApiGrantsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsAPIService
-	id string
+	id         string
 }
 
 func (r ApiGrantsDestroyRequest) Execute() (*http.Response, error) {
@@ -185,24 +185,24 @@ Grants are part of the role-based access control feature set, so
 if your subscription does not have support for it, these paths
 will return a 403 Forbidden error.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiGrantsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiGrantsDestroyRequest
 */
 func (a *GrantsAPIService) GrantsDestroy(ctx context.Context, id string) ApiGrantsDestroyRequest {
 	return ApiGrantsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *GrantsAPIService) GrantsDestroyExecute(r ApiGrantsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsAPIService.GrantsDestroy")
@@ -291,14 +291,14 @@ func (a *GrantsAPIService) GrantsDestroyExecute(r ApiGrantsDestroyRequest) (*htt
 }
 
 type ApiGrantsListRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsAPIService
-	ordering *string
-	page *int32
-	pageSize *int32
-	principal *string
-	role *string
-	scope *string
+	ordering   *string
+	page       *int32
+	pageSize   *int32
+	principal  *string
+	role       *string
+	scope      *string
 }
 
 // Which field to use when ordering the results.
@@ -350,24 +350,25 @@ Grants are part of the role-based access control feature set, so
 if your subscription does not have support for it, these paths
 will return a 403 Forbidden error.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGrantsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiGrantsListRequest
 */
 func (a *GrantsAPIService) GrantsList(ctx context.Context) ApiGrantsListRequest {
 	return ApiGrantsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedGrantList
+//
+//	@return PaginatedGrantList
 func (a *GrantsAPIService) GrantsListExecute(r ApiGrantsListRequest) (*PaginatedGrantList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedGrantList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedGrantList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsAPIService.GrantsList")
@@ -482,7 +483,7 @@ func (a *GrantsAPIService) GrantsListExecute(r ApiGrantsListRequest) (*Paginated
 }
 
 type ApiGrantsMultiDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsAPIService
 }
 
@@ -498,24 +499,25 @@ Removes grants matching the query parameters atomically.
 Use this technique to disable access control on a scope,
 or remove all grants for a user.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGrantsMultiDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiGrantsMultiDestroyRequest
 */
 func (a *GrantsAPIService) GrantsMultiDestroy(ctx context.Context) ApiGrantsMultiDestroyRequest {
 	return ApiGrantsMultiDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return Grant
+//
+//	@return Grant
 func (a *GrantsAPIService) GrantsMultiDestroyExecute(r ApiGrantsMultiDestroyRequest) (*Grant, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Grant
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Grant
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsAPIService.GrantsMultiDestroy")
@@ -612,9 +614,9 @@ func (a *GrantsAPIService) GrantsMultiDestroyExecute(r ApiGrantsMultiDestroyRequ
 }
 
 type ApiGrantsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *GrantsAPIService
-	id string
+	ctx          context.Context
+	ApiService   *GrantsAPIService
+	id           string
 	patchedGrant *PatchedGrant
 }
 
@@ -636,26 +638,27 @@ Grants are part of the role-based access control feature set, so
 if your subscription does not have support for it, these paths
 will return a 403 Forbidden error.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiGrantsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiGrantsPartialUpdateRequest
 */
 func (a *GrantsAPIService) GrantsPartialUpdate(ctx context.Context, id string) ApiGrantsPartialUpdateRequest {
 	return ApiGrantsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Grant
+//
+//	@return Grant
 func (a *GrantsAPIService) GrantsPartialUpdateExecute(r ApiGrantsPartialUpdateRequest) (*Grant, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Grant
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Grant
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsAPIService.GrantsPartialUpdate")
@@ -755,9 +758,9 @@ func (a *GrantsAPIService) GrantsPartialUpdateExecute(r ApiGrantsPartialUpdateRe
 }
 
 type ApiGrantsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsAPIService
-	id string
+	id         string
 }
 
 func (r ApiGrantsRetrieveRequest) Execute() (*Grant, *http.Response, error) {
@@ -773,26 +776,27 @@ Grants are part of the role-based access control feature set, so
 if your subscription does not have support for it, these paths
 will return a 403 Forbidden error.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiGrantsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiGrantsRetrieveRequest
 */
 func (a *GrantsAPIService) GrantsRetrieve(ctx context.Context, id string) ApiGrantsRetrieveRequest {
 	return ApiGrantsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Grant
+//
+//	@return Grant
 func (a *GrantsAPIService) GrantsRetrieveExecute(r ApiGrantsRetrieveRequest) (*Grant, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Grant
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Grant
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsAPIService.GrantsRetrieve")
@@ -890,10 +894,10 @@ func (a *GrantsAPIService) GrantsRetrieveExecute(r ApiGrantsRetrieveRequest) (*G
 }
 
 type ApiGrantsUpdateRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *GrantsAPIService
-	id string
-	grant *Grant
+	id         string
+	grant      *Grant
 }
 
 func (r ApiGrantsUpdateRequest) Grant(grant Grant) ApiGrantsUpdateRequest {
@@ -914,26 +918,27 @@ Grants are part of the role-based access control feature set, so
 if your subscription does not have support for it, these paths
 will return a 403 Forbidden error.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiGrantsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiGrantsUpdateRequest
 */
 func (a *GrantsAPIService) GrantsUpdate(ctx context.Context, id string) ApiGrantsUpdateRequest {
 	return ApiGrantsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Grant
+//
+//	@return Grant
 func (a *GrantsAPIService) GrantsUpdateExecute(r ApiGrantsUpdateRequest) (*Grant, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Grant
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Grant
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "GrantsAPIService.GrantsUpdate")

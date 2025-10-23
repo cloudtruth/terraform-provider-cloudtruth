@@ -19,12 +19,11 @@ import (
 	"net/url"
 )
 
-
 // FeaturesAPIService FeaturesAPI service
 type FeaturesAPIService service
 
 type ApiFeaturesRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *FeaturesAPIService
 }
 
@@ -37,24 +36,25 @@ FeaturesRetrieve Method for FeaturesRetrieve
 
 Returns a dictionary of features and whether or not they are enabled
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiFeaturesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiFeaturesRetrieveRequest
 */
 func (a *FeaturesAPIService) FeaturesRetrieve(ctx context.Context) ApiFeaturesRetrieveRequest {
 	return ApiFeaturesRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return FeaturesResponse
+//
+//	@return FeaturesResponse
 func (a *FeaturesAPIService) FeaturesRetrieveExecute(r ApiFeaturesRetrieveRequest) (*FeaturesResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *FeaturesResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *FeaturesResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FeaturesAPIService.FeaturesRetrieve")

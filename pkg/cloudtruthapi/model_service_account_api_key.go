@@ -22,12 +22,12 @@ var _ MappedNullable = &ServiceAccountAPIKey{}
 // ServiceAccountAPIKey struct for ServiceAccountAPIKey
 type ServiceAccountAPIKey struct {
 	// A free-form name for the API key. Need not be unique. 50 characters max.
-	Name *string `json:"name,omitempty"`
-	Prefix string `json:"prefix"`
+	Name   *string `json:"name,omitempty"`
+	Prefix string  `json:"prefix"`
 	// If the API key is revoked, clients cannot use it anymore. (This cannot be undone.)
-	Revoked *bool `json:"revoked,omitempty"`
-	HasExpired bool `json:"has_expired"`
-	Created time.Time `json:"created"`
+	Revoked    *bool     `json:"revoked,omitempty"`
+	HasExpired bool      `json:"has_expired"`
+	Created    time.Time `json:"created"`
 	// Once API key expires, clients cannot use it anymore.
 	ExpiryDate NullableTime `json:"expiry_date,omitempty"`
 }
@@ -220,6 +220,7 @@ func (o *ServiceAccountAPIKey) HasExpiryDate() bool {
 func (o *ServiceAccountAPIKey) SetExpiryDate(v time.Time) {
 	o.ExpiryDate.Set(&v)
 }
+
 // SetExpiryDateNil sets the value for ExpiryDate to be an explicit nil
 func (o *ServiceAccountAPIKey) SetExpiryDateNil() {
 	o.ExpiryDate.Set(nil)
@@ -231,7 +232,7 @@ func (o *ServiceAccountAPIKey) UnsetExpiryDate() {
 }
 
 func (o ServiceAccountAPIKey) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -290,5 +291,3 @@ func (v *NullableServiceAccountAPIKey) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

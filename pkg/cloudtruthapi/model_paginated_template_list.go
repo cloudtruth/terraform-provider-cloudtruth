@@ -20,10 +20,10 @@ var _ MappedNullable = &PaginatedTemplateList{}
 
 // PaginatedTemplateList struct for PaginatedTemplateList
 type PaginatedTemplateList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
+	Count    *int32         `json:"count,omitempty"`
+	Next     NullableString `json:"next,omitempty"`
 	Previous NullableString `json:"previous,omitempty"`
-	Results []Template `json:"results,omitempty"`
+	Results  []Template     `json:"results,omitempty"`
 }
 
 // NewPaginatedTemplateList instantiates a new PaginatedTemplateList object
@@ -107,6 +107,7 @@ func (o *PaginatedTemplateList) HasNext() bool {
 func (o *PaginatedTemplateList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedTemplateList) SetNextNil() {
 	o.Next.Set(nil)
@@ -149,6 +150,7 @@ func (o *PaginatedTemplateList) HasPrevious() bool {
 func (o *PaginatedTemplateList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedTemplateList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -192,7 +194,7 @@ func (o *PaginatedTemplateList) SetResults(v []Template) {
 }
 
 func (o PaginatedTemplateList) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -251,5 +253,3 @@ func (v *NullablePaginatedTemplateList) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

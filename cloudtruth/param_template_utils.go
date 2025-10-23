@@ -48,11 +48,12 @@ func paramOrTemplateImportHelper(ctx context.Context, d *schema.ResourceData, me
 	if err != nil {
 		return nil, err
 	}
-	projName, err := c.lookupProject(ctx, *projID) // We have the project ID, look up its name
-	if err != nil {
-		return nil, err
+	// Look up the project name from the ID using the projectIDs cache (ID -> name map)
+	projName, ok := c.projectIDs[*projID]
+	if !ok {
+		return nil, fmt.Errorf("project with ID %s not found in cache", *projID)
 	}
-	err = d.Set("project", *projName)
+	err = d.Set("project", projName)
 	if err != nil {
 		return nil, err
 	}

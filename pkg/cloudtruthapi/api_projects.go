@@ -21,14 +21,13 @@ import (
 	"time"
 )
 
-
 // ProjectsAPIService ProjectsAPI service
 type ProjectsAPIService service
 
 type ApiProjectsCopyCreateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
+	id          string
 	projectCopy *ProjectCopy
 }
 
@@ -44,26 +43,27 @@ func (r ApiProjectsCopyCreateRequest) Execute() (*Project, *http.Response, error
 /*
 ProjectsCopyCreate Method for ProjectsCopyCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiProjectsCopyCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiProjectsCopyCreateRequest
 */
 func (a *ProjectsAPIService) ProjectsCopyCreate(ctx context.Context, id string) ApiProjectsCopyCreateRequest {
 	return ApiProjectsCopyCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Project
+//
+//	@return Project
 func (a *ProjectsAPIService) ProjectsCopyCreateExecute(r ApiProjectsCopyCreateRequest) (*Project, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Project
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Project
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsCopyCreate")
@@ -166,8 +166,8 @@ func (a *ProjectsAPIService) ProjectsCopyCreateExecute(r ApiProjectsCopyCreateRe
 }
 
 type ApiProjectsCreateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
+	ctx           context.Context
+	ApiService    *ProjectsAPIService
 	projectCreate *ProjectCreate
 }
 
@@ -183,24 +183,25 @@ func (r ApiProjectsCreateRequest) Execute() (*Project, *http.Response, error) {
 /*
 ProjectsCreate Method for ProjectsCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiProjectsCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiProjectsCreateRequest
 */
 func (a *ProjectsAPIService) ProjectsCreate(ctx context.Context) ApiProjectsCreateRequest {
 	return ApiProjectsCreateRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return Project
+//
+//	@return Project
 func (a *ProjectsAPIService) ProjectsCreateExecute(r ApiProjectsCreateRequest) (*Project, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Project
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Project
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsCreate")
@@ -302,9 +303,9 @@ func (a *ProjectsAPIService) ProjectsCreateExecute(r ApiProjectsCreateRequest) (
 }
 
 type ApiProjectsDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ProjectsAPIService
-	id string
+	id         string
 }
 
 func (r ApiProjectsDestroyRequest) Execute() (*http.Response, error) {
@@ -314,24 +315,24 @@ func (r ApiProjectsDestroyRequest) Execute() (*http.Response, error) {
 /*
 ProjectsDestroy Method for ProjectsDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiProjectsDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiProjectsDestroyRequest
 */
 func (a *ProjectsAPIService) ProjectsDestroy(ctx context.Context, id string) ApiProjectsDestroyRequest {
 	return ApiProjectsDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
 func (a *ProjectsAPIService) ProjectsDestroyExecute(r ApiProjectsDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsDestroy")
@@ -420,14 +421,14 @@ func (a *ProjectsAPIService) ProjectsDestroyExecute(r ApiProjectsDestroyRequest)
 }
 
 type ApiProjectsListRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
+	ctx                  context.Context
+	ApiService           *ProjectsAPIService
 	descriptionIcontains *string
-	name *string
-	nameIcontains *string
-	ordering *string
-	page *int32
-	pageSize *int32
+	name                 *string
+	nameIcontains        *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
 }
 
 func (r ApiProjectsListRequest) DescriptionIcontains(descriptionIcontains string) ApiProjectsListRequest {
@@ -470,24 +471,25 @@ func (r ApiProjectsListRequest) Execute() (*PaginatedProjectList, *http.Response
 /*
 ProjectsList Method for ProjectsList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiProjectsListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiProjectsListRequest
 */
 func (a *ProjectsAPIService) ProjectsList(ctx context.Context) ApiProjectsListRequest {
 	return ApiProjectsListRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedProjectList
+//
+//	@return PaginatedProjectList
 func (a *ProjectsAPIService) ProjectsListExecute(r ApiProjectsListRequest) (*PaginatedProjectList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedProjectList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedProjectList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsList")
@@ -602,19 +604,19 @@ func (a *ProjectsAPIService) ProjectsListExecute(r ApiProjectsListRequest) (*Pag
 }
 
 type ApiProjectsParameterExportListRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	projectPk string
-	asOf *time.Time
-	contains *string
-	endswith *string
-	environment *string
+	ctx            context.Context
+	ApiService     *ProjectsAPIService
+	projectPk      string
+	asOf           *time.Time
+	contains       *string
+	endswith       *string
+	environment    *string
 	explicitExport *bool
-	maskSecrets *bool
-	ordering *string
-	output *string
-	startswith *string
-	tag *string
+	maskSecrets    *bool
+	ordering       *string
+	output         *string
+	startswith     *string
+	tag            *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -692,26 +694,27 @@ will be in a quoted string).  Note that capitalization is the only name coercion
 that will be performed on parameter names, names that are invalid for a given
 format will be omitted.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsParameterExportListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsParameterExportListRequest
 */
 func (a *ProjectsAPIService) ProjectsParameterExportList(ctx context.Context, projectPk string) ApiProjectsParameterExportListRequest {
 	return ApiProjectsParameterExportListRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectPk: projectPk,
+		ctx:        ctx,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterExport
+//
+//	@return ParameterExport
 func (a *ProjectsAPIService) ProjectsParameterExportListExecute(r ApiProjectsParameterExportListRequest) (*ParameterExport, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterExport
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterExport
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParameterExportList")
@@ -830,8 +833,8 @@ func (a *ProjectsAPIService) ProjectsParameterExportListExecute(r ApiProjectsPar
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -849,10 +852,10 @@ func (a *ProjectsAPIService) ProjectsParameterExportListExecute(r ApiProjectsPar
 }
 
 type ApiProjectsParametersCopyCreateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	projectPk string
+	ctx           context.Context
+	ApiService    *ProjectsAPIService
+	id            string
+	projectPk     string
 	parameterCopy *ParameterCopy
 }
 
@@ -868,28 +871,29 @@ func (r ApiProjectsParametersCopyCreateRequest) Execute() (*Parameter, *http.Res
 /*
 ProjectsParametersCopyCreate Method for ProjectsParametersCopyCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsParametersCopyCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsParametersCopyCreateRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersCopyCreate(ctx context.Context, id string, projectPk string) ApiProjectsParametersCopyCreateRequest {
 	return ApiProjectsParametersCopyCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Parameter
+//
+//	@return Parameter
 func (a *ProjectsAPIService) ProjectsParametersCopyCreateExecute(r ApiProjectsParametersCopyCreateRequest) (*Parameter, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Parameter
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Parameter
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersCopyCreate")
@@ -993,9 +997,9 @@ func (a *ProjectsAPIService) ProjectsParametersCopyCreateExecute(r ApiProjectsPa
 }
 
 type ApiProjectsParametersCreateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	projectPk string
+	ctx             context.Context
+	ApiService      *ProjectsAPIService
+	projectPk       string
 	parameterCreate *ParameterCreate
 }
 
@@ -1011,26 +1015,27 @@ func (r ApiProjectsParametersCreateRequest) Execute() (*Parameter, *http.Respons
 /*
 ProjectsParametersCreate Method for ProjectsParametersCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsParametersCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsParametersCreateRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersCreate(ctx context.Context, projectPk string) ApiProjectsParametersCreateRequest {
 	return ApiProjectsParametersCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectPk: projectPk,
+		ctx:        ctx,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Parameter
+//
+//	@return Parameter
 func (a *ProjectsAPIService) ProjectsParametersCreateExecute(r ApiProjectsParametersCreateRequest) (*Parameter, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Parameter
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Parameter
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersCreate")
@@ -1133,10 +1138,10 @@ func (a *ProjectsAPIService) ProjectsParametersCreateExecute(r ApiProjectsParame
 }
 
 type ApiProjectsParametersDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ProjectsAPIService
-	id string
-	projectPk string
+	id         string
+	projectPk  string
 }
 
 func (r ApiProjectsParametersDestroyRequest) Execute() (*http.Response, error) {
@@ -1146,26 +1151,26 @@ func (r ApiProjectsParametersDestroyRequest) Execute() (*http.Response, error) {
 /*
 ProjectsParametersDestroy Method for ProjectsParametersDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsParametersDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsParametersDestroyRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersDestroy(ctx context.Context, id string, projectPk string) ApiProjectsParametersDestroyRequest {
 	return ApiProjectsParametersDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
 func (a *ProjectsAPIService) ProjectsParametersDestroyExecute(r ApiProjectsParametersDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersDestroy")
@@ -1255,29 +1260,29 @@ func (a *ProjectsAPIService) ProjectsParametersDestroyExecute(r ApiProjectsParam
 }
 
 type ApiProjectsParametersDualityListRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	projectPk string
-	difference *bool
-	environment *string
-	evaluate *bool
+	ctx                 context.Context
+	ApiService          *ProjectsAPIService
+	projectPk           string
+	difference          *bool
+	environment         *string
+	evaluate            *bool
 	immediateParameters *bool
-	maskSecrets *bool
-	name *string
-	nameContains *string
-	nameIcontains *string
-	nameIexact *string
-	nameIstartswith *string
-	nameStartswith *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	secret *bool
-	t1AsOf *time.Time
-	t1Tag *string
-	t2AsOf *time.Time
-	t2Tag *string
-	values *bool
+	maskSecrets         *bool
+	name                *string
+	nameContains        *string
+	nameIcontains       *string
+	nameIexact          *string
+	nameIstartswith     *string
+	nameStartswith      *string
+	ordering            *string
+	page                *int32
+	pageSize            *int32
+	secret              *bool
+	t1AsOf              *time.Time
+	t1Tag               *string
+	t2AsOf              *time.Time
+	t2Tag               *string
+	values              *bool
 }
 
 // Compare the values at &#x60;t1&#x60; and &#x60;t2&#x60; and if they are the same, omit the parameter from the result.
@@ -1410,26 +1415,27 @@ entry.
 If t1 is not specified then it will point to a time in the past where
 nothing existed.  If t2 is not specified then it is assumed to be "now".
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsParametersDualityListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsParametersDualityListRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersDualityList(ctx context.Context, projectPk string) ApiProjectsParametersDualityListRequest {
 	return ApiProjectsParametersDualityListRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectPk: projectPk,
+		ctx:        ctx,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedParameterDualityList
+//
+//	@return PaginatedParameterDualityList
 func (a *ProjectsAPIService) ProjectsParametersDualityListExecute(r ApiProjectsParametersDualityListRequest) (*PaginatedParameterDualityList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedParameterDualityList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedParameterDualityList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersDualityList")
@@ -1587,28 +1593,28 @@ func (a *ProjectsAPIService) ProjectsParametersDualityListExecute(r ApiProjectsP
 }
 
 type ApiProjectsParametersListRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	projectPk string
-	asOf *time.Time
+	ctx                  context.Context
+	ApiService           *ProjectsAPIService
+	projectPk            string
+	asOf                 *time.Time
 	descriptionIcontains *string
-	difference *string
-	environment *string
-	evaluate *bool
-	immediateParameters *bool
-	maskSecrets *bool
-	name *string
-	nameContains *string
-	nameIcontains *string
-	nameIexact *string
-	nameIstartswith *string
-	nameStartswith *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	secret *bool
-	tag *string
-	values *bool
+	difference           *string
+	environment          *string
+	evaluate             *bool
+	immediateParameters  *bool
+	maskSecrets          *bool
+	name                 *string
+	nameContains         *string
+	nameIcontains        *string
+	nameIexact           *string
+	nameIstartswith      *string
+	nameStartswith       *string
+	ordering             *string
+	page                 *int32
+	pageSize             *int32
+	secret               *bool
+	tag                  *string
+	values               *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -1724,26 +1730,27 @@ func (r ApiProjectsParametersListRequest) Execute() (*PaginatedParameterList, *h
 /*
 ProjectsParametersList Method for ProjectsParametersList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsParametersListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsParametersListRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersList(ctx context.Context, projectPk string) ApiProjectsParametersListRequest {
 	return ApiProjectsParametersListRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectPk: projectPk,
+		ctx:        ctx,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedParameterList
+//
+//	@return PaginatedParameterList
 func (a *ProjectsAPIService) ProjectsParametersListExecute(r ApiProjectsParametersListRequest) (*PaginatedParameterList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedParameterList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedParameterList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersList")
@@ -1898,10 +1905,10 @@ func (a *ProjectsAPIService) ProjectsParametersListExecute(r ApiProjectsParamete
 }
 
 type ApiProjectsParametersPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	projectPk string
+	ctx                    context.Context
+	ApiService             *ProjectsAPIService
+	id                     string
+	projectPk              string
 	patchedParameterUpdate *PatchedParameterUpdate
 }
 
@@ -1917,28 +1924,29 @@ func (r ApiProjectsParametersPartialUpdateRequest) Execute() (*Parameter, *http.
 /*
 ProjectsParametersPartialUpdate Method for ProjectsParametersPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsParametersPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsParametersPartialUpdateRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersPartialUpdate(ctx context.Context, id string, projectPk string) ApiProjectsParametersPartialUpdateRequest {
 	return ApiProjectsParametersPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Parameter
+//
+//	@return Parameter
 func (a *ProjectsAPIService) ProjectsParametersPartialUpdateExecute(r ApiProjectsParametersPartialUpdateRequest) (*Parameter, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Parameter
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Parameter
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersPartialUpdate")
@@ -2039,15 +2047,15 @@ func (a *ProjectsAPIService) ProjectsParametersPartialUpdateExecute(r ApiProject
 }
 
 type ApiProjectsParametersPushesListRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
 	parameterPk string
-	projectPk string
-	asOf *time.Time
-	ordering *string
-	page *int32
-	pageSize *int32
-	tag *string
+	projectPk   string
+	asOf        *time.Time
+	ordering    *string
+	page        *int32
+	pageSize    *int32
+	tag         *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -2089,28 +2097,29 @@ ProjectsParametersPushesList List push operations.
 
 The push operations that this parameter was involved in.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parameterPk
- @param projectPk
- @return ApiProjectsParametersPushesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parameterPk
+	@param projectPk
+	@return ApiProjectsParametersPushesListRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersPushesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersPushesListRequest {
 	return ApiProjectsParametersPushesListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:  a,
+		ctx:         ctx,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedTaskStepList
+//
+//	@return PaginatedTaskStepList
 func (a *ProjectsAPIService) ProjectsParametersPushesListExecute(r ApiProjectsParametersPushesListRequest) (*PaginatedTaskStepList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedTaskStepList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedTaskStepList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersPushesList")
@@ -2224,17 +2233,17 @@ func (a *ProjectsAPIService) ProjectsParametersPushesListExecute(r ApiProjectsPa
 }
 
 type ApiProjectsParametersRetrieveRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	projectPk string
-	asOf *time.Time
-	environment *string
-	evaluate *bool
+	ctx                 context.Context
+	ApiService          *ProjectsAPIService
+	id                  string
+	projectPk           string
+	asOf                *time.Time
+	environment         *string
+	evaluate            *bool
 	immediateParameters *bool
-	maskSecrets *bool
-	tag *string
-	values *bool
+	maskSecrets         *bool
+	tag                 *string
+	values              *bool
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -2286,28 +2295,29 @@ func (r ApiProjectsParametersRetrieveRequest) Execute() (*Parameter, *http.Respo
 /*
 ProjectsParametersRetrieve Method for ProjectsParametersRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter ledger.
- @param projectPk
- @return ApiProjectsParametersRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter ledger.
+	@param projectPk
+	@return ApiProjectsParametersRetrieveRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsParametersRetrieveRequest {
 	return ApiProjectsParametersRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Parameter
+//
+//	@return Parameter
 func (a *ProjectsAPIService) ProjectsParametersRetrieveExecute(r ApiProjectsParametersRetrieveRequest) (*Parameter, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Parameter
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Parameter
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRetrieve")
@@ -2427,10 +2437,10 @@ func (a *ProjectsAPIService) ProjectsParametersRetrieveExecute(r ApiProjectsPara
 }
 
 type ApiProjectsParametersRulesCreateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	parameterPk string
-	projectPk string
+	ctx                 context.Context
+	ApiService          *ProjectsAPIService
+	parameterPk         string
+	projectPk           string
 	parameterRuleCreate *ParameterRuleCreate
 }
 
@@ -2446,28 +2456,29 @@ func (r ApiProjectsParametersRulesCreateRequest) Execute() (*ParameterRule, *htt
 /*
 ProjectsParametersRulesCreate Method for ProjectsParametersRulesCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesCreateRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersRulesCreate(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersRulesCreateRequest {
 	return ApiProjectsParametersRulesCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:  a,
+		ctx:         ctx,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterRule
+//
+//	@return ParameterRule
 func (a *ProjectsAPIService) ProjectsParametersRulesCreateExecute(r ApiProjectsParametersRulesCreateRequest) (*ParameterRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterRule
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterRule
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesCreate")
@@ -2571,11 +2582,11 @@ func (a *ProjectsAPIService) ProjectsParametersRulesCreateExecute(r ApiProjectsP
 }
 
 type ApiProjectsParametersRulesDestroyRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
+	id          string
 	parameterPk string
-	projectPk string
+	projectPk   string
 }
 
 func (r ApiProjectsParametersRulesDestroyRequest) Execute() (*http.Response, error) {
@@ -2585,28 +2596,28 @@ func (r ApiProjectsParametersRulesDestroyRequest) Execute() (*http.Response, err
 /*
 ProjectsParametersRulesDestroy Method for ProjectsParametersRulesDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter rule.
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter rule.
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesDestroyRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersRulesDestroy(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesDestroyRequest {
 	return ApiProjectsParametersRulesDestroyRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:  a,
+		ctx:         ctx,
+		id:          id,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
 func (a *ProjectsAPIService) ProjectsParametersRulesDestroyExecute(r ApiProjectsParametersRulesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesDestroy")
@@ -2697,14 +2708,14 @@ func (a *ProjectsAPIService) ProjectsParametersRulesDestroyExecute(r ApiProjects
 }
 
 type ApiProjectsParametersRulesListRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
 	parameterPk string
-	projectPk string
-	ordering *string
-	page *int32
-	pageSize *int32
-	type_ *string
+	projectPk   string
+	ordering    *string
+	page        *int32
+	pageSize    *int32
+	type_       *string
 }
 
 // Which field to use when ordering the results.
@@ -2737,28 +2748,29 @@ func (r ApiProjectsParametersRulesListRequest) Execute() (*PaginatedParameterRul
 /*
 ProjectsParametersRulesList Method for ProjectsParametersRulesList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesListRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersRulesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersRulesListRequest {
 	return ApiProjectsParametersRulesListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:  a,
+		ctx:         ctx,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedParameterRuleList
+//
+//	@return PaginatedParameterRuleList
 func (a *ProjectsAPIService) ProjectsParametersRulesListExecute(r ApiProjectsParametersRulesListRequest) (*PaginatedParameterRuleList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedParameterRuleList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedParameterRuleList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesList")
@@ -2869,11 +2881,11 @@ func (a *ProjectsAPIService) ProjectsParametersRulesListExecute(r ApiProjectsPar
 }
 
 type ApiProjectsParametersRulesPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	parameterPk string
-	projectPk string
+	ctx                        context.Context
+	ApiService                 *ProjectsAPIService
+	id                         string
+	parameterPk                string
+	projectPk                  string
 	patchedParameterRuleUpdate *PatchedParameterRuleUpdate
 }
 
@@ -2889,30 +2901,31 @@ func (r ApiProjectsParametersRulesPartialUpdateRequest) Execute() (*ParameterRul
 /*
 ProjectsParametersRulesPartialUpdate Method for ProjectsParametersRulesPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter rule.
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter rule.
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesPartialUpdateRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersRulesPartialUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesPartialUpdateRequest {
 	return ApiProjectsParametersRulesPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:  a,
+		ctx:         ctx,
+		id:          id,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterRuleUpdate
+//
+//	@return ParameterRuleUpdate
 func (a *ProjectsAPIService) ProjectsParametersRulesPartialUpdateExecute(r ApiProjectsParametersRulesPartialUpdateRequest) (*ParameterRuleUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterRuleUpdate
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterRuleUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesPartialUpdate")
@@ -3014,11 +3027,11 @@ func (a *ProjectsAPIService) ProjectsParametersRulesPartialUpdateExecute(r ApiPr
 }
 
 type ApiProjectsParametersRulesRetrieveRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
+	id          string
 	parameterPk string
-	projectPk string
+	projectPk   string
 }
 
 func (r ApiProjectsParametersRulesRetrieveRequest) Execute() (*ParameterRule, *http.Response, error) {
@@ -3028,30 +3041,31 @@ func (r ApiProjectsParametersRulesRetrieveRequest) Execute() (*ParameterRule, *h
 /*
 ProjectsParametersRulesRetrieve Method for ProjectsParametersRulesRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter rule ledger.
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter rule ledger.
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesRetrieveRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersRulesRetrieve(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesRetrieveRequest {
 	return ApiProjectsParametersRulesRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:  a,
+		ctx:         ctx,
+		id:          id,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterRule
+//
+//	@return ParameterRule
 func (a *ProjectsAPIService) ProjectsParametersRulesRetrieveExecute(r ApiProjectsParametersRulesRetrieveRequest) (*ParameterRule, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterRule
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterRule
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesRetrieve")
@@ -3151,11 +3165,11 @@ func (a *ProjectsAPIService) ProjectsParametersRulesRetrieveExecute(r ApiProject
 }
 
 type ApiProjectsParametersRulesUpdateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	parameterPk string
-	projectPk string
+	ctx                 context.Context
+	ApiService          *ProjectsAPIService
+	id                  string
+	parameterPk         string
+	projectPk           string
 	parameterRuleUpdate *ParameterRuleUpdate
 }
 
@@ -3171,30 +3185,31 @@ func (r ApiProjectsParametersRulesUpdateRequest) Execute() (*ParameterRuleUpdate
 /*
 ProjectsParametersRulesUpdate Method for ProjectsParametersRulesUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter rule.
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersRulesUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter rule.
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersRulesUpdateRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersRulesUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersRulesUpdateRequest {
 	return ApiProjectsParametersRulesUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:  a,
+		ctx:         ctx,
+		id:          id,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterRuleUpdate
+//
+//	@return ParameterRuleUpdate
 func (a *ProjectsAPIService) ProjectsParametersRulesUpdateExecute(r ApiProjectsParametersRulesUpdateRequest) (*ParameterRuleUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterRuleUpdate
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterRuleUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersRulesUpdate")
@@ -3299,12 +3314,12 @@ func (a *ProjectsAPIService) ProjectsParametersRulesUpdateExecute(r ApiProjectsP
 }
 
 type ApiProjectsParametersTimelineRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ProjectsAPIService
-	id string
-	projectPk string
-	asOf *time.Time
-	tag *string
+	id         string
+	projectPk  string
+	asOf       *time.Time
+	tag        *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -3331,28 +3346,29 @@ Summary information about how a parameter has changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the parameter itself, including rules and values, is included.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter ledger.
- @param projectPk
- @return ApiProjectsParametersTimelineRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter ledger.
+	@param projectPk
+	@return ApiProjectsParametersTimelineRetrieveRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersTimelineRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsParametersTimelineRetrieveRequest {
 	return ApiProjectsParametersTimelineRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterTimeline
+//
+//	@return ParameterTimeline
 func (a *ProjectsAPIService) ProjectsParametersTimelineRetrieveExecute(r ApiProjectsParametersTimelineRetrieveRequest) (*ParameterTimeline, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTimeline
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTimeline
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersTimelineRetrieve")
@@ -3457,11 +3473,11 @@ func (a *ProjectsAPIService) ProjectsParametersTimelineRetrieveExecute(r ApiProj
 }
 
 type ApiProjectsParametersTimelinesRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ProjectsAPIService
-	projectPk string
-	asOf *time.Time
-	tag *string
+	projectPk  string
+	asOf       *time.Time
+	tag        *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -3488,26 +3504,27 @@ Information about how the parameters of a project have changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the project's parameters, including rules and values, is included.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsParametersTimelinesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsParametersTimelinesRetrieveRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersTimelinesRetrieve(ctx context.Context, projectPk string) ApiProjectsParametersTimelinesRetrieveRequest {
 	return ApiProjectsParametersTimelinesRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectPk: projectPk,
+		ctx:        ctx,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return ParameterTimeline
+//
+//	@return ParameterTimeline
 func (a *ProjectsAPIService) ProjectsParametersTimelinesRetrieveExecute(r ApiProjectsParametersTimelinesRetrieveRequest) (*ParameterTimeline, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ParameterTimeline
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ParameterTimeline
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersTimelinesRetrieve")
@@ -3611,10 +3628,10 @@ func (a *ProjectsAPIService) ProjectsParametersTimelinesRetrieveExecute(r ApiPro
 }
 
 type ApiProjectsParametersUpdateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	projectPk string
+	ctx             context.Context
+	ApiService      *ProjectsAPIService
+	id              string
+	projectPk       string
 	parameterUpdate *ParameterUpdate
 }
 
@@ -3630,28 +3647,29 @@ func (r ApiProjectsParametersUpdateRequest) Execute() (*Parameter, *http.Respons
 /*
 ProjectsParametersUpdate Method for ProjectsParametersUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsParametersUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsParametersUpdateRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersUpdate(ctx context.Context, id string, projectPk string) ApiProjectsParametersUpdateRequest {
 	return ApiProjectsParametersUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Parameter
+//
+//	@return Parameter
 func (a *ProjectsAPIService) ProjectsParametersUpdateExecute(r ApiProjectsParametersUpdateRequest) (*Parameter, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Parameter
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Parameter
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersUpdate")
@@ -3755,13 +3773,13 @@ func (a *ProjectsAPIService) ProjectsParametersUpdateExecute(r ApiProjectsParame
 }
 
 type ApiProjectsParametersValuesCreateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
 	parameterPk string
-	projectPk string
+	projectPk   string
 	valueCreate *ValueCreate
 	environment *string
-	evaluate *bool
+	evaluate    *bool
 }
 
 func (r ApiProjectsParametersValuesCreateRequest) ValueCreate(valueCreate ValueCreate) ApiProjectsParametersValuesCreateRequest {
@@ -3790,28 +3808,29 @@ ProjectsParametersValuesCreate Set a value.
 
 Set the value of a parameter in an environment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesCreateRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersValuesCreate(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersValuesCreateRequest {
 	return ApiProjectsParametersValuesCreateRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:  a,
+		ctx:         ctx,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Value
+//
+//	@return Value
 func (a *ProjectsAPIService) ProjectsParametersValuesCreateExecute(r ApiProjectsParametersValuesCreateRequest) (*Value, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Value
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Value
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesCreate")
@@ -3921,13 +3940,13 @@ func (a *ProjectsAPIService) ProjectsParametersValuesCreateExecute(r ApiProjects
 }
 
 type ApiProjectsParametersValuesDestroyRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
+	id          string
 	parameterPk string
-	projectPk string
+	projectPk   string
 	environment *string
-	evaluate *bool
+	evaluate    *bool
 }
 
 // When fetching a single value, if that value is dynamic and evaluate is true, uses this environment for template evaluation.  If none is specified, uses the value&#39;s environment.  Note that the value must be active in the specified environment. No effect on values that are not dynamic.
@@ -3951,28 +3970,28 @@ ProjectsParametersValuesDestroy Destroy a value.
 
 Destroy the value of a parameter in an environment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesDestroyRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersValuesDestroy(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesDestroyRequest {
 	return ApiProjectsParametersValuesDestroyRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:  a,
+		ctx:         ctx,
+		id:          id,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
 func (a *ProjectsAPIService) ProjectsParametersValuesDestroyExecute(r ApiProjectsParametersValuesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesDestroy")
@@ -4069,19 +4088,19 @@ func (a *ProjectsAPIService) ProjectsParametersValuesDestroyExecute(r ApiProject
 }
 
 type ApiProjectsParametersValuesListRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
 	parameterPk string
-	projectPk string
-	asOf *time.Time
+	projectPk   string
+	asOf        *time.Time
 	environment *string
-	evaluate *bool
-	exclude *string
-	include *string
+	evaluate    *bool
+	exclude     *string
+	include     *string
 	maskSecrets *bool
-	page *int32
-	pageSize *int32
-	tag *string
+	page        *int32
+	pageSize    *int32
+	tag         *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -4145,34 +4164,34 @@ func (r ApiProjectsParametersValuesListRequest) Execute() (*PaginatedValueList, 
 /*
 ProjectsParametersValuesList Retrieve values.
 
+	       Retrieve previously set values of a parameter in one or all environments.
+	       To see all the _effective_ values for a parameter across every environment,
+	       use the Parameters API (see the `values` field).
 
-        Retrieve previously set values of a parameter in one or all environments.
-        To see all the _effective_ values for a parameter across every environment,
-        use the Parameters API (see the `values` field).
-    
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesListRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersValuesList(ctx context.Context, parameterPk string, projectPk string) ApiProjectsParametersValuesListRequest {
 	return ApiProjectsParametersValuesListRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:  a,
+		ctx:         ctx,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedValueList
+//
+//	@return PaginatedValueList
 func (a *ProjectsAPIService) ProjectsParametersValuesListExecute(r ApiProjectsParametersValuesListRequest) (*PaginatedValueList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedValueList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedValueList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesList")
@@ -4298,13 +4317,13 @@ func (a *ProjectsAPIService) ProjectsParametersValuesListExecute(r ApiProjectsPa
 }
 
 type ApiProjectsParametersValuesPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	parameterPk string
-	projectPk string
-	environment *string
-	evaluate *bool
+	ctx                context.Context
+	ApiService         *ProjectsAPIService
+	id                 string
+	parameterPk        string
+	projectPk          string
+	environment        *string
+	evaluate           *bool
 	patchedValueUpdate *PatchedValueUpdate
 }
 
@@ -4334,30 +4353,31 @@ ProjectsParametersValuesPartialUpdate Update a value.
 
 Update the value of a parameter in an environment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesPartialUpdateRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesPartialUpdateRequest {
 	return ApiProjectsParametersValuesPartialUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:  a,
+		ctx:         ctx,
+		id:          id,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return ValueUpdate
+//
+//	@return ValueUpdate
 func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdateExecute(r ApiProjectsParametersValuesPartialUpdateRequest) (*ValueUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ValueUpdate
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ValueUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesPartialUpdate")
@@ -4465,18 +4485,18 @@ func (a *ProjectsAPIService) ProjectsParametersValuesPartialUpdateExecute(r ApiP
 }
 
 type ApiProjectsParametersValuesRetrieveRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
+	id          string
 	parameterPk string
-	projectPk string
-	asOf *time.Time
+	projectPk   string
+	asOf        *time.Time
 	environment *string
-	evaluate *bool
-	exclude *string
-	include *string
+	evaluate    *bool
+	exclude     *string
+	include     *string
 	maskSecrets *bool
-	tag *string
+	tag         *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -4530,30 +4550,31 @@ ProjectsParametersValuesRetrieve Retrieve a value.
 
 Retrieve the value of a parameter in an environment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this value ledger.
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this value ledger.
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesRetrieveRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersValuesRetrieve(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesRetrieveRequest {
 	return ApiProjectsParametersValuesRetrieveRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:  a,
+		ctx:         ctx,
+		id:          id,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Value
+//
+//	@return Value
 func (a *ProjectsAPIService) ProjectsParametersValuesRetrieveExecute(r ApiProjectsParametersValuesRetrieveRequest) (*Value, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Value
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Value
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesRetrieve")
@@ -4674,13 +4695,13 @@ func (a *ProjectsAPIService) ProjectsParametersValuesRetrieveExecute(r ApiProjec
 }
 
 type ApiProjectsParametersValuesUpdateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
+	id          string
 	parameterPk string
-	projectPk string
+	projectPk   string
 	environment *string
-	evaluate *bool
+	evaluate    *bool
 	valueUpdate *ValueUpdate
 }
 
@@ -4710,30 +4731,31 @@ ProjectsParametersValuesUpdate Update a value.
 
 Update the value of a parameter in an environment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param parameterPk The parameter id.
- @param projectPk The project id.
- @return ApiProjectsParametersValuesUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param parameterPk The parameter id.
+	@param projectPk The project id.
+	@return ApiProjectsParametersValuesUpdateRequest
 */
 func (a *ProjectsAPIService) ProjectsParametersValuesUpdate(ctx context.Context, id string, parameterPk string, projectPk string) ApiProjectsParametersValuesUpdateRequest {
 	return ApiProjectsParametersValuesUpdateRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:  a,
+		ctx:         ctx,
+		id:          id,
 		parameterPk: parameterPk,
-		projectPk: projectPk,
+		projectPk:   projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return ValueUpdate
+//
+//	@return ValueUpdate
 func (a *ProjectsAPIService) ProjectsParametersValuesUpdateExecute(r ApiProjectsParametersValuesUpdateRequest) (*ValueUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ValueUpdate
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ValueUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsParametersValuesUpdate")
@@ -4841,9 +4863,9 @@ func (a *ProjectsAPIService) ProjectsParametersValuesUpdateExecute(r ApiProjects
 }
 
 type ApiProjectsPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
+	ctx                  context.Context
+	ApiService           *ProjectsAPIService
+	id                   string
 	patchedProjectUpdate *PatchedProjectUpdate
 }
 
@@ -4859,26 +4881,27 @@ func (r ApiProjectsPartialUpdateRequest) Execute() (*ProjectUpdate, *http.Respon
 /*
 ProjectsPartialUpdate Method for ProjectsPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiProjectsPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiProjectsPartialUpdateRequest
 */
 func (a *ProjectsAPIService) ProjectsPartialUpdate(ctx context.Context, id string) ApiProjectsPartialUpdateRequest {
 	return ApiProjectsPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ProjectUpdate
+//
+//	@return ProjectUpdate
 func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUpdateRequest) (*ProjectUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ProjectUpdate
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ProjectUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsPartialUpdate")
@@ -4978,9 +5001,9 @@ func (a *ProjectsAPIService) ProjectsPartialUpdateExecute(r ApiProjectsPartialUp
 }
 
 type ApiProjectsRetrieveRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ProjectsAPIService
-	id string
+	id         string
 }
 
 func (r ApiProjectsRetrieveRequest) Execute() (*Project, *http.Response, error) {
@@ -4990,26 +5013,27 @@ func (r ApiProjectsRetrieveRequest) Execute() (*Project, *http.Response, error) 
 /*
 ProjectsRetrieve Method for ProjectsRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this project ledger.
- @return ApiProjectsRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this project ledger.
+	@return ApiProjectsRetrieveRequest
 */
 func (a *ProjectsAPIService) ProjectsRetrieve(ctx context.Context, id string) ApiProjectsRetrieveRequest {
 	return ApiProjectsRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return Project
+//
+//	@return Project
 func (a *ProjectsAPIService) ProjectsRetrieveExecute(r ApiProjectsRetrieveRequest) (*Project, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Project
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Project
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsRetrieve")
@@ -5107,15 +5131,15 @@ func (a *ProjectsAPIService) ProjectsRetrieveExecute(r ApiProjectsRetrieveReques
 }
 
 type ApiProjectsTemplatePreviewCreateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	projectPk string
+	ctx                          context.Context
+	ApiService                   *ProjectsAPIService
+	projectPk                    string
 	templatePreviewCreateRequest *TemplatePreviewCreateRequest
-	asOf *time.Time
-	environment *string
-	maskSecrets *bool
-	tag *string
-	template *string
+	asOf                         *time.Time
+	environment                  *string
+	maskSecrets                  *bool
+	tag                          *string
+	template                     *string
 }
 
 func (r ApiProjectsTemplatePreviewCreateRequest) TemplatePreviewCreateRequest(templatePreviewCreateRequest TemplatePreviewCreateRequest) ApiProjectsTemplatePreviewCreateRequest {
@@ -5162,26 +5186,27 @@ ProjectsTemplatePreviewCreate Method for ProjectsTemplatePreviewCreate
 
 Endpoint for previewing a template.  Post the template content in the request body.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsTemplatePreviewCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsTemplatePreviewCreateRequest
 */
 func (a *ProjectsAPIService) ProjectsTemplatePreviewCreate(ctx context.Context, projectPk string) ApiProjectsTemplatePreviewCreateRequest {
 	return ApiProjectsTemplatePreviewCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectPk: projectPk,
+		ctx:        ctx,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return TemplatePreview
+//
+//	@return TemplatePreview
 func (a *ProjectsAPIService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsTemplatePreviewCreateRequest) (*TemplatePreview, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *TemplatePreview
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TemplatePreview
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatePreviewCreate")
@@ -5290,8 +5315,8 @@ func (a *ProjectsAPIService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsT
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -5309,9 +5334,9 @@ func (a *ProjectsAPIService) ProjectsTemplatePreviewCreateExecute(r ApiProjectsT
 }
 
 type ApiProjectsTemplatesCreateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	projectPk string
+	ctx            context.Context
+	ApiService     *ProjectsAPIService
+	projectPk      string
 	templateCreate *TemplateCreate
 }
 
@@ -5327,26 +5352,27 @@ func (r ApiProjectsTemplatesCreateRequest) Execute() (*Template, *http.Response,
 /*
 ProjectsTemplatesCreate Method for ProjectsTemplatesCreate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsTemplatesCreateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsTemplatesCreateRequest
 */
 func (a *ProjectsAPIService) ProjectsTemplatesCreate(ctx context.Context, projectPk string) ApiProjectsTemplatesCreateRequest {
 	return ApiProjectsTemplatesCreateRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectPk: projectPk,
+		ctx:        ctx,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Template
+//
+//	@return Template
 func (a *ProjectsAPIService) ProjectsTemplatesCreateExecute(r ApiProjectsTemplatesCreateRequest) (*Template, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Template
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Template
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesCreate")
@@ -5440,8 +5466,8 @@ func (a *ProjectsAPIService) ProjectsTemplatesCreateExecute(r ApiProjectsTemplat
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -5459,10 +5485,10 @@ func (a *ProjectsAPIService) ProjectsTemplatesCreateExecute(r ApiProjectsTemplat
 }
 
 type ApiProjectsTemplatesDestroyRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ProjectsAPIService
-	id string
-	projectPk string
+	id         string
+	projectPk  string
 }
 
 func (r ApiProjectsTemplatesDestroyRequest) Execute() (*http.Response, error) {
@@ -5472,26 +5498,26 @@ func (r ApiProjectsTemplatesDestroyRequest) Execute() (*http.Response, error) {
 /*
 ProjectsTemplatesDestroy Method for ProjectsTemplatesDestroy
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsTemplatesDestroyRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsTemplatesDestroyRequest
 */
 func (a *ProjectsAPIService) ProjectsTemplatesDestroy(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesDestroyRequest {
 	return ApiProjectsTemplatesDestroyRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
 func (a *ProjectsAPIService) ProjectsTemplatesDestroyExecute(r ApiProjectsTemplatesDestroyRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodDelete
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesDestroy")
@@ -5581,18 +5607,18 @@ func (a *ProjectsAPIService) ProjectsTemplatesDestroyExecute(r ApiProjectsTempla
 }
 
 type ApiProjectsTemplatesListRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	projectPk string
-	asOf *time.Time
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
+	projectPk   string
+	asOf        *time.Time
 	environment *string
-	evaluate *bool
+	evaluate    *bool
 	maskSecrets *bool
-	name *string
-	ordering *string
-	page *int32
-	pageSize *int32
-	tag *string
+	name        *string
+	ordering    *string
+	page        *int32
+	pageSize    *int32
+	tag         *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -5607,7 +5633,7 @@ func (r ApiProjectsTemplatesListRequest) Environment(environment string) ApiProj
 	return r
 }
 
-// If &#x60;true&#x60;, evaluates the template&#39;s body.  If &#x60;false&#x60;, returns the unevaluated template body. 
+// If &#x60;true&#x60;, evaluates the template&#39;s body.  If &#x60;false&#x60;, returns the unevaluated template body.
 func (r ApiProjectsTemplatesListRequest) Evaluate(evaluate bool) ApiProjectsTemplatesListRequest {
 	r.evaluate = &evaluate
 	return r
@@ -5655,26 +5681,27 @@ func (r ApiProjectsTemplatesListRequest) Execute() (*PaginatedTemplateList, *htt
 /*
 ProjectsTemplatesList Method for ProjectsTemplatesList
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsTemplatesListRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsTemplatesListRequest
 */
 func (a *ProjectsAPIService) ProjectsTemplatesList(ctx context.Context, projectPk string) ApiProjectsTemplatesListRequest {
 	return ApiProjectsTemplatesListRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectPk: projectPk,
+		ctx:        ctx,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return PaginatedTemplateList
+//
+//	@return PaginatedTemplateList
 func (a *ProjectsAPIService) ProjectsTemplatesListExecute(r ApiProjectsTemplatesListRequest) (*PaginatedTemplateList, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PaginatedTemplateList
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PaginatedTemplateList
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesList")
@@ -5790,8 +5817,8 @@ func (a *ProjectsAPIService) ProjectsTemplatesListExecute(r ApiProjectsTemplates
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -5809,10 +5836,10 @@ func (a *ProjectsAPIService) ProjectsTemplatesListExecute(r ApiProjectsTemplates
 }
 
 type ApiProjectsTemplatesPartialUpdateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	projectPk string
+	ctx                   context.Context
+	ApiService            *ProjectsAPIService
+	id                    string
+	projectPk             string
 	patchedTemplateUpdate *PatchedTemplateUpdate
 }
 
@@ -5828,28 +5855,29 @@ func (r ApiProjectsTemplatesPartialUpdateRequest) Execute() (*Template, *http.Re
 /*
 ProjectsTemplatesPartialUpdate Method for ProjectsTemplatesPartialUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsTemplatesPartialUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsTemplatesPartialUpdateRequest
 */
 func (a *ProjectsAPIService) ProjectsTemplatesPartialUpdate(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesPartialUpdateRequest {
 	return ApiProjectsTemplatesPartialUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Template
+//
+//	@return Template
 func (a *ProjectsAPIService) ProjectsTemplatesPartialUpdateExecute(r ApiProjectsTemplatesPartialUpdateRequest) (*Template, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Template
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Template
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesPartialUpdate")
@@ -5941,8 +5969,8 @@ func (a *ProjectsAPIService) ProjectsTemplatesPartialUpdateExecute(r ApiProjects
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -5960,15 +5988,15 @@ func (a *ProjectsAPIService) ProjectsTemplatesPartialUpdateExecute(r ApiProjects
 }
 
 type ApiProjectsTemplatesRetrieveRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	projectPk string
-	asOf *time.Time
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
+	id          string
+	projectPk   string
+	asOf        *time.Time
 	environment *string
-	evaluate *bool
+	evaluate    *bool
 	maskSecrets *bool
-	tag *string
+	tag         *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -5983,7 +6011,7 @@ func (r ApiProjectsTemplatesRetrieveRequest) Environment(environment string) Api
 	return r
 }
 
-// If &#x60;true&#x60;, evaluates the template&#39;s body.  If &#x60;false&#x60;, returns the unevaluated template body. 
+// If &#x60;true&#x60;, evaluates the template&#39;s body.  If &#x60;false&#x60;, returns the unevaluated template body.
 func (r ApiProjectsTemplatesRetrieveRequest) Evaluate(evaluate bool) ApiProjectsTemplatesRetrieveRequest {
 	r.evaluate = &evaluate
 	return r
@@ -6008,28 +6036,29 @@ func (r ApiProjectsTemplatesRetrieveRequest) Execute() (*Template, *http.Respons
 /*
 ProjectsTemplatesRetrieve Method for ProjectsTemplatesRetrieve
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter ledger.
- @param projectPk
- @return ApiProjectsTemplatesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter ledger.
+	@param projectPk
+	@return ApiProjectsTemplatesRetrieveRequest
 */
 func (a *ProjectsAPIService) ProjectsTemplatesRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesRetrieveRequest {
 	return ApiProjectsTemplatesRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Template
+//
+//	@return Template
 func (a *ProjectsAPIService) ProjectsTemplatesRetrieveExecute(r ApiProjectsTemplatesRetrieveRequest) (*Template, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Template
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Template
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesRetrieve")
@@ -6134,8 +6163,8 @@ func (a *ProjectsAPIService) ProjectsTemplatesRetrieveExecute(r ApiProjectsTempl
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -6153,13 +6182,13 @@ func (a *ProjectsAPIService) ProjectsTemplatesRetrieveExecute(r ApiProjectsTempl
 }
 
 type ApiProjectsTemplatesTimelineRetrieveRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	projectPk string
-	asOf *time.Time
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
+	id          string
+	projectPk   string
+	asOf        *time.Time
 	environment *string
-	tag *string
+	tag         *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -6192,28 +6221,29 @@ Information about how a template has changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the template itself is included.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id A UUID string identifying this parameter ledger.
- @param projectPk
- @return ApiProjectsTemplatesTimelineRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id A UUID string identifying this parameter ledger.
+	@param projectPk
+	@return ApiProjectsTemplatesTimelineRetrieveRequest
 */
 func (a *ProjectsAPIService) ProjectsTemplatesTimelineRetrieve(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesTimelineRetrieveRequest {
 	return ApiProjectsTemplatesTimelineRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return TemplateTimeline
+//
+//	@return TemplateTimeline
 func (a *ProjectsAPIService) ProjectsTemplatesTimelineRetrieveExecute(r ApiProjectsTemplatesTimelineRetrieveRequest) (*TemplateTimeline, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *TemplateTimeline
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TemplateTimeline
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesTimelineRetrieve")
@@ -6321,12 +6351,12 @@ func (a *ProjectsAPIService) ProjectsTemplatesTimelineRetrieveExecute(r ApiProje
 }
 
 type ApiProjectsTemplatesTimelinesRetrieveRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	projectPk string
-	asOf *time.Time
+	ctx         context.Context
+	ApiService  *ProjectsAPIService
+	projectPk   string
+	asOf        *time.Time
 	environment *string
-	tag *string
+	tag         *string
 }
 
 // Specify a point in time to retrieve configuration from. Cannot be specified with &#x60;tag&#x60;.
@@ -6359,26 +6389,27 @@ Information about how the templates of a project have changed over time.
 The time range of historical information available depends on your subscription.
 Any changes to the project's templates is included.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectPk
- @return ApiProjectsTemplatesTimelinesRetrieveRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectPk
+	@return ApiProjectsTemplatesTimelinesRetrieveRequest
 */
 func (a *ProjectsAPIService) ProjectsTemplatesTimelinesRetrieve(ctx context.Context, projectPk string) ApiProjectsTemplatesTimelinesRetrieveRequest {
 	return ApiProjectsTemplatesTimelinesRetrieveRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectPk: projectPk,
+		ctx:        ctx,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return TemplateTimeline
+//
+//	@return TemplateTimeline
 func (a *ProjectsAPIService) ProjectsTemplatesTimelinesRetrieveExecute(r ApiProjectsTemplatesTimelinesRetrieveRequest) (*TemplateTimeline, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *TemplateTimeline
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *TemplateTimeline
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesTimelinesRetrieve")
@@ -6485,10 +6516,10 @@ func (a *ProjectsAPIService) ProjectsTemplatesTimelinesRetrieveExecute(r ApiProj
 }
 
 type ApiProjectsTemplatesUpdateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
-	projectPk string
+	ctx            context.Context
+	ApiService     *ProjectsAPIService
+	id             string
+	projectPk      string
 	templateUpdate *TemplateUpdate
 }
 
@@ -6504,28 +6535,29 @@ func (r ApiProjectsTemplatesUpdateRequest) Execute() (*Template, *http.Response,
 /*
 ProjectsTemplatesUpdate Method for ProjectsTemplatesUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @param projectPk
- @return ApiProjectsTemplatesUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@param projectPk
+	@return ApiProjectsTemplatesUpdateRequest
 */
 func (a *ProjectsAPIService) ProjectsTemplatesUpdate(ctx context.Context, id string, projectPk string) ApiProjectsTemplatesUpdateRequest {
 	return ApiProjectsTemplatesUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		projectPk: projectPk,
+		ctx:        ctx,
+		id:         id,
+		projectPk:  projectPk,
 	}
 }
 
 // Execute executes the request
-//  @return Template
+//
+//	@return Template
 func (a *ProjectsAPIService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplatesUpdateRequest) (*Template, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *Template
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Template
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsTemplatesUpdate")
@@ -6620,8 +6652,8 @@ func (a *ProjectsAPIService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplat
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -6639,9 +6671,9 @@ func (a *ProjectsAPIService) ProjectsTemplatesUpdateExecute(r ApiProjectsTemplat
 }
 
 type ApiProjectsUpdateRequest struct {
-	ctx context.Context
-	ApiService *ProjectsAPIService
-	id string
+	ctx           context.Context
+	ApiService    *ProjectsAPIService
+	id            string
 	projectUpdate *ProjectUpdate
 }
 
@@ -6657,26 +6689,27 @@ func (r ApiProjectsUpdateRequest) Execute() (*ProjectUpdate, *http.Response, err
 /*
 ProjectsUpdate Method for ProjectsUpdate
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id
- @return ApiProjectsUpdateRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id
+	@return ApiProjectsUpdateRequest
 */
 func (a *ProjectsAPIService) ProjectsUpdate(ctx context.Context, id string) ApiProjectsUpdateRequest {
 	return ApiProjectsUpdateRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ProjectUpdate
+//
+//	@return ProjectUpdate
 func (a *ProjectsAPIService) ProjectsUpdateExecute(r ApiProjectsUpdateRequest) (*ProjectUpdate, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ProjectUpdate
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ProjectUpdate
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProjectsAPIService.ProjectsUpdate")

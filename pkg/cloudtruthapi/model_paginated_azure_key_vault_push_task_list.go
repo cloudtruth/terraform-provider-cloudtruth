@@ -20,10 +20,10 @@ var _ MappedNullable = &PaginatedAzureKeyVaultPushTaskList{}
 
 // PaginatedAzureKeyVaultPushTaskList struct for PaginatedAzureKeyVaultPushTaskList
 type PaginatedAzureKeyVaultPushTaskList struct {
-	Count *int32 `json:"count,omitempty"`
-	Next NullableString `json:"next,omitempty"`
-	Previous NullableString `json:"previous,omitempty"`
-	Results []AzureKeyVaultPushTask `json:"results,omitempty"`
+	Count    *int32                  `json:"count,omitempty"`
+	Next     NullableString          `json:"next,omitempty"`
+	Previous NullableString          `json:"previous,omitempty"`
+	Results  []AzureKeyVaultPushTask `json:"results,omitempty"`
 }
 
 // NewPaginatedAzureKeyVaultPushTaskList instantiates a new PaginatedAzureKeyVaultPushTaskList object
@@ -107,6 +107,7 @@ func (o *PaginatedAzureKeyVaultPushTaskList) HasNext() bool {
 func (o *PaginatedAzureKeyVaultPushTaskList) SetNext(v string) {
 	o.Next.Set(&v)
 }
+
 // SetNextNil sets the value for Next to be an explicit nil
 func (o *PaginatedAzureKeyVaultPushTaskList) SetNextNil() {
 	o.Next.Set(nil)
@@ -149,6 +150,7 @@ func (o *PaginatedAzureKeyVaultPushTaskList) HasPrevious() bool {
 func (o *PaginatedAzureKeyVaultPushTaskList) SetPrevious(v string) {
 	o.Previous.Set(&v)
 }
+
 // SetPreviousNil sets the value for Previous to be an explicit nil
 func (o *PaginatedAzureKeyVaultPushTaskList) SetPreviousNil() {
 	o.Previous.Set(nil)
@@ -192,7 +194,7 @@ func (o *PaginatedAzureKeyVaultPushTaskList) SetResults(v []AzureKeyVaultPushTas
 }
 
 func (o PaginatedAzureKeyVaultPushTaskList) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -251,5 +253,3 @@ func (v *NullablePaginatedAzureKeyVaultPushTaskList) UnmarshalJSON(src []byte) e
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

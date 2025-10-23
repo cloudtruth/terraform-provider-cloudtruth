@@ -20,16 +20,16 @@ var _ MappedNullable = &IntegrationNode{}
 
 // IntegrationNode Describes the content available at a given location.
 type IntegrationNode struct {
-	Fqn string `json:"fqn"`
-	NodeType NodeTypeEnum `json:"node_type"`
-	Secret *bool `json:"secret,omitempty"`
-	Name *string `json:"name,omitempty"`
-	Jmespath NullableString `json:"jmespath,omitempty"`
+	Fqn         string         `json:"fqn"`
+	NodeType    NodeTypeEnum   `json:"node_type"`
+	Secret      *bool          `json:"secret,omitempty"`
+	Name        *string        `json:"name,omitempty"`
+	Jmespath    NullableString `json:"jmespath,omitempty"`
 	ContentType NullableString `json:"content_type,omitempty"`
 	ContentData NullableString `json:"content_data,omitempty"`
-	ContentSize NullableInt32 `json:"content_size,omitempty"`
-	ContentKeys []string `json:"content_keys,omitempty"`
-	VenueId NullableString `json:"venue_id,omitempty"`
+	ContentSize NullableInt32  `json:"content_size,omitempty"`
+	ContentKeys []string       `json:"content_keys,omitempty"`
+	VenueId     NullableString `json:"venue_id,omitempty"`
 }
 
 // NewIntegrationNode instantiates a new IntegrationNode object
@@ -195,6 +195,7 @@ func (o *IntegrationNode) HasJmespath() bool {
 func (o *IntegrationNode) SetJmespath(v string) {
 	o.Jmespath.Set(&v)
 }
+
 // SetJmespathNil sets the value for Jmespath to be an explicit nil
 func (o *IntegrationNode) SetJmespathNil() {
 	o.Jmespath.Set(nil)
@@ -237,6 +238,7 @@ func (o *IntegrationNode) HasContentType() bool {
 func (o *IntegrationNode) SetContentType(v string) {
 	o.ContentType.Set(&v)
 }
+
 // SetContentTypeNil sets the value for ContentType to be an explicit nil
 func (o *IntegrationNode) SetContentTypeNil() {
 	o.ContentType.Set(nil)
@@ -279,6 +281,7 @@ func (o *IntegrationNode) HasContentData() bool {
 func (o *IntegrationNode) SetContentData(v string) {
 	o.ContentData.Set(&v)
 }
+
 // SetContentDataNil sets the value for ContentData to be an explicit nil
 func (o *IntegrationNode) SetContentDataNil() {
 	o.ContentData.Set(nil)
@@ -321,6 +324,7 @@ func (o *IntegrationNode) HasContentSize() bool {
 func (o *IntegrationNode) SetContentSize(v int32) {
 	o.ContentSize.Set(&v)
 }
+
 // SetContentSizeNil sets the value for ContentSize to be an explicit nil
 func (o *IntegrationNode) SetContentSizeNil() {
 	o.ContentSize.Set(nil)
@@ -396,6 +400,7 @@ func (o *IntegrationNode) HasVenueId() bool {
 func (o *IntegrationNode) SetVenueId(v string) {
 	o.VenueId.Set(&v)
 }
+
 // SetVenueIdNil sets the value for VenueId to be an explicit nil
 func (o *IntegrationNode) SetVenueIdNil() {
 	o.VenueId.Set(nil)
@@ -407,7 +412,7 @@ func (o *IntegrationNode) UnsetVenueId() {
 }
 
 func (o IntegrationNode) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -480,5 +485,3 @@ func (v *NullableIntegrationNode) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

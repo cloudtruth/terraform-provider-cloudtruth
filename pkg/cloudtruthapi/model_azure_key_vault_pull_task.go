@@ -27,14 +27,14 @@ type AzureKeyVaultPullTask struct {
 	// The reason why this task was triggered.
 	Reason NullableString `json:"reason,omitempty"`
 	// Indicates task steps were only simulated, not actually performed.
-	DryRun *bool `json:"dry_run,omitempty"`
-	State *StateEnum `json:"state,omitempty"`
+	DryRun *bool      `json:"dry_run,omitempty"`
+	State  *StateEnum `json:"state,omitempty"`
 	// If an error occurs early during processing, before attempting to process values, this code may be helpful in determining the problem.
 	ErrorCode NullableString `json:"error_code,omitempty"`
 	// If an error occurs early during processing, before attempting to process values, this detail may be helpful in determining the problem.
 	ErrorDetail NullableString `json:"error_detail,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	ModifiedAt NullableTime `json:"modified_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	ModifiedAt  NullableTime   `json:"modified_at"`
 }
 
 // NewAzureKeyVaultPullTask instantiates a new AzureKeyVaultPullTask object
@@ -138,6 +138,7 @@ func (o *AzureKeyVaultPullTask) HasReason() bool {
 func (o *AzureKeyVaultPullTask) SetReason(v string) {
 	o.Reason.Set(&v)
 }
+
 // SetReasonNil sets the value for Reason to be an explicit nil
 func (o *AzureKeyVaultPullTask) SetReasonNil() {
 	o.Reason.Set(nil)
@@ -244,6 +245,7 @@ func (o *AzureKeyVaultPullTask) HasErrorCode() bool {
 func (o *AzureKeyVaultPullTask) SetErrorCode(v string) {
 	o.ErrorCode.Set(&v)
 }
+
 // SetErrorCodeNil sets the value for ErrorCode to be an explicit nil
 func (o *AzureKeyVaultPullTask) SetErrorCodeNil() {
 	o.ErrorCode.Set(nil)
@@ -286,6 +288,7 @@ func (o *AzureKeyVaultPullTask) HasErrorDetail() bool {
 func (o *AzureKeyVaultPullTask) SetErrorDetail(v string) {
 	o.ErrorDetail.Set(&v)
 }
+
 // SetErrorDetailNil sets the value for ErrorDetail to be an explicit nil
 func (o *AzureKeyVaultPullTask) SetErrorDetailNil() {
 	o.ErrorDetail.Set(nil)
@@ -347,7 +350,7 @@ func (o *AzureKeyVaultPullTask) SetModifiedAt(v time.Time) {
 }
 
 func (o AzureKeyVaultPullTask) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -413,5 +416,3 @@ func (v *NullableAzureKeyVaultPullTask) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

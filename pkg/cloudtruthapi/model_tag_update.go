@@ -164,6 +164,7 @@ func (o *TagUpdate) HasTimestamp() bool {
 func (o *TagUpdate) SetTimestamp(v time.Time) {
 	o.Timestamp.Set(&v)
 }
+
 // SetTimestampNil sets the value for Timestamp to be an explicit nil
 func (o *TagUpdate) SetTimestampNil() {
 	o.Timestamp.Set(nil)
@@ -207,7 +208,7 @@ func (o *TagUpdate) SetImmutable(v bool) {
 }
 
 func (o TagUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -265,5 +266,3 @@ func (v *NullableTagUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

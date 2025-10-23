@@ -23,11 +23,11 @@ var _ MappedNullable = &PatchedParameterRuleUpdate{}
 type PatchedParameterRuleUpdate struct {
 	Id *string `json:"id,omitempty"`
 	// The parameter this rule is for.
-	Parameter *string `json:"parameter,omitempty"`
-	Type *ParameterRuleTypeEnum `json:"type,omitempty"`
-	Constraint *string `json:"constraint,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	ModifiedAt NullableTime `json:"modified_at,omitempty"`
+	Parameter  *string                `json:"parameter,omitempty"`
+	Type       *ParameterRuleTypeEnum `json:"type,omitempty"`
+	Constraint *string                `json:"constraint,omitempty"`
+	CreatedAt  *time.Time             `json:"created_at,omitempty"`
+	ModifiedAt NullableTime           `json:"modified_at,omitempty"`
 }
 
 // NewPatchedParameterRuleUpdate instantiates a new PatchedParameterRuleUpdate object
@@ -239,6 +239,7 @@ func (o *PatchedParameterRuleUpdate) HasModifiedAt() bool {
 func (o *PatchedParameterRuleUpdate) SetModifiedAt(v time.Time) {
 	o.ModifiedAt.Set(&v)
 }
+
 // SetModifiedAtNil sets the value for ModifiedAt to be an explicit nil
 func (o *PatchedParameterRuleUpdate) SetModifiedAtNil() {
 	o.ModifiedAt.Set(nil)
@@ -250,7 +251,7 @@ func (o *PatchedParameterRuleUpdate) UnsetModifiedAt() {
 }
 
 func (o PatchedParameterRuleUpdate) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -315,5 +316,3 @@ func (v *NullablePatchedParameterRuleUpdate) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
